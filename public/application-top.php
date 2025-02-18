@@ -63,5 +63,5 @@ if (strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
     AttachedFile::registerS3ClientStream();
 }
 define('SYSTEM_INIT', true);
-define('WHITE_LABELED', false);
+define('WHITE_LABELED', true);
 define('CONF_WEB_APP_VERSION', 'TV-10.2.0-20250116');

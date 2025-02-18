@@ -1,0 +1,17 @@
+.social-media-icon{
+	display: inline-block;
+	height: 60px;
+	width: 60px;
+	position: fixed;
+	z-index: 1030;
+	left: 1rem;
+	bottom: 2rem;
+	border-radius: 100%;
+	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+@media screen and (max-width: 991px) {
+	.social-media-icon{
+		bottom: 7rem;
+	}
+}

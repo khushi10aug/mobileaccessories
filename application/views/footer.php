@@ -353,7 +353,15 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
     <span>
         <?php echo Labels::getLabel('LBL_TOP', $siteLangId); ?></span>
 </button>
+	<a class="social-media-icon" href="https://api.whatsapp.com/send?phone=+918451066698&text=Welcome" target="_blank">
+		<img src="<?php echo CONF_WEBROOT_URL; ?>images/whatsapp-icon.png">
+	</a>
 <?php include(CONF_THEME_PATH . '_partial/footer-part/fonts.php'); ?>
+
+<style>
+	
+</style>
+
 </body>
 
 </html>

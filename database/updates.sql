@@ -925,3 +925,7 @@ ALTER TABLE `tbl_app_release_version_logs`
   
 ALTER TABLE `tbl_app_release_version_logs`
   MODIFY `arvlog_id` int(11) NOT NULL AUTO_INCREMENT;
+
+-- ---------------------------------task-126067-hns-code-field-addition-on-catalog-form------------------------
+ALTER TABLE `tbl_users` ADD `user_gst_number` VARCHAR(254) NULL DEFAULT NULL AFTER `user_deleted`;
+ALTER TABLE `tbl_products` ADD `product_hsn_code` VARCHAR(254) NULL DEFAULT NULL AFTER `product_min_selling_price`;

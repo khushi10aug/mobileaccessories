@@ -734,6 +734,7 @@ class SellerController extends SellerBaseController
         $srch = new OrderProductSearch($this->siteLangId, true, true);
         $srch->joinPaymentMethod();
         $srch->joinSellerProducts();
+        $srch->joinProduct();
         $srch->joinShop();
         $srch->joinShopSpecifics();
         $srch->joinShopCountry();
@@ -744,7 +745,7 @@ class SellerController extends SellerBaseController
         $srch->addCondition('op_selprod_user_id', '=', $userId);
         $srch->addCondition('op_id', '=', $op_id);
         $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_VENDOR_ORDER_STATUS")));
-        $srch->addMultipleFields(array('*', 'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city'));
+        $srch->addMultipleFields(array('*', 'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city', 'product_hsn_code'));
         $rs = $srch->getResultSet();
         $orderDetail = FatApp::getDb()->fetch($rs);
 
@@ -781,16 +782,12 @@ class SellerController extends SellerBaseController
         $taxOptions = $opChargesLog->getData($this->siteLangId);
         $orderDetail['taxOptions'] = $taxOptions;
 
-        /* $this->set('orderDetail', $orderDetail);
-          $this->set('languages', Language::getAllNames());
-          $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
-          $this->set('canEdit', $this->userPrivilege->canEditSales(UserAuthentication::getLoggedUserId(), true));
-          $this->_template->render(true, true); */
-
         $template = new FatTemplate('', '');
         $template->set('siteLangId', $this->siteLangId);
         $template->set('orderDetail', $orderDetail);
         $template->set('shippedBySeller', $shippedBySeller);
+        $template->set('buyerGstNumber', User::getAttributesById($orderDetail['order_user_id'], 'user_gst_number'));
+        $template->set('sellerGstNumber', User::getAttributesById($orderDetail['op_selprod_user_id'], 'user_gst_number'));
 
         require_once CONF_INSTALLATION_PATH . 'vendor/autoload.php';
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -4715,7 +4712,7 @@ class SellerController extends SellerBaseController
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         $languages = Language::getAllNames();
-        unset($languages[ $this->siteLangId]);
+        unset($languages[$this->siteLangId]);
         if (!empty($translatorSubscriptionKey) && count($languages) > 0) {
             $frm->addCheckBox(Labels::getLabel('FRM_TRANSLATE_TO_OTHER_LANGUAGES', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }

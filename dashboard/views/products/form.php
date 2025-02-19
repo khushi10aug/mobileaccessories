@@ -135,6 +135,7 @@ if (null != $fld) {
                             echo HtmlHelper::getFieldHtml($frm, 'selprod_cost', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_min_selling_price', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_youtube_video', 12);
+                            echo HtmlHelper::getFieldHtml($frm, 'product_hsn_code', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_attachements_with_inventory', 6, ['class' => 'attachmentWithInventoryJs'], Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL_INFO', $langId));
                             echo HtmlHelper::getFieldHtml($frm, 'product_description', 12);
                             echo HtmlHelper::getFieldHtml($frm, 'record_id', 6);

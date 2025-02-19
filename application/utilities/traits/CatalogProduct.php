@@ -186,6 +186,7 @@ trait CatalogProduct
         }
         $frm->addHtmlEditor(Labels::getLabel('FRM_DESCRIPTION', $langId), 'product_description');
         $frm->addTextBox(Labels::getLabel('FRM_YOUTUBE_VIDEO_URL', $langId), 'product_youtube_video');
+        $frm->addTextBox(Labels::getLabel('FRM_HSN_CODE', $langId), 'product_hsn_code');
         $frm->addCheckBox(Labels::getLabel('FRM_MARK_AS_FEATURED', $langId), 'product_featured', 1, array(), false, 0);
         $frm->addCheckBox(Labels::getLabel("FRM_ACTIVE", $langId), 'product_active', applicationConstants::YES, array(), true, 0);
 

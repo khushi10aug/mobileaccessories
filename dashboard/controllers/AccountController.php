@@ -427,7 +427,7 @@ class AccountController extends LoggedUserController
         if (User::isAffiliate()) {
             return false;
         }
-        
+
         $giftCard = GiftCards::getGiftCards($this->userParentId);
         return !empty($giftCard);
     }
@@ -1882,11 +1882,40 @@ class AccountController extends LoggedUserController
 
         $srch->addMultipleFields(
             array(
-                'selprod_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
-                'product_id', 'prodcat_id', 'ufp_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on',
-                'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand.brand_id', 'product_model',
-                'IFNULL(brand_name, brand_identifier) as brand_name', 'IFNULL(splprice_price, selprod_price) AS theprice', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
-                'CASE WHEN splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found', 'selprod_price', 'selprod_user_id', 'selprod_code', 'selprod_sold_count', 'selprod_condition', 'IFNULL(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist', 'IFNULL(uwlp.uwlp_uwlist_id, 0) as uwlp_uwlist_id', 'ifnull(prod_rating,0) prod_rating', 'selprod_min_order_qty', 'selprod_available_from', 'selprod_stock', 'shop_id', 'product_updated_on', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled', 'product_type'
+                'selprod_id',
+                'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
+                'product_id',
+                'prodcat_id',
+                'ufp_id',
+                'IFNULL(product_name, product_identifier) as product_name',
+                'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name',
+                'product_updated_on',
+                'IF(selprod_stock > 0, 1, 0) AS in_stock',
+                'brand.brand_id',
+                'product_model',
+                'IFNULL(brand_name, brand_identifier) as brand_name',
+                'IFNULL(splprice_price, selprod_price) AS theprice',
+                'splprice_display_list_price',
+                'splprice_display_dis_val',
+                'splprice_display_dis_type',
+                'CASE WHEN splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found',
+                'selprod_price',
+                'selprod_user_id',
+                'selprod_code',
+                'selprod_sold_count',
+                'selprod_condition',
+                'IFNULL(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist',
+                'IFNULL(uwlp.uwlp_uwlist_id, 0) as uwlp_uwlist_id',
+                'ifnull(prod_rating,0) prod_rating',
+                'selprod_min_order_qty',
+                'selprod_available_from',
+                'selprod_stock',
+                'shop_id',
+                'product_updated_on',
+                'selprod_cart_type',
+                'selprod_hide_price',
+                'shop_rfq_enabled',
+                'product_type'
             )
         );
 
@@ -1992,11 +2021,37 @@ class AccountController extends LoggedUserController
 
         $srch->addMultipleFields(
             array(
-                'selprod_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
-                'product_id', 'prodcat_id', 'ufp_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on',
-                'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand.brand_id', 'product_model',
-                'IFNULL(brand_name, brand_identifier) as brand_name', 'IFNULL(splprice_price, selprod_price) AS theprice', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
-                'CASE WHEN splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found', 'selprod_price', 'selprod_user_id', 'selprod_code', 'selprod_condition', 'IFNULL(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist', 'ifnull(prod_rating,0) prod_rating', 'selprod_sold_count', 'selprod_min_order_qty', 'selprod_available_from', 'selprod_stock', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled', 'product_type'
+                'selprod_id',
+                'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
+                'product_id',
+                'prodcat_id',
+                'ufp_id',
+                'IFNULL(product_name, product_identifier) as product_name',
+                'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name',
+                'product_updated_on',
+                'IF(selprod_stock > 0, 1, 0) AS in_stock',
+                'brand.brand_id',
+                'product_model',
+                'IFNULL(brand_name, brand_identifier) as brand_name',
+                'IFNULL(splprice_price, selprod_price) AS theprice',
+                'splprice_display_list_price',
+                'splprice_display_dis_val',
+                'splprice_display_dis_type',
+                'CASE WHEN splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found',
+                'selprod_price',
+                'selprod_user_id',
+                'selprod_code',
+                'selprod_condition',
+                'IFNULL(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist',
+                'ifnull(prod_rating,0) prod_rating',
+                'selprod_sold_count',
+                'selprod_min_order_qty',
+                'selprod_available_from',
+                'selprod_stock',
+                'selprod_cart_type',
+                'selprod_hide_price',
+                'shop_rfq_enabled',
+                'product_type'
             )
         );
 
@@ -2112,8 +2167,15 @@ class AccountController extends LoggedUserController
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(
             array(
-                'shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'shop_name', 'shop_description',
-                'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city'
+                'shop_id',
+                'shop_user_id',
+                'shop_ltemplate_id',
+                'shop_created_on',
+                'shop_name',
+                'shop_description',
+                'shop_country_l.country_name as shop_country_name',
+                'shop_state_l.state_name as shop_state_name',
+                'shop_city'
             )
         );
         $srch->addCondition('shop_id', '=', 'mysql_func_' . $shop_id, 'AND', true);
@@ -2186,9 +2248,17 @@ class AccountController extends LoggedUserController
         $srch->addCondition('ufs_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
         $srch->addMultipleFields(
             array(
-                's.shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'shop_name', 'shop_description',
-                'shop_country_l.country_name as country_name', 'shop_state_l.state_name as state_name', 'shop_city',
-                'IFNULL(ufs.ufs_id, 0) as is_favorite', 'shop_updated_on'
+                's.shop_id',
+                'shop_user_id',
+                'shop_ltemplate_id',
+                'shop_created_on',
+                'shop_name',
+                'shop_description',
+                'shop_country_l.country_name as country_name',
+                'shop_state_l.state_name as state_name',
+                'shop_city',
+                'IFNULL(ufs.ufs_id, 0) as is_favorite',
+                'shop_updated_on'
             )
         );
         $srch->setPageNumber($page);
@@ -2411,10 +2481,21 @@ class AccountController extends LoggedUserController
         $this->setRecordCount(clone $srch, $pagesize, $page, $post, true);
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(array(
-            'tth.*', 'ttm.*',
-            'tfr.user_id as message_sent_by', 'tfr.user_updated_on as message_from_user_updated_on', 'tfr.user_phone as message_from_user_phone', 'tfr.user_phone_dcode as message_from_user_phone_dcode', 'tfr.user_name as message_sent_by_username', 'tfto.user_id as message_sent_to', 'tfto.user_updated_on as message_to_user_updated_on',
-            'tfto.user_name as message_sent_to_name', 'tfto_c.credential_email as message_sent_to_email',
-            'tfrs.shop_id as message_from_shop_id', 'tfrs.shop_user_id as message_from_shop_user_id', 'tfto.user_name as message_sent_to_name', 'IFNULL(tfrs_l.shop_name, tfrs.shop_identifier) as message_from_shop_name'
+            'tth.*',
+            'ttm.*',
+            'tfr.user_id as message_sent_by',
+            'tfr.user_updated_on as message_from_user_updated_on',
+            'tfr.user_phone as message_from_user_phone',
+            'tfr.user_phone_dcode as message_from_user_phone_dcode',
+            'tfr.user_name as message_sent_by_username',
+            'tfto.user_id as message_sent_to',
+            'tfto.user_updated_on as message_to_user_updated_on',
+            'tfto.user_name as message_sent_to_name',
+            'tfto_c.credential_email as message_sent_to_email',
+            'tfrs.shop_id as message_from_shop_id',
+            'tfrs.shop_user_id as message_from_shop_user_id',
+            'tfto.user_name as message_sent_to_name',
+            'IFNULL(tfrs_l.shop_name, tfrs.shop_identifier) as message_from_shop_name'
         ));
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
@@ -2484,10 +2565,21 @@ class AccountController extends LoggedUserController
         $srch->joinShops($this->siteLangId);
         $srch->joinOrderProducts($this->siteLangId);
         $srch->addMultipleFields(array(
-            'tth.*', 'ttm.*',
-            'tfr.user_id as message_sent_by', 'tfr.user_updated_on as message_from_user_updated_on', 'tfr.user_phone as message_from_user_phone', 'tfr.user_phone_dcode as message_from_user_phone_dcode', 'tfr.user_name as message_sent_by_username', 'tfto.user_id as message_sent_to', 'tfto.user_updated_on as message_to_user_updated_on',
-            'tfto.user_name as message_sent_to_name', 'tfto_c.credential_email as message_sent_to_email',
-            'tfrs.shop_id as message_from_shop_id', 'tfrs.shop_user_id as message_from_shop_user_id', 'tfto.user_name as message_sent_to_name', 'IFNULL(tfrs_l.shop_name, tfrs.shop_identifier) as message_from_shop_name'
+            'tth.*',
+            'ttm.*',
+            'tfr.user_id as message_sent_by',
+            'tfr.user_updated_on as message_from_user_updated_on',
+            'tfr.user_phone as message_from_user_phone',
+            'tfr.user_phone_dcode as message_from_user_phone_dcode',
+            'tfr.user_name as message_sent_by_username',
+            'tfto.user_id as message_sent_to',
+            'tfto.user_updated_on as message_to_user_updated_on',
+            'tfto.user_name as message_sent_to_name',
+            'tfto_c.credential_email as message_sent_to_email',
+            'tfrs.shop_id as message_from_shop_id',
+            'tfrs.shop_user_id as message_from_shop_user_id',
+            'tfto.user_name as message_sent_to_name',
+            'IFNULL(tfrs_l.shop_name, tfrs.shop_identifier) as message_from_shop_name'
         ));
         $srch->addCondition('message_deleted', '=', applicationConstants::NO);
         $srch->addCondition('tth.thread_id', '=', $threadId);
@@ -2540,9 +2632,15 @@ class AccountController extends LoggedUserController
         $srch->joinMessagePostedToUser(true, $this->siteLangId);
         $srch->joinThreadStartedByUser();
         $srch->addMultipleFields(array(
-            'tth.*', 'ttm.message_id', 'ttm.message_text', 'ttm.message_date', 'ttm.message_is_unread',
-            'IFNULL(tfrs_l.shop_name, tfrs.shop_identifier) as message_from_shop_name', 'tfrs.shop_id as message_from_shop_id',
-            'tftos.shop_id as message_to_shop_id', 'IFNULL(tftos_l.shop_name, tftos.shop_identifier) as message_to_shop_name'
+            'tth.*',
+            'ttm.message_id',
+            'ttm.message_text',
+            'ttm.message_date',
+            'ttm.message_is_unread',
+            'IFNULL(tfrs_l.shop_name, tfrs.shop_identifier) as message_from_shop_name',
+            'tfrs.shop_id as message_from_shop_id',
+            'tftos.shop_id as message_to_shop_id',
+            'IFNULL(tftos_l.shop_name, tftos.shop_identifier) as message_to_shop_name'
         ));
         $srch->addCondition('ttm.message_deleted', '=', 'mysql_func_0', 'AND', true);
         $srch->addCondition('tth.thread_id', '=', 'mysql_func_' . $threadId, 'AND', true);
@@ -2845,8 +2943,6 @@ class AccountController extends LoggedUserController
 
         if (User::isAffiliate()) {
             $zipFld = $frm->addRequiredField(Labels::getLabel('FRM_POSTALCODE', $this->siteLangId), 'user_zip');
-            /* $zipFld->requirements()->setRegularExpressionToValidate(ValidateElement::ZIP_REGEX);
-            $zipFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_ONLY_ALPHANUMERIC_VALUE_IS_ALLOWED.', $this->siteLangId)); */
         }
         $parent = User::getAttributesById(UserAuthentication::getLoggedUserId(true), 'user_parent');
         if (User::isAdvertiser() && $parent == 0) {
@@ -2855,7 +2951,7 @@ class AccountController extends LoggedUserController
             $fld->html_after_field = '<small>' . Labels::getLabel('FRM_PLEASE_TELL_US_SOMETHING_ABOUT_YOURSELF', $this->siteLangId) . '</small>';
             $frm->addTextArea(Labels::getLabel('FRM_WHAT_KIND_PRODUCTS_SERVICES_ADVERTISE', $this->siteLangId), 'user_products_services');
         }
-
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_GST_NUMBER', $this->siteLangId), 'user_gst_number');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
@@ -3101,9 +3197,18 @@ class AccountController extends LoggedUserController
         $srch->addOrder('orrmsg_id', 'DESC');
         $srch->addMultipleFields(
             array(
-                'orrmsg_id', 'orrmsg_from_user_id', 'orrmsg_msg',
-                'orrmsg_date', 'msg_user.user_name as msg_user_name', 'orrequest_status',
-                'orrmsg_from_admin_id', 'admin_name', 'ifnull(s_l.shop_name, s.shop_identifier) as shop_name', 's.shop_id', 'op_selprod_user_id', 'op_rounding_off'
+                'orrmsg_id',
+                'orrmsg_from_user_id',
+                'orrmsg_msg',
+                'orrmsg_date',
+                'msg_user.user_name as msg_user_name',
+                'orrequest_status',
+                'orrmsg_from_admin_id',
+                'admin_name',
+                'ifnull(s_l.shop_name, s.shop_identifier) as shop_name',
+                's.shop_id',
+                'op_selprod_user_id',
+                'op_rounding_off'
             )
         );
 
@@ -3706,6 +3811,7 @@ class AccountController extends LoggedUserController
         $srch = new OrderProductSearch($this->siteLangId, true, true);
         $srch->joinPaymentMethod();
         $srch->joinSellerProducts();
+        $srch->joinProduct();
         $srch->joinShop();
         $srch->joinShopSpecifics();
         $srch->joinShopCountry();
@@ -3719,7 +3825,7 @@ class AccountController extends LoggedUserController
         }
         $srch->addDirectCondition("((op_selprod_user_id = $this->userId and op.op_status_id IN (" . implode(",", unserialize(FatApp::getConfig("CONF_VENDOR_ORDER_STATUS"))) . ")) or (order_user_id=$this->userId and op.op_status_id IN (" . implode(",", unserialize(FatApp::getConfig("CONF_BUYER_ORDER_STATUS"))) . ") ) )");
 
-        $srch->addMultipleFields(array('*', 'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city'));
+        $srch->addMultipleFields(array('*', 'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city', 'product_hsn_code'));
 
         $childOrderDetail = FatApp::getDb()->fetchAll($srch->getResultSet(), 'op_id');
 
@@ -3764,6 +3870,8 @@ class AccountController extends LoggedUserController
         $template->set('orderDetail', $orderDetail);
         $template->set('childOrderDetail', $childOrderDetail);
         $template->set('opId', $opId);
+        $template->set('buyerGstNumber', User::getAttributesById($orderDetail['order_user_id'], 'user_gst_number'));
+        $template->set('sellerGstNumber', User::getAttributesById(current($childOrderDetail)['selprod_user_id'], 'user_gst_number'));
 
         require_once CONF_INSTALLATION_PATH . 'vendor/autoload.php';
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);

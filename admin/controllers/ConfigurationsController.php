@@ -470,6 +470,7 @@ class ConfigurationsController extends ListingBaseController
                 $fld->requirements()->setRequired(true);
                 $frm->addTextarea(Labels::getLabel("FRM_ADDRESS_LINE_2", $langId), 'CONF_ADDRESS_LINE_2_' . $langId);
 
+                $fld = $frm->addTextBox(Labels::getLabel("FRM_GST_NUMBER", $langId), 'CONF_ADMIN_GST_NUMBER');
 
                 break;
 

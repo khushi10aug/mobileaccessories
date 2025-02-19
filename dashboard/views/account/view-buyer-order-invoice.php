@@ -80,6 +80,10 @@ if (!empty($orderDetail['billingAddress'])) {
     if ($orderDetail['billingAddress']['oua_phone'] != '') {
         $billingAddress  .= '<br><span class="default-ltr">' . ValidateElement::formatDialCode($orderDetail['billingAddress']['oua_phone_dcode']) . $orderDetail['billingAddress']['oua_phone'] . '</span>';
     }
+
+    if (!is_null($buyerGstNumber) && !empty(trim($buyerGstNumber))) {
+        $billingAddress  .= '<br><span class="default-ltr">' . Labels::getLabel("LBL_GST_number", $siteLangId) . ': ' . $buyerGstNumber . '</span>';
+    }
 }
 
 
@@ -166,6 +170,11 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                 $item .= $childOrder['op_shipping_durations'] . '-' . $childOrder['op_shipping_duration_name'];
             }
 
+            if (!is_null($childOrder['product_hsn_code']) && !empty(trim($childOrder['product_hsn_code']))) {
+                $item .= '<br>';
+                $item .= Labels::getLabel('LBL_HSN_Code', $siteLangId) . ': ' . $childOrder['product_hsn_code'];
+            }
+
             $couponDiscount = abs(CommonHelper::orderProductAmount($childOrder, 'DISCOUNT'));
             $volumeDiscount = abs(CommonHelper::orderProductAmount($childOrder, 'VOLUME_DISCOUNT'));
             $totalSavings = ($childOrder['op_special_price'] * $childOrder["op_qty"]) + $couponDiscount + $volumeDiscount;
@@ -183,6 +192,10 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                     <strong style=" padding-bottom:10px; "><?php echo Labels::getLabel('LBL_SOLD_BY', $siteLangId); ?>: <?php echo $childOrder['op_shop_name']; ?></strong>
                     <br>
                     <?php echo Labels::getLabel('LBL_Shop_Address', $siteLangId); ?>: <?php echo $childOrder['shop_city'] . ', ' . $childOrder['shop_state_name'] . ', ' . $childOrder['shop_country_name'] . ' - ' . $childOrder['shop_postalcode']; ?>
+                    <?php if (!is_null($sellerGstNumber) && !empty(trim($sellerGstNumber))) { ?>
+                        <br>
+                        <?php echo Labels::getLabel('LBL_GST_Number', $siteLangId); ?>: <?php echo $sellerGstNumber; ?>
+                    <?php } ?>
                 </td>
             </tr>
             <tr>
@@ -385,19 +398,27 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <tbody>
                         <tr>
-                            <td style="padding:20px 15px;"><strong><?php echo Labels::getLabel('LBL_Regd._office', $siteLangId); ?>: </strong><?php echo nl2br(FatApp::getConfig('CONF_ADDRESS_' . $siteLangId, FatUtility::VAR_STRING, '')); ?>
-                                <?php $site_conatct = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
-                                $email_id = FatApp::getConfig('CONF_CONTACT_EMAIL', FatUtility::VAR_STRING, '');
-                                if ($site_conatct || $email_id) { ?>
-                                    <p><strong><?php echo Labels::getLabel('LBL_Contact', $siteLangId) ?>:</strong>
+                            <td style="padding:20px 15px;">
+                                <strong><?php echo Labels::getLabel('LBL_Regd._office', $siteLangId); ?>: </strong><?php echo nl2br(FatApp::getConfig('CONF_ADDRESS_' . $siteLangId, FatUtility::VAR_STRING, '')); ?>
+                                <p>
+                                    <?php $site_conatct = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
+                                    $email_id = FatApp::getConfig('CONF_CONTACT_EMAIL', FatUtility::VAR_STRING, '');
+                                    if ($site_conatct || $email_id) { ?>
+                                        <strong><?php echo Labels::getLabel('LBL_Contact', $siteLangId) ?>:</strong>
                                         <?php if ($site_conatct) {
                                             echo $site_conatct;
                                         } ?>
                                         <?php if ($email_id) {
                                             echo '|| ' . $email_id;
                                         } ?>
-                                    </p>
-                                <?php } ?>
+
+                                    <?php } ?>
+                                    <?php if (!empty(FatApp::getConfig('CONF_ADMIN_GST_NUMBER'))) { ?>
+                                        <br>
+                                        <strong><?php echo strtoupper(Labels::getLabel('LBL_GST', $siteLangId)) ?> <?php echo Labels::getLabel('LBL_NUMBER', $siteLangId); ?>:</strong>
+                                        <?php echo trim(FatApp::getConfig('CONF_ADMIN_GST_NUMBER')); ?>
+                                    <?php } ?>
+                                </p>
                             </td>
                         </tr>
                     </tbody>

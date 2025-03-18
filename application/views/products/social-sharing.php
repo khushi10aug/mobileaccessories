@@ -14,7 +14,7 @@ if (isset($productView) && true == $productView) { ?>
         <button class="btn btn-outline-light btn-favorite <?php echo $isActive; ?>" type="button" data-id="<?php echo $product['selprod_id']; ?>" onclick="<?php echo $jsFunc; ?>" data-bs-toggle="tooltip" data-bs-placement="top" title="<?php echo $title; ?>">
 
             <svg class="svg" width="20" height="20">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart-filled">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#heart-filled">
                 </use>
             </svg>
         </button>
@@ -23,7 +23,7 @@ if (isset($productView) && true == $productView) { ?>
             <li class="via-social-sharing-item">
                 <a href="javascript:void(0)" class="via-social-sharing-link st-custom-button" data-network="facebook" data-url="<?php echo UrlHelper::generateFullUrl('Products', 'view', array($product['selprod_id'])); ?>/">
                     <svg class="svg" width="20" height="20">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#facebook">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#facebook">
                         </use>
                     </svg>
                 </a>
@@ -31,7 +31,7 @@ if (isset($productView) && true == $productView) { ?>
             <li class="via-social-sharing-item">
                 <a href="javascript:void(0)" class="via-social-sharing-link st-custom-button" data-network="twitter">
                     <svg class="svg" width="20" height="20">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#twitter">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#twitter">
                         </use>
                     </svg>
                 </a>
@@ -39,7 +39,7 @@ if (isset($productView) && true == $productView) { ?>
             <li class="via-social-sharing-item">
                 <a href="javascript:void(0)" class="via-social-sharing-link st-custom-button" data-network="pinterest">
                     <svg class="svg" width="20" height="20">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pinterest">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#pinterest">
                         </use>
                     </svg>
                 </a>
@@ -47,7 +47,7 @@ if (isset($productView) && true == $productView) { ?>
             <li class="via-social-sharing-item">
                 <a href="javascript:void(0)" class="via-social-sharing-link st-custom-button" data-network="email">
                     <svg class="svg" width="20" height="20">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#envelope">
                         </use>
                     </svg>
                 </a>

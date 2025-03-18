@@ -25,7 +25,7 @@ $frm->developerTags['fld_default_col'] = 12;
                 <li>
                     <i class="icn">
                         <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bussiness-name" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bussiness-name"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#bussiness-name" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#bussiness-name"></use>
                         </svg>
                     </i>
                     <div class="lable">
@@ -37,7 +37,7 @@ $frm->developerTags['fld_default_col'] = 12;
                 <li>
                     <i class="icn">
                         <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bank-name" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bank-name"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#bank-name" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#bank-name"></use>
                         </svg>
                     </i>
                     <div class="lable">
@@ -49,7 +49,7 @@ $frm->developerTags['fld_default_col'] = 12;
                 <li>
                     <i class="icn">
                         <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bank-branch" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bank-branch"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#bank-branch" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#bank-branch"></use>
                         </svg>
                     </i>
                     <div class="lable">
@@ -61,7 +61,7 @@ $frm->developerTags['fld_default_col'] = 12;
                 <li>
                     <i class="icn">
                         <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#account" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#account"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#account" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#account"></use>
                         </svg>
                     </i>
                     <div class="lable">
@@ -73,7 +73,7 @@ $frm->developerTags['fld_default_col'] = 12;
                 <li>
                     <i class="icn">
                         <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#ifsc" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#ifsc"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#ifsc" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#ifsc"></use>
                         </svg>
                     </i>
                     <div class="lable">
@@ -85,7 +85,7 @@ $frm->developerTags['fld_default_col'] = 12;
                 <li>
                     <i class="icn">
                         <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#routing" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#routing"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#routing" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#routing"></use>
                         </svg>
                     </i>
                     <div class="lable">
@@ -97,7 +97,7 @@ $frm->developerTags['fld_default_col'] = 12;
                 <li class="notes">
                     <i class="icn">
                         <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bank-notes" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bank-notes"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#bank-notes" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#bank-notes"></use>
                         </svg>
                     </i>
                     <div class="lable">

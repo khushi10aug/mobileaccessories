@@ -36,8 +36,8 @@ $vtype = $postedData['vtype'] ?? false;
                             <?php if ($isNotServiceable) { ?>
                                 <div class="not-available">
                                     <svg class="svg">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info"
-                                            href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#info"
+                                            href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#info">
                                         </use>
                                     </svg> <?php echo Labels::getLabel('LBL_NOT_SERVICEABLE', $siteLangId); ?>
                                 </div>

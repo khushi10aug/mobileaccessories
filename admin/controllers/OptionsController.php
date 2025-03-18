@@ -187,8 +187,15 @@ class OptionsController extends ListingBaseController
         $recordId = FatUtility::int($post['option_id']);
         unset($post['option_id']);
 
-        $optionObj = new Option($recordId);
         $post['option_identifier'] = $post['option_name'];
+        if (0 < $recordId) {
+            $sellerId = Option::getAttributesById($recordId, 'option_seller_id');
+            if (0 < $sellerId) {
+                $post['option_identifier'] = $post['option_name'] . '-' . $sellerId;
+            }
+        }
+
+        $optionObj = new Option($recordId);
         $optionObj->assignValues($post);
         if (!$optionObj->save()) {
             $msg = $optionObj->getError();

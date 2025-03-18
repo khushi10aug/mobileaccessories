@@ -44,7 +44,7 @@
                         "onclick" => "form(" . $row['optionvalue_option_id'] . "," . $row['optionvalue_id'] . ")"
                     ), '<svg class="svg" width="18" height="18">
                             <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#edit">
                             </use>
                         </svg>', true);
 
@@ -54,7 +54,7 @@
                         'class' => 'button small green', 'title' => Labels::getLabel('LBL_DELETE', $langId), "onclick" => "deleteRecord(" . $row['optionvalue_option_id'] . "," . $row['optionvalue_id'] . ")"
                     ), '<svg class="svg" width="18" height="18">
                             <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
                             </use>
                         </svg>', true);
                     break;

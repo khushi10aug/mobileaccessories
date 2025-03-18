@@ -90,7 +90,7 @@
                         '<i class="icn">
                             <svg class="svg" width="18" height="18">
                                 <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#view">
                                 </use>
                             </svg>
                         </i>',
@@ -101,7 +101,7 @@
                         $li = $ul->appendElement("li");
                         $li->appendElement('a', array('href' => 'javascript:void(0);', 'title' => Labels::getLabel('LBL_RENEW_SUBSCRIPTION', $siteLangId), 'onclick' => 'renewSubscription(' . $order['ossubs_id'] . ')'), '<svg class="svg" width="18" height="18">
                         <use
-                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#counterclockwise">
+                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#counterclockwise">
                         </use>
                     </svg', true);
                     }

@@ -35,14 +35,13 @@ class FilterHelper extends FatUtility
         // $prodSrchObj->joinSellers();
         $prodSrchObj->setGeoAddress();
         $prodSrchObj->joinShops($langId, true, true, 0, true);
-        $prodSrchObj->joinShopCountry();
-        $prodSrchObj->joinShopState();
+        /* $prodSrchObj->joinShopCountry();
+        $prodSrchObj->joinShopState(); */
         $prodSrchObj->joinBrands($langId);
         $prodSrchObj->joinProductToCategory($langId);
-        $prodSrchObj->joinSellerSubscription(0, false, true);
-        $prodSrchObj->addSubscriptionValidCondition();
         $prodSrchObj->validateAndJoinDeliveryLocation();
         $prodSrchObj->joinProductToTax();
+        $prodSrchObj->addCondition('selprod_code', 'IS NOT', 'mysql_func_null', 'and', true);
 
         if (array_key_exists('category', $post)) {
             $joinWithRelationTableInstead = $headerFormParamsAssocArr['joinWithRelationTableInstead'] ?? false;

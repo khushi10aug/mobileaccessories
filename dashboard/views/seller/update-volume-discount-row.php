@@ -20,7 +20,7 @@
             <li><a title="Delete" href="javascript:void(0);" onclick="deleteSellerProductVolumeDiscount(<?php echo $volDiscountId; ?>)">
                 <svg class="svg" width="18" height="18">
                     <use
-                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
                     </use>
                 </svg>
             </a></li>

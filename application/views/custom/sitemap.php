@@ -44,7 +44,7 @@
                                         <li>
                                             <a
                                                 href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop['shop_id'])); ?>">
-                                                <?php echo $shop['shop_name']; ?>
+                                                <?php echo $shop['shop_name'] ?? $shop['shop_identifier']; ?>
                                             </a>
                                         </li>
                                     <?php } ?>

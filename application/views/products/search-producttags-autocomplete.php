@@ -63,7 +63,7 @@ if (empty($keyword)) {
                     <a class="recent-search__link recentSearch-js" href="javascript:void(0)"><span class=""><?php echo $keyword; ?></span></a>
                     <div class="recent-search__arrow recentSearch-js">
                         <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#arrow-top"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#arrow-top"></use>
                         </svg>
                     </div>
                 </li>

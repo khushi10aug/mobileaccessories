@@ -31,7 +31,7 @@
                     <a class="industry-carousal-link" title="<?php echo $category['prodcat_name']; ?>"
                         href="<?php echo $prodCatUrl; ?>">
                         <div class="industry-carousal-block">
-                            <img class="industry-carousal-icon" src="<?php echo $catIconUrl; ?>">
+                            <img class="industry-carousal-icon" src="<?php echo $catIconUrl; ?>" alt="<?php echo $category['prodcat_name']; ?>">
                             <div class="industry-carousal-name"><span><?php echo $category['prodcat_name']; ?></span>
                             </div>
                         </div>

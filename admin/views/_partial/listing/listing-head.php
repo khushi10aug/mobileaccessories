@@ -13,7 +13,7 @@ if (isset($actionItemsData['formColumns']) && !empty($actionItemsData['formColum
         $actionItemsData['columnButtons'] .= '<li>
             <svg class="svg handleJs" width="18" height="18">
                 <use
-                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#drag">
+                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#drag">
                 </use>
             </svg>
             <label class="checkbox ' . $disabled . '">

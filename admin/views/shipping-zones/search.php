@@ -35,7 +35,7 @@ if (!empty($zones)) {
                             <li>
                                 <a class="" href="javascript:void(0);" onclick="zoneForm(<?php echo $profile_id; ?>, <?php echo $zone['shipzone_id'] ?>)" title="<?php echo Labels::getLabel("LBL_Edit", $siteLangId); ?>">
                                     <svg class="svg" width="18" height="18">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#edit">
                                         </use>
                                     </svg>
                                 </a>
@@ -43,7 +43,7 @@ if (!empty($zones)) {
                             <li>
                                 <a class="" href="javascript:void(0);" onclick="deleteZone(<?php echo $shipProZoneId ?>)" title="<?php echo Labels::getLabel("LBL_Delete", $siteLangId); ?>">
                                     <svg class="svg" width="18" height="18">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#delete">
                                         </use>
                                     </svg>
                                 </a>
@@ -91,7 +91,7 @@ if (!empty($zones)) {
                                             <li>
                                                 <a class="" href="javascript:void(0);" onclick="addEditShipRates(<?php echo $rate['shiprate_shipprozone_id'] ?>, <?php echo $rate['shiprate_id'] ?>);" title="<?php echo Labels::getLabel("LBL_Edit", $siteLangId); ?>">
                                                     <svg class="svg" width="18" height="18">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#edit">
                                                         </use>
                                                     </svg>
                                                 </a>
@@ -99,7 +99,7 @@ if (!empty($zones)) {
                                             <li>
                                                 <a class="" href="javascript:void(0);" onclick="deleteRate(<?php echo $rate['shiprate_id'] ?>)" title="<?php echo Labels::getLabel("LBL_Delete", $siteLangId); ?>">
                                                     <svg class="svg" width="18" height="18">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#delete">
                                                         </use>
                                                     </svg>
                                                 </a>

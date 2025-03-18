@@ -6,7 +6,7 @@ class HtmlHelper
     public const DANGER = 3;
     public const PRIMARY = 4;
     public const INFO = 5;
-    
+
     public static function addButtonHtml(string $lbl, string $type = 'button', $name = '', $class = '', $onclick = ''): string
     {
         $name = (!empty($name) ? 'name="' . $name . '"' : '');
@@ -267,7 +267,7 @@ class HtmlHelper
                                         <a href="javascript:void(0)"  onclick="' . $editFn . '" data-bs-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('FRM_CLICK_HERE_TO_EDIT', $langId) . '">
                                             <svg class="svg" width="18" height="18">
                                                 <use
-                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#edit">
                                                 </use>
                                             </svg>
                                         </a>
@@ -277,7 +277,7 @@ class HtmlHelper
                                             <a href="javascript:void(0)"  onclick="' . $removeFn . '" data-bs-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('FRM_CLICK_HERE_TO_REMOVE', $langId) . '">
                                                 <svg class="svg" width="18" height="18">
                                                     <use
-                                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
                                                     </use>
                                                 </svg>
                                                 </a>
@@ -329,7 +329,7 @@ class HtmlHelper
             $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
             $langFld->htmlAfterField = '<a href="javascript:void(0);" onclick="' . $onclickFn . '" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
                                 <svg class="svg" width="18" height="18">
-                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-translate">
+                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#icon-translate">
                                     </use>
                                 </svg>
                             </a>';
@@ -347,8 +347,8 @@ class HtmlHelper
         $titleArr = explode(' ', $keyword);
         $title = '';
         foreach ($titleArr as $val) {
-            $title .= substr($val, 0, 1);
-            if (strlen($title) == $len) {
+            $title .= mb_substr($val, 0, 1);
+            if (mb_strlen($title) == $len) {
                 break;
             }
         }
@@ -374,7 +374,7 @@ class HtmlHelper
     public static function getErrorMessageHtml(string $message, string $icon = ''): string
     {
         $icon = empty($icon) ? '<svg class="svg" height="18" width="18">
-                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#warning">
+                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#warning">
                                     </use>
                                 </svg>' :  $icon;
         return '<div class="alert alert-danger" role="alert">

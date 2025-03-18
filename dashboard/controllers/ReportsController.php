@@ -114,8 +114,16 @@ class ReportsController extends SellerBaseController
                 break;
         }
         if ($type == 'export') {
-            $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
+            $batchCount = FatApp::getPostedData('batch_count', FatUtility::VAR_INT, 0);
+            $batchNumber = FatApp::getPostedData('batch_number', FatUtility::VAR_INT, 1);
+            $pageSize = Report::MAX_LIMIT;
+            if (isset($batchCount) && $batchCount > 0 && $batchCount <= Report::MAX_LIMIT) {
+                $pageSize = $batchCount;
+            }
+            $pagenumber = ($batchNumber < 1) ? 1 : $batchNumber;
+
+            $srch->setPageNumber($pagenumber);
+            $srch->setPageSize($pageSize);
             $rs = $srch->getResultSet();
             $sheetData = array();
             array_push($sheetData, array_values($fields));
@@ -349,8 +357,16 @@ class ReportsController extends SellerBaseController
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(array('product_id', 'product_name', 'selprod_id', 'selprod_code', 'selprod_user_id', 'selprod_title', 'selprod_price', 'IFNULL(totOrders, 0) as totOrders', 'grouped_option_name', 'grouped_optionvalue_name', 'IFNULL(s_l.shop_name, shop_identifier) as shop_name', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'count(distinct tquwl.uwlist_user_id) as followers', 'selprod_sku', 'opq.*'));
         if ($export == "export") {
-            $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
+            $batchCount = FatApp::getPostedData('batch_count', FatUtility::VAR_INT, 0);
+            $batchNumber = FatApp::getPostedData('batch_number', FatUtility::VAR_INT, 1);
+            $pageSize = Report::MAX_LIMIT;
+            if (isset($batchCount) && $batchCount > 0 && $batchCount <= Report::MAX_LIMIT) {
+                $pageSize = $batchCount;
+            }
+            $pagenumber = ($batchNumber < 1) ? 1 : $batchNumber;
+
+            $srch->setPageNumber($pagenumber);
+            $srch->setPageSize($pageSize);
             $rs = $srch->getResultSet();
             $sheetData = array();
 
@@ -527,8 +543,16 @@ class ReportsController extends SellerBaseController
         $srch->addMultipleFields(['IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_stock', 'IFNULL(qryop.stock_on_order, 0) as stock_on_order', 'selprod_cost', '(selprod_stock * selprod_cost)  as inventory_value', 'selprod_price', '(selprod_stock * selprod_price)  as  total_value', 'selprod_id', 'brand_name', 'selprod_sku']);
 
         if ($type == 'export') {
-            $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
+            $batchCount = FatApp::getPostedData('batch_count', FatUtility::VAR_INT, 0);
+            $batchNumber = FatApp::getPostedData('batch_number', FatUtility::VAR_INT, 1);
+            $pageSize = Report::MAX_LIMIT;
+            if (isset($batchCount) && $batchCount > 0 && $batchCount <= Report::MAX_LIMIT) {
+                $pageSize = $batchCount;
+            }
+            $pagenumber = ($batchNumber < 1) ? 1 : $batchNumber;
+
+            $srch->setPageNumber($pagenumber);
+            $srch->setPageSize($pageSize);
             $rs = $srch->getResultSet();
             $sheetData = array();
             array_push($sheetData, array_values($fields));
@@ -705,8 +729,16 @@ class ReportsController extends SellerBaseController
         $srch->doNotCalculateRecords();
         $srch->setOrderBy($sortBy, $sortOrder);
         if ($export == "export") {
-            $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
+            $batchCount = FatApp::getPostedData('batch_count', FatUtility::VAR_INT, 0);
+            $batchNumber = FatApp::getPostedData('batch_number', FatUtility::VAR_INT, 1);
+            $pageSize = Report::MAX_LIMIT;
+            if (isset($batchCount) && $batchCount > 0 && $batchCount <= Report::MAX_LIMIT) {
+                $pageSize = $batchCount;
+            }
+            $pagenumber = ($batchNumber < 1) ? 1 : $batchNumber;
+
+            $srch->setPageNumber($pagenumber);
+            $srch->setPageSize($pageSize);
             $rs = $srch->getResultSet();
             $sheetData = array();
             array_push($sheetData, array_values($fields));
@@ -891,6 +923,36 @@ class ReportsController extends SellerBaseController
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-clear');
+        return $frm;
+    }
+
+    public function form()
+    {
+        $formTitle = Labels::getLabel('LBL_SALES_REPORT', $this->siteLangId);
+        $frm = $this->getExportForm($this->siteLangId);
+        $this->set('frm', $frm);
+        $this->set('includeTabs', false);
+        $this->set('formTitle', $formTitle);
+        $this->set('html', $this->_template->render(false, false, '_partial/listing/form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    protected function getExportForm($langId)
+    {
+
+        $frm = new Form('frmExport', array('id' => 'frmExport'));
+
+        /* Batch Count[ */
+        $fld =  $frm->addIntegerField(Labels::getLabel('FRM_COUNTS_PER_BATCH', $langId), 'batch_count', Report::MAX_LIMIT, array('id' => 'batch_count'));
+        $fld->requirements()->setRequired(true);
+        $fld->requirements()->setRange(1, Report::MAX_LIMIT);
+        /*]*/
+
+        /* Batch Number[ */
+        $fld = $frm->addIntegerField(Labels::getLabel('FRM_BATCH_NUMBER', $langId), 'batch_number', 1, array('id' => 'batch_number'));
+        $fld->requirements()->setRequired(true);
+        $fld->requirements()->setPositive();
+        $frm->setFormTagAttribute('onSubmit', 'exportReport(); return false;');
         return $frm;
     }
 

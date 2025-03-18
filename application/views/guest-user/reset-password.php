@@ -27,13 +27,21 @@ $fld->value = $credential_username;
     <div class="form-sign">
         <?php
         $logoUrl = UrlHelper::generateUrl();
+        $imgDataType = '';
+        $logoWidth = '';
         $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
-        $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
         $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-        $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        if (AttachedFile::FILE_ATTACHMENT_TYPE_SVG == $fileData['afile_attachment_type']) {
+            $siteLogo = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']) . $uploadedTime;
+            $imgDataType = 'data-type="svg"';
+            $logoWidth = 'width="120"';
+        } else {
+            $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
+            $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        }
         ?>
-        <a class="form-sign-logo" href="<?php echo $logoUrl; ?>">
-            <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>">
+        <a class="form-sign-logo" href="<?php echo $logoUrl; ?>" <?php echo $imgDataType; ?>>
+            <img <?php if (AttachedFile::FILE_ATTACHMENT_TYPE_OTHER == $fileData['afile_attachment_type'] && $fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" <?php echo $logoWidth; ?>>
         </a>
         <div class="form-sign-body">
             <div class="card-sign">
@@ -51,7 +59,7 @@ $fld->value = $credential_username;
                             <?php echo Labels::getLabel('LBL_BACK_TO_LOGIN', $siteLangId); ?>
                         </a>
                     </div>
-                </div>                
+                </div>
             </div>
         </div>
     </div>

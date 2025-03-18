@@ -10,7 +10,7 @@ $actionItemsData['otherButtons'] = [
         ],
         'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                 <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#view">
                                 </use>
                             </svg><span>' . Labels::getLabel('BTN_READ', $siteLangId) . '</span>',
     ],
@@ -23,7 +23,7 @@ $actionItemsData['otherButtons'] = [
         ],
         'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                 <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#hide">
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#hide">
                                 </use>
                             </svg><span>' . Labels::getLabel('BTN_UNREAD', $siteLangId) . '</span>',
     ],

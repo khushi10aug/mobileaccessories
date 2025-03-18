@@ -47,7 +47,7 @@ $products = $orderInfo['orderProducts'];
                             <?php if ($orderInfo['order_type'] != Orders::ORDER_WALLET_RECHARGE && $orderInfo['order_type'] != Orders::ORDER_GIFT_CARD) { ?>
                                 <p>
                                     <svg class="svg" width="22px" height="22px">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#TimePlaced" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#TimePlaced">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#TimePlaced" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#TimePlaced">
                                         </use>
                                     </svg>
                                     <?php
@@ -63,7 +63,7 @@ $products = $orderInfo['orderProducts'];
                                     <span class="no-print">
                                         <a class="btn btn-link btn-icon" onclick="window.print();" href="javascript:void(0)">
                                             <svg class="svg" width="16" height="16">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#print">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#print">
                                                 </use>
                                             </svg>
                                             <?php echo Labels::getLabel("LBL_PRINT", $siteLangId); ?></a>

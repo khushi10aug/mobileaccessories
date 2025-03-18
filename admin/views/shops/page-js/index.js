@@ -44,5 +44,13 @@
         var slide_screen = $("#slideScreenJs").val();
         shopImages(shop_id, 'image', slide_screen, lang_id);
     });
+    shopMissingInfo = function(shopId){     
+        fcom.updateWithAjax(fcom.makeUrl('Shops', 'shopMissingInfo'), {recordId: shopId}, function(t) { 
+            fcom.closeProcessing();
+            $.ykmodal(t.html);
+            fcom.removeLoader();
+            
+        });
+    }
 })();
 

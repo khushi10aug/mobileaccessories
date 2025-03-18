@@ -17,7 +17,7 @@ if (true === $addVerifiedBadge) {
     $verifiedBadge = '<div class="verified ' . $class . '" data-bs-toggle="tooltip" data-bs-palcement="top" title="' . $verifiedTitle . '">
                     <svg class="svg" width="16" height="16">
                         <use
-                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-verified">
+                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#icon-verified">
                         </use>
                     </svg>
                 </div>';

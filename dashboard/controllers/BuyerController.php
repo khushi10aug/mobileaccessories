@@ -2815,7 +2815,7 @@ class BuyerController extends BuyerBaseController
         $frm->addCheckBox(strtr(Labels::getLabel('FRM_I_AGREE_THAT_MY_REVIEW,_including_my_name,_username,_may_be_shared_by_{website-name}_on_its_website_and_mobile_app_to_the_public._Further_details_of_which_are_set_out_in_the_Privacy_Policy_which_I_have_previously_consented', $langId), $arr), 'agree', 1);
         $frm->addHiddenField('', 'op_id', $op_id);
         $frm->addHiddenField('', 'referrer', CommonHelper::redirectUserReferer(true));
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEND_REVIEW', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $langId));
         return $frm;
     }
 

@@ -14,7 +14,7 @@ if (isset($editButton) && is_array($editButton)) {
         array('href' => 'javascript:void(0)', 'class' => $cls, "onclick" => $onclick),
         '<svg class="svg" width="18" height="18">
             <use
-                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#edit">
             </use>
         </svg>',
         true
@@ -48,7 +48,7 @@ if (isset($deleteButton) && is_array($deleteButton)) {
         array('href' => 'javascript:void(0)', 'class' => $cls, "onclick" => $onclick),
         '<svg class="svg" width="18" height="18">
             <use
-                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
             </use>
         </svg>',
         true
@@ -59,7 +59,7 @@ if (isset($deleteButton) && is_array($deleteButton)) {
 if (isset($dropdownButtons) && is_array($dropdownButtons)) {
     $li = $ul->appendElement('li', ['class' => 'actions-item dropdown position-static', 'data-bs-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId)]);
     $li->appendElement('button', array('class' => 'actions-link', 'data-bs-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'false'), '<svg class="svg" width="18" height="18">
-                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#more-dots">
+                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#more-dots">
                                     </use>
                                 </svg>', true);
     $div = $li->appendElement('div', array('class' => 'dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim'));
@@ -75,7 +75,7 @@ if (isset($dropdownButtons) && is_array($dropdownButtons)) {
             '<i class="icn">
             <svg class="svg" width="18" height="18">
                 <use
-                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#edit">
                 </use>
             </svg>
         </i>' . Labels::getLabel('LBL_EDIT', $siteLangId),
@@ -106,7 +106,7 @@ if (isset($dropdownButtons) && is_array($dropdownButtons)) {
             '<i class="icn">
             <svg class="svg" width="18" height="18">
                 <use
-                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
                 </use>
             </svg>
         </i>' . Labels::getLabel('LBL_DELETE', $siteLangId),

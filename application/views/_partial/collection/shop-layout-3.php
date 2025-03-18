@@ -34,7 +34,7 @@ if (isset($collection['shops']) && count($collection['shops'])) {
                                         <?php if (round($shop['shopData']['shop_avg_rating']) > 0) { ?>
                                             <div class="product-ratings">
                                                 <svg class="svg svg-star" width="14" height="14">
-                                                    <use xlink:href="/images/retina/sprite.svg#star-yellow"></use>
+                                                    <use xlink:href="/images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-yellow"></use>
                                                 </svg>
                                                 <span class="rate">
                                                     <?php echo round($shop['shopData']['shop_avg_rating']); ?>
@@ -64,7 +64,7 @@ if (isset($collection['shops']) && count($collection['shops'])) {
                                         'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($productId, (isset($prodImgSize) && isset($i) && ($i == 1)) ? $prodImgSize : ImageDimension::VIEW_MOBILE, $selProdId, 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg')],
                                         'ratio' => '1:1',
                                         'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($productId, (isset($prodImgSize) && isset($i) && ($i == 1)) ? $prodImgSize : ImageDimension::VIEW_MOBILE, $selProdId, 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
-                                        'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $prodcatName,
+                                        'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $product['product_name'],
                                         'siteLangId' => $siteLangId,
                                     ];
                                     $prodUrl = 0 < $selProdId ? UrlHelper::generateUrl('Products', 'View', array($selProdId)) : 'javascript:void(0);';

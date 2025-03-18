@@ -46,7 +46,7 @@ if (!empty($digitalDownloads)) { ?>
                                                 <a href="' . UrlHelper::generateUrl('Buyer', 'downloadDigitalFile', array($row['afile_id'], $row['afile_record_id'])) . '">
                                                     <svg class="svg" width="18" height="18">
                                                         <use
-                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#download">
                                                         </use>
                                                     </svg>
                                                 </a>

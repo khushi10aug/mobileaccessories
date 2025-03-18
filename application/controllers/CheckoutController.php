@@ -110,7 +110,7 @@ class CheckoutController extends MyAppController
 
                     /* ] */
 
-                    $cartProducts = $this->cartObj->getProducts($this->siteLangId);
+                    $cartProducts = $this->cartObj->getBasketProducts($this->siteLangId);
                     foreach ($cartProducts as $product) {
                         if (!$product['in_stock'] && !isset($_SESSION['offer_checkout'])) {
                             $stock = false;

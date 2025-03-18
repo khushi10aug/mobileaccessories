@@ -48,7 +48,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             <div class="alert alert-info" role="alert">
                 <div class="alert-icon">
                     <svg class="svg" width="18" height="18">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#info">
                         </use>
                     </svg>
                 </div>

@@ -70,7 +70,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                             <button onclick="loadGeoLocation()" class="btn btn-brand btn-block btn-detect">
 
                                 <svg class="svg" width="18" height="18">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#gps">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#gps">
                                     </use>
                                 </svg>
 

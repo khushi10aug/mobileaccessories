@@ -2,7 +2,8 @@
 if(!empty($timeSlots)){
     foreach($timeSlots as $slot) { 
         $displayTime = date("H:i:s", strtotime('+'.$pickupInterval.' hour'));
-        if($selectedDate == date('Y-m-d') && $displayTime > $slot['tslot_from_time']){
+        $displayDate = date("Y-m-d", strtotime(date("Y-m-d", strtotime('+'.$pickupInterval.' hour'))));
+        if($selectedDate == $displayDate && $displayTime > $slot['tslot_from_time']){
             continue;
         }
 ?>

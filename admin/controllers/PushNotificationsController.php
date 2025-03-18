@@ -340,10 +340,6 @@ class PushNotificationsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        if (!$row = DiscountCoupons::getAttributesById($recordId, 'coupon_id')) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
         $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PUSH_NOTIFICATION_IMAGE, $recordId);
         $this->set('images', $images);
         $this->set('recordId', $recordId);

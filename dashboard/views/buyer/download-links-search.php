@@ -87,7 +87,7 @@ if (null != $fld) {
 
                         $li->appendElement('a', array('href' => $row['opddl_downloadable_link'], 'target' => '_blank', 'onclick' => $linkOnClick, 'class' => '', 'title' => Labels::getLabel('LBL_Click_to_download', $siteLangId)), '<svg class="svg" width="18" height="18">
                         <use
-                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#download">
                         </use>
                     </svg>', true);
                     }
@@ -113,7 +113,7 @@ if (null != $fld) {
                             $li = $ul->appendElement("li");
                             $li->appendElement('a', array('href' => UrlHelper::generateUrl('Buyer', 'downloadDigitalLinksFile', array($row['op_id'])), 'class' => '', 'title' => Labels::getLabel('LBL_DOWNLOAD_LINKS', $siteLangId)), '<svg class="svg" width="18" height="18">
                             <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#download">
                             </use>
                         </svg>', true);
                         }

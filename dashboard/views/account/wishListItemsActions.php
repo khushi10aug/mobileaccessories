@@ -18,7 +18,7 @@ if (isset($products) && 0 < count($products)) {
                 <button class="btn btn-outline-gray btn-icon formActionBtn-js disabled"
                     onclick="viewWishList(0, this, event, <?php echo $uwlist_id; ?>);">
                     <svg class="svg btn-icon-start" width="18" height="18">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#move">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#move">
                         </use>
                     </svg>
                     <span class="btn-txt"><?php echo Labels::getLabel('LBL_MOVE', $siteLangId); ?></span>
@@ -31,7 +31,7 @@ if (isset($products) && 0 < count($products)) {
                 <button class="btn btn-outline-gray btn-icon formActionBtn-js disabled"
                     onclick="addSelectedToCart(event, <?php echo ($isWishList ? 1 : 0); ?>);">
                     <svg class="svg btn-icon-start" width="18" height="18">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#cart">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#cart">
                         </use>
                     </svg>
                     <span class="btn-txt"><?php echo Labels::getLabel('LBL_CART', $siteLangId); ?></span>
@@ -43,7 +43,7 @@ if (isset($products) && 0 < count($products)) {
             data-placement="top">
             <button class="btn btn-outline-gray btn-icon formActionBtn-js disabled" onclick="<?php echo $function; ?>">
                 <svg class="svg btn-icon-start" width="18" height="18">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#delete">
                     </use>
                 </svg>
                 <span class="btn-txt"><?php echo Labels::getLabel('LBL_REMOVE', $siteLangId); ?></span></button>
@@ -53,7 +53,7 @@ if (isset($products) && 0 < count($products)) {
             <li title="<?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>" data-bs-toggle="tooltip" data-placement="top">
                 <button class="btn btn-outline-gray btn-icon" onclick="searchWishList()">
                     <svg class="svg btn-icon-start" width="18" height="18">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#back">
                         </use>
                     </svg>
                     <span class="txt"><?php echo Labels::getLabel('LBL_Back', $siteLangId); ?></span></button>

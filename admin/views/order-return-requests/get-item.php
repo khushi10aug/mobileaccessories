@@ -45,7 +45,7 @@
                 <li class="list-stats-item">
                     <a href="<?php echo UrlHelper::generateUrl('OrderReturnRequests', 'downloadAttachment', [$order["orrequest_id"]]);  ?>" class="btn btn-icon btn-outline-brand btn-add" title="<?php echo Labels::getLabel('LBL_DOWNLOAD_ATTACHMENT', $siteLangId); ?>" data-bs-toggle='tooltip' data-placement='top'>
                         <svg class="svg btn-icon-start" width="18" height="18">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#icon-download">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-download">
                             </use>
                         </svg>
                         <span><?php echo Labels::getLabel('LBL_DOWNLOAD', $siteLangId); ?></span>

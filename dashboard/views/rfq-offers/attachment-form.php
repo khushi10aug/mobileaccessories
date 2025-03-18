@@ -38,7 +38,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
         <button class="btn-attachments btnAttachmentsJs" type="button">
             <?php echo $frm->getFieldHtml('attachment_file'); ?>
             <svg class="svg" width="20" height="20">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#attachments"></use>
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#attachments"></use>
             </svg>
         </button>
         <?php
@@ -52,14 +52,14 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
                 echo $fld = str_replace("</label>", "", $fld);
                 ?>
                 <svg class="svg" width="20" height="20">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#user-follow-line"></use>
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#user-follow-line"></use>
                 </svg>
             </button>
         <?php } ?>
         <?php echo $frm->getFieldHtml('rom_message'); ?>
         <button class="btn-send btnSubmitJs" type="submit" disabled>
             <svg class="svg" width="20" height="20">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#send"></use>
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#send"></use>
             </svg>
         </button>
         <?php echo '</form>' . $frm->getExternalJs(); ?>

@@ -19,7 +19,7 @@
                                 'title' => Labels::getLabel('LBL_ADD_SOCIAL_PLATFORM', $siteLangId)
                             ],
                             'label' => '<svg class="svg btn-icon-start" width="18" height="18">
-                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#add">
                                     </use>
                                 </svg><span>' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>'
                         ],
@@ -95,7 +95,7 @@
                             array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "addForm(" . $row['splatform_id'] . ")"),
                             '<svg class="svg" width="18" height="18">
                             <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#edit">
                             </use>
                         </svg>',
                             true
@@ -103,7 +103,7 @@
                         $li = $ul->appendElement("li");
                         $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteRecord(" . $row['splatform_id'] . ")"), '<svg class="svg" width="18" height="18">
                             <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
                             </use>
                         </svg>', true);
                         break;

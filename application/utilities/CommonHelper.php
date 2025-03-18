@@ -316,14 +316,28 @@ class CommonHelper extends FatUtility
         if (!$sortKeys) {
             return $tempArr;
         }
+
+        // Custom sorting to maintain the order of the input array
+        $sortedTempArr = array();
         foreach ($tempArr as $key => $val) {
             $codeArr = explode($separater, $key);
-            sort($codeArr);
+            // Sort the codeArr based on the order of the input array
+            usort($codeArr, function($a, $b) use ($arr, $useKey) {
+                $aIndex = $bIndex = -1;
+                foreach ($arr as $index => $item) {
+                    if (array_key_exists($a, $item[$useKey])) {
+                        $aIndex = $index;
+                    }
+                    if (array_key_exists($b, $item[$useKey])) {
+                        $bIndex = $index;
+                    }
+                }
+                return $aIndex - $bIndex;
+            });
             $selProdCode = implode($separater, $codeArr);
-            unset($tempArr[$key]);
-            $tempArr[$selProdCode] = $val;
+            $sortedTempArr[$selProdCode] = $val;
         }
-        return $tempArr;
+        return $sortedTempArr;
     }
 
     public static function rewardPointDiscount($orderNetAmount, $rewardPoints)
@@ -1948,7 +1962,8 @@ class CommonHelper extends FatUtility
     }
 
     public static function cleanArray($obj)
-    {
+    {        
+        ini_set('memory_limit', '100M');
         $orig_obj = $obj;
 
         // We want to preserve the object name to the array

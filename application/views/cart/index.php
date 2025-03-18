@@ -14,7 +14,7 @@
                                             <label class="control-label radio is-active shippingLblJs">
                                                 <input class="control-input" type="radio" id="shipping" name="fulfillment_type" value="<?php echo Shipping::FULFILMENT_SHIP; ?>" <?php echo ($pickUpProductsCount == 0) ? "checked='true'" : ''; ?>>
                                                 <svg class="svg" width="18" height="18">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#shipping">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#shipping">
                                                     </use>
                                                 </svg><?php echo Labels::getLabel('LBL_SHIP_MY_ORDER', $siteLangId); ?>
                                             </label>
@@ -23,7 +23,7 @@
                                             <label class="control-label radio pickupLblJs">
                                                 <input class="control-input" type="radio" id="pickup" name="fulfillment_type" value="<?php echo Shipping::FULFILMENT_PICKUP; ?>" <?php echo $shipProductsCount == 0 ? "checked='true'" : ''; ?>>
                                                 <svg class="svg" width="18" height="18">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#store">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#store">
                                                     </use>
                                                 </svg>
                                                 <?php echo Labels::getLabel('LBL_PICKUP_IN_STORE', $siteLangId); ?>

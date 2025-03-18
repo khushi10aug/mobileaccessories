@@ -57,7 +57,7 @@
                         array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_Change_Password', $siteLangId), "onclick" => "userPasswordForm(" . $row['user_id'] . ")"),
                         '<svg class="svg" width="18" height="18">
                             <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#password">
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#password">
                             </use>
                         </svg>',
                         true
@@ -69,7 +69,7 @@
                         array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "addUserForm(" . $row['user_id'] . ")"),
                         '<svg class="svg" width="18" height="18">
                             <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#edit">
                             </use>
                         </svg>',
                         true
@@ -81,7 +81,7 @@
                         array('href' => UrlHelper::generateUrl('Seller', 'UserPermissions', array($row['user_id'])), 'title' => Labels::getLabel('LBL_Permissions', $siteLangId)),
                         '<svg class="svg" width="18" height="18">
                             <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#user-permission">
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#user-permission">
                             </use>
                         </svg>',
                         true

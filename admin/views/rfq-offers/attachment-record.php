@@ -32,7 +32,7 @@ if (1 > $row['rom_buyer_access']) {
                 <a class="attachments-item" target="blank" title="<?php echo Labels::getLabel('LBL_DOWNLOAD_FILE', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('RfqOffers', 'downloadAttachmentFile', array($row['rom_id'], $row['rom_primary_offer_id'])); ?>">
                     <span class="attachments-thumb">
                         <svg class="svg" width="14" height="14">
-                            <use xlink:href="<?php echo CONF_WEBROOT_BACKEND; ?>images/retina/sprite.svg#download"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_BACKEND; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#download"></use>
                         </svg>
                     </span>
                     <span class="attachments-file-name"> <?php echo $row['afile_name']; ?></span>

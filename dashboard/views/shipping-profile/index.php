@@ -14,7 +14,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     'title' => Labels::getLabel('LBL_Create_Profile', $siteLangId)
                 ],
                 'icon' => '<svg class="svg btn-icon-start" width="18" height="18">
-                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#add">
                             </use>
                         </svg>',
                 'label' => Labels::getLabel('LBL_NEW', $siteLangId)

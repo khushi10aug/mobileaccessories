@@ -651,7 +651,7 @@ class CollectionsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $this->setFormTitle($collectionType, $data['collection_layout_type']);
-        $mediaType = ($data['collection_layout_type'] != Collections::TYPE_CATEGORY_LAYOUT12) ? ImageDimension::VIEW_MOBILE : ImageDimension::VIEW_DESKTOP;
+        [$mediaType, $layoutType] = ($data['collection_layout_type'] != Collections::TYPE_CATEGORY_LAYOUT12) ? [ImageDimension::VIEW_MOBILE, 0] : [ImageDimension::VIEW_DESKTOP, Collections::TYPE_CATEGORY_LAYOUT12];
 
         $frm = $this->getMediaForm($recordId);
         $this->set('recordId', $recordId);
@@ -662,11 +662,12 @@ class CollectionsController extends ListingBaseController
         $this->set('activeGentab', false);
         $this->set('displayMediaOnly', $data['collection_display_media_only']);
         $this->set('imageDimension', ImageDimension::getDisplayCollectionImageData($mediaType));
+        $this->set('imageDimensions', ImageDimension::getDisplayCollectionImageData(layout: $layoutType));
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function images($recordId, $langId = 0)
+    public function images($recordId, $langId = 0, $screen = 0)
     {
         $this->checkEditPrivilege(true);
         $languages = Language::getAllNames();
@@ -679,14 +680,15 @@ class CollectionsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        if (!$row = Collections::getAttributesById($recordId, 'collection_id')) {
+        if (!$row = Collections::getAttributesById($recordId, ['collection_id', 'collection_layout_type'])) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_COLLECTION_IMAGE, $recordId, 0, $langId, (1 == count($languages)), 0, 1);
+        $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_COLLECTION_IMAGE, $recordId, 0, $langId, (1 == count($languages)), $screen, 1);
         $this->set('languages', Language::getAllNames());
         $this->set('images', $images);
         $this->set('recordId', $recordId);
+        $this->set('collection_layout_type', $row['collection_layout_type']);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
@@ -699,7 +701,14 @@ class CollectionsController extends ListingBaseController
         $frm->addHiddenField('', 'min_width');
         $frm->addHiddenField('', 'min_height');
 
-        $frm->addCheckBox(Labels::getLabel("FRM_DISPLAY_MEDIA_ONLY", $this->siteLangId), 'collection_display_media_only', 1, array(), false, 0);
+        
+        $data = Collections::getAttributesById($recordId, ['collection_type', 'collection_layout_type']);
+        if(in_array($data['collection_layout_type'], Collections::COLLECTION_WITH_MEDIA)) {
+            $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
+            $frm->addSelectBox(Labels::getLabel("FRM_DEVICE", $this->siteLangId), 'collection_screen', $screenArr, '', array(), '');
+        } else {
+            $frm->addCheckBox(Labels::getLabel("FRM_DISPLAY_MEDIA_ONLY", $this->siteLangId), 'collection_display_media_only', 1, array(), false, 0);
+        }
 
         $languagesArr = applicationConstants::getAllLanguages();
         if (count($languagesArr) > 1) {
@@ -724,6 +733,7 @@ class CollectionsController extends ListingBaseController
         $collection_id = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         $file_type = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
+        $screen = FatApp::getPostedData('collection_screen', FatUtility::VAR_INT, 0);
 
         if (!$collection_id || !$file_type) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -754,7 +764,8 @@ class CollectionsController extends ListingBaseController
                 $_FILES['cropped_image']['name'],
                 -1,
                 true,
-                $lang_id
+                $lang_id,
+                $screen
             )
         ) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);

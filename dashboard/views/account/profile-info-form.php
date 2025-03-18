@@ -91,7 +91,7 @@ $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'upload
                 <?php if ($mode == 'Edit') { ?>
                     <label class="btn btn-delete" title="<?php echo Labels::getLabel('LBL_REMOVE_IMAGE', $siteLangId); ?>" onclick="removeProfileImage()">                       
                         <svg class="svg" width="14" height="14">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#delete">
                             </use>
                         </svg>
                     </label>  
@@ -99,7 +99,7 @@ $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'upload
                     <label class="btn btn-edit" title="<?php echo Labels::getLabel('LBL_UPLOAD_IMAGE_FILE', $siteLangId); ?>">
                         <input type="file" class="sr-only" id="profileInputImage" name="file" accept="image/*" onChange="popupImage(this)">
                         <svg class="svg" width="14" height="14">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#edit">
                             </use>
                         </svg>
                     </label>
@@ -117,7 +117,7 @@ $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'upload
                         <li <?php echo (User::USER_BUYER_DASHBOARD == $data['user_preferred_dashboard']) ? 'class="is-active"' : '' ?>>
                             <button class="user-type-link" type="button" href="javascript:void(0)" onclick="setPreferredDashboad(<?php echo User::USER_BUYER_DASHBOARD; ?>)">
                                 <svg class="svg" width="14" height="14">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#tick">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#tick">
                                     </use>
                                 </svg>
                                 <?php echo Labels::getLabel('LBL_Buyer', $siteLangId); ?>
@@ -128,7 +128,7 @@ $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'upload
                         <li <?php echo (User::USER_SELLER_DASHBOARD == $data['user_preferred_dashboard']) ? 'class="is-active"' : '' ?>>
                             <button class="user-type-link" type="button" href="javascript:void(0)" onclick="setPreferredDashboad(<?php echo User::USER_SELLER_DASHBOARD; ?>)">
                                 <svg class="svg" width="14" height="14">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#tick">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#tick">
                                     </use>
                                 </svg>
                                 <?php echo Labels::getLabel('LBL_Seller', $siteLangId); ?></button>

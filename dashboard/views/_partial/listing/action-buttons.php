@@ -20,7 +20,7 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
         ],
         '<svg class="svg btn-icon-start" width="18" height="18">
             <use
-                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#active">
+                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#active">
             </use>
         </svg><span class="btn-txt">' . Labels::getLabel('BTN_ACTIVATE', $siteLangId) . '</span>',
         true
@@ -36,7 +36,7 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
         ],
         '<svg class="svg btn-icon-start" width="18" height="18">
             <use
-                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#in-active">
+                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#in-active">
             </use>
         </svg><span class="btn-txt">' . Labels::getLabel('BTN_DEACTIVATE', $siteLangId) . '</span>',
         true
@@ -54,7 +54,7 @@ if (isset($deleteButton) && true === $deleteButton && $canEdit) {
         ],
         '<svg class="svg btn-icon-start" width="18" height="18">
             <use
-                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
             </use>
         </svg><span class="btn-txt">' . Labels::getLabel('BTN_DELETE', $siteLangId) . '</span>',
         true
@@ -86,7 +86,7 @@ if (!empty($columnButtons)) {
         ],
         '<svg class="svg" width="18" height="18">
             <use
-                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#columns">
+                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#columns">
             </use>
         </svg>' . Labels::getLabel('LBL_COLUMNS', $siteLangId),
         true

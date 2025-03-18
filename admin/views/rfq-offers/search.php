@@ -82,7 +82,7 @@ if (!isset($tbody)) {
                         <?php if (RfqOffers::STATUS_REJECTED == $row['offer_status']) { ?>
                             <p class="note note-rejects text-danger">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#info">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#info">
                                     </use>
                                 </svg><?php echo Labels::getLabel('MSG_THIS_OFFER_HAS_BEEN_REJECTED_BY_BUYER'); ?>
                             </p>
@@ -90,7 +90,7 @@ if (!isset($tbody)) {
                         <?php if (RfqOffers::STATUS_ACCEPTED == $row['offer_status'] || (applicationConstants::YES == $row['rlo_buyer_acceptance'] && 1 > $row['counter_offer_id'])) { ?>
                             <p class="note note-accepted text-success">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#info">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#info">
                                     </use>
                                 </svg><?php echo Labels::getLabel('MSG_THIS_OFFER_HAS_BEEN_ACCEPTED_BY_BUYER'); ?>
                             </p>
@@ -161,7 +161,7 @@ if (!isset($tbody)) {
                         <?php if (RfqOffers::STATUS_REJECTED == $row['counter_offer_status']) { ?>
                             <p class="note note-rejects text-danger">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#info">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#info">
                                     </use>
                                 </svg><?php echo Labels::getLabel('MSG_THIS_OFFER_HAS_BEEN_REJECTED_BY_SELLER'); ?>
                             </p>
@@ -169,7 +169,7 @@ if (!isset($tbody)) {
                         <?php if (RfqOffers::STATUS_ACCEPTED == $row['counter_offer_status']) { ?>
                             <p class="note note-accepted text-success">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#info">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#info">
                                     </use>
                                 </svg><?php echo Labels::getLabel('MSG_THIS_OFFER_HAS_BEEN_ACCEPTED_BY_SELLER'); ?>
                             </p>
@@ -177,7 +177,7 @@ if (!isset($tbody)) {
                         <?php if (1 > $row['counter_offer_id']) { ?>
                             <p class="note">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#info">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#info">
                                     </use>
                                 </svg><?php echo ($row['offer_negotiable']) ? Labels::getLabel('MSG_NO_OFFER_QUOTED', $siteLangId) : Labels::getLabel('MSG_NOT_OPEN_FOR_QUOTE', $siteLangId); ?>
                             </p>
@@ -195,7 +195,7 @@ if (!isset($tbody)) {
                             <?php if (in_array($row['counter_offer_status'], [RfqOffers::STATUS_OPEN, RfqOffers::STATUS_COUNTERED]) && 1 > $row['rlo_seller_acceptance'] && 0 < $buyerAcceptance) { ?>
                                 <button class="btn <?php echo $buyerOffered ? 'btn-accept' : 'btn-info'; ?> btn-icon" onClick="accept(<?php echo $counterOfferId; ?>,<?php echo  $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_SHARE_FINAL_ACCEPTANCE', $siteLangId); ?>">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#accept">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#accept">
                                         </use>
                                     </svg>
                                     <?php if ($buyerOffered) {
@@ -207,7 +207,7 @@ if (!isset($tbody)) {
                             <?php } else if (RfqOffers::STATUS_REJECTED == $row['counter_offer_status'] && applicationConstants::YES == $row['rlo_buyer_acceptance']) { ?>
                                 <button class="btn btn-info btn-icon" onClick="accept(<?php echo $row['rlo_seller_offer_id']; ?>,<?php echo  $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_SHARE_FINAL_ACCEPTANCE', $siteLangId); ?>">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#accept">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#accept">
                                         </use>
                                     </svg> <?php echo Labels::getLabel('LBL_APPROVE'); ?>
                                 </button>
@@ -215,7 +215,7 @@ if (!isset($tbody)) {
                             if (RfqOffers::STATUS_OPEN == $row['counter_offer_status'] && $row['counter_offer_status'] !== null && 1 > $row['rlo_seller_acceptance']) { ?>
                                 <button class="btn btn-reject btn-icon" onClick="reject(<?php echo $row['counter_offer_id']; ?>,<?php echo $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_Reject', $siteLangId); ?>">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#reject">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#reject">
                                         </use>
                                     </svg> <?php echo Labels::getLabel('LBL_REJECT'); ?>
                                 </button>
@@ -224,7 +224,7 @@ if (!isset($tbody)) {
 
                         <button class="btn btn-gray btn-icon" onclick="view(<?php echo $rfqId; ?>, <?php echo $row['rlo_primary_offer_id']; ?>)">
                             <svg class="svg" width="16" height="16">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#log">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#log">
                                 </use>
                             </svg> <?php echo Labels::getLabel('LBL_OFFERS_LOG', $siteLangId); ?>
                         </button>
@@ -239,7 +239,7 @@ if (!isset($tbody)) {
                                     <span class="dot"></span>
                                 <?php } ?>
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#linking">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#linking">
                                     </use>
                                 </svg> <?php echo Labels::getLabel('LBL_ATTACHMENTS', $siteLangId); ?>
                             </button>
@@ -248,7 +248,7 @@ if (!isset($tbody)) {
                                     <span class="dot"></span>
                                 <?php } ?>
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#admin-reply">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#admin-reply">
                                     </use>
                                 </svg> <?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?>
                             </button>

@@ -32,7 +32,7 @@ foreach ($arrListing as $sn => $row) {
                 $div = $td->appendElement('div', ['class' => 'handleJs']);
                 $div->appendElement('plaintext', $tdAttr, '<svg class="svg" width="18" height="18">
                                                             <use
-                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#drag">
+                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#drag">
                                                             </use>
                                                         </svg>', true);
                 break;
@@ -117,7 +117,7 @@ foreach ($arrListing as $sn => $row) {
                                 'title' => Labels::getLabel('LBL_SETTINGS', $siteLangId)
                             ],
                             'label' => '<svg class="svg" width="20" height="20">
-                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-setting">
+                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#icon-setting">
                                             </use>
                                         </svg>'
                         ],
@@ -179,7 +179,7 @@ $frm->addHiddenField('', 'status'); ?>
                         ],
                         'label' => '<svg class="svg" width="18" height="18">
                                         <use
-                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#sync-currency">
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#sync-currency">
                                         </use>
                                     </svg><span>' . Labels::getLabel('BTN_SYNC', $siteLangId) . '</span>',
                     ]

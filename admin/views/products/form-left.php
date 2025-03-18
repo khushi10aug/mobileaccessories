@@ -8,7 +8,7 @@
                             <a class="stock-nav-link" href="#basic-details">
                                 <i class="stock-nav-icn">
                                     <svg class="svg" width="20" height="20">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg#icn-basic-details">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icn-basic-details">
                                         </use>
                                     </svg>
                                 </i>
@@ -25,7 +25,7 @@
                                 <a class="stock-nav-link" href="#inventory">
                                     <i class="stock-nav-icn">
                                         <svg class="svg" width="20" height="20">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg#icn-variants-options">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icn-variants-options">
                                             </use>
                                         </svg>
                                     </i>
@@ -40,7 +40,7 @@
                                 <a class="stock-nav-link" href="#variants-options">
                                     <i class="stock-nav-icn">
                                         <svg class="svg" width="20" height="20">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg#icn-variants-options">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icn-variants-options">
                                             </use>
                                         </svg>
                                     </i>
@@ -55,7 +55,7 @@
                             <a class="stock-nav-link" href="#media">
                                 <i class="stock-nav-icn">
                                     <svg class="svg" width="20" height="20">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg#icn-media">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icn-media">
                                         </use>
                                     </svg>
                                 </i>
@@ -69,7 +69,7 @@
                             <a class="stock-nav-link" href="#specifications">
                                 <i class="stock-nav-icn">
                                     <svg class="svg" width="20" height="20">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg#icn-specifications">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icn-specifications">
                                         </use>
                                     </svg>
                                 </i>
@@ -83,7 +83,7 @@
                             <a class="stock-nav-link" href="#tax-shipping">
                                 <i class="stock-nav-icn">
                                     <svg class="svg" width="20" height="20">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg#icn-tax-shipping">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icn-tax-shipping">
                                         </use>
                                     </svg>
                                 </i>
@@ -102,7 +102,7 @@
                             <a class="stock-nav-link" href="#digital-files">
                                 <i class="stock-nav-icn">
                                     <svg class="svg" width="20" height="20">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg#icn-digital-files">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icn-digital-files">
                                         </use>
                                     </svg>
                                 </i>
@@ -117,7 +117,7 @@
                             <a class="stock-nav-link" href="#digital-links">
                                 <i class="stock-nav-icn">
                                     <svg class="svg" width="20" height="20">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg#icn-digital-links">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icn-digital-links">
                                         </use>
                                     </svg>
                                 </i>

@@ -5,7 +5,7 @@
             <div class="blog-detail-left">
                 <a class="btn btn-icon btn-link btn-back" href="<?php echo UrlHelper::generateUrl('Blog'); ?>">
                     <svg class="svg" width="20" height="20">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-blog.svg#arrow-back">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-blog.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#arrow-back">
                         </use>
                     </svg>
                 </a> <?php echo Labels::getLabel('LBL_BACK_TO_HOME', $siteLangId); ?>
@@ -40,7 +40,7 @@
                         <div class="share-blog">
                             <button class="btn btn-outline-brand btn-wide btn-icon no-after" type="button" data-bs-toggle="modal" data-bs-target="#socialSharing<?php echo $blogPostData['post_id']; ?>">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-blog.svg#share">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-blog.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#share">
                                     </use>
                                 </svg>
                                 <?php echo Labels::getLabel('LBL_SHARE'); ?>
@@ -158,7 +158,7 @@
                         <li class="social-facebook">
                             <a class="social-link st-custom-button" data-network="facebook" data-url="<?php echo UrlHelper::generateFullUrl('Blog', 'postDetail', array($blogPostData['post_id'])) . '/'; ?>">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#facebook">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#facebook">
                                     </use>
                                 </svg>
 
@@ -167,7 +167,7 @@
                         <li class="social-twitter">
                             <a class="social-link st-custom-button" data-network="twitter">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#twitter">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#twitter">
                                     </use>
                                 </svg>
 
@@ -176,7 +176,7 @@
                         <li class="social-pintrest">
                             <a class="social-link st-custom-button" data-network="pinterest">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pinterest">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#pinterest">
                                     </use>
                                 </svg>
 
@@ -186,7 +186,7 @@
                             <a class="social-link st-custom-button" data-network="email">
 
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#envelope">
                                     </use>
                                 </svg>
 
@@ -201,7 +201,7 @@
                         </span>
                         <button class="copy-btn" type="button" onclick="copyText(this, true)" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>">
                             <svg class="svg" width="18" height="18">
-                                <use xlink:href="<?php echo  CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#copy-to-all">
+                                <use xlink:href="<?php echo  CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#copy-to-all">
                                 </use>
                             </svg>
                         </button>

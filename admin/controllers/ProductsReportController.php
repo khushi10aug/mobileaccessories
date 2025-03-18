@@ -39,7 +39,9 @@ class ProductsReportController extends ListingBaseController
 
     public function search($type = false)
     {
-        $this->getListingData($type);
+        $batchCount = FatApp::getPostedData('batch_count', FatUtility::VAR_INT, 0);
+        $batchNumber = FatApp::getPostedData('batch_number', FatUtility::VAR_INT, 1);
+        $this->getListingData($type, $batchCount, $batchNumber);
         $jsonData = [
             'headSection' => $this->_template->render(false, false, '_partial/listing/head-section.php', true),
             'listingHtml' => $this->_template->render(false, false, 'products-report/search.php', true),
@@ -48,7 +50,7 @@ class ProductsReportController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    public function getListingData($type = false)
+    public function getListingData($type = false, $batchCount = 1, $batchNumber = 0)
     {
         $db = FatApp::getDb();
 
@@ -167,8 +169,14 @@ class ProductsReportController extends ListingBaseController
         }
 
         if ($type == 'export') {
-            $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
+            $pageSize = Report::MAX_LIMIT;
+            if (isset($batchCount) && $batchCount > 0 && $batchCount <= Report::MAX_LIMIT) {
+                $pageSize = $batchCount;
+            }
+            $pagenumber = ($batchNumber < 1) ? 1 : $batchNumber;
+
+            $srch->setPageNumber($pagenumber);
+            $srch->setPageSize($pageSize);
             $rs = $srch->getResultSet();
             $sheetData = array();
 
@@ -187,15 +195,15 @@ class ProductsReportController extends ListingBaseController
                             if ($row['selprod_title'] != '') {
                                 $name .= "\n" . Labels::getLabel('LBL_CUSTOM_TITLE', $this->siteLangId) . ':' . $row['selprod_title'];
                             }
-                            if ($row['grouped_option_name'] != '') {
-                                $groupedOptionNameArr = explode(',', $row['grouped_option_name']);
-                                $groupedOptionValueArr = explode(',', $row['grouped_optionvalue_name']);
-                                if (!empty($groupedOptionNameArr)) {
-                                    foreach ($groupedOptionNameArr as $key => $optionName) {
-                                        $name .= "\n" . $optionName . ':</strong> ' . $groupedOptionValueArr[$key];
-                                    }
-                                }
-                            }
+                            // if ($row['grouped_option_name'] != '') {
+                            //     $groupedOptionNameArr = explode(',', $row['grouped_option_name']);
+                            //     $groupedOptionValueArr = explode(',', $row['grouped_optionvalue_name']);
+                            //     if (!empty($groupedOptionNameArr)) {
+                            //         foreach ($groupedOptionNameArr as $key => $optionName) {
+                            //             $name .= "\n" . $optionName . ':</strong> ' . $groupedOptionValueArr[$key];
+                            //         }
+                            //     }
+                            // }
 
                             if ($row['brand_name'] != '') {
                                 $name .= "\n" . Labels::getLabel('LBL_BRAND', $this->siteLangId) . ": " . $row['brand_name'];
@@ -256,6 +264,36 @@ class ProductsReportController extends ListingBaseController
             $this->set('fields', $fields);
             $this->set('allowedKeysForSorting', array_keys($fields));
         }
+    }
+
+    public function form()
+    {
+        $formTitle = Labels::getLabel('LBL_EXPORT_PRODUCTS_REPORT', $this->siteLangId);
+        $frm = $this->getExportForm($this->siteLangId);
+        $this->set('frm', $frm);
+        $this->set('includeTabs', false);
+        $this->set('formTitle', $formTitle);
+        $this->set('html', $this->_template->render(false, false, '_partial/listing/form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    protected function getExportForm($langId)
+    {
+
+        $frm = new Form('frmExport', array('id' => 'frmExport'));
+
+        /* Batch Count[ */
+        $fld =  $frm->addIntegerField(Labels::getLabel('FRM_COUNTS_PER_BATCH', $langId), 'batch_count', Report::MAX_LIMIT, array('id' => 'batch_count'));
+        $fld->requirements()->setRequired(true);
+        $fld->requirements()->setRange(1, Report::MAX_LIMIT);
+        /*]*/
+
+        /* Batch Number[ */
+        $fld = $frm->addIntegerField(Labels::getLabel('FRM_BATCH_NUMBER', $langId), 'batch_number', 1, array('id' => 'batch_number'));
+        $fld->requirements()->setRequired(true);
+        $fld->requirements()->setPositive();
+        $frm->setFormTagAttribute('onSubmit', 'exportRecords(); return false;');
+        return $frm;
     }
 
     public function export()

@@ -974,7 +974,7 @@ class ShopsController extends MyAppController
         $frm->addHiddenField('', 'shop_id');
         $frm->addSelectBox(Labels::getLabel('FRM_SELECT_REASON', $langId), 'sreport_reportreason_id', ShopReportReason::getReportReasonArr($langId), '', array(), Labels::getLabel('FRM_SELECT', $langId))->requirements()->setRequired();
         $frm->addTextArea(Labels::getLabel('FRM_MESSAGE', $langId), 'sreport_message')->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT_REPORT', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $langId));
         return $frm;
     }
 

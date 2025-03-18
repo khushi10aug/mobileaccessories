@@ -21,7 +21,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                 <li class="list-cart-item minus-space">
                     <div class="delivery-info">
                         <svg class="svg" width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#warning">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#warning">
                             </use>
                         </svg>
                         <span class="not-pickup">
@@ -188,7 +188,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                         class="decrease decrease-js <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'disabled' : ''; ?>"
                                         type="button">
                                         <svg class="svg" width="16" height="16">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#minus">
                                             </use>
                                         </svg>
                                     </button>
@@ -201,7 +201,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                     <button
                                         class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'disabled' : ''; ?>">
                                         <svg class="svg" width="16" height="16">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#plus">
                                             </use>
                                         </svg>
                                     </button>

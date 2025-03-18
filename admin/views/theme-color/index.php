@@ -186,7 +186,7 @@ if (!empty($googleFontFamilyUrl)) {
                         <div class="alert alert-solid-brand " role="alert">
                             <div class="alert-icon">
                                 <svg class="svg" width="20" height="20">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#warning">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#warning">
                                     </use>
                                 </svg>
                             </div>

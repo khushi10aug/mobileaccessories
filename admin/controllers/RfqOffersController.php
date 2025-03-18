@@ -84,7 +84,7 @@ class RfqOffersController extends ListingBaseController
                     'title' => Labels::getLabel('LBL_OFFER', $this->siteLangId)
                 ],
                 'label' => '<svg class="svg btn-icon-start" width="18" height="18">
-                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#add">
                                 </use>
                             </svg><span>' . Labels::getLabel('LBL_NEW_OFFER', $this->siteLangId) . '</span>',
             ];

@@ -55,8 +55,8 @@ class ProductsController extends MyAppController
             $prodSrchObj->joinBrandsLang($this->siteLangId, $keyword);
             $prodSrchObj->joinProductToCategory();
             $prodSrchObj->joinProductToTax();
-            $prodSrchObj->joinSellerSubscription(0, false, true);
-            $prodSrchObj->addSubscriptionValidCondition();
+            /*  $prodSrchObj->joinSellerSubscription(0, false, true);
+            $prodSrchObj->addSubscriptionValidCondition(); */
             $prodSrchObj->doNotCalculateRecords();
             $prodSrchObj->setPageSize(1);
             $prodSrchObj->doNotCalculateRecords();
@@ -151,7 +151,7 @@ class ProductsController extends MyAppController
             $et->sendRequest();
         }
 
-        if (FatUtility::isAjaxCall()&& $viewType != 'popupProduct' && $viewType != 'popup') {
+        if (FatUtility::isAjaxCall() && $viewType != 'popupProduct' && $viewType != 'popup') {
             $this->set('products', $data['products']);
             $this->set('tRightRibbons', $tRightRibbons);
             /*$this->set('moreSellersProductsArr', $data['moreSellersProductsArr']);*/
@@ -562,14 +562,71 @@ class ProductsController extends MyAppController
             $prodSrch->joinUserWishListProducts($loggedUserId);
             $prodSrch->addFld('COALESCE(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
         }
+        $prodSrch->addCondition('selprod_code', 'IS NOT', 'mysql_func_null', 'and', true);
         $prodSrch->addMultipleFields(
             array(
-                'product_id', 'selprod_sku', 'product_identifier', 'COALESCE(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'COALESCE(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn', 'product_short_description', 'product_description',
-                'selprod_id', 'selprod_user_id', 'selprod_code', 'selprod_condition', 'selprod_price', 'special_price_found', 'splprice_start_date', 'splprice_end_date', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_warranty', 'selprod_return_policy', 'selprodComments',
-                'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'brand_short_description', 'user_name',
-                'shop_id', 'COALESCE(shop_name, shop_identifier) as shop_name',
-                'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price', 'product_attrgrp_id', 'product_youtube_video', 'product_cod_enabled', 'selprod_cod_enabled', 'selprod_available_from', 'selprod_min_order_qty', 'product_updated_on', 'product_warranty', 'selprod_return_age', 'selprod_cancellation_age', 'shop_return_age',
-                'shop_cancellation_age', 'selprod_fulfillment_type', 'shop_fulfillment_type', 'product_fulfillment_type', 'product_attachements_with_inventory', 'selprod_product_id', 'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name', 'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name', 'selprod_condition', 'product_warranty_unit', 'shop_rfq_enabled', 'selprod_cart_type', 'selprod_hide_price'
+                'product_id',
+                'selprod_sku',
+                'product_identifier',
+                'COALESCE(product_name,product_identifier) as product_name',
+                'product_seller_id',
+                'product_model',
+                'product_type',
+                'prodcat_id',
+                'COALESCE(prodcat_name,prodcat_identifier) as prodcat_name',
+                'product_upc',
+                'product_isbn',
+                'product_short_description',
+                'product_description',
+                'selprod_id',
+                'selprod_user_id',
+                'selprod_code',
+                'selprod_condition',
+                'selprod_price',
+                'special_price_found',
+                'splprice_start_date',
+                'splprice_end_date',
+                'COALESCE(selprod_title, product_name, product_identifier) as selprod_title',
+                'selprod_warranty',
+                'selprod_return_policy',
+                'selprodComments',
+                'theprice',
+                'selprod_stock',
+                'selprod_threshold_stock_level',
+                'IF(selprod_stock > 0, 1, 0) AS in_stock',
+                'brand_id',
+                'COALESCE(brand_name, brand_identifier) as brand_name',
+                'brand_short_description',
+                'user_name',
+                'shop_id',
+                'COALESCE(shop_name, shop_identifier) as shop_name',
+                'splprice_display_dis_type',
+                'splprice_display_dis_val',
+                'splprice_display_list_price',
+                'product_attrgrp_id',
+                'product_youtube_video',
+                'product_cod_enabled',
+                'selprod_cod_enabled',
+                'selprod_available_from',
+                'selprod_min_order_qty',
+                'product_updated_on',
+                'product_warranty',
+                'selprod_return_age',
+                'selprod_cancellation_age',
+                'shop_return_age',
+                'shop_cancellation_age',
+                'selprod_fulfillment_type',
+                'shop_fulfillment_type',
+                'product_fulfillment_type',
+                'product_attachements_with_inventory',
+                'selprod_product_id',
+                'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name',
+                'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name',
+                'selprod_condition',
+                'product_warranty_unit',
+                'shop_rfq_enabled',
+                'selprod_cart_type',
+                'selprod_hide_price'
             )
         );
         $productRs = $prodSrch->getResultSet();
@@ -623,7 +680,15 @@ class ProductsController extends MyAppController
             $product['preview_links'] = DigitalDownloadSearch::getLinks($recordId, $productType, $optionComb, $this->siteLangId, null, true, true);
 
             $attrs = [
-                'afile_id as prev_afile_id', 'pddr_id', 'pddr_options_code', 'afile_record_id', 'afile_record_subid', 'afile_lang_id', 'afile_name as preview', 'afile_type', 'afile_id'
+                'afile_id as prev_afile_id',
+                'pddr_id',
+                'pddr_options_code',
+                'afile_record_id',
+                'afile_record_subid',
+                'afile_lang_id',
+                'afile_name as preview',
+                'afile_type',
+                'afile_id'
             ];
 
             $product['preview_attachments'] = DigitalDownloadSearch::getAttachments(
@@ -723,7 +788,7 @@ class ProductsController extends MyAppController
             $isProductShippedBySeller = Product::isProductShippedBySeller($product['product_id'], $product['product_seller_id'], $product['selprod_user_id']);
             if ($isProductShippedBySeller) {
                 $walletBalance = User::getUserBalance($product['selprod_user_id']);
-                
+
                 $codEnabled = (0 < $product['product_cod_enabled'] ? $product['selprod_cod_enabled'] : 0);
                 $codMinWalletBalance = -1;
                 $shop_cod_min_wallet_balance = Shop::getAttributesByUserId($product['selprod_user_id'], 'shop_cod_min_wallet_balance');
@@ -1204,11 +1269,36 @@ class ProductsController extends MyAppController
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addMultipleFields(
             array(
-                'product_id', 'prodcat_id', 'substring_index(group_concat(COALESCE(prodcat_name, prodcat_identifier) ORDER BY COALESCE(prodcat_name, prodcat_identifier) ASC SEPARATOR "," ) , ",", 1) as prodcat_name', 'COALESCE(product_name, product_identifier) as product_name', 'product_model', 'product_short_description', 'product_updated_on',
-                'selprod_id', 'selprod_user_id',  'selprod_code', 'selprod_stock', 'selprod_condition', 'selprod_price', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title',
-                'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
-                'theprice', 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'brand_short_description',
-                'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_sold_count', 'selprod_return_policy', 'shop_id', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled', 'product_type'
+                'product_id',
+                'prodcat_id',
+                'substring_index(group_concat(COALESCE(prodcat_name, prodcat_identifier) ORDER BY COALESCE(prodcat_name, prodcat_identifier) ASC SEPARATOR "," ) , ",", 1) as prodcat_name',
+                'COALESCE(product_name, product_identifier) as product_name',
+                'product_model',
+                'product_short_description',
+                'product_updated_on',
+                'selprod_id',
+                'selprod_user_id',
+                'selprod_code',
+                'selprod_stock',
+                'selprod_condition',
+                'selprod_price',
+                'COALESCE(selprod_title, product_name, product_identifier) as selprod_title',
+                'special_price_found',
+                'splprice_display_list_price',
+                'splprice_display_dis_val',
+                'splprice_display_dis_type',
+                'theprice',
+                'brand_id',
+                'COALESCE(brand_name, brand_identifier) as brand_name',
+                'brand_short_description',
+                'IF(selprod_stock > 0, 1, 0) AS in_stock',
+                'selprod_sold_count',
+                'selprod_return_policy',
+                'shop_id',
+                'selprod_cart_type',
+                'selprod_hide_price',
+                'shop_rfq_enabled',
+                'product_type'
             )
         );
 
@@ -1306,9 +1396,27 @@ class ProductsController extends MyAppController
         $prodSrch->addCondition('selprod_id', 'IN', $cookiesProductsArr);
         $prodSrch->addMultipleFields(
             array(
-                'product_id', 'COALESCE(product_name, product_identifier) as product_name', 'prodcat_id', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on',
-                'selprod_id', 'selprod_condition', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'theprice',
-                'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_price', 'shop_id', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled', 'product_type'
+                'product_id',
+                'COALESCE(product_name, product_identifier) as product_name',
+                'prodcat_id',
+                'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
+                'product_updated_on',
+                'selprod_id',
+                'selprod_condition',
+                'IF(selprod_stock > 0, 1, 0) AS in_stock',
+                'theprice',
+                'special_price_found',
+                'splprice_display_list_price',
+                'splprice_display_dis_val',
+                'splprice_display_dis_type',
+                'selprod_sold_count',
+                'COALESCE(selprod_title, product_name, product_identifier) as selprod_title',
+                'selprod_price',
+                'shop_id',
+                'selprod_cart_type',
+                'selprod_hide_price',
+                'shop_rfq_enabled',
+                'product_type'
             )
         );
         $productRs = $prodSrch->getResultSet();
@@ -1341,9 +1449,28 @@ class ProductsController extends MyAppController
             $prodSrch->addCondition('selprod_id', 'IN', $ids);
             $prodSrch->addMultipleFields(
                 array(
-                    'product_id', 'COALESCE(product_name, product_identifier) as product_name', 'prodcat_id', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on', 'COALESCE(selprod_title,product_name, product_identifier) as selprod_title',
-                    'selprod_id', 'selprod_condition', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'theprice',
-                    'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'selprod_price', 'selprod_stock', 'selprod_min_order_qty', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled', 'product_type'
+                    'product_id',
+                    'COALESCE(product_name, product_identifier) as product_name',
+                    'prodcat_id',
+                    'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
+                    'product_updated_on',
+                    'COALESCE(selprod_title,product_name, product_identifier) as selprod_title',
+                    'selprod_id',
+                    'selprod_condition',
+                    'IF(selprod_stock > 0, 1, 0) AS in_stock',
+                    'theprice',
+                    'special_price_found',
+                    'splprice_display_list_price',
+                    'splprice_display_dis_val',
+                    'splprice_display_dis_type',
+                    'selprod_sold_count',
+                    'selprod_price',
+                    'selprod_stock',
+                    'selprod_min_order_qty',
+                    'selprod_cart_type',
+                    'selprod_hide_price',
+                    'shop_rfq_enabled',
+                    'product_type'
                 )
             );
 
@@ -1646,9 +1773,22 @@ class ProductsController extends MyAppController
         // $productSrchObj->joinProductRating();
         $productSrchObj->addMultipleFields(
             array(
-                'product_id', 'selprod_id', 'COALESCE(product_name, product_identifier) as product_name', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title',
-                'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
-                'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_rating as prod_rating ', 'selprod_sold_count'
+                'product_id',
+                'selprod_id',
+                'COALESCE(product_name, product_identifier) as product_name',
+                'COALESCE(selprod_title, product_name, product_identifier) as selprod_title',
+                'special_price_found',
+                'splprice_display_list_price',
+                'splprice_display_dis_val',
+                'splprice_display_dis_type',
+                'theprice',
+                'selprod_price',
+                'selprod_stock',
+                'selprod_condition',
+                'prodcat_id',
+                'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
+                'product_rating as prod_rating ',
+                'selprod_sold_count'
             )
         );
 
@@ -1750,7 +1890,46 @@ class ProductsController extends MyAppController
 
         $prodSrch->addMultipleFields(
             array(
-                'product_id', 'COALESCE(product_name,product_identifier ) as product_name', 'product_seller_id', 'product_model', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn', 'product_short_description', 'product_description', 'selprod_id', 'selprod_user_id', 'selprod_code', 'selprod_condition', 'selprod_price', 'special_price_found', 'splprice_start_date', 'splprice_end_date', 'COALESCE(selprod_title,product_name,product_identifier) as selprod_title', 'selprod_warranty', 'selprod_return_policy', 'selprodComments', 'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'brand_short_description', 'user_name', 'shop_id', 'shop_name', 'COALESCE(sq_sprating.prod_rating,0) prod_rating ', 'COALESCE(sq_sprating.totReviews,0) totReviews', 'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price', 'product_attrgrp_id', 'product_youtube_video', 'product_cod_enabled', 'selprod_cod_enabled'
+                'product_id',
+                'COALESCE(product_name,product_identifier ) as product_name',
+                'product_seller_id',
+                'product_model',
+                'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
+                'product_upc',
+                'product_isbn',
+                'product_short_description',
+                'product_description',
+                'selprod_id',
+                'selprod_user_id',
+                'selprod_code',
+                'selprod_condition',
+                'selprod_price',
+                'special_price_found',
+                'splprice_start_date',
+                'splprice_end_date',
+                'COALESCE(selprod_title,product_name,product_identifier) as selprod_title',
+                'selprod_warranty',
+                'selprod_return_policy',
+                'selprodComments',
+                'theprice',
+                'selprod_stock',
+                'selprod_threshold_stock_level',
+                'IF(selprod_stock > 0, 1, 0) AS in_stock',
+                'brand_id',
+                'COALESCE(brand_name, brand_identifier) as brand_name',
+                'brand_short_description',
+                'user_name',
+                'shop_id',
+                'shop_name',
+                'COALESCE(sq_sprating.prod_rating,0) prod_rating ',
+                'COALESCE(sq_sprating.totReviews,0) totReviews',
+                'splprice_display_dis_type',
+                'splprice_display_dis_val',
+                'splprice_display_list_price',
+                'product_attrgrp_id',
+                'product_youtube_video',
+                'product_cod_enabled',
+                'selprod_cod_enabled'
             )
         );
 
@@ -1900,12 +2079,39 @@ class ProductsController extends MyAppController
             $srch = Product::getListingObj($get, $this->siteLangId, $userId);
 
             $flds = array(
-                'prodcat_code', 'product_id', 'prodcat_id', 'COALESCE(product_name, product_identifier) as product_name', 'product_model',  'product_updated_on', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
-                'selprod_id', 'selprod_user_id',  'selprod_code', 'selprod_stock', 'selprod_condition', 'selprod_price', 'COALESCE(selprod_title  ,COALESCE(product_name, product_identifier)) as selprod_title',
-                'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'splprice_start_date', 'splprice_end_date',
-                'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'user_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock',
-                'selprod_sold_count', 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty',
-                'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name', 'selprod_cart_type', 'selprod_hide_price', 'shop.shop_rfq_enabled'
+                'prodcat_code',
+                'product_id',
+                'prodcat_id',
+                'COALESCE(product_name, product_identifier) as product_name',
+                'product_model',
+                'product_updated_on',
+                'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
+                'selprod_id',
+                'selprod_user_id',
+                'selprod_code',
+                'selprod_stock',
+                'selprod_condition',
+                'selprod_price',
+                'COALESCE(selprod_title  ,COALESCE(product_name, product_identifier)) as selprod_title',
+                'splprice_display_list_price',
+                'splprice_display_dis_val',
+                'splprice_display_dis_type',
+                'splprice_start_date',
+                'splprice_end_date',
+                'brand_id',
+                'COALESCE(brand_name, brand_identifier) as brand_name',
+                'user_name',
+                'IF(selprod_stock > 0, 1, 0) AS in_stock',
+                'selprod_sold_count',
+                'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */
+                'selprod_min_order_qty',
+                'shop.shop_id',
+                'shop.shop_lat',
+                'shop.shop_lng',
+                'COALESCE(shop_name, shop_identifier) as shop_name',
+                'selprod_cart_type',
+                'selprod_hide_price',
+                'shop.shop_rfq_enabled'
             );
             $removeFlds = array_diff($flds, ['1']);
             $this->setRecordCount(clone $srch, $get['pageSize'], $get['page'], $get, true, $removeFlds);
@@ -1979,16 +2185,43 @@ class ProductsController extends MyAppController
 
         $srch = Product::getListingObj($post, $this->siteLangId, $userId);
         $flds = array(
-            'prodcat_code', 'product_id', 'prodcat_id', 'COALESCE(product_name, product_identifier) as product_name', 'product_model',  'product_updated_on', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
-            'selprod_id', 'selprod_user_id',  'selprod_code', 'selprod_stock', 'selprod_condition', 'selprod_price', 'COALESCE(selprod_title  ,COALESCE(product_name, product_identifier)) as selprod_title',
-            'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'splprice_start_date', 'splprice_end_date',
-            'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'user_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock',
-            'selprod_sold_count', 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty',
-            'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name', 'selprod_cart_type', 'selprod_hide_price', 'shop.shop_rfq_enabled'
+            'prodcat_code',
+            'product_id',
+            'prodcat_id',
+            'COALESCE(product_name, product_identifier) as product_name',
+            'product_model',
+            'product_updated_on',
+            'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
+            'selprod_id',
+            'selprod_user_id',
+            'selprod_code',
+            'selprod_stock',
+            'selprod_condition',
+            'selprod_price',
+            'COALESCE(selprod_title  ,COALESCE(product_name, product_identifier)) as selprod_title',
+            'splprice_display_list_price',
+            'splprice_display_dis_val',
+            'splprice_display_dis_type',
+            'splprice_start_date',
+            'splprice_end_date',
+            'brand_id',
+            'COALESCE(brand_name, brand_identifier) as brand_name',
+            'user_name',
+            'IF(selprod_stock > 0, 1, 0) AS in_stock',
+            'selprod_sold_count',
+            'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */
+            'selprod_min_order_qty',
+            'shop.shop_id',
+            'shop.shop_lat',
+            'shop.shop_lng',
+            'COALESCE(shop_name, shop_identifier) as shop_name',
+            'selprod_cart_type',
+            'selprod_hide_price',
+            'shop.shop_rfq_enabled'
         );
         $removeFlds = array_diff($flds, ['1']);
         $this->setRecordCount(clone $srch, $post['pageSize'], $post['page'], $post, true, $removeFlds);
-        
+
         Product::setOrderOnListingObj($srch, $post);
 
         $srch->setPageNumber($page);

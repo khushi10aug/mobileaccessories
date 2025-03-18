@@ -42,7 +42,7 @@ foreach ($records as $sn => $row) {
                             ),
                             '<svg class="svg" width="18" height="18">
                                 <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#download">
                                 </use>
                             </svg>',
                             true
@@ -57,7 +57,7 @@ foreach ($records as $sn => $row) {
                                 'onclick' => 'deleteDigitalFile(' . $row['afile_id'] . ', ' . $row['afile_record_id'] . ')', 'href' => 'javascript:void(0);'
                             ),
                             '<svg class="svg" width="18" height="18">
-                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
                                 </use>
                             </svg>',
                             true
@@ -83,7 +83,7 @@ foreach ($records as $sn => $row) {
                         ),
                         '<svg class="svg" width="18" height="18">
                         <use
-                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#download">
                         </use>
                     </svg>',
                         true
@@ -99,7 +99,7 @@ foreach ($records as $sn => $row) {
                                 'href' => 'javascript:void(0);'
                             ),
                             '<svg class="svg" width="18" height="18">
-                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
                             </use>
                         </svg>',
                             true
@@ -119,7 +119,7 @@ foreach ($records as $sn => $row) {
                             ),
                             '<svg class="svg" width="18" height="18">
                             <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#add">
                             </use>
                         </svg>' . Labels::getLabel('LBL_Add', $siteLangId),
                             true
@@ -164,7 +164,7 @@ foreach ($records as $sn => $row) {
                                 'onclick' => 'deleteDigitalFile(' . $fileId . ', ' . $row['afile_record_id'] . ', ' . $isPreview . ', 1)', 'href' => 'javascript:void(0);'
                             ),
                             '<svg class="svg" width="18" height="18">
-                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
                             </use>
                         </svg>',
                             true

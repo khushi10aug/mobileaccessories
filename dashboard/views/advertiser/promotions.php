@@ -15,7 +15,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                 'title' => Labels::getLabel('LBL_ADD_PROMOTION', $siteLangId)
             ],
             'icon' => '<svg class="svg btn-icon-start" width="18" height="18">
-            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#add">
             </use>
         </svg>',
             'label' => Labels::getLabel('LBL_NEW', $siteLangId)
@@ -29,7 +29,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                 <div class="alert alert-info" role="alert">
                     <div class="alert-icon">
                         <svg class="svg" width="18" height="18">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#info">
                             </use>
                         </svg>
                     </div>

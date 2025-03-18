@@ -46,19 +46,19 @@ $pagination .= FatUtility::getPageString(
     ' <li class="pagination-item dotted"><a href="javascript:void(0);">...</a></li> ',
     $linksToDisp,
     ' <li class="pagination-item rewind"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><svg class="svg" width="20" height="20">
-    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#double-arrow-left">
+    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#double-arrow-left">
     </use>
 </svg></a></li>',
     ' <li class="pagination-item forward"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><svg class="svg" width="20" height="20">
-    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#double-arrow-right">
+    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#double-arrow-right">
     </use>
 </svg></a></li>',
     ' <li class="pagination-item prev"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><svg class="svg" width="20" height="20">
-    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#arrow-left">
+    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#arrow-left">
     </use>
 </svg></a></li>',
     ' <li class="pagination-item next"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><svg class="svg" width="20" height="20">
-    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#arrow-right">
+    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#arrow-right">
     </use>
 </svg></a></li>'
 );

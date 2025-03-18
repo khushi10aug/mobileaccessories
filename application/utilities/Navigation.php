@@ -28,10 +28,7 @@ class Navigation
 
         $layout = FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1);
         $includeCategories = ($layout == Navigations::LAYOUT_MEGA_MENU) ? false : true;
-        if (CommonHelper::demoUrl()) {
-            $includeCategories = true;
-        }
-
+        
         $headerNavigation = CacheHelper::get('headerNavigation_' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
         if ($headerNavigation) {
             $headerNavigation = unserialize($headerNavigation);

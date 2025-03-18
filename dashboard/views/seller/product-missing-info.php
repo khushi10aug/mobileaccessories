@@ -32,7 +32,9 @@
                     break;    
                     case 'valid':
                         $class = $row[$key] == applicationConstants::YES ? 'badge-success' :'badge-danger';
-                        $html = '<span class="badge badge-inline '.$class.'">'.$yesNoArr[$row[$key]].'</span>';
+                        $title = $row[$key] == applicationConstants::NO && isset($row['code']) ? ' <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title=" ' . Labels::getLabel('LBL_PLEASE_DELETE_THIS_INVENTORY_OR_ADD_OPTIONS_FROM_IMPORT/EXPORT_MODULE', $siteLangId) . '"></i>' : '';
+                        $html = '<span class="badge badge-inline '.$class.'" >'.$yesNoArr[$row[$key]]. $title .'
+                        </span>';
                         $td->appendElement('plaintext', array(), $html, true);
                     break;    
                     default:

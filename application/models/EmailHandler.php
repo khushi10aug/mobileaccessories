@@ -691,7 +691,7 @@ class EmailHandler extends FatModel
         return true;
     }
 
-    public function newOrderBuyerAdmin($order_id, $langId = 0, $includeAdmin = true, $pushNotification = true)
+    public function newOrderBuyerAdmin($order_id, $langId = 0, $includeAdmin = true, $sendInstantNotification = false)
     {
         if ($order_id == '') {
             trigger_error(Labels::getLabel("ERR_ORDER_ID_NOT_SPECIFIED", $this->commonLangId), E_USER_ERROR);
@@ -795,7 +795,7 @@ class EmailHandler extends FatModel
                 'unotification_type' => 'BUYER_ORDER',
                 'unotification_data' => json_encode(array('orderId' => $orderInfo['order_id'])),
             );
-            if (!$notificationObj->addNotification($notificationDataArr, $pushNotification)) {
+            if (!$notificationObj->addNotification($notificationDataArr, $sendInstantNotification)) {
                 $this->error = $notificationObj->getError();
                 return false;
             }

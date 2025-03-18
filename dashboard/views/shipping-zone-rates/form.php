@@ -20,14 +20,14 @@ unset($languages[CommonHelper::getDefaultFormLangId()]);
 $fld = $frm->getField('add_condition');
 $fld->value = '<a href="javascript:void(0)" class="btn btn-icon btn-outline-brand add-condition--js" onclick="modifyRateFields(1)" title="' . Labels::getLabel("LBL_ADD_CONDITION", $siteLangId) . '" data-bs-toggle="tooltip" data-placement="top">
 <svg class="svg btn-icon-start" width="18" height="18">
-    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#add">
     </use>
 </svg>
 <span>' . Labels::getLabel("LBL_ADD_CONDITION", $siteLangId) . '</span>
 </a>
 <a href="javascript:void(0)" class="btn btn-icon btn-outline-brand remove-condition--js"  style="display : none;" onclick="modifyRateFields(0)" title="' . Labels::getLabel("LBL_REMOVE_CONDITION", $siteLangId) . '" data-bs-toggle="tooltip" data-placement="top">
 <svg class="svg" width="18" height="18">
-    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
     </use>
 </svg>
 <span>' . Labels::getLabel("LBL_REMOVE_CONDITION", $siteLangId) . '</span>

@@ -34,7 +34,7 @@ if (!empty($footer_navigation) && false == $topHeadLinks) {
         <div class="col-lg-4 col-md-4 mb-3 mb-md-0">
             <div class="footer-group">
                 <h4 class="footer-group-head dropdown-toggle-custom" data-bs-toggle="collapse"
-                    data-bs-target="#collapseWidth<?php echo $i; ?>" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    data-bs-target="#collapseWidth<?php echo $i; ?>" aria-expanded="false" aria-controls="collapseExample">
                     <?php echo $nav['parent']; ?><i class="dropdown-toggle-custom-arrow"></i>
                 </h4>
                 <ul class="footer-nav collapse" id="collapseWidth<?php echo $i; ?>">

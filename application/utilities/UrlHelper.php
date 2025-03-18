@@ -265,4 +265,9 @@ class UrlHelper extends FatUtility
         $params = empty(FatApp::getParameters()) ? [] : FatApp::getParameters();
         return UrlHelper::generateFullUrl($controllerName, $action, $params, CONF_WEBROOT_FRONT_URL, null, false, false, true, $langId);
     }
+
+    public static function getStaticImageUrl(string $afilePhysicalPath) 
+    {
+        return CONF_WEBROOT_FRONTEND . CONF_UPLOADS_DIR . $afilePhysicalPath;
+    }
 }

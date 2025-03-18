@@ -28,7 +28,7 @@ if (!empty($addresses)) { ?>
                                             <ul class="phone-list">
                                                 <li class="phone-list-item phone-txt">
                                                     <svg class="svg" width="20" height="20">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#mobile-alt">
                                                         </use>
                                                     </svg>
                                                     <span class="default-ltr"><?php echo $addrPhone; ?></span>
@@ -145,7 +145,7 @@ $displayDateformat = FatDate::convertDateFormatFromPhp(
 
         var slot_time = $(ele).next().children('.time').html();
         var addrHtml = $("input[name='pickup_address']:checked").next('.js-addr').html();
-        var html = '<address class="address shop-address">' + addrHtml + '<ul class="phone-list"><li class="phone-list-item time-txt"><svg class="svg" width="20" height="20"><use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#calendar-day"></use></svg>' + calendarSelectedDate + ' ' + slot_time + '</li></ul></address>';
+        var html = '<address class="address shop-address">' + addrHtml + '<ul class="phone-list"><li class="phone-list-item time-txt"><svg class="svg" width="20" height="20"><use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#calendar-day"></use></svg>' + calendarSelectedDate + ' ' + slot_time + '</li></ul></address>';
         $(".pickupAddressBtn-" + pickUpBy + "-js").text(langLbl.changePickup);
         $(".js-slot-addr_" + pickUpBy).html(html);
         $.ykmodal.close();

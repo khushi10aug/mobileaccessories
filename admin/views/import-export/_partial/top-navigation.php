@@ -4,7 +4,7 @@
         <a class="settings-inner-link" href="javascript:void(0)" onclick="loadForm('export', this)">
             <i class="settings-inner-icn">
                 <svg class="svg" width="20" height="20">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-system-setting">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-system-setting">
                     </use>
                 </svg>
             </i>
@@ -18,7 +18,7 @@
         <a class="settings-inner-link" href="javascript:void(0)" onclick="loadForm('import', this)">
             <i class="settings-inner-icn">
                 <svg class="svg" width="20" height="20">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-system-setting">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-system-setting">
                     </use>
                 </svg>
             </i>
@@ -32,7 +32,7 @@
         <a class="settings-inner-link" href="javascript:void(0)" onclick="loadForm('bulk_media', this)">
             <i class="settings-inner-icn">
                 <svg class="svg" width="20" height="20">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-system-setting">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-system-setting">
                     </use>
                 </svg>
             </i>
@@ -46,7 +46,7 @@
         <a class="settings-inner-link" href="javascript:void(0)" onclick="loadForm('settings', this)">
             <i class="settings-inner-icn">
                 <svg class="svg" width="20" height="20">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-system-setting">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-system-setting">
                     </use>
                 </svg>
             </i>

@@ -26,7 +26,7 @@ if (is_array($ribbRow) && !empty($ribbRow)) {
         case Badge::SHAPE_CIRCLE:
             $ribbon = '<div class="badges badges-' . $type . ' ' . $class . '" title="' . $title . '">
                         <svg class="svg" style="fill:' . $color . '">
-                            <use xlink:href="' . CONF_WEBROOT_FRONT_URL . 'images/retina/badges/sprite.svg#badges-' . $type . '"></use>
+                            <use xlink:href="' . CONF_WEBROOT_FRONT_URL . 'images/retina/badges/sprite' . AttachedFile::setTimeParam(RELEASE_DATE) . '#badges-' . $type . '"></use>
                         </svg>
                         <span class="text" style="color:' . $textColor . '">' . $text . '</span>
                     </div>';

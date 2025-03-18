@@ -4,7 +4,7 @@
         <div class="cards-message">
             <div class="cards-message-icon">
                 <svg class="svg" width="20" height="20">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#exclamation-triangle">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#exclamation-triangle">
                     </use>
                 </svg>
             </div>

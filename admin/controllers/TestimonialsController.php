@@ -227,6 +227,10 @@ class TestimonialsController extends ListingBaseController
                 }
             }
         }
+
+        if ($newTabLangId == 0 && !$this->isMediaUploaded($recordId)) {
+            $this->set('openMediaForm', true);
+        }
         
         $this->set('msg', $this->str_setup_successful);
         $this->set('recordId', $recordId);
@@ -366,6 +370,16 @@ class TestimonialsController extends ListingBaseController
         $frm->addHiddenField('', 'min_width', 300);
         $frm->addHiddenField('', 'min_height', 300);
         return $frm;
+    }
+
+    
+    protected function isMediaUploaded($recordId)
+    {
+        $attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_TESTIMONIAL_IMAGE, $recordId, 0);
+        if (false !== $attachment && 0 < $attachment['afile_id']) {
+            return true;
+        }
+        return false;
     }
 
     /**

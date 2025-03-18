@@ -603,4 +603,18 @@ class PatchUpdateController extends ListingBaseController
         }
         echo "Done";
     }
+
+    public function updateProductMeta(){
+        $qry = "UPDATE tbl_meta_tags_lang AS mtl
+        JOIN tbl_meta_tags AS mt ON mtl.metalang_meta_id = mt.meta_id
+        JOIN tbl_seller_products AS sp ON mt.meta_record_id = sp.selprod_id
+        JOIN tbl_seller_products_lang AS spl ON sp.selprod_id = spl.selprodlang_selprod_id
+        SET mtl.meta_title = spl.selprod_title
+        WHERE mt.meta_controller = 'products' 
+        AND mt.meta_action = 'view'
+        AND mtl.metalang_lang_id = spl.selprodlang_lang_id;";
+        FatApp::getDb()->query($qry);
+        echo "done";
+    }
+    
 }

@@ -16,13 +16,13 @@ if ($fld != null) {
 
 $delBtn = '<button type="button" data-id="' . $firstCompontentId . '" class="invisible btn btn--secondary ripplelink remove-combined-form--js ml-2" title="Remove">
         <svg class="svg" width="18" height="18">
-            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
             </use>
         </svg>
     </button>';
 $addBtn = '<button type="button"  class="btn btn--secondary ripplelink add-combined-form--js ml-2" title="Add"> 
         <svg class="svg" width="18" height="18">
-            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#add">
             </use>
         </svg>
     </button>';

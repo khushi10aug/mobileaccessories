@@ -100,6 +100,26 @@ if (1 == $page) {
     $product['product_description'] = html_entity_decode($product['product_description'], ENT_QUOTES, 'utf-8');
     $product['product_description'] = str_replace('/editor/editor-image/', FatUtility::generateFullUrl() . 'editor/editor-image/', $product['product_description']);
 
+    $product['product_cart_btn'] = 0;
+    $fromDate = strtotime($product['selprod_available_from']);
+    $currentDate = strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
+
+    if (
+        $fromDate <= $currentDate &&
+        false === SellerProduct::isPriceHidden($product['selprod_hide_price'], $product['shop_rfq_enabled']) &&
+        (
+            SellerProduct::isCartType($product['shop_rfq_enabled'], $product['selprod_cart_type'])
+        )
+    ) {
+        $product['product_cart_btn'] = 1;
+    }
+    $product['product_rfq_btn'] = 0;
+    if (
+        RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_cart_type'])
+    ) {
+        $product['product_rfq_btn'] = 1;
+    }
+
     if (!empty($product['moreSellersArr']) && 0 < count($product['moreSellersArr'])) {
 
         /* Shop and SelProd Badge */
@@ -137,7 +157,7 @@ if (1 == $page) {
         }
         unset($product['moreSellersArr']);
     }
-
+    
     $product['codEnabled'] = (true === $codEnabled ? 1 : 0);
     $product['isOutOfMinOrderQty'] = $isOutOfMinOrderQty;
     $product['shippingDetails'] = empty($shippingDetails) ? (object) array() : $shippingDetails;

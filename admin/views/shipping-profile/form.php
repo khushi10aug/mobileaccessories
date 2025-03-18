@@ -46,7 +46,7 @@ $langFld->addFieldTagAttribute('autocomplete', "off"); ?>
                         <div class="card-toolbar">
                             <a class="btn btn-icon btn-outline-brand btn-add" href="javascript:void(0);" onclick="profileProductForm(<?php echo $profile_id; ?>)" title="<?php echo Labels::getLabel("LBL_Edit", $siteLangId); ?>">
                                 <svg class="svg btn-icon-start" width="18" height="18">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#add">
                                     </use>
                                 </svg>
                                 <span><?php echo Labels::getLabel('LBL_NEW', $siteLangId); ?></span>
@@ -68,7 +68,7 @@ $langFld->addFieldTagAttribute('autocomplete', "off"); ?>
                         <div class="card-toolbar">
                             <a class="btn btn-icon btn-outline-brand btn-add" href="javascript:void(0);" onclick="zoneForm(<?php echo $profile_id; ?>, 0)" title="<?php echo Labels::getLabel("LBL_Edit", $siteLangId); ?>">
                                 <svg class="svg btn-icon-start" width="18" height="18">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#add">
                                     </use>
                                 </svg>
                                 <span><?php echo Labels::getLabel('LBL_NEW', $siteLangId); ?></span>

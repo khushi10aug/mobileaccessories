@@ -698,9 +698,9 @@ class ImageController extends FatController
     }
 
 
-    public function collectionReal($recordId, $langId = 0, $sizeType = '', $fileType = '')
+    public function collectionReal($recordId, $langId = 0, $sizeType = '', $fileType = '', $screen = 0, $collection_layout_type = 0)
     {
-        $this->displayCollectionImage($recordId, $langId, $sizeType, true, $fileType);
+        $this->displayCollectionImage($recordId, $langId, $sizeType, true, $fileType, $screen, $collection_layout_type);
     }
 
     public function collection($recordId, $langId = 0, $sizeType = '')
@@ -708,21 +708,20 @@ class ImageController extends FatController
         $this->displayCollectionImage($recordId, $langId, $sizeType);
     }
 
-    public function displayCollectionImage($collectionId, $langId = 0, $sizeType = '', $displayUniversalImage = true, $fileType = '')
+    public function displayCollectionImage($collectionId, $langId = 0, $sizeType = '', $displayUniversalImage = true, $fileType = '', $screen = 0, $collection_layout_type = 0)
     {
         $collectionId = FatUtility::int($collectionId);
         $fileType = empty($fileType) ? AttachedFile::FILETYPE_COLLECTION_IMAGE : $fileType;
         //$file_row = AttachedFile::getAttachment( AttachedFile::FILETYPE_COLLECTION_IMAGE, $collectionId );
-        $file_row = AttachedFile::getAttachment($fileType, $collectionId, 0, $langId, $displayUniversalImage);
+        $file_row = AttachedFile::getAttachment($fileType, $collectionId, 0, $langId, $displayUniversalImage, $screen);
         $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
         $default_image = 'banner-default-image.png';
 
-        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_DISPLAY_COLLECTION_IMAGE, $sizeType);
+        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_DISPLAY_COLLECTION_IMAGE, $sizeType, layout: $collection_layout_type);
 
         if ($sizeType) {
-
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
 

@@ -50,7 +50,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) { ?>
         <li class="dropdown-menu-item">
             <a class="dropdown-menu-link" href="<?php echo $dashboardOrgUrl; ?>">
                 <svg class="svg" width="18" height="18">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-dashboard"></use>
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icn-dashboard"></use>
                 </svg><?php echo Labels::getLabel("NAV_DASHBOARD", $siteLangId); ?>
             </a>
         </li>
@@ -58,7 +58,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) { ?>
             <a class="dropdown-menu-link" target="_blank"
                 href="<?php echo UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND); ?>"> <svg class="svg"
                     width="18" height="18">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-home"></use>
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icn-home"></use>
                 </svg>
                 <?php echo Labels::getLabel("NAV_HOME", $siteLangId); ?>
             </a>
@@ -68,7 +68,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) { ?>
                 title="<?php echo Labels::getLabel('NAV_SHOP', $siteLangId); ?>" target="_blank"
                 href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id), CONF_WEBROOT_FRONTEND); ?>">
                 <svg class="svg" width="18" height="18">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-shop">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icn-shop">
                     </use>
                 </svg><?php echo Labels::getLabel("NAV_SHOP", $siteLangId); ?>
             </a> </li>
@@ -76,13 +76,13 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) { ?>
         <li class="dropdown-menu-item"><a class="dropdown-menu-link"
                 href="<?php echo UrlHelper::generateUrl('account', 'profileInfo', [], CONF_WEBROOT_DASHBOARD); ?>">
                 <svg class="svg" width="18" height="18">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-user"></use>
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icn-user"></use>
                 </svg><?php echo Labels::getLabel("NAV_PROFILE", $siteLangId); ?></a> </li>
 
         <li class="dropdown-menu-item"> <a class="dropdown-menu-link"
                 href="<?php echo UrlHelper::generateUrl('Account', 'changeEmailPassword'); ?>">
                 <svg class="svg" width="18" height="18">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-update"></use>
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icn-update"></use>
                 </svg><?php echo Labels::getLabel('NAV_UPDATE_CREDENTIALS', $siteLangId); ?></a> </li>
 
         <li class="divider"></li>
@@ -90,7 +90,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) { ?>
             <a class="logout-btn"
                 href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND, null, false, false, true, $siteLangId); ?>">
                 <svg class="svg" width="18" height="18">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-logout"></use>
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icn-logout"></use>
                 </svg>
                 <?php echo Labels::getLabel('NAV_LOGOUT', $siteLangId); ?></a>
         </li>

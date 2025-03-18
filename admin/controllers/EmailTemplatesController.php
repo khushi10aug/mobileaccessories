@@ -27,7 +27,7 @@ class EmailTemplatesController extends ListingBaseController
             ],
             'label' => '<svg class="svg btn-icon-start " width="18" height="18">
                             <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-aside-menu.svg#icon-system-settings">
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-aside-menu.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#icon-system-settings">
                             </use>
                         </svg>
                         <span>' . Labels::getLabel('BTN_SETTINGS', $this->siteLangId) . '</span>',
@@ -318,9 +318,9 @@ class EmailTemplatesController extends ListingBaseController
             }
             $settingFrm->fill(current($translatedData));
         }
-        
-        if( 0 < $emailLogo['afile_id'] && 0 < $emailLogo['afile_aspect_ratio']){           
-            $settingFrm->fill(['CONF_EMAIL_TEMPLATE_LOGO_RATIO'=> $emailLogo['afile_aspect_ratio']]);
+
+        if (0 < $emailLogo['afile_id'] && 0 < $emailLogo['afile_aspect_ratio']) {
+            $settingFrm->fill(['CONF_EMAIL_TEMPLATE_LOGO_RATIO' => $emailLogo['afile_aspect_ratio']]);
         }
 
         $this->set('image', $emailLogo);
@@ -329,8 +329,8 @@ class EmailTemplatesController extends ListingBaseController
         $this->set('settingFrm', $settingFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->set('canEdit', $this->objPrivilege->canEditEmailTemplates($this->admin_id, true));
-        $this->set('logoSqDimensions', ImageDimension::getData(ImageDimension::TYPE_EMAIL_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_SQUARE)); 
-        $this->set('logoRecDimensions', ImageDimension::getData(ImageDimension::TYPE_EMAIL_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_RECTANGULAR));     
+        $this->set('logoSqDimensions', ImageDimension::getData(ImageDimension::TYPE_EMAIL_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_SQUARE));
+        $this->set('logoRecDimensions', ImageDimension::getData(ImageDimension::TYPE_EMAIL_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_RECTANGULAR));
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
@@ -421,7 +421,7 @@ class EmailTemplatesController extends ListingBaseController
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
-        $this->set('lang_id', $lang_id);      
+        $this->set('lang_id', $lang_id);
         $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -440,19 +440,19 @@ class EmailTemplatesController extends ListingBaseController
 
     protected function getFormColumns(): array
     {
-        $emptyCartItemsTblHeadingCols = CacheHelper::get($this->pageKey.'headingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $emptyCartItemsTblHeadingCols = CacheHelper::get($this->pageKey . 'headingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($emptyCartItemsTblHeadingCols) {
             return json_decode($emptyCartItemsTblHeadingCols, true);
         }
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'etpl_name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
             'etpl_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create($this->pageKey.'headingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create($this->pageKey . 'headingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
 
         return $arr;
     }

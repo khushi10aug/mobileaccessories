@@ -1245,7 +1245,6 @@ $(function () {
 			includeGuestLogin = false;
 		}
 		data = "includeGuestLogin=" + includeGuestLogin + "&signinpopup=1";
-		fcom.displayProcessing();
 		fcom.updateWithAjax(
 			fcom.makeUrl("GuestUser", "loginForm"),
 			data,
@@ -1265,14 +1264,14 @@ $(function () {
 		});
 	};
 
-    setGeoLocation = function () {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl("Home", "setGeoLocation"), '', function (ans) {
-            fcom.closeProcessing();
-            $.ykmodal(ans, true,'','','',false);
-            googleAddressAutocomplete('ga-autoComplete-header');
-        });
-    };
+	setGeoLocation = function () {
+		fcom.displayProcessing();
+		fcom.ajax(fcom.makeUrl("Home", "setGeoLocation"), '', function (ans) {
+			fcom.closeProcessing();
+			$.ykmodal(ans, true, '', '', '', false);
+			googleAddressAutocomplete('ga-autoComplete-header');
+		});
+	};
 
 	guestUserLogin = function (frm, v) {
 		v.validate();

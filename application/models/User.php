@@ -2388,7 +2388,7 @@ class User extends MyAppModel
         return isset($row['uauth_user_id']) ? $row['uauth_user_id'] : '';
     }
 
-    public static function getUserAuthFcmFormattedData(int $userType, string $fcmToken, int $deviceOs = null, int $mainTableRecordId = null, string $appToken = '')
+    public static function getUserAuthFcmFormattedData(int $userType, string $fcmToken, mixed $deviceOs = null, mixed $mainTableRecordId = null, string $appToken = '')
     {
         $expiry = strtotime("+7 DAYS");
         $userType = 1 > $userType ? User::USER_TYPE_BUYER : $userType;
@@ -2402,11 +2402,11 @@ class User extends MyAppModel
             'uauth_last_ip' => CommonHelper::getClientIp(),
         ];
 
-        if (null !== $deviceOs) {
+        if (null !== $deviceOs && is_int($deviceOs)) {
             $data['uauth_device_os'] = $deviceOs;
         }
 
-        if (null !== $mainTableRecordId) {
+        if (null !== $mainTableRecordId && is_int($mainTableRecordId)) {
             $data['uauth_user_id'] = $mainTableRecordId;
         }
 
@@ -2471,8 +2471,9 @@ class User extends MyAppModel
         $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', 1);
         $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'verified', '=', 1);
         $srch->addCondition('uauth_fcm_id', '!=', '');
-        $srch->addCondition('uauth_last_access', '>=', date('Y-m-d H:i:s', strtotime("-7 DAYS")));
+        // $srch->addCondition('uauth_last_access', '>=', date('Y-m-d H:i:s', strtotime("-7 DAYS")));
         $srch->addMultipleFields(['uauth_fcm_id', 'uauth_device_os']);
+        $srch->addOrder('uauth_last_access', 'DESC');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();

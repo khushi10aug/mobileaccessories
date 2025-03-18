@@ -68,7 +68,7 @@
                                         array('href' => 'javascript:void(0)', 'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "sellerProductSpecialPriceForm(" . $selprod_id . ", " . $row['splprice_id'] . ")"),
                                         '<svg class="svg" width="18" height="18">
                                         <use
-                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#edit">
                                         </use>
                                     </svg>',
                                         true
@@ -79,7 +79,7 @@
                                         array('href' => 'javascript:void(0)', 'class' => '', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteSellerProductSpecialPrice(" . $row['splprice_id'] . ")"),
                                         '<svg class="svg" width="18" height="18">
                                         <use
-                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
                                         </use>
                                     </svg>',
                                         true

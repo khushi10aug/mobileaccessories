@@ -10,7 +10,7 @@ $action = strtolower($action); ?>
         <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?> data-bs-toggle="collapse" data-bs-target="#nav-orders" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
             <span class="dashboard-menu-icon">
                 <svg class="svg" width="18" height="18">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#order-sales">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#order-sales">
                     </use>
                 </svg>
             </span>
@@ -57,7 +57,7 @@ $action = strtolower($action); ?>
             <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?> data-bs-toggle="collapse" data-bs-target="#nav-offers" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
                 <span class="dashboard-menu-icon">
                     <svg class="svg" width="18" height="18">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#my-offers">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#my-offers">
                         </use>
                     </svg>
                 </span>
@@ -104,7 +104,7 @@ $action = strtolower($action); ?>
         <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?> data-bs-toggle="collapse" data-bs-target="#nav-general" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
             <span class="dashboard-menu-icon">
                 <svg class="svg" width="18" height="18">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#saved-searches">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#saved-searches">
                     </use>
                 </svg>
             </span>
@@ -151,7 +151,7 @@ $action = strtolower($action); ?>
         <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?> data-bs-toggle="collapse" data-bs-target="#nav-profile" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
             <span class="dashboard-menu-icon">
                 <svg class="svg" width="18" height="18">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#my-account">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#my-account">
                     </use>
                 </svg>
             </span>

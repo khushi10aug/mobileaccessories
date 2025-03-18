@@ -32,7 +32,7 @@ class ContentPagesController extends ListingBaseController
                     'title' => Labels::getLabel('LBL_LAYOUTS_INSTRUCTIONS', $this->siteLangId)
                 ],
                 'label' => '<svg class="svg btn-icon-start " width="18" height="18">
-                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#export">
+                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#export">
                                 </use>
                             </svg><span>' . Labels::getLabel('BTN_LAYOUTS', $this->siteLangId) . '</span>',
             ]

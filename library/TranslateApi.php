@@ -10,10 +10,12 @@ class TranslateApi
     private $translatePath;
     private $fromLang;
     private $error;
+    private $region;
 
     public function __construct($fromLang)
     {
         $this->subscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        $this->region = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY_REGION', FatUtility::VAR_STRING, '');
         $this->host = 'https://api.cognitive.microsofttranslator.com';
         $this->translatePath = '/translate?api-version=3.0';
         $this->fromLang = $fromLang;
@@ -43,6 +45,10 @@ class TranslateApi
             'Ocp-Apim-Subscription-Key: ' . $this->subscriptionKey ,
             'X-ClientTraceId: ' . $this->comCreateGuid()
         );
+        
+        if (!empty($this->region)) {
+            $curl_headers[] = 'Ocp-Apim-Subscription-Region: ' . $this->region;
+        }
         $url = $this->host . $this->translatePath;
 
         //Language Translate From, Translate To

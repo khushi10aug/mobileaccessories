@@ -8,7 +8,7 @@
             <div class="grid-layout-left">
                 <button class="float-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#card-aside" aria-controls="card-aside">
                     <svg class="svg" width="20" height="20">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#nav">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#nav">
                         </use>
                     </svg>
                 </button>
@@ -33,7 +33,7 @@
                                         <a class="settings-inner-link" href="javascript:void(0)" onclick='tabSearchRecords("<?php echo $tabMetaType; ?>")'>
                                             <i class="settings-inner-icn">
                                                 <svg class="svg" width="20" height="20">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.meta.svg#icon_<?php echo $tabMetaType; ?>">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.meta.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon_<?php echo $tabMetaType; ?>">
                                                     </use>
                                                 </svg>
                                             </i>

@@ -71,6 +71,16 @@ $(document).ready(function () {
             $('.gaAccessTokenJs').show();
         }
     });
+
+    $(document).on('click', '.svgFileTypeJs', function () {
+        var logoType = $(this).closest('.svgFileTypeSectionJs').data('logoType');
+        if (1 == $(this).val()) {
+            $('.prefRatioSectionJs' + logoType).hide();
+        } else {
+            $('.prefRatioSectionJs' + logoType).show();
+        }
+    });
+    $('.svgFileTypeJs:checked').trigger('click');
 });
 
 (function () {
@@ -149,63 +159,65 @@ $(document).ready(function () {
             if (!validateFileUpload(inputBtn.files[0])) {
                 return;
             }
-            loadCropperSkeleton();
-            $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
-            fcom.updateWithAjax(fcom.makeUrl('Configurations', 'imgCropper'), '', function (t) {
-                fcom.closeProcessing();
-                $("#modalBoxJs .modal-body").html(t.body);
-                $("#modalBoxJs .modal-footer").html(t.footer);
+            var file = inputBtn.files[0];
+            var fileType = $(inputBtn).attr('data-file_type');
+            fldName = "afile_attachment_type_" + fileType;
+            var afile_attachment_type = $('input[name="' + fldName + '"]:checked').val();
+            /* 1: Svg */
+            if ('undefined' != typeof afile_attachment_type && 1 == afile_attachment_type) {
+                var formData = new FormData();
+                formData.append('file_type', fileType);
+                formData.append('cropped_image', file);
+                uploadConfImages(formData);
+            } else {
+                loadCropperSkeleton();
+                $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
+                fcom.updateWithAjax(fcom.makeUrl('Configurations', 'imgCropper'), '', function (t) {
+                    fcom.closeProcessing();
+                    $("#modalBoxJs .modal-body").html(t.body);
+                    $("#modalBoxJs .modal-footer").html(t.footer);
 
-                var file = inputBtn.files[0];
-                var minWidth = $(inputBtn).attr('data-min_width');
-                var minHeight = $(inputBtn).attr('data-min_height');
-                var options = {
-                    // minContainerHeight: 350,
-                    toggleDragModeOnDblclick: false,
-                    imageSmoothingQuality: 'high',
-                    imageSmoothingEnabled: true,
-                };
-
-                if (minWidth != undefined && minHeight != undefined) {
-                    options['aspectRatio'] = minWidth / minHeight;
-                    options['minCropBoxWidth'] = minWidth;
-                    options['minCropBoxHeight'] = minHeight;
-                    options['data'] = {
-                        width: minWidth,
-                        height: minHeight,
+                    var file = inputBtn.files[0];
+                    var minWidth = $(inputBtn).attr('data-min_width');
+                    var minHeight = $(inputBtn).attr('data-min_height');
+                    var options = {
+                        // minContainerHeight: 350,
+                        toggleDragModeOnDblclick: false,
+                        imageSmoothingQuality: 'high',
+                        imageSmoothingEnabled: true,
                     };
-                } else {
 
-                    /*
-                    let maxCroppedWidth = 300;
-                    let maxCroppedHeight = 300;
-                    //options['initialAspectRatio'] = 1;                      
-                    options['crop'] = function (event) {
-                        let boxData = cropper.getCropBoxData();                   
-                        console.log(boxData);                       
-                        boxData['width'] = Math.min((maxCroppedWidth -10) , boxData['width']);
-                        boxData['height'] = Math.min((maxCroppedHeight -10), boxData['height']);
-                        cropper.setCropBoxData( boxData); 
-                    } ;     
-                    */
-                }
-
-                $(inputBtn).val('');
-                setTimeout(function () { cropImage(file, options, 'uploadConfImages', inputBtn) }, 200);
-                return;
-            });
+                    if (minWidth != undefined && minHeight != undefined) {
+                        options['aspectRatio'] = minWidth / minHeight;
+                        options['minCropBoxWidth'] = minWidth;
+                        options['minCropBoxHeight'] = minHeight;
+                        options['data'] = {
+                            width: minWidth,
+                            height: minHeight,
+                        };
+                    }
+                    $(inputBtn).val('');
+                    setTimeout(function () { cropImage(file, options, 'uploadConfImages', inputBtn) }, 200);
+                    return;
+                });
+            }
         }
     };
 
     uploadConfImages = function (formData) {
         var langId = document.frmConfiguration.lang_id.value;
         var formType = document.frmConfiguration.form_type.value;
-        var fldName = "ratio_type_" + formData.get('file_type');
+        var fileType = formData.get('file_type');
+        var fldName = "ratio_type_" + fileType;
         var ratio_type = $('input[name="' + fldName + '"]:checked').val();
+
+        fldName = "afile_attachment_type_" + fileType;
+        var afile_attachment_type = $('input[name="' + fldName + '"]:checked').val();
 
         formData.append('lang_id', langId);
         formData.append('form_type', formType);
         formData.append('ratio_type', ratio_type);
+        formData.append('afile_attachment_type', afile_attachment_type);
         $.ajax({
             url: fcom.makeUrl('Configurations', 'uploadMedia'),
             type: 'post',
@@ -408,7 +420,7 @@ $(document).on('change', 'input[name="CONF_RFQ_MODULE"]', function () {
             if (!confirm(langLbl.confirmDisableRfq)) {
                 $(this).prop('checked', true);
                 return false;
-            } 
+            }
             $(this).prop('checked', false);
             $('input[name="CONF_GLOBAL_RFQ_MODULE"]').prop('checked', false);
         }

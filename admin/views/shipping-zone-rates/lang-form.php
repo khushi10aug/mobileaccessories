@@ -25,7 +25,7 @@ if (null != $langFld) {
             $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
             $langFld->htmlAfterField = '<a href="javascript:void(0);" onclick="editRateLangForm(' . $zoneId . ', ' . $rateId . ', ' . array_key_first($languages) . ', 1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $siteLangId) . '">
                                             <svg class="svg" width="18" height="18">
-                                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-translate">
+                                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#icon-translate">
                                                 </use>
                                             </svg>
                                         </a>';

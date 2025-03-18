@@ -91,7 +91,7 @@ foreach ($arrListing as $sn => $row) {
                         ],
                         'label' => '<i class="icn"><svg class="svg" width="18" height="18">
                                         <use
-                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#list">
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#list">
                                         </use>
                                     </svg></i>',
                     ];
@@ -106,7 +106,7 @@ foreach ($arrListing as $sn => $row) {
                         ],
                         'label' => '<i class="icn"><svg class="svg" width="18" height="18">
                                         <use
-                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#view">
                                         </use>
                                     </svg></i>',
                     ];
@@ -126,7 +126,7 @@ foreach ($arrListing as $sn => $row) {
                                 ],
                                 'label' => '<i class="icn"><svg class="svg" width="18" height="18">
                                             <use
-                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#group-add">
+                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#group-add">
                                             </use>
                                         </svg></i>' . Labels::getLabel('LBL_ASSIGN_SELLER', $siteLangId),
                             ];

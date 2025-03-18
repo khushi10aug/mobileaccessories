@@ -2,7 +2,7 @@
 <div class="dropdown dropdown-static dropdown-addresses addressMenuJs">
     <a class="btn btn-outline-gray btn-dropdown dropdown-toggle-custom btn-icon selectedAddressJs" href="javascript:void(0)" id="dropdownMenuButton1" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
         <svg class="svg" width="16" height="16">
-            <use xlink:href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite.svg#location">
+            <use xlink:href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#location">
             </use>
         </svg>
         <span class="btn-dropdown-content text-break btnDropdownContentJs">

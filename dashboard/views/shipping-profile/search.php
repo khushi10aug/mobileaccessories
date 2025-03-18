@@ -60,7 +60,7 @@
                             $li->appendElement('a', array('href' => UrlHelper::generateUrl('shippingProfile', 'form', array($row['shipprofile_id'])),  'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId)), '<i class="icn">
                             <svg class="svg" width="18" height="18">
                                 <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#edit">
                                 </use>
                             </svg>
                         </i>', true);
@@ -69,7 +69,7 @@
                                 $li->appendElement('a', array('href' => 'javascript::void(0)',  'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "deleteRecord(" . $row['shipprofile_id'] . ")"), '<i class="icn">
                                 <svg class="svg" width="18" height="18">
                                     <use
-                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
                                     </use>
                                 </svg>
                             </i>', true);
@@ -78,7 +78,7 @@
                             $li->appendElement('a', array('href' => UrlHelper::generateUrl('shippingProfile', 'form', array($row['shipprofile_id'])),  'class' => '', 'title' => Labels::getLabel('LBL_View', $siteLangId)), '<i class="icn">
                             <svg class="svg" width="18" height="18">
                                 <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#view">
                                 </use>
                             </svg>
                         </i>', true);

@@ -11,7 +11,7 @@ if (is_array($trackingInfo['data']['tracking']['checkpoints']) && count($trackin
     <h5 class="modal-title">
         <a class="btn-back" href="javascript:void(0)" onclick="getItemStatusHistory(<?php echo $orderId; ?> ,<?php echo $op_id; ?>)">
             <svg class="svg" width="24" height="24">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL ?>images/retina/sprite-actions.svg#back">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#back">
                 </use>
             </svg>
         </a>

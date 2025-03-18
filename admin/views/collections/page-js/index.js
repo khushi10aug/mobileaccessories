@@ -140,8 +140,12 @@ $(document).on('change', '.prefDimensionsJs', function () {
         );
     };
 
-    loadImages = function (recordId, langId = 0) {
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images', [recordId, langId]), '', function (t) {
+    loadImages = function (recordId, langId = 0, screen = 0) {
+        if(0 == screen){
+            screen = $("select[name='collection_screen']").val();
+            screen = 'undefined' == typeof screen ? 0 : screen;
+        }
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images', [recordId, langId, screen]), '', function (t) {
             fcom.closeProcessing();
             fcom.removeLoader();
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");

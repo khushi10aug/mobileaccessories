@@ -66,7 +66,7 @@ class BlogPostsController extends ListingBaseController
                 ],
                 'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                 <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#active">
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#active">
                                 </use>
                             </svg><span>' . Labels::getLabel('LBL_PUBLISHED', $this->siteLangId) . '</span>',
             ],
@@ -79,7 +79,7 @@ class BlogPostsController extends ListingBaseController
                 ],
                 'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                 <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#in-active">
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#in-active">
                                 </use>
                             </svg><span>' . Labels::getLabel('LBL_UNPUBLISHED', $this->siteLangId) . '</span>',
             ],
@@ -95,7 +95,7 @@ class BlogPostsController extends ListingBaseController
                 ],
                 'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                 <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
                                 </use>
                             </svg><span>' . Labels::getLabel('BTN_DELETE', $this->siteLangId) . '</span>',
             ];

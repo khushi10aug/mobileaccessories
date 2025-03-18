@@ -287,8 +287,7 @@ class SellerController extends SellerBaseController
         $shippedById = FatApp::getPostedData('opshipping_by_seller_user_id');
         if ('' != $shippedById) {
             $srch->addCondition('opshipping_by_seller_user_id', '=', $shippedById);
-        }
-
+        }        
         $this->setRecordCount(clone $srch, $pagesize, $page, $post);
         $srch->doNotCalculateRecords();
         $srch->addOrder("op_id", "DESC");
@@ -3799,6 +3798,7 @@ class SellerController extends SellerBaseController
 
         if (
             0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) &&
+            RequestForQuote::TYPE_INDIVIDUAL == FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0) &&
             applicationConstants::NO == FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)
         ) {
             $fld = $frm->addCheckBox(Labels::getLabel("FRM_ENABLE_RFQ_MODULE", $this->siteLangId), 'shop_rfq_enabled', 1, array(), false, 0);
@@ -4575,7 +4575,7 @@ class SellerController extends SellerBaseController
         }
 
         if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
-            if (0 < $shopDetails['shop_rfq_enabled']) {
+            if (0 < $shopDetails['shop_rfq_enabled'] || RequestForQuote::TYPE_INDIVIDUAL != FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0)) {
                 $cartTypeFld = $frm->addSelectBox(Labels::getLabel('FRM_CART_TYPE', $this->siteLangId), 'selprod_cart_type', SellerProduct::getCartType(), SellerProduct::CART_TYPE_BOTH, array('class' => 'fieldsVisibilityJs onlyShowHideJs'), '');
                 $cartTypeFld->requirements()->setRequired();
                 $frm->addCheckBox(Labels::getLabel("FRM_HIDE_PRICE", $this->siteLangId), 'selprod_hide_price', 1, array(), false, 0);
@@ -5991,7 +5991,7 @@ class SellerController extends SellerBaseController
     {
         $post = FatApp::getPostedData();
 
-        $srch = Tag::getSearchObject($post['LangId']);
+        $srch = Tag::getSearchObject($post['langId']);
         $srch->addOrder('tag_name');
         $srch->addMultipleFields(array('tag_id', 'tag_name'));
 
@@ -6053,19 +6053,28 @@ class SellerController extends SellerBaseController
             LibHelper::exitWithError($this->str_invalid_request);
         }
 
-        $record = new Tag();
-        $record->assignValues(['tag_name' => $tagName, 'tag_lang_id' => $langId, 'tag_user_id' => $this->userParentId]);
+        $srch = Tag::getSearchObject($langId);
+        $srch->addMultipleFields(array('tag_id'));
+        $srch->addCondition('tag_name', 'like', $tagName);
+        $res = $srch->getResultSet();
+        $row = FatApp::getDb()->fetch($res);
+        if (false == $row || empty($row)) {
+            $record = new Tag();
+            $record->assignValues(['tag_name' => $tagName, 'tag_lang_id' => $langId, 'tag_user_id' => $this->userParentId]);
 
-        if (!$record->save()) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_THIS_IDENTIFIER_IS_NOT_AVAILABLE._PLEASE_TRY_WITH_ANOTHER_ONE.', $this->siteLangId));
+            if (!$record->save()) {
+                FatUtility::dieJsonError(Labels::getLabel('ERR_THIS_IDENTIFIER_IS_NOT_AVAILABLE._PLEASE_TRY_WITH_ANOTHER_ONE.', $this->siteLangId));
+            }
+            $tagId = $record->getMainTableRecordId();
+        } else {
+            $tagId = $row['tag_id'];
         }
-        $tag_id = $record->getMainTableRecordId();
         /* update product tags association and tag string in products lang table[ */
-        Tag::updateTagStrings($tag_id);
+        Tag::updateTagStrings($tagId);
         /* ] */
 
         $this->set('msg', Labels::getLabel('MSG_TAG_UPDATED_SUCCESSFUL', $this->siteLangId));
-        $this->set('tagId', $tag_id);
+        $this->set('tagId', $tagId);
         $this->_template->render(false, false, 'json-success.php');
     }
 

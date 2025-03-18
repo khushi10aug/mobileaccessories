@@ -3,11 +3,11 @@ $actionItemsData = array_merge($actionItemsData, ['otherButtons' =>  [[
     'attr' => [
         'href' => 'javascript:void(0)',
         'class' => 'btn btn-icon btn-link',
-        'onclick' => 'exportRecords()',
+        'onclick' => 'exportForm()',
         'title' => Labels::getLabel('LBL_Export', $siteLangId)
     ],
     'label' => '<svg class="svg" width="18" height="18">
-    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#export">
+    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#export">
     </use>
 </svg>' . Labels::getLabel('LBL_Export', $siteLangId)
 ]]]);

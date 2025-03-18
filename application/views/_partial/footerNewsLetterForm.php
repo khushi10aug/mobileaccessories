@@ -23,7 +23,7 @@
         <hgroup class="newsletter-head">
             <h3>
                 <svg class="svg" width="32" height="32">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#go">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#go">
                     </use>
                 </svg>
                 <?php echo Labels::getLabel('LBL_Sign_up_for_newsletter'); ?>

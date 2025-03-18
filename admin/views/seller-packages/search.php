@@ -25,7 +25,7 @@ foreach ($arrListing as $sn => $row) {
                 $div = $td->appendElement('div', ['class' => 'handleJs']);
                 $div->appendElement('plaintext', $tdAttr, '<svg class="svg" width="18" height="18">
                                                             <use
-                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#drag">
+                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#drag">
                                                             </use>
                                                         </svg>', true);
                 break;
@@ -67,7 +67,7 @@ foreach ($arrListing as $sn => $row) {
                             ],
                             'label' => '<svg class="svg" width="18" height="18">
                                             <use
-                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-setting">
+                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#icon-setting">
                                             </use>
                                         </svg>'
                         ]

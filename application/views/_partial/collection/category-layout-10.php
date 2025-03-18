@@ -44,7 +44,7 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                                                     <div class="not-available">
                                                         <svg class="svg">
                                                             <use
-                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#linkedinfo">
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#linkedinfo">
                                                             </use>
                                                         </svg>
                                                         <?php echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId); ?>
@@ -76,7 +76,7 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                                                 <?php if ($product['product_rating']) { ?>
                                                     <div class="product-ratings">
                                                         <svg class="svg svg-star" width="14" height="14">
-                                                            <use xlink:href="/images/retina/sprite.svg#star-yellow">
+                                                            <use xlink:href="/images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-yellow">
                                                             </use>
                                                         </svg>
                                                         <span class="rate"><?php echo $product['product_rating']; ?></span>

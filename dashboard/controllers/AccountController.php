@@ -2978,7 +2978,7 @@ class AccountController extends LoggedUserController
         $htm = '<div class="alert alert-info" role="alert">
                     <div class="alert-icon">
                         <svg class="svg" width="18" height="18">
-                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#info">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#info">
                             </use>
                         </svg>
                      </div> 

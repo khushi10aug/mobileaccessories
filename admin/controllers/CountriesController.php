@@ -167,6 +167,12 @@ class CountriesController extends ListingBaseController
             LibHelper::exitWithError($recordObj->getError(), true);
         }
 
+        if(applicationConstants::INACTIVE == $post['country_active']){
+            if(!Shop::updateShopsDisplayStatus($countryId)){
+                LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_UPDATE_DISPLAY_STATUS_OF_SHOP'), true);
+            }
+        }
+
         $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
 
         Product::updateMinPrices(0, 0, 0, $recordId);
@@ -307,6 +313,12 @@ class CountriesController extends ListingBaseController
         $obj = new Countries($recordId);
         if (!$obj->changeStatus($status)) {
             LibHelper::exitWithError($obj->getError(), true);
+        }
+        
+        if(applicationConstants::INACTIVE == $status){
+            if(!Shop::updateShopsDisplayStatus($recordId)){
+                LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_UPDATE_DISPLAY_STATUS_OF_SHOP'), true);
+            }
         }
     }
 

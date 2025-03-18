@@ -38,7 +38,9 @@ class DiscountCouponsReportController extends ListingBaseController
 
     public function search($type = false)
     {
-        $this->getListingData($type);
+        $batchCount = FatApp::getPostedData('batch_count', FatUtility::VAR_INT, 0);
+        $batchNumber = FatApp::getPostedData('batch_number', FatUtility::VAR_INT, 1);
+        $this->getListingData($type, $batchCount, $batchNumber);
         $jsonData = [
             'headSection' => $this->_template->render(false, false, '_partial/listing/head-section.php', true),
             'listingHtml' => $this->_template->render(false, false, 'discount-coupons-report/search.php', true),
@@ -47,7 +49,7 @@ class DiscountCouponsReportController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    public function getListingData($type = false)
+    public function getListingData($type = false, $batchCount = 1, $batchNumber = 0)
     {
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('listingColumns', FatUtility::VAR_STRING, '');
@@ -100,8 +102,14 @@ class DiscountCouponsReportController extends ListingBaseController
 
 
         if ($type == 'export') {
-            $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
+            $pageSize = Report::MAX_LIMIT;
+            if (isset($batchCount) && $batchCount > 0 && $batchCount <= Report::MAX_LIMIT) {
+                $pageSize = $batchCount;
+            }
+            $pagenumber = ($batchNumber < 1) ? 1 : $batchNumber;
+
+            $srch->setPageNumber($pagenumber);
+            $srch->setPageSize($pageSize);
             $rs = $srch->getResultSet();
             $sheetData = array();
 
@@ -153,6 +161,36 @@ class DiscountCouponsReportController extends ListingBaseController
     public function export()
     {
         $this->search('export');
+    }
+
+    public function form()
+    {
+        $formTitle = Labels::getLabel('LBL_EXPORT_DISCOUNT_COUPONS_REPORT', $this->siteLangId);
+        $frm = $this->getExportForm($this->siteLangId);
+        $this->set('frm', $frm);
+        $this->set('includeTabs', false);
+        $this->set('formTitle', $formTitle);
+        $this->set('html', $this->_template->render(false, false, '_partial/listing/form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    protected function getExportForm($langId)
+    {
+
+        $frm = new Form('frmExport', array('id' => 'frmExport'));
+
+        /* Batch Count[ */
+        $fld =  $frm->addIntegerField(Labels::getLabel('FRM_COUNTS_PER_BATCH', $langId), 'batch_count', Report::MAX_LIMIT, array('id' => 'batch_count'));
+        $fld->requirements()->setRequired(true);
+        $fld->requirements()->setRange(1, Report::MAX_LIMIT);
+        /*]*/
+
+        /* Batch Number[ */
+        $fld = $frm->addIntegerField(Labels::getLabel('FRM_BATCH_NUMBER', $langId), 'batch_number', 1, array('id' => 'batch_number'));
+        $fld->requirements()->setRequired(true);
+        $fld->requirements()->setPositive();
+        $frm->setFormTagAttribute('onSubmit', 'exportRecords(); return false;');
+        return $frm;
     }
 
     public function getSearchForm($fields = [], $couponDate = '')

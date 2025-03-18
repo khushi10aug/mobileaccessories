@@ -140,4 +140,21 @@
             }).on('input', getItem).on('focus', getItem).on('dropdown:select', bindItem);
         });
     };
+
+    deleteImage = function (recordId, afile_id, lang_id, slide_screen) {
+        var agree = confirm(langLbl.confirmDelete);
+        if (!agree) {
+            return false;
+        }
+        fcom.ajax(fcom.makeUrl(controllerName, 'removeMedia', [recordId, afile_id, lang_id, slide_screen]), '', function (t) {
+            var ans = $.parseJSON(t);
+            if (ans.status == 0) {
+                fcom.displayErrorMessage(ans.msg);
+                return;
+            }
+            
+            fcom.displaySuccessMessage(ans.msg);
+            loadImages(recordId, lang_id);
+        });
+    }
 })();

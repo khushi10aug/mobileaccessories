@@ -620,4 +620,21 @@ class ShopsController extends ListingBaseController
     {
         return array_diff($fields, ['shop_active', 'numOfReports', 'numOfProducts', 'numOfReviews'], Common::excludeKeysForSort());
     }
+
+    public function shopMissingInfo()
+    {
+        $shopId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (1 > $shopId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $shopRow = Shop::getAttributesById($shopId, ['shop_id']);
+        if (!$shopRow) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $this->set('infoArr', Shop::getShopMissingInfo($shopId, $this->siteLangId));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
 }

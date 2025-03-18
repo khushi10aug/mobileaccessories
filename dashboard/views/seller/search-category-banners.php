@@ -38,7 +38,7 @@
                         array('href' => 'javascript:void(0)', 'onclick' => 'addCategoryBanner(' . $row['prodcat_id'] . ')', 'class' => '', 'title' => Labels::getLabel('LBL_Media', $siteLangId)),
                         '<svg class="svg" width="18" height="18">
         <use
-            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#edit">
         </use>
     </svg>',
                         true

@@ -76,7 +76,7 @@
 
         <button class="c-header-icon quick-search" data-bs-toggle="modal" data-bs-target="#search-main">
             <svg class="svg" width="20" height="20">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#icon-search">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-search">
                 </use>
             </svg>
         </button>
@@ -89,7 +89,7 @@
                     href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>"
                     title="<?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?>">
                     <svg class="svg bell-shake-delay" width="20" height="20">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#envelope">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#envelope">
                         </use>
                     </svg>
                     <span class="h-badge msg-count">

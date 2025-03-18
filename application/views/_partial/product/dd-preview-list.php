@@ -27,7 +27,7 @@
                                 <input class="copy-input" value="' . $link['pdl_preview_link'] . '" id="copypreview_' . $link['pdl_id'] . '" readonly> <button class="copy-btn" id="copyButton_' . $link['pdl_id'] . '" onclick="fcom.copyToClipboard(\'copypreview_' . $link['pdl_id'] . '\')">
        
                                                 <svg class="svg" width="18" height="18">
-                                                    <use xlink:href="' . CONF_WEBROOT_FRONTEND . 'images/retina/sprite.svg#copy-to-all">
+                                                    <use xlink:href="' . CONF_WEBROOT_FRONTEND . 'images/retina/sprite.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#copy-to-all">
                                                     </use>
                                                 </svg>                                           
                                            
@@ -60,7 +60,7 @@
                                                     title="<?php echo $attachment['preview']; ?>"
                                                     onclick="playVideo('<?php echo $videoPath; ?>', '<?php echo $fileExt; ?>','<?php echo $attachment['preview']; ?>','<?php echo $attachment['preview']; ?>'); return false;">
                                                     <svg class="svg" width="18" height="18">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#view">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#view">
                                                         </use>
                                                     </svg>
                                                 </button>
@@ -70,7 +70,7 @@
                                                     title="<?php echo $attachment['preview']; ?>"
                                                     data-fancybox="gallery-<?php echo $product['selprod_id']; ?>">
                                                     <svg class="svg" width="18" height="18">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#view">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#view">
                                                         </use>
                                                     </svg>
                                                 </a>
@@ -80,7 +80,7 @@
                                                 title="<?php echo $attachment['preview']; ?>">
                                                 <svg class="svg" width="18" height="18">
                                                     <use
-                                                        xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#icon-download">
+                                                        xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-download">
                                                     </use>
                                                 </svg>
                                             </a>

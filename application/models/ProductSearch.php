@@ -104,17 +104,31 @@ class ProductSearch extends SearchBase
         }
         $this->joinShops(0, true, true, $shopId, true);
 
-        $countryId = 0;
-        if (isset($criteria['country_id']) && 0 < $criteria['country_id']) {
-            $countryId = FatUtility::int($criteria['country_id']);
+        $joinShopCountry = true;
+        if (isset($criteria['doNotJoinShopCountry']) && true == $criteria['doNotJoinShopCountry']) {
+            $joinShopCountry = false;
         }
-        $this->joinShopCountry(0, true, $countryId);
 
-        $stateId = 0;
-        if (isset($criteria['state_id']) && 0 < $criteria['state_id']) {
-            $stateId = FatUtility::int($criteria['state_id']);
+        if ($joinShopCountry) {
+            $countryId = 0;
+            if (isset($criteria['country_id']) && 0 < $criteria['country_id']) {
+                $countryId = FatUtility::int($criteria['country_id']);
+            }
+            $this->joinShopCountry(0, true, $countryId);
         }
-        $this->joinShopState(0, true, $stateId);
+
+        $joinShopState = true;
+        if (isset($criteria['doNotJoinShopState']) && true == $criteria['doNotJoinShopState']) {
+            $joinShopState = false;
+        }
+
+        if ($joinShopState) {
+            $stateId = 0;
+            if (isset($criteria['state_id']) && 0 < $criteria['state_id']) {
+                $stateId = FatUtility::int($criteria['state_id']);
+            }
+            $this->joinShopState(0, true, $stateId);
+        }
         $this->joinBrands(0, true, true, true, $criteria);
 
         $joinShippingPkg = true;
@@ -275,8 +289,8 @@ class ProductSearch extends SearchBase
         /* $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'tu.user_id = sprods.selprod_user_id AND tu.user_is_supplier = ' . applicationConstants::YES, 'tu');
         $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'tuc.credential_user_id = tu.user_id and tuc.credential_active = ' . applicationConstants::ACTIVE . ' and tuc.credential_verified = ' . applicationConstants::YES, 'tuc'); */
         $srch->joinTable(Shop::DB_TBL, 'INNER JOIN', 'ts.shop_user_id = sprods.selprod_user_id and ts.shop_user_valid = 1 and ts.shop_active = ' . applicationConstants::YES . ' AND ts.shop_supplier_display_status = ' . applicationConstants::YES . $shopCondition, 'ts');
-        $srch->joinTable(Countries::DB_TBL, 'INNER JOIN', 'tcn.country_id = ts.shop_country_id and tcn.country_active = ' . applicationConstants::YES, 'tcn');
-        $srch->joinTable(States::DB_TBL, 'INNER JOIN', 'tst.state_id = ts.shop_state_id and tst.state_active = ' . applicationConstants::YES, 'tst');
+        // $srch->joinTable(Countries::DB_TBL, 'INNER JOIN', 'tcn.country_id = ts.shop_country_id and tcn.country_active = ' . applicationConstants::YES, 'tcn');
+        //$srch->joinTable(States::DB_TBL, 'INNER JOIN', 'tst.state_id = ts.shop_state_id and tst.state_active = ' . applicationConstants::YES, 'tst');
 
         if (FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
             $srch->joinTable(Brand::DB_TBL, 'INNER JOIN', 'tb.brand_id = tp.product_brand_id and tb.brand_active = ' . applicationConstants::YES . ' and tb.brand_deleted = ' . applicationConstants::NO, 'tb');

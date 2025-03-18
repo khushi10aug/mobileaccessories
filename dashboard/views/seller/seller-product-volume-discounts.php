@@ -49,14 +49,14 @@
                                         $li = $ul->appendElement("li");
                                         $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "sellerProductVolumeDiscountForm(" . $selprod_id . ", " . $row['voldiscount_id'] . ")"), '<svg class="svg" width="18" height="18">
         <use
-            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#edit">
         </use>
     </svg>', true);
                                         $li = $ul->appendElement("li");
                                         $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => '', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteSellerProductVolumeDiscount(" . $row['voldiscount_id'] . ")"), '<i class="icn">
                                         <svg class="svg" width="18" height="18">
                                             <use
-                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
                                             </use>
                                         </svg>
                                     </i>', true);

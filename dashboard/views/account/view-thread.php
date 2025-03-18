@@ -120,7 +120,7 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                     echo $frm->getFieldHtml('message_text'); ?>
                     <button class="btn btn-icon btn-send" type="submit">
                         <svg class="svg" width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#submitfly">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#submitfly">
                             </use>
                         </svg>
                     </button>

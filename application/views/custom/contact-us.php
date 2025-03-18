@@ -142,7 +142,7 @@ $fld->developerTags['col'] = 12;
                                                 <span class="icon">
                                                     <svg class="svg" width="18" height="18">
                                                         <use
-                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#phones">
+                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#phones">
                                                         </use>
                                                     </svg>
                                                 </span>
@@ -159,7 +159,7 @@ $fld->developerTags['col'] = 12;
                                             <li>
                                                 <span class="icon"><svg class="svg" width="18" height="18">
                                                         <use
-                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fax">
+                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#fax">
                                                         </use>
                                                     </svg>
                                                 </span>
@@ -172,7 +172,7 @@ $fld->developerTags['col'] = 12;
                                         <li>
                                             <span class="icon"><svg class="svg" width="18" height="18">
                                                     <use
-                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#customer-care">
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#customer-care">
                                                     </use>
                                                 </svg>
                                             </span>

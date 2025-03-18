@@ -122,7 +122,7 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                                                         <li class="btn-remove-row-js" data-day="<?php echo $i; ?>">
                                                             <a href="javascript:void(0)" class="">
                                                                 <svg class="svg" width="18" height="18">
-                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#delete">
                                                                     </use>
                                                                 </svg>
                                                             </a>
@@ -131,7 +131,7 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                                                     <li class="addRowBtn<?php echo $i; ?>-js d-none">
                                                         <a href="javascript:void(0)" onclick="addRow('<?php echo $i; ?>')" class="">
                                                             <svg class="svg" width="18" height="18">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#add">
                                                                 </use>
                                                             </svg>
                                                         </a>
@@ -173,7 +173,7 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                                             <ul class="actions">
                                                 <li class="addRowBtn<?php echo $i; ?>-js d-none">
                                                     <a href="javascript:void(0)" onclick="addRow('<?php echo $i; ?>')" class=""><svg class="svg" width="18" height="18">
-                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#add">
                                                             </use>
                                                         </svg>
                                                     </a>

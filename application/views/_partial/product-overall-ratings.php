@@ -27,7 +27,7 @@ if ($totReviews) {
         <li class="progress-block-item">
             <span class="star">
                 <span class="txt">5</span> <svg class="svg svg-star" width="9" height="9">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-yellow">
                     </use>
                 </svg></span>
             <progress class="progress" min="0" max="100" value="<?php echo $rate_5_width; ?>"
@@ -37,7 +37,7 @@ if ($totReviews) {
         <li class="progress-block-item">
             <span class="star">
                 <span class="txt">4</span><svg class="svg svg-star" width="9" height="9">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-yellow">
                     </use>
                 </svg></span>
             <progress class="progress" min="0" max="100" value="<?php echo $rate_4_width; ?>"
@@ -47,7 +47,7 @@ if ($totReviews) {
         <li class="progress-block-item">
             <span class="star">
                 <span class="txt">3</span> <svg class="svg svg-star" width="9" height="9">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-yellow">
                     </use>
                 </svg></span>
             <progress class="progress" min="0" max="100" value="<?php echo $rate_3_width; ?>"
@@ -57,7 +57,7 @@ if ($totReviews) {
         <li class="progress-block-item">
             <span class="star">
                 <span class="txt">2</span><svg class="svg svg-star" width="9" height="9">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-yellow">
                     </use>
                 </svg></span>
             <progress class="progress" min="0" max="100" value="<?php echo $rate_2_width; ?>"
@@ -68,7 +68,7 @@ if ($totReviews) {
             <span class="star">
                 <span class="txt">1</span>
                 <svg class="svg svg-star" width="9" height="9">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-yellow">
                     </use>
                 </svg></span>
             <progress class="progress" min="0" max="100" value="<?php echo $rate_1_width; ?>"
@@ -97,7 +97,7 @@ if ($totReviews) {
             </span>
             <span class="value">
                 <svg class="svg svg-star" width="11" height="11">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-yellow">
                     </use>
                 </svg>
                 <span class="out-of"><?php echo $ratingValue; ?> /5</span>

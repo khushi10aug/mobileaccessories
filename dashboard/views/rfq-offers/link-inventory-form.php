@@ -10,7 +10,7 @@ $fld->addFieldTagAttribute('id', 'rfqSelprodIdJs');
 $fld->addFieldTagAttribute('placeholder', Labels::getLabel('FRM_SELECT_INVENTORY', $siteLangId));
 
 $icon = '<svg class="svg" width="18" height="18">
-            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#add">
             </use>
         </svg>';
 $lbl = Labels::getLabel('LBL_NOT_FOUND?', $siteLangId);

@@ -66,7 +66,7 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
                                 <ul class="phone-list">
                                     <li class="phone-list-item phone-txt">
                                         <svg class="svg" width="20" height="20">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#mobile-alt">
                                             </use>
                                         </svg>
                                         <span class="default-ltr"><?php echo $addrPhone; ?></span>
@@ -111,7 +111,7 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
                         <div class="info">
                             <span>
                                 <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#reward-points">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#reward-points">
                                     </use>
                                 </svg> <?php echo Labels::getLabel('LBL_REWARD_POINTS', $siteLangId); ?>
                                 <strong><?php echo $cartSummary['cartRewardPoints']; ?>

@@ -19,13 +19,13 @@ if ($includeWrapper) { ?>
                             <?php if ($canEdit) { ?>
                                 <button onclick="addNewLinkForm(<?php echo $row['nlink_nav_id']; ?>, <?php echo $row['nlink_id']; ?>)" title="<?php echo  Labels::getLabel('LBL_EDIT', $siteLangId); ?>" class="btn btn-clean btn-sm clickable" data-bs-toggle="tooltip" data-placement="top">
                                     <svg class="svg clickable" width="18" height="18">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#edit">
                                         </use>
                                     </svg>
                                 </button>
                                 <button onclick="deleteLink(<?php echo $row['nlink_nav_id']; ?>, <?php echo $row['nlink_id']; ?>)" title="<?php echo  Labels::getLabel('LBL_DELETE_RECORD', $siteLangId); ?>" class="btn btn-clean btn-sm clickable" data-bs-toggle="tooltip" data-placement="top">
                                     <svg class="svg clickable" width="18" height="18">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#delete">
                                         </use>
                                     </svg>
                                 </button>
@@ -37,7 +37,7 @@ if ($includeWrapper) { ?>
                     <div class="handleJs">
                         <i class="clickable sort-icon" data-nav-id="<?php echo $row['nlink_nav_id']; ?>" data-nlink-id="<?php echo $row['nlink_id']; ?>">
                             <svg class="svg" width="18" height="18">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#drag">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#drag">
                                 </use>
                             </svg>
                         </i>

@@ -27,7 +27,7 @@ class Admin extends MyAppModel
 
         $stateId = FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 0);
         $stateName = States::getAttributesByLangId($langId, $stateId, ['state_name', 'state_identifier'], applicationConstants::JOIN_LEFT);
-        $stateName = !empty($stateName['state_name']) ? $stateName['state_name'] : $stateName['state_identifier'];
+        $stateName = !empty($stateName['state_name']) ? $stateName['state_name'] : $stateName['state_identifier'] ?? '';
         $stateCode = States::getAttributesById($stateId, 'state_code');
 
         $postalCode = FatApp::getConfig('CONF_ZIP_CODE', FatUtility::VAR_STRING, '');

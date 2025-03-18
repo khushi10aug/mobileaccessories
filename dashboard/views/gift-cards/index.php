@@ -22,7 +22,7 @@ $btnReset->addFieldTagAttribute('onclick', 'clearSearch()');
                 <div class="buttons-group d-flex align-items-center">
                     <a href="javascript:void(0)" class="btn btn--secondary slide-toggle-js">
                         <svg class="icon icon--clock icon--small margin-right-2">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL . 'images/sprite.svg#search'; ?>"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL . 'images/sprite.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#search'; ?>"></use>
                         </svg>
                         <?php echo Label::getLabel('LBL_Search'); ?>
                     </a>

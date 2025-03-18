@@ -27,7 +27,7 @@ class AbandonedCartController extends ListingBaseController
                 'onclick' => ''
             ],
             'label' => '<svg class="svg btn-icon-start" width="18" height="18">
-                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view"></use>
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#view"></use>
                         </svg><span>' . Labels::getLabel('BTN_PRODUCTS', $this->siteLangId) . '</span>',
         ];
 

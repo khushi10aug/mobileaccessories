@@ -524,7 +524,7 @@ class ShipRocket extends ShippingServicesBase
                     'tax' => $taxPercentage,
                 ]
             ],
-            'payment_method' => (FatApp::getConfig("CONF_COD_ORDER_STATUS", FatUtility::VAR_INT, FatApp::getConfig("CONF_COD_ORDER_STATUS")) == $this->orderDetail['op_status_id']) ? 'COD' : 'Prepaid',
+            'payment_method' => (FatApp::getConfig("CONF_COD_ORDER_STATUS", FatUtility::VAR_INT, FatApp::getConfig("CONF_COD_ORDER_STATUS")) == $this->orderDetail['op_status_id']) || (isset($this->orderDetail['plugin_code']) && in_array(strtolower($this->orderDetail['plugin_code']), ['cashondelivery'])) ? 'COD' : 'Prepaid',
             'shipping_charges' => $shippingTotal,
             'total_discount' => $totalDiscount,
             'sub_total' => CommonHelper::orderProductAmount($this->orderDetail, 'CART_TOTAL', false, User::USER_TYPE_SELLER) + $taxCharged,

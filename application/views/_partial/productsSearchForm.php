@@ -8,14 +8,14 @@ echo $frmProductSearch->getFormTag();
 <?php /* <li class="is--active d-none d-xl-block">
             <a href="javascript:void(0)" class="switch--grind switch--link-js grid hide--mobile"><i class="icn">
                 <svg class="svg">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#gridview" href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#gridview"></use>
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#gridview" href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#gridview"></use>
                 </svg>
             </i><span class="txt"><?php echo Labels::getLabel('LBL_Grid_View', $siteLangId); ?></span></a>
         </li>
         <li class="d-none d-xl-block">
             <a href="javascript:void(0)" class="switch--list switch--link-js list hide--mobile"><i class="icn">
                 <svg class="svg">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#listview" href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#listview"></use>
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#listview" href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#listview"></use>
                 </svg>
             </i><span class="txt"><?php echo Labels::getLabel('LBL_List_View', $siteLangId); ?></span></a>
         </li> */ ?>

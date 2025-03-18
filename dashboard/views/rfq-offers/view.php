@@ -25,7 +25,7 @@ $totalRecords = count($arrListing); ?>
                             <?php if (RfqOffers::STATUS_ACCEPTED == $row['offer_status']) { ?>
                                 <p class="txt-accepted">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#check-double"></use>
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#check-double"></use>
                                     </svg>
                                     <?php echo Labels::getLabel('MSG_THIS_OFFER_HAS_BEEN_ACCEPTED', $siteLangId); ?>
                                 </p>
@@ -33,7 +33,7 @@ $totalRecords = count($arrListing); ?>
                             <?php if (RfqOffers::STATUS_REJECTED == $row['offer_status']) { ?>
                                 <p class="txt-rejected">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#close-circle"></use>
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#close-circle"></use>
                                     </svg>
                                     <?php echo Labels::getLabel('MSG_THIS_OFFER_HAS_BEEN_REJECTED', $siteLangId); ?>
                                 </p>

@@ -20,7 +20,7 @@ if (!empty($orderPickUpData)) {
                             <ul class="phone-list">
                                 <li class="phone-list-item time-txt">
                                     <svg class="svg" width="20" height="20">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#calendar-day">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#calendar-day">
                                         </use>
                                     </svg>
                                     <?php echo FatDate::format($address["opshipping_date"]) . ' ' . $fromTime . ' - ' . $toTime; ?>
@@ -43,7 +43,7 @@ if (!empty($orderPickUpData)) {
                                 <ul class="phone-list">
                                     <li class="phone-list-item phone-txt">
                                         <svg class="svg" width="20" height="20">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#mobile-alt">
                                             </use>
                                         </svg>
                                         <span class="default-ltr"><?php echo ValidateElement::formatDialCode($address['oua_phone_dcode']) . $address['oua_phone']; ?></span>

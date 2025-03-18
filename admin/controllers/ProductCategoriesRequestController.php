@@ -191,7 +191,20 @@ class ProductCategoriesRequestController extends ListingBaseController
             LibHelper::exitWithError($msg, true);
         }
         $this->setLangData($record, ['prodcat_name' => $data['prodcat_name']]);
+        $newTabLangId = 0;
+        $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
+        if (0 < count($languages)) {
+            foreach ($languages as $langId => $langName) {
+                if (!ProductCategory::getAttributesByLangId($langId, $recordId)) {
+                    $newTabLangId = $langId;
+                    break;
+                }
+            }
+        }
 
+        if ($newTabLangId == 0 && !$this->isMediaUploaded($recordId)) {
+            $this->set('openMediaForm', true);
+        }
         /* url data[ */
         $prodCatOriginalUrl = $this->rewriteUrl . $recordId;
         if ($post['urlrewrite_custom'] == '') {
@@ -204,6 +217,7 @@ class ProductCategoriesRequestController extends ListingBaseController
         $record->updateCatCode();
         $this->set('msg', $this->str_setup_successful);
         $this->set('recordId', $recordId);
+        $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 

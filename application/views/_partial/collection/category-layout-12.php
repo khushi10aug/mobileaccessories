@@ -17,11 +17,20 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                         $uploadedTime = AttachedFile::setTimeParam($fileRow['afile_updated_at']);
                         ?>
                         <?php
+                        $dimensions = ImageDimension::getDisplayCollectionImageData('', Collections::TYPE_CATEGORY_LAYOUT12);
                         $pictureAttr = [
-                            'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::generateFileUrl('Image', 'collectionReal', array($fileRow['afile_record_id'], $fileRow['afile_lang_id'], 'WEBP' . ImageDimension::VIEW_DESKTOP)) . $uploadedTime],
-                            'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::generateFileUrl('Image', 'collectionReal', array($fileRow['afile_record_id'], $fileRow['afile_lang_id'], ImageDimension::VIEW_DESKTOP)) . $uploadedTime],
-                            'ratio' => '4:1',
-                            'imageUrl' => UrlHelper::generateFileUrl('Image', 'collectionReal', array($fileRow['afile_record_id'], $fileRow['afile_lang_id'], ImageDimension::VIEW_DESKTOP)) . $uploadedTime,
+                            'webpImageUrl' => [
+                                ImageDimension::VIEW_DESKTOP => UrlHelper::generateFileUrl('Image', 'collectionReal', array($fileRow['afile_record_id'], $fileRow['afile_lang_id'], 'WEBP' . ImageDimension::VIEW_DESKTOP, AttachedFile::FILETYPE_COLLECTION_IMAGE, applicationConstants::SCREEN_DESKTOP, $collection['collection_layout_type'])) . $uploadedTime,
+                                ImageDimension::VIEW_TABLET => UrlHelper::generateFileUrl('Image', 'collectionReal', array($fileRow['afile_record_id'], $fileRow['afile_lang_id'], 'WEBP' . ImageDimension::VIEW_TABLET, AttachedFile::FILETYPE_COLLECTION_IMAGE, applicationConstants::SCREEN_IPAD, $collection['collection_layout_type'])) . $uploadedTime,
+                                ImageDimension::VIEW_MOBILE => UrlHelper::generateFileUrl('Image', 'collectionReal', array($fileRow['afile_record_id'], $fileRow['afile_lang_id'], 'WEBP' . ImageDimension::VIEW_MOBILE, AttachedFile::FILETYPE_COLLECTION_IMAGE, applicationConstants::SCREEN_MOBILE, $collection['collection_layout_type'])) . $uploadedTime
+                            ],
+                            'jpgImageUrl' => [
+                                ImageDimension::VIEW_DESKTOP => UrlHelper::generateFileUrl('Image', 'collectionReal', array($fileRow['afile_record_id'], $fileRow['afile_lang_id'], ImageDimension::VIEW_DESKTOP, AttachedFile::FILETYPE_COLLECTION_IMAGE, applicationConstants::SCREEN_DESKTOP, $collection['collection_layout_type'])) . $uploadedTime,
+                                ImageDimension::VIEW_TABLET => UrlHelper::generateFileUrl('Image', 'collectionReal', array($fileRow['afile_record_id'], $fileRow['afile_lang_id'], ImageDimension::VIEW_TABLET, AttachedFile::FILETYPE_COLLECTION_IMAGE, applicationConstants::SCREEN_IPAD, $collection['collection_layout_type'])) . $uploadedTime,
+                                ImageDimension::VIEW_MOBILE => UrlHelper::generateFileUrl('Image', 'collectionReal', array($fileRow['afile_record_id'], $fileRow['afile_lang_id'], ImageDimension::VIEW_MOBILE, AttachedFile::FILETYPE_COLLECTION_IMAGE, applicationConstants::SCREEN_MOBILE, $collection['collection_layout_type'])) . $uploadedTime
+                            ],
+                            'ratio' => $dimensions['aspectRatio'],
+                            'imageUrl' => UrlHelper::generateFileUrl('Image', 'collectionReal', array($fileRow['afile_record_id'], $fileRow['afile_lang_id'], ImageDimension::VIEW_DESKTOP, AttachedFile::FILETYPE_COLLECTION_IMAGE, applicationConstants::SCREEN_DESKTOP, $collection['collection_layout_type'])) . $uploadedTime,
                             'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $collection['collection_name'],
                             'title' => (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $collection['collection_name'],
                             'siteLangId' => $siteLangId,

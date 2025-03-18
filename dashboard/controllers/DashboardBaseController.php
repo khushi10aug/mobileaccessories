@@ -449,7 +449,7 @@ class DashboardBaseController extends FatController
             $userName = 'login@dummyid.com';
             $pass = 'kanwar@123';
         }
-        $fld = $frm->addRequiredField(Labels::getLabel('FRM_USERNAME_OR_EMAIL', $siteLangId), 'username', $userName, array('placeholder' => Labels::getLabel('FRM_USERNAME_OR_EMAIL', $siteLangId), 'data-alt-placeholder' => Labels::getLabel('FRM_PHONE_NUMBER', $siteLangId)));
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_USERNAME', $siteLangId), 'username', $userName, array('placeholder' => Labels::getLabel('FRM_USERNAME', $siteLangId), 'data-alt-placeholder' => Labels::getLabel('FRM_PHONE_NUMBER', $siteLangId)));
         $pwd = $frm->addPasswordField(Labels::getLabel('FRM_PASSWORD', $siteLangId), 'password', $pass, array('placeholder' => Labels::getLabel('FRM_PASSWORD', $siteLangId)));
         $pwd->requirements()->setRequired();
 

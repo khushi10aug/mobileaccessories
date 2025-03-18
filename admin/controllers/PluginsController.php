@@ -168,7 +168,7 @@ class PluginsController extends ListingBaseController
                         ],
                         'label' => '<svg class="svg" width="18" height="18">
                                         <use
-                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#sync-currency">
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#sync-currency">
                                         </use>
                                     </svg><span>' . Labels::getLabel('BTN_SYNC', $this->siteLangId) . '</span>',
                     ]
@@ -188,7 +188,7 @@ class PluginsController extends ListingBaseController
                         ],
                         'label' => '<svg class="svg" width="18" height="18">
                                         <use
-                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#sync">
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#sync">
                                         </use>
                                     </svg><span>' . Labels::getLabel('LBL_SYNC_CARRIERS', $this->siteLangId) . '</span>',
                     ]

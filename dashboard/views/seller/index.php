@@ -25,7 +25,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                 'title' => Labels::getLabel('LBL_CREATE_SHOP', $siteLangId)
             ],
             'label' => '<svg class="svg btn-icon-start" width="18" height="18">
-                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#add">
                             </use>
                         </svg>' . Labels::getLabel('LBL_CREATE_SHOP', $siteLangId)
         ];
@@ -40,7 +40,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                 'title' => Labels::getLabel('LBL_SHOP_INVENTORY', $siteLangId)
             ],
             'icon' => '<svg class="svg btn-icon-start" width="18" height="18">
-            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#inventories">
+            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#inventories">
             </use>
         </svg>',
             'label' =>  Labels::getLabel('LBL_SHOP_INVENTORY', $siteLangId)
@@ -326,12 +326,12 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                     <td>
                                                         <ul class="actions">
                                                             <li><a title="<?php echo Labels::getLabel('LBL_View_Order', $siteLangId); ?>" href="<?php echo $orderDetailUrl; ?>"><svg class="svg" width="18" height="18">
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#view">
                                                                         </use>
                                                                     </svg></a></li>
                                                             <?php if (!in_array($row["op_status_id"], $notAllowedStatues)) { ?>
                                                                 <li><a href="<?php echo UrlHelper::generateUrl('seller', 'cancelOrder', array($row['op_id'])); ?>" title="<?php echo Labels::getLabel('LBL_Cancel_Order', $siteLangId); ?>"><svg class="svg btn-icon-start" width="18" height="18">
-                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#close">
+                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#close">
                                                                             </use>
                                                                         </svg></a></li>
                                                             <?php } ?>
@@ -496,7 +496,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                             <li>
                                                                 <a title="<?php echo Labels::getLabel('LBL_View_Request', $siteLangId); ?>" href="<?php echo $url; ?>">
                                                                     <svg class="svg" width="18" height="18">
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#view">
                                                                         </use>
                                                                     </svg>
                                                                 </a>
@@ -589,7 +589,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                             ?>
                                                                 <button class="btn btn-view" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="<?php echo Labels::getLabel('LBL_VIEW_MORE', $siteLangId); ?>" onclick='getCancellationRequestComment(<?php echo $row['ocrequest_id']; ?>)'>
                                                                     <svg class="svg" width="10" height="10">
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#more">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#more">
                                                                         </use>
                                                                     </svg>
                                                                 </button>

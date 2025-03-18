@@ -73,8 +73,8 @@ $canRequestCustomProducts = (0 < FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUST
                             <div class="col-md-6">
                                 <div class="info">
                                     <span> <svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite.svg#info"
-                                                href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite.svg#info">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#info"
+                                                href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#info">
                                             </use>
                                         </svg><?php echo Labels::getLabel('LBL_Generate_requests_using_buttons_below', $siteLangId); ?></span>
                                 </div>

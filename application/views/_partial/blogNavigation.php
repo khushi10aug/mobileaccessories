@@ -1,14 +1,26 @@
 <div class="container">
     <div class="header-blog-inner">
-        <div class="logo">
-            <?php
-            $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
+        <?php
+        $imgDataType = '';
+        $logoWidth = '';
+        $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
+        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+        if (AttachedFile::FILE_ATTACHMENT_TYPE_SVG == $fileData['afile_attachment_type']) {
+            $siteLogo = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']) . $uploadedTime;
+            $imgDataType = 'data-type="svg"';
+            $logoWidth = 'width="120"';
+        } else {
             $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
-            $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
             $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-            ?>
+        }
+        ?>
+        <div class="logo" <?php echo $imgDataType; ?>>
             <a href="<?php echo UrlHelper::generateUrl(); ?>">
-                <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId); ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>">
+                <img <?php if (AttachedFile::FILE_ATTACHMENT_TYPE_OTHER == $fileData['afile_attachment_type'] && $fileData['afile_aspect_ratio'] > 0) { ?>
+                    data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?>
+                    src="<?php echo $siteLogo; ?>"
+                    alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId); ?>"
+                    title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>" <?php echo $logoWidth; ?>>
             </a>
         </div>
         <div class="header-blog-right">
@@ -65,13 +77,13 @@
 
             <button class="btn-menu blogPageBurgerIconJs" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#blog-menu">
                 <svg class="svg" width="20" height="20">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-blog.svg#burgerMenu">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-blog.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#burgerMenu">
                     </use>
                 </svg>
             </button>
             <button class="btn-blog-search" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#blog-search">
                 <svg class="svg" width="20" height="20">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-blog.svg#magnifying">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-blog.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#magnifying">
                     </use>
                 </svg>
             </button>

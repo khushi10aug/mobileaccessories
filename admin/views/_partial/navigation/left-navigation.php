@@ -10,10 +10,17 @@ $adminSidebar = (in_array(FatApp::getController(), ['ProductsController', 'Custo
         <a href="<?php echo UrlHelper::generateUrl(); ?>" class="logo">
             <?php
             $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $siteLangId, false);
-            $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
+            $logoWidth = '';
             $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+            if (AttachedFile::FILE_ATTACHMENT_TYPE_SVG == $fileData['afile_attachment_type']) {
+                $imgUrl = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']) . $uploadedTime;
+                $logoWidth = 'width="100"';
+            } else {
+                $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
+                $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            }
             ?>
-            <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } else { ?> data-ratio="1:1" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
+            <img <?php if (AttachedFile::FILE_ATTACHMENT_TYPE_OTHER == $fileData['afile_attachment_type'] && $fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } else { ?> data-ratio="1:1" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo $imgUrl; ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" <?php echo $logoWidth; ?>>
         </a>
     </div>
     <div class="sidebar-menu sidebarMenuJs" id="sidebar-menu">
@@ -26,7 +33,7 @@ $adminSidebar = (in_array(FatApp::getController(), ['ProductsController', 'Custo
                     <button class="menu-section menuLinkJs" data-selector='["Settings"]' onclick="redirectFn('<?php echo UrlHelper::generateUrl('Settings'); ?>')" type="button">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-system-settings">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-system-settings">
                                 </use>
                             </svg>
                         </span>

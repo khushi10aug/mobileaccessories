@@ -5,7 +5,7 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
             <header class="section-head category-product">
                 <?php echo ($collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
                 <div class="section-action">
-                    <ul class="nav nav-tabs" role="tablist">
+                    <ul class="nav nav-tabs tabs-masking" role="tablist">
                         <?php
                         $x = 0;
                         foreach ($collection['categories'] as $key => $category) {
@@ -13,11 +13,12 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link <?php echo 1 == $x ? 'active' : ''; ?>" data-bs-toggle="tab"
                                     data-bs-target="#tb-<?php echo $key . "-" . $collection['collection_id']; ?>" role="tab"
-                                    aria-controls="tabpanel-<?php echo $key . "-" . $collection['collection_id']; ?>" title="<?php echo $category['catData']['prodcat_name']; ?>">
+                                    aria-controls="tabpanel-<?php echo $key . "-" . $collection['collection_id']; ?>"
+                                    title="<?php echo $category['catData']['prodcat_name']; ?>">
                                     <?php echo $category['catData']['prodcat_name']; ?>
                                 </button>
                             </li>
-                        <?php if (4 == $x) {
+                            <?php if (4 == $x) {
                                 break;
                             }
                         } ?>
@@ -30,7 +31,7 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                     $dataDisplayCount = (Collections::TYPE_CATEGORY_LAYOUT8 == $collection['collection_layout_type']) ? $collection['collection_primary_records'] : (0 < $collection['collection_primary_records'] ? $collection['collection_primary_records'] : 4);
                     foreach ($collection['categories'] as $key => $category) {
                         $j++;
-                    ?>
+                        ?>
                         <div class="tab-pane fade category-product-layout-1  <?php echo 1 == $j ? 'show active' : ''; ?>"
                             id="tb-<?php echo $key . "-" . $collection['collection_id']; ?>">
                             <div class="product-listing" data-view="<?php echo $dataDisplayCount; ?>">
@@ -43,7 +44,7 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                                     if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                                         $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                                     }
-                                ?>
+                                    ?>
                                     <div class="product-listing-item">
                                         <div
                                             class="products <?php echo (isset($layoutClass)) ? $layoutClass : ''; ?> <?php if ($product['selprod_stock'] <= 0) { ?> out-of-stock <?php } ?>">
@@ -65,7 +66,7 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                                                     <div class="not-available">
                                                         <svg class="svg">
                                                             <use
-                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#linkedinfo">
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#linkedinfo">
                                                             </use>
                                                         </svg>
                                                         <?php echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId); ?>
@@ -108,11 +109,11 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                                             </div>
                                         </div>
                                     </div>
-                                <?php $i++;
+                                    <?php $i++;
                                 } ?>
                             </div>
                         </div>
-                    <?php if (4 == $j) {
+                        <?php if (4 == $j) {
                             break;
                         }
                     } ?>

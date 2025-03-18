@@ -9,6 +9,7 @@ class Report extends SearchBase
     private $ordersTableJoined;
     private $attr = [];
     private $shopSpecific = false;
+    public const MAX_LIMIT = 5000;
 
     /**
      * __construct

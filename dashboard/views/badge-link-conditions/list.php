@@ -18,7 +18,7 @@ if (Badge::COND_MANUAL == $conditionType && $row[Badge::DB_TBL_PREFIX . 'require
             'title' => Labels::getLabel('LBL_BIND_CONDITION', $siteLangId)
         ],
         'icon' => '<svg class="svg btn-icon-start" width="18" height="18">
-                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#add">
                             </use>
                         </svg>',
         'label' => Labels::getLabel('LBL_NEW', $siteLangId)

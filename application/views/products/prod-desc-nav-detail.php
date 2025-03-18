@@ -24,7 +24,7 @@
                     <h2 class="descriptions-head" data-bs-toggle="collapse" data-bs-target="#specification" aria-expanded="true"><?php echo Labels::getLabel('LBL_Specifications', $siteLangId); ?>
                         <?php ?>
                         <svg class="svg plus toggleAccordianJs" width="16" height="16">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#plus">
                             </use>
                         </svg>
                     </h2>
@@ -59,7 +59,7 @@
                 <div class="descriptions-item accordianSectionJs">
                     <h2 class="descriptions-head  <?php echo ($firstIsVisible ? 'collapsed' : ''); ?>" data-bs-toggle="collapse" data-bs-target="#description" aria-expanded="true"><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?>
                         <svg class="svg plus toggleAccordianJs" width="16" height="16">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#plus">
                             </use>
                         </svg>
                     </h2>
@@ -77,7 +77,7 @@
                 <div class="descriptions-item accordianSectionJs">
                     <h2 class="descriptions-head  <?php echo ($firstIsVisible ? 'collapsed' : ''); ?>" data-bs-toggle="collapse" data-bs-target="#video" aria-expanded="true"><?php echo Labels::getLabel('LBL_Video', $siteLangId); ?>
                         <svg class="svg plus toggleAccordianJs" width="16" height="16">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#plus">
                             </use>
                         </svg>
                     </h2>
@@ -97,7 +97,7 @@
                 <div class="descriptions-item accordianSectionJs">
                     <h2 class="descriptions-head  <?php echo ($firstIsVisible ? 'collapsed' : ''); ?>" data-bs-toggle="collapse" data-bs-target="#policies" aria-expanded="true"><?php echo Labels::getLabel('LBL_Shop_Policies', $siteLangId); ?>
                         <svg class="svg plus toggleAccordianJs" width="16" height="16">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#plus">
                             </use>
                         </svg>
                     </h2>
@@ -128,7 +128,7 @@
                 <div class="descriptions-item accordianSectionJs">
                     <h2 class="descriptions-head <?php echo ($firstIsVisible ? 'collapsed' : ''); ?>" data-bs-toggle="collapse" data-bs-target="#extra_comments" aria-expanded="true"><?php echo Labels::getLabel('LBL_Extra_comments', $siteLangId); ?>
                         <svg class="svg plus toggleAccordianJs" width="16" height="16">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#plus">
                             </use>
                         </svg>
                     </h2>

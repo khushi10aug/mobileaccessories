@@ -32,7 +32,7 @@ $geoAddress = isset($_COOKIE["_ykGeoAddress"]) ? $_COOKIE["_ykGeoAddress"] : $ge
         </div>
         <button onclick="loadGeoLocation()" class="btn btn-brand btn-block btn-detect">
             <svg class="svg" width="18" height="18">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#gps">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#gps">
                 </use>
             </svg>
             <span class="txt">

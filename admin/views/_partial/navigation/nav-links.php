@@ -9,7 +9,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
             <button class="menu-section navLinkJs" type="button" data-selector='["Home"]' onclick="redirectFn('<?php echo UrlHelper::generateUrl(); ?>')">
                 <span class="menu-icon">
                     <svg class="svg " width="24" height="24">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-dashboard">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-dashboard">
                         </use>
                     </svg>
                 </span>
@@ -33,7 +33,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
             <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_PRODUCT_MANAGEMENT" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-product-catalog">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-product-catalog">
                         </use>
                     </svg>
                 </span>
@@ -49,7 +49,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Products"]' href="<?php echo UrlHelper::generateUrl('Products'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?></span>
@@ -61,7 +61,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["SellerProducts"]' href="<?php echo UrlHelper::generateUrl('SellerProducts'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_PRODUCT_INVENTORY', $siteLangId); ?></span>
@@ -73,7 +73,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ProductCategories"]' href="<?php echo UrlHelper::generateUrl('ProductCategories'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_CATEGORIES', $siteLangId); ?></span>
@@ -85,7 +85,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Brands"]' href="<?php echo UrlHelper::generateUrl('Brands'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -98,7 +98,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Shops"]' href="<?php echo UrlHelper::generateUrl('Shops'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SHOPS', $siteLangId); ?></span>
@@ -111,7 +111,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Options", "OptionValues"]' href="<?php echo UrlHelper::generateUrl('Options'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_OPTIONS', $siteLangId); ?></span>
@@ -123,7 +123,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Tags"]' href="<?php echo UrlHelper::generateUrl('Tags'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_PRODUCT_TAGS', $siteLangId); ?></span>
@@ -135,7 +135,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ThresholdProducts"]' href="<?php echo UrlHelper::generateUrl('thresholdProducts'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_THRESHOLD_PRODUCTS', $siteLangId); ?><?php if (!$quickSearch && $threshSelProdCount) { ?> (<?php echo HtmlHelper::displayNumberWithPlus($threshSelProdCount); ?>)<?php } ?></span>
@@ -166,7 +166,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
             <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_REQUESTS" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-requests">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-requests">
                         </use>
                     </svg>
                 </span>
@@ -182,7 +182,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["BrandRequests"]' href="<?php echo UrlHelper::generateUrl('brandRequests'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_BRAND_REQUEST', $siteLangId); ?><?php if (!$quickSearch && $brandReqCount) { ?> (<?php echo HtmlHelper::displayNumberWithPlus($brandReqCount); ?>)<?php } ?></span>
@@ -194,7 +194,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ProductCategoriesRequest"]' href="<?php echo UrlHelper::generateUrl('ProductCategoriesRequest'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_CATEGORIES_REQUESTS', $siteLangId); ?>
@@ -207,7 +207,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('CustomProducts'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_MASTER_PRODUCT_REQUESTS', $siteLangId); ?>
@@ -220,7 +220,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('products', 'approvalPending'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SELLER_PRODUCT_REQUESTS', $siteLangId); ?>
@@ -233,7 +233,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["SellerApprovalRequests"]' href="<?php echo UrlHelper::generateUrl('sellerApprovalRequests'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SELLER_APPROVAL_REQUESTS', $siteLangId); ?><?php if (!$quickSearch && $supReqCount) { ?> (<?php echo HtmlHelper::displayNumberWithPlus($supReqCount); ?>)<?php } ?></span>
@@ -247,7 +247,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["OrderReturnRequests"]' href="<?php echo UrlHelper::generateUrl('OrderReturnRequests'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -263,7 +263,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["WithdrawalRequests"]' href="<?php echo UrlHelper::generateUrl('WithdrawalRequests'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -282,7 +282,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["OrderCancellationRequests"]' href="<?php echo UrlHelper::generateUrl('OrderCancellationRequests'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -301,7 +301,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["BadgeRequests"]' href="<?php echo UrlHelper::generateUrl('BadgeRequests'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -320,7 +320,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["UserGdprRequests"]' href="<?php echo UrlHelper::generateUrl('userGdprRequests'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -346,7 +346,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
             <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_RFQ" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-rfq">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-rfq">
                         </use>
                     </svg>
                 </span>
@@ -362,7 +362,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["RequestForQuotes", "RfqOffers"]' href="<?php echo UrlHelper::generateUrl('RequestForQuotes'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -395,7 +395,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
             <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_ORDERS" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-orders">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-orders">
                         </use>
                     </svg>
                 </span>
@@ -411,7 +411,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Orders"]' href="<?php echo UrlHelper::generateUrl('Orders'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?></span>
@@ -423,7 +423,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["GiftCardOrders"]' href="<?php echo UrlHelper::generateUrl('GiftCardOrders'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_GIFT_CARD_ORDERS', $siteLangId); ?></span>
@@ -435,7 +435,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["SubscriptionOrders"]' href="<?php echo UrlHelper::generateUrl('SubscriptionOrders'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SUBSCRIPTION_ORDERS', $siteLangId); ?></span>
@@ -447,7 +447,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["OrderCancelReasons"]' href="<?php echo UrlHelper::generateUrl('OrderCancelReasons'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_ORDER_CANCEL_REASONS', $siteLangId); ?></span>
@@ -459,7 +459,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["OrderReturnReasons"]' href="<?php echo UrlHelper::generateUrl('OrderReturnReasons'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -474,7 +474,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["OrderStatus"]' href="<?php echo UrlHelper::generateUrl('OrderStatus'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_ORDER_STATUSES', $siteLangId); ?></span>
@@ -486,7 +486,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ProductReviews"]' href="<?php echo UrlHelper::generateUrl('ProductReviews'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_PRODUCT_REVIEWS', $siteLangId); ?></span>
@@ -498,7 +498,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["AbandonedCart", "AbandonedCartProducts"]' href="<?php echo UrlHelper::generateUrl('AbandonedCart'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_ABANDONED_CART', $siteLangId); ?></span>
@@ -521,7 +521,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
             <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_USERS" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-users">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-users">
                         </use>
                     </svg>
                 </span>
@@ -537,7 +537,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["AdminUsers", "AdminPermissions"]' href="<?php echo UrlHelper::generateUrl('AdminUsers') ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -550,7 +550,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Users"]' href="<?php echo UrlHelper::generateUrl('Users'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -561,7 +561,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Rewards"]' href="<?php echo UrlHelper::generateUrl('Rewards'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -572,7 +572,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Transactions"]' href="<?php echo UrlHelper::generateUrl('Transactions'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -584,7 +584,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["DeletedUsers"]' href="<?php echo UrlHelper::generateUrl('DeletedUsers'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -596,7 +596,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["UsersAddresses"]' href="<?php echo UrlHelper::generateUrl('UsersAddresses'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -609,7 +609,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Messages"]' href="<?php echo UrlHelper::generateUrl('Messages') ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -637,7 +637,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
             <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_PROMOTIONS" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-promotions">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-promotions">
                         </use>
                     </svg>
                 </span>
@@ -653,7 +653,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["SpecialPrice"]' href="<?php echo UrlHelper::generateUrl('SpecialPrice'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -665,7 +665,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["VolumeDiscount"]' href="<?php echo UrlHelper::generateUrl('VolumeDiscount'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -677,7 +677,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["RelatedProducts"]' href="<?php echo UrlHelper::generateUrl('RelatedProducts'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -689,7 +689,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["BuyTogetherProducts"]' href="<?php echo UrlHelper::generateUrl('BuyTogetherProducts'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -704,7 +704,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Promotions"]' href="<?php echo UrlHelper::generateUrl('promotions'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -720,7 +720,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["RewardsOnPurchase"]' href="<?php echo UrlHelper::generateUrl('RewardsOnPurchase'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -735,7 +735,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["SmartRecomendedWeightages"]' href="<?php echo UrlHelper::generateUrl('SmartRecomendedWeightages'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -747,7 +747,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["RecomendedTagProducts"]' href="<?php echo UrlHelper::generateUrl('RecomendedTagProducts'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -762,7 +762,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["DiscountCoupons"]' href="<?php echo UrlHelper::generateUrl('DiscountCoupons'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -778,7 +778,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["PushNotifications"]' href="<?php echo UrlHelper::generateUrl('PushNotifications'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#mobile">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#mobile">
                                         </use>
                                     </svg>
                                 </span>
@@ -792,7 +792,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Badges"]' href="<?php echo UrlHelper::generateUrl('Badges'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-badge">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-badge">
                                         </use>
                                     </svg>
                                 </span>
@@ -804,7 +804,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Ribbons"]' href="<?php echo UrlHelper::generateUrl('Ribbons'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-ribbon">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-ribbon">
                                         </use>
                                     </svg>
                                 </span>
@@ -830,7 +830,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
             <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_BLOG" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-blog">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-blog">
                         </use>
                     </svg>
                 </span>
@@ -846,7 +846,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["BlogPostCategories"]' href="<?php echo UrlHelper::generateUrl('BlogPostCategories'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_BLOG_POST_CATEGORIES', $siteLangId); ?></span>
@@ -858,7 +858,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["BlogPosts"]' href="<?php echo UrlHelper::generateUrl('BlogPosts'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_BLOG_POSTS', $siteLangId); ?></span>
@@ -870,7 +870,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["BlogContributions"]' href="<?php echo UrlHelper::generateUrl('BlogContributions'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_BLOG_CONTRIBUTIONS', $siteLangId); ?></span>
@@ -882,7 +882,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["BlogComments"]' href="<?php echo UrlHelper::generateUrl('BlogComments'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span><span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_BLOG_COMMENTS', $siteLangId); ?></span>
@@ -904,7 +904,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
             <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_TAX" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-sales-tax">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-sales-tax">
                         </use>
                     </svg>
                 </span>
@@ -921,7 +921,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                 <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["TaxStructure"]' href="<?php echo UrlHelper::generateUrl('TaxStructure'); ?>">
                                     <span class="nav_icon">
                                         <svg class="svg" width="24" height="24">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                             </use>
                                         </svg>
                                     </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_TAX_STRUCTURE', $siteLangId); ?></span>
@@ -932,7 +932,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["TaxCategories"]' href="<?php echo UrlHelper::generateUrl('TaxCategories'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_TAX_CATEGORIES', $siteLangId); ?></span>
@@ -943,7 +943,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                 <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["TaxCategoriesRule"]' href="<?php echo UrlHelper::generateUrl('TaxCategoriesRule'); ?>">
                                     <span class="nav_icon">
                                         <svg class="svg" width="24" height="24">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                             </use>
                                         </svg>
                                     </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_TAX_CATEGORIES_RULE', $siteLangId); ?></span>
@@ -973,7 +973,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
             <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_CMS" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-CMS">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-CMS">
                         </use>
                     </svg>
                 </span>
@@ -989,7 +989,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Slides"]' href="<?php echo UrlHelper::generateUrl('Slides'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -1004,7 +1004,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["BannerLocation", "Banners"]' href="<?php echo UrlHelper::generateUrl('BannerLocation'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -1019,7 +1019,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ContentPages"]' href="<?php echo UrlHelper::generateUrl('ContentPages'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -1034,7 +1034,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ContentBlock"]' href="<?php echo UrlHelper::generateUrl('ContentBlock'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_CONTENT_BLOCK', $siteLangId); ?></span>
@@ -1046,7 +1046,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ImportInstructions"]' href="<?php echo UrlHelper::generateUrl('ImportInstructions'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_IMPORT_INSTRUCTIONS', $siteLangId); ?></span>
@@ -1058,7 +1058,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["FaqCategories", "Faq"]' href="<?php echo UrlHelper::generateUrl('FaqCategories'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_FAQS', $siteLangId); ?></span>
@@ -1070,7 +1070,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Testimonials"]' href="<?php echo UrlHelper::generateUrl('Testimonials'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_TESTIMONIALS', $siteLangId); ?></span>
@@ -1082,7 +1082,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Navigations"]' href="<?php echo UrlHelper::generateUrl('Navigations'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_NAVIGATIONS', $siteLangId); ?></span>
@@ -1094,7 +1094,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Collections"]' href="<?php echo UrlHelper::generateUrl('Collections'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_COLLECTIONS', $siteLangId); ?></span>
@@ -1128,7 +1128,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
             <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_REPORTS" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-reports">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-reports">
                         </use>
                     </svg>
                 </span>
@@ -1152,7 +1152,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom collapsed" data-bs-toggle="collapse" href="#salesReportNav" aria-expanded="true">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SALES_REPORTS', $siteLangId); ?></span>
@@ -1213,7 +1213,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom collapsed" data-bs-toggle="collapse" href="#usersReportNav" aria-expanded="true">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -1271,7 +1271,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom collapsed" data-bs-toggle="collapse" href="#financialReportNav" aria-expanded="true">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -1316,7 +1316,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom collapsed" data-bs-toggle="collapse" href="#subscriptionReportNav" aria-expanded="true">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SUBSCRIPTION_REPORT', $siteLangId); ?></span>
@@ -1346,7 +1346,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom collapsed" data-selector='["DiscountCouponsReport"]' href="<?php echo UrlHelper::generateUrl('DiscountCouponsReport'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -1370,7 +1370,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
             <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_IMPORT_EXPORT" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-import-export">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-import-export">
                         </use>
                     </svg>
                 </span>
@@ -1385,7 +1385,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ImportExport"]' href="<?php echo UrlHelper::generateUrl('ImportExport'); ?>">
                             <span class="nav_icon">
                                 <svg class="svg" width="24" height="24">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                     </use>
                                 </svg>
                             </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?></span>
@@ -1411,7 +1411,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
             <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_SHIPPING" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-shipping-pickup">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-shipping-pickup">
                         </use>
                     </svg>
                 </span>
@@ -1427,7 +1427,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ShippingCompanyUsers"]' href="<?php echo UrlHelper::generateUrl('ShippingCompanyUsers'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SHIPPING_COMPANY_USERS', $siteLangId); ?></span>
@@ -1440,7 +1440,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs" data-selector='["ShippingPackages"]' href="<?php echo UrlHelper::generateUrl('shippingPackages'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -1454,7 +1454,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs" data-selector='["ShippingProfile"]' href="<?php echo UrlHelper::generateUrl('shippingProfile'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -1468,7 +1468,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["PickupAddresses"]' href="<?php echo UrlHelper::generateUrl('PickupAddresses'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_PICKUP_ADDRESSES', $siteLangId); ?></span>
@@ -1481,7 +1481,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ShippedProducts"]' href="<?php echo UrlHelper::generateUrl('ShippedProducts'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SHIPPED_PRODUCTS', $siteLangId); ?></span>
@@ -1494,7 +1494,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["TrackingCodeRelation"]' href="<?php echo UrlHelper::generateUrl('TrackingCodeRelation'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_TRACKING_CODE_RELATION', $siteLangId); ?></span>
@@ -1517,7 +1517,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
             <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_SEO" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-SEO">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-SEO">
                         </use>
                     </svg>
                 </span>
@@ -1533,7 +1533,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["UrlRewriting"]' href="<?php echo UrlHelper::generateUrl('UrlRewriting'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_URL_REWRITING', $siteLangId); ?></span>
@@ -1546,7 +1546,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ImageAttributes"]' href="<?php echo UrlHelper::generateUrl('ImageAttributes'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span>
@@ -1561,7 +1561,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Sitemap"]' href="<?php echo UrlHelper::generateUrl('sitemap', 'generate'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span><span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_GENERATE_SITEMAP', $siteLangId); ?></span>
@@ -1571,7 +1571,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" target="_blank" href="<?php echo UrlHelper::generateFullUrl('custom', 'sitemap', array(), CONF_WEBROOT_FRONT_URL); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_VIEW_HTML', $siteLangId); ?></span>
@@ -1581,7 +1581,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" target="_blank" href="<?php echo UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . 'sitemap.xml'; ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_VIEW_XML', $siteLangId); ?></span>
@@ -1594,7 +1594,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["MetaTags"]' href="<?php echo UrlHelper::generateUrl('MetaTags'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_META_TAGS_MANAGEMENT', $siteLangId); ?></span>

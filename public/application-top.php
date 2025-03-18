@@ -65,3 +65,4 @@ if (strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
 define('SYSTEM_INIT', true);
 define('WHITE_LABELED', true);
 define('CONF_WEB_APP_VERSION', 'TV-10.2.0-20250116');
+define('RELEASE_DATE', '2025-01-16');

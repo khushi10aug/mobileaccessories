@@ -26,7 +26,7 @@ $canSendSms = $canSendSms ?? false;
 <div class="card-sign">
     <div class="card-sign_head">
         <h2 class="title">
-            <?php echo Labels::getLabel('LBL_SIGN_IN_TO_YOUR_SITE_ACCOUNT', $siteLangId); ?>
+            <?php echo Labels::getLabel('FRM_SIGN_IN', $siteLangId); ?>
         </h2>
     </div>
     <div class="card-sign_body">
@@ -90,7 +90,7 @@ $canSendSms = $canSendSms ?? false;
         </div>
     </div>
     <div class="card-sign_foot">
-        <h6><?php echo Labels::getLabel('DON’T_HAVE_AN_ACCOUNT?', $siteLangId); ?></h6>
+        <h6><?php echo Labels::getLabel('LBL_DON’T_HAVE_AN_ACCOUNT?', $siteLangId); ?></h6>
         <div class="more-links">
             <?php
             if (1 > $signInWithPhone) {

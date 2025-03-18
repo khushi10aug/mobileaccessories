@@ -26,7 +26,7 @@ class Notifications extends MyAppModel
         return $srch;
     }
 
-    public function addNotification($data, $pushNotification = true)
+    public function addNotification($data, $sendInstantNotification = false)
     {
         $userId = FatUtility::int($data['unotification_user_id']);
         if (1 > $userId) {
@@ -34,12 +34,15 @@ class Notifications extends MyAppModel
             return false;
         }
         $data['unotification_date'] = date('Y-m-d H:i:s');
+        if (true === $sendInstantNotification) {
+            $data['unotification_sent_to_app'] = 1;
+        }
         $this->assignValues($data);
         if (!$this->save()) {
             return false;
         }
 
-        if (true === $pushNotification) {
+        if (true === $sendInstantNotification) {
             $serviceAccountJsonKey = FatApp::getConfig("CONF_FIREBASE_SERVICE_ACCOUNT_JSON_KEY", FatUtility::VAR_STRING, '');
             if (trim($serviceAccountJsonKey) == '') {
                 return $this->getMainTableRecordId();
@@ -78,6 +81,8 @@ class Notifications extends MyAppModel
             "Authorization: Bearer $access_token",
             'Content-Type: application/json'
         ];
+
+        $notificationId = $notiData['notification_id'] ?? 0;
 
         $msg = [
             "title" => (string)($notiData['title'] ?? ''),
@@ -153,6 +158,16 @@ class Notifications extends MyAppModel
                 curl_close($ch);
                 return false;
             }
+            if ($notificationId) {
+                FatApp::getDb()->updateFromArray(
+                    self::DB_TBL,
+                    array('unotification_sent_to_app' => 1),
+                    array(
+                        'smt' => "unotification_id = ?",
+                        'vals' => array((int)$notificationId)
+                        )
+                    );
+            }
         }
         curl_close($ch);
         return true;
@@ -185,5 +200,71 @@ class Notifications extends MyAppModel
         }
         $res = FatApp::getDb()->fetch($rs);
         return $res['UnReadNotificationCount'];
+    }
+
+    public static function triggerNotification($notificationId = 0)
+    {
+        $srch = new SearchBase(static::DB_TBL, 'unt');
+        if ($notificationId) {
+            $srch->addCondition('unotification_id', '=', $notificationId);
+        } else {
+            $srch->addCondition('unotification_sent_to_app', '=', applicationConstants::NO);
+            $srch->addCondition('unotification_is_read', '=', applicationConstants::NO);
+        }
+        $srch->addOrder('unotification_date', 'ASC');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(50);
+        $rs = $srch->getResultSet();
+        $results = FatApp::getDb()->fetchAll($rs);
+        if (empty($results)) {
+            return;
+        }
+
+        $config = static::getConfArr();
+        $fcmDeviceIdsArr = [];
+        $unreadNotificationCount = [];
+
+        $siteName = FatApp::getConfig('CONF_WEBSITE_NAME_' . CommonHelper::getLangId(), FatUtility::VAR_STRING, ' ');
+
+        foreach ($results as $data) {
+            if (1 > $data['unotification_user_id']) {
+                continue;
+            }
+
+            if (!array_key_exists($data['unotification_user_id'], $fcmDeviceIdsArr)) {
+                $uObj = new User($data['unotification_user_id']);
+                $fcmDeviceIds = $uObj->getPushNotificationTokens();
+                if (empty($fcmDeviceIds)) {
+                    continue;
+                }
+                $fcmDeviceIdsArr[$data['unotification_user_id']] = $fcmDeviceIds;
+            }
+
+            $message = array(
+                'title' => empty($siteName) ? $_SERVER['SERVER_NAME'] : $siteName,
+                'text' => $data['unotification_body'],
+                'type' => $data['unotification_type'],
+                'notification_id' => $data['unotification_id']
+            );
+
+            $fcmDeviceIds = $fcmDeviceIdsArr[$data['unotification_user_id']] ?? [];
+            foreach ($fcmDeviceIds as $pushNotificationApiToken) {
+                self::sendPushNotification($config, $pushNotificationApiToken['uauth_fcm_id'], $pushNotificationApiToken['uauth_device_os'], $message);
+            }
+        }
+    }
+
+    public static function getConfArr()
+    {
+        $serviceAccountJsonKey = FatApp::getConfig("CONF_FIREBASE_SERVICE_ACCOUNT_JSON_KEY", FatUtility::VAR_STRING, '');
+        if (trim($serviceAccountJsonKey) == '') {
+            return [];
+        }
+        $config = json_decode($serviceAccountJsonKey, true);
+        if (json_last_error() !== JSON_ERROR_NONE &&  $config['project_id'] == '') {
+            return [];
+        }
+
+        return $config;
     }
 }

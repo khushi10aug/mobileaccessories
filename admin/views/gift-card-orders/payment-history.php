@@ -62,7 +62,7 @@ if (!empty($order['payments'])) { ?>
                                 <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_CLICK_TO_VIEW_COMMENTS', $siteLangId); ?>">
                                     <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#modal<?php echo $key; ?>">
                                         <svg class="svg" width="18" height="18">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#comment">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#comment">
                                             </use>
                                         </svg>
                                     </a>
@@ -71,7 +71,7 @@ if (!empty($order['payments'])) { ?>
                                     <li title='<?php echo Labels::getLabel("LBL_APPROVE", $siteLangId); ?>' data-bs-toggle="tooltip" data-placement="top">
                                         <a href="javascript:void(0)" onclick="approve('<?php echo $row['opayment_id']; ?>')">
                                             <svg class="svg" width="18" height="18">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#tick">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#tick">
                                                 </use>
                                             </svg>
                                         </a>
@@ -79,7 +79,7 @@ if (!empty($order['payments'])) { ?>
                                     <li title='<?php echo Labels::getLabel("LBL_REJECT", $siteLangId); ?>' data-bs-toggle="tooltip" data-placement="top">
                                         <a href="javascript:void(0)" onclick="reject('<?php echo $row['opayment_id']; ?>')">
                                             <svg class="svg" width="18" height="18">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#not-allowed">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#not-allowed">
                                                 </use>
                                             </svg>
                                         </a>

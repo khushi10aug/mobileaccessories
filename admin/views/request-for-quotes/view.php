@@ -71,7 +71,7 @@
                     <span class="value">
                         <a target="blank" title="<?php echo Labels::getLabel('LBL_DOWNLOAD_FILE', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('RequestForQuotes', 'downloadFile', array($recordId)); ?>">
                             <svg class="svg" width="16" height="16">
-                                <use xlink:href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite.svg#icon-download"></use>
+                                <use xlink:href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-download"></use>
                             </svg>
                             <?php echo $res['afile_name']; ?>
                         </a>

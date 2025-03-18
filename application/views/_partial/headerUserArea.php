@@ -40,7 +40,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
                     <button type="button" class="quick-nav-link button-account dropdown-toggle no-after" data-bs-toggle="dropdown"
                         data-bs-auto-close="outside">
                         <svg class="svg" width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#login"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#login"></use>
                         </svg>
                         <span class="txt">
                             <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . htmlspecialchars($userName, ENT_QUOTES, 'utf-8'); ?>
@@ -72,7 +72,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
                 <div class="dropdown">
                     <button type="button" class="quick-nav-link button-account sign-in sign-in-popup-js">
                         <svg class="svg" width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#login"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#login"></use>
                         </svg>
                         <span class="txt">
                             <?php echo Labels::getLabel('LBL_Sign_In_/_Register', $siteLangId); ?> </span>
@@ -86,7 +86,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
                 <button type="button" class="quick-nav-link button-account dropdown-toggle no-after" data-bs-toggle="dropdown"
                     data-bs-auto-close="outside">
                     <svg class="svg" width="20" height="20">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#login"></use>
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#login"></use>
                     </svg>
                     <span class="txt">
                         <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . htmlspecialchars($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_name'], ENT_QUOTES, 'utf-8'); ?></span>

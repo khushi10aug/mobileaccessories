@@ -78,8 +78,8 @@
                                             onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')"
                                             class="icons-wrapper">
                                             <svg class="svg" width="18" height="18">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin"
-                                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin"></use>
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#bin"
+                                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#bin"></use>
                                             </svg>
                                         </a>
                                     </td>

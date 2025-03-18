@@ -695,6 +695,10 @@ class RequestForQuote extends MyAppModel
             return true;
         }
 
+        /* if ($moduleType == RequestForQuote::TYPE_INDIVIDUAL && SellerProduct::CART_TYPE_CART_ONLY != $cartType) {
+            return true;
+        } */
+
         if (0 < FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
             return true;
         }
@@ -803,6 +807,12 @@ class RequestForQuote extends MyAppModel
         }
 
         if (0 < FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            return true;
+        }
+
+        $moduleType = FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0);
+
+        if ($moduleType != RequestForQuote::TYPE_INDIVIDUAL && SellerProduct::CART_TYPE_RFQ_ONLY == $cartType) {
             return true;
         }
 

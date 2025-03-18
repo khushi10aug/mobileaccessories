@@ -84,7 +84,7 @@ class ImageDimension extends FatUtility
     public const VIEW_PROD_PROMOTIONAL_BANNER = "PRODUCTBANNER";
     public const VIEW_CROPED = "CROPED";
 
-    public static function getData(int $type, $sizeType = '', $aspectRatioType = 1): array
+    public static function getData(int $type, $sizeType = '', $aspectRatioType = 1, $layout = 0): array
     {
         $sizeType = strtoupper($sizeType);
 
@@ -152,7 +152,7 @@ class ImageDimension extends FatUtility
                 $imageDimensions = self::getSocialPlatformImageData($sizeType);
                 break;
             case self::TYPE_DISPLAY_COLLECTION_IMAGE:
-                $imageDimensions = self::getDisplayCollectionImageData($sizeType);
+                $imageDimensions = self::getDisplayCollectionImageData($sizeType, $layout);
                 break;
             case self::TYPE_DISPLAY_COLLECTION_BG_IMAGE:
                 $imageDimensions = self::getDisplayCollectionBGImageData($sizeType);
@@ -543,7 +543,7 @@ class ImageDimension extends FatUtility
     }
 
 
-    public static function getDisplayCollectionImageData(string $sizeType = ''): array
+    public static function getDisplayCollectionImageData(string $sizeType = '', int $layout = 0): array
     {
         $arr =  [
             self::VIEW_DESKTOP => [self::WIDTH => 278, self::HEIGHT => 417],
@@ -551,6 +551,20 @@ class ImageDimension extends FatUtility
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_HOME => [self::WIDTH => 76, self::HEIGHT => 92]
         ];
+        if($layout == Collections::TYPE_CATEGORY_LAYOUT12) {
+            $arr = [
+                self::VIEW_DESKTOP => [self::WIDTH => 278, self::HEIGHT => 417],
+                self::VIEW_MOBILE => [self::WIDTH => 375, self::HEIGHT => 200],
+                self::VIEW_TABLET => [self::WIDTH => 1200, self::HEIGHT => 400],
+                self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
+                self::VIEW_HOME => [self::WIDTH => 76, self::HEIGHT => 92]
+            ];
+        }
+        foreach ($arr as $key => $val) {
+            $arr[$key]['aspectRatio'] = self::getAspectRatio($arr[$key][self::WIDTH], $arr[$key][self::HEIGHT]);
+        }
+
+        $arr['aspectRatio'] = self::getAspectRatio($arr[self::VIEW_DESKTOP][self::WIDTH], $arr[self::VIEW_DESKTOP][self::HEIGHT]);
 
         return self::returnData($arr, self::VIEW_THUMB, $sizeType);
     }

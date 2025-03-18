@@ -44,7 +44,7 @@ if ($showAddToFavorite) {
                     title="<?php echo Labels::getLabel('LBL_Move_to_cart', $siteLangId); ?>"
                     data-id='<?php echo $product['selprod_id']; ?>'>
                     <svg class="svg" width="18" height="18">
-                        <use xlink:href=" <?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#shopping-cart">
+                        <use xlink:href=" <?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#shopping-cart">
                         </use>
                     </svg>
                 </a>
@@ -57,7 +57,7 @@ if ($showAddToFavorite) {
                     onclick="removeFromWishlist(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event);"
                     href="javascript:void(0)" class="">
                     <svg class="svg" width="20" height="20">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#delete">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#delete">
                         </use>
                     </svg>
                 </a>
@@ -66,7 +66,7 @@ if ($showAddToFavorite) {
                     onclick="removeFromFavorite(<?php echo $product['selprod_id']; ?>, 'searchFavouriteListItems');"
                     data-id="<?php echo $product['selprod_id']; ?>">
                     <svg class="svg" width="20" height="20">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#delete">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#delete">
                         </use>
                     </svg>
                 </a>
@@ -87,7 +87,7 @@ if ($showAddToFavorite) {
                 title="<?php echo ($product['ufp_id']) ? Labels::getLabel('LBL_Remove_product_from_favourite_list', $siteLangId) : Labels::getLabel('LBL_Add_Product_to_favourite_list', $siteLangId); ?>">
 
                 <svg class="svg" width="16" height="16">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#heart">
                     </use>
                 </svg>
 
@@ -99,7 +99,7 @@ if ($showAddToFavorite) {
                 title="<?php echo ($product['is_in_any_wishlist']) ? Labels::getLabel('LBL_Remove_product_from_your_wishlist', $siteLangId) : Labels::getLabel('LBL_Add_Product_to_your_wishlist', $siteLangId); ?>">
 
                 <svg class="svg" width="16" height="16">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#heart">
                     </use>
                 </svg>
 
@@ -111,7 +111,7 @@ if ($showAddToFavorite) {
             <a class="" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#shareIcon">
 
                 <svg class="svg" width="16" height="16">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#share">
                     </use>
                 </svg>
 
@@ -135,7 +135,7 @@ if ($showAddToFavorite) {
                                     data-url="<?php echo UrlHelper::generateFullUrl('Products', 'view', array($product['selprod_id'])); ?>/">
                                     <svg class="svg">
                                         <use
-                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#facebook">
+                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#facebook">
                                         </use>
                                     </svg>
 
@@ -146,7 +146,7 @@ if ($showAddToFavorite) {
 
                                     <svg class="svg">
                                         <use
-                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#twitter">
+                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#twitter">
                                         </use>
                                     </svg>
                                 </a>
@@ -155,7 +155,7 @@ if ($showAddToFavorite) {
                                 <a href="javascript:void(0)" class="st-custom-button" data-network="pinterest">
                                     <svg class="svg">
                                         <use
-                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pinterest">
+                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#pinterest">
                                         </use>
                                     </svg>
                                 </a>
@@ -164,7 +164,7 @@ if ($showAddToFavorite) {
                                 <a href="javascript:void(0)" class="st-custom-button" data-network="email">
                                     <svg class="svg">
                                         <use
-                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
+                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#envelope">
                                         </use>
                                     </svg>
                                 </a>
@@ -180,7 +180,7 @@ if ($showAddToFavorite) {
                                 title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>">
                                 <svg class="svg" width="18" height="18">
                                     <use
-                                        xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#copy-to-all">
+                                        xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#copy-to-all">
                                     </use>
                                 </svg>
                             </button>

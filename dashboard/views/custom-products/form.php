@@ -23,7 +23,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
             <h2>
                 <a class="btn btn-back" href="<?php echo UrlHelper::generateUrl('sellerRequests'); ?>">
                     <svg class="svg" width="24" height="24">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#back">
                         </use>
                     </svg>
                 </a>
@@ -42,7 +42,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                 $langFld->htmlAfterField = '<div class="input-group-append">
                                                             <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm(' . $langId . ',1)" class="btn" title="' . Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
                                                                 <svg class="svg" width="18" height="18">
-                                                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#icon-translate">
+                                                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#icon-translate">
                                                                     </use>
                                                                 </svg>
                                                             </a>
@@ -83,7 +83,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                             echo HtmlHelper::getFieldHtml($frm, 'product_model', 6);
                             $fld = $frm->getField('product_warranty');
                             if (null !== $fld) {
-                                ?>
+                            ?>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <?php
@@ -401,7 +401,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                                             onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>);">
                                             <svg class="svg btn-icon-start" width="18" height="18">
                                                 <use
-                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#add">
                                                 </use>
                                             </svg>
                                             <span><?php echo Labels::getLabel('BTN_DIGITAL_FILES', $langId); ?></span>
@@ -445,7 +445,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                                             onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>);">
                                             <svg class="svg btn-icon-start" width="18" height="18">
                                                 <use
-                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#add">
                                                 </use>
                                             </svg>
                                             <span><?php echo Labels::getLabel('BTN_DIGITAL_LINKS', $langId); ?></span>
@@ -530,7 +530,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                     if (null != $fld) {
                         $fld->addFieldTagAttribute('class', 'form-tagify');
                         $fld->addFieldTagAttribute('id', 'product_tags');
-                        ?>
+                    ?>
                         <div class="card">
                             <div class="card-head">
                                 <div class="card-head-label">
@@ -578,7 +578,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
     var fulfilmentTypePickup = '<?php echo Shipping::FULFILMENT_PICKUP; ?>';
     var prodTypeDigital = '<?php echo Product::PRODUCT_TYPE_DIGITAL; ?>';
 
-    $(function () {
+    $(function() {
         $('body').addClass('isLoading');
         $('#addStock').prepend(fcom.getLoader());
         prodSpecifications();
@@ -597,7 +597,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
             langId
         });
 
-        $('#addProductfrm .optionsJs').each(function (index) {
+        $('#addProductfrm .optionsJs').each(function(index) {
             var selectedOptionData = [];
             if (index in productOptions) {
                 let optionName = productOptions[index]['option_name'];
@@ -622,7 +622,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
         });
 
 
-        $('#addProductfrm .optionValuesJs').each(function (index) {
+        $('#addProductfrm .optionValuesJs').each(function(index) {
             tagifyOptionValue("#" + $(this).attr('id'));
         });
 
@@ -632,12 +632,12 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
             getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $recordId; ?>);
         <?php } ?>
         upcType();
-        document.getElementById('stock-block1').addEventListener('shown.bs.collapse', function () {
+        document.getElementById('stock-block1').addEventListener('shown.bs.collapse', function() {
             fixTableColumnWidth();
         })
     });
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         if (prodTypeDigital == $('.productTypeJs:checked').val() && 0 == $('.attachmentWithInventoryJs:checked').val()) {
             $('.digitalDownloadSectionJS').removeClass('hidden');
         } else if (!$('.digitalDownloadSectionJS').hasClass('hidden')) {
@@ -645,7 +645,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
         }
     });
 
-    $(document).on('change', '.attachmentWithInventoryJs', function () {
+    $(document).on('change', '.attachmentWithInventoryJs', function() {
         if (prodTypeDigital == $('.productTypeJs:checked').val()) {
             if (1 == $(this).val()) {
                 $('.digitalDownloadSectionJS').addClass('hidden');

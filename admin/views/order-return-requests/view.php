@@ -13,7 +13,7 @@ echo $msgsSrchForm->getFormHtml(); ?>
                             <h3 class="card-head-title">
                                 <a class="btn-back" href="<?php echo UrlHelper::generateUrl('OrderReturnRequests'); ?>">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#back">
                                         </use>
                                     </svg>
                                 </a>
@@ -63,7 +63,7 @@ echo $msgsSrchForm->getFormHtml(); ?>
                                                     ],
                                                     'label' => '<svg class="svg" width="18" height="18">
                                                                     <use
-                                                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#view">
                                                                     </use>
                                                                 </svg>',
                                                 ],
@@ -77,7 +77,7 @@ echo $msgsSrchForm->getFormHtml(); ?>
                                                     ],
                                                     'label' => '<svg class="svg" width="18" height="18">
                                                                     <use
-                                                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#form">
+                                                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#form">
                                                                     </use>
                                                                 </svg>',
                                                 ];
@@ -102,7 +102,7 @@ echo $msgsSrchForm->getFormHtml(); ?>
                         <div class="card-toolbar">
                             <a href="javascript:void(0);" class="btn btn-icon btn-outline-brand btn-add" onclick="addNewComment(<?php echo $orrequestId; ?>)" title="<?php echo Labels::getLabel('LBL_NEW_COMMENT', $siteLangId); ?>" data-bs-toggle='tooltip' data-placement='top'>
                                 <svg class="svg btn-icon-start" width="18" height="18">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#add">
                                     </use>
                                 </svg>
                                 <span><?php echo Labels::getLabel('LBL_NEW', $siteLangId); ?></span>

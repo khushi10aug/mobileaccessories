@@ -352,7 +352,7 @@ class AdminGuestController extends FatController
         $frm->addTextBox(Labels::getlabel('FRM_USERNAME', $this->siteLangId), 'username', $userName)->requirements()->setRequired();
         $frm->addPasswordField(Labels::getlabel('FRM_PASSWORD', $this->siteLangId), 'password', $pass)->requirements()->setRequired();
         $frm->addCheckBox('', 'rememberme', 1);
-        $frm->addHtml('', 'btn_submit', HtmlHelper::addButtonHtml(Labels::getLabel('BTN_SIGN_IN', $this->siteLangId), 'submit', 'btn_submit', 'btn btn-brand btn-lg btn-block'));
+        $frm->addHtml('', 'btn_submit', HtmlHelper::addButtonHtml(Labels::getLabel('BTN_LOGIN', $this->siteLangId), 'submit', 'btn_submit', 'btn btn-brand btn-lg btn-block'));
         return $frm;
     }
 
@@ -361,7 +361,7 @@ class AdminGuestController extends FatController
         $frm = new Form('adminFrmForgot');
         $frm->addEmailField(Labels::getLabel('FRM_ENTER_YOUR_EMAIL_ADDRESS', $this->siteLangId), 'admin_email')->requirements()->setRequired();
         CommonHelper::addCaptchaField($frm);
-        $frm->addSubmitButton('', 'btn_forgot', Labels::getLabel('BTN_SEND_RESET_PASWORD_EMAIL', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_forgot', Labels::getLabel('BTN_SUBMIT', $this->siteLangId));
         return $frm;
     }
 

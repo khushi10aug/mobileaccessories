@@ -11,7 +11,7 @@ if ($canEdit) { ?>
                     <li>
                         <a href="<?php echo UrlHelper::generateUrl('products', 'form'); ?>" class="btn btn-outline-gray btn-icon">
                             <svg class="svg btn-icon-start" width="18" height="18">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#add">
                                 </use>
                             </svg><?php echo Labels::getLabel('LBL_NEW_PRODUCT', $siteLangId); ?>
                         </a>
@@ -21,7 +21,7 @@ if ($canEdit) { ?>
                     <li>
                         <a href="<?php echo UrlHelper::generateUrl('seller', 'catalog'); ?>" class="btn btn-outline-gray btn-icon">
                             <svg class="svg btn-icon-start" width="18" height="18">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#inventories">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#inventories">
                                 </use>
                             </svg><?php echo Labels::getLabel('LBL_MY_PRODUCTS', $siteLangId); ?>
                         </a>
@@ -32,7 +32,7 @@ if ($canEdit) { ?>
                 <li>
                     <a href="<?php echo UrlHelper::generateUrl('seller', 'catalog', [0]); ?>" class="btn btn-outline-gray btn-icon">
                         <svg class="svg btn-icon-start" width="18" height="18">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#inventories">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#inventories">
                             </use>
                         </svg><?php echo Labels::getLabel('LBL_MARKETPLACE_PRODUCTS', $siteLangId); ?>
                     </a>
@@ -42,7 +42,7 @@ if ($canEdit) { ?>
                 <li>
                     <a href="<?php echo UrlHelper::generateUrl('products', 'form'); ?>" class="btn btn-outline-gray btn-icon">
                         <svg class="svg btn-icon-start" width="18" height="18">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#add">
                             </use>
                         </svg><?php echo Labels::getLabel('LBL_NEW_CATALOG', $siteLangId); ?>
                     </a>
@@ -53,7 +53,7 @@ if ($canEdit) { ?>
                 <li>
                     <a href="<?php echo UrlHelper::generateUrl('Seller', 'requestedCatalog'); ?>" class="btn btn-outline-gray btn-icon">
                         <svg class="svg btn-icon-start" width="18" height="18">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#inventories">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#inventories">
                             </use>
                         </svg><?php echo Labels::getLabel('LBL_REQUEST_A_PRODUCT', $siteLangId); ?>
                     </a>
@@ -65,7 +65,7 @@ if ($canEdit) { ?>
                 <li>
                     <a href="<?php echo $prodUrl; ?>" class="btn btn-outline-gray btn-icon">
                         <svg class="svg btn-icon-start" width="18" height="18">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#back">
                             </use>
                         </svg><?php echo Labels::getLabel('LBL_BACK_TO_INVENTORY', $siteLangId); ?>
                     </a>
@@ -119,7 +119,7 @@ if ($canEdit) { ?>
                 $onclick = "addNew()";
                 $title = Labels::getLabel('BTN_NEW_RECORD', $siteLangId);
                 $icon = '<svg class="svg btn-icon-start" width="18" height="18">
-                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#add">
                             </use>
                         </svg>';
                 $label =  $icon . '<span>' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>';

@@ -36,7 +36,7 @@ if (!$userActiveTab) {
         <div class="mobile-actions-item">
             <a class="mobile-actions-link" href="<?php echo UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND, null, false, false, true, $siteLangId); ?>">
                 <svg class="svg" width="24" height="24">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#home">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#home">
                     </use>
                 </svg>
                 <span class="txt"><?php echo Labels::getLabel("NAV_HOME", $siteLangId); ?></span>
@@ -45,7 +45,7 @@ if (!$userActiveTab) {
         <div class="mobile-actions-item">
             <button class="mobile-actions-link  <?php echo (trim($_SERVER['REQUEST_URI'], '/') != trim($dashboardOrgUrl, '/') ? 'active' : ''); ?>" type="button" data-trigger="sidebar">
                 <svg class="svg" width="24" height="24">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#menu">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#menu">
                     </use>
                 </svg>
                 <span class="txt"><?php echo Labels::getLabel("NAV_MENU", $siteLangId); ?></span>
@@ -54,7 +54,7 @@ if (!$userActiveTab) {
         <div class="mobile-actions-item">
             <button class="mobile-actions-link <?php echo (trim($_SERVER['REQUEST_URI'], '/') == trim($dashboardOrgUrl, '/') ? 'active' : ''); ?>" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-account" aria-controls="offcanvas-account">
                 <svg class="svg" width="24" height="24">
-                    <use xlink:href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite-header.svg#mbl-account">
+                    <use xlink:href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#mbl-account">
                     </use>
                 </svg>
                 <span class="txt"><?php echo Labels::getLabel("LBL_Account", $siteLangId); ?></span>

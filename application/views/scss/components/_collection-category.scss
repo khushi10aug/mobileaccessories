@@ -517,6 +517,7 @@
 
     .slick-dots {
         bottom: -10px;
+        display: none !important;
 
         @include media-breakpoint-up(lg) {
             display: none !important;

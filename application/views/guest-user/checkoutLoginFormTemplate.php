@@ -8,10 +8,10 @@ $onSubmitFunctionName = isset($onSubmitFunctionName) ? $onSubmitFunctionName : '
         <div id="" class="tabz--checkout-login tabs--flat-js">
             <ul>
                 <li class="is-active"><a href="#user-1"> <i class="icn"><svg class="svg">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tick" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tick"></use>
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#tick" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#tick"></use>
                             </svg></i><?php echo Labels::getLabel('LBL_Existing_User', $siteLangId); ?> </a></li>
                 <li><a href="#user-2"> <i class="icn"><svg class="svg">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tick" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tick"></use>
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#tick" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#tick"></use>
                             </svg></i><?php echo Labels::getLabel('LBL_Guest_User', $siteLangId); ?> </a></li>
             </ul>
         </div>

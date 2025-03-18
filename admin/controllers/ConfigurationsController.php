@@ -82,7 +82,7 @@ class ConfigurationsController extends ListingBaseController
         if (!empty($redirection)) {
             $headerHtmlContent = '<a href="' . $redirection['link'] . '" class="btn btn-icon btn-outline-gray ms-2" title="" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="' . $redirection['title'] . '">
                                     <svg class="svg btn-icon-start" width="18" height="18">
-                                        <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#gear">
+                                        <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#gear">
                                         </use>
                                     </svg>                                
                                 </a>';
@@ -311,6 +311,13 @@ class ConfigurationsController extends ListingBaseController
         $file_type = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         $aspectRatio = FatApp::getPostedData('ratio_type', FatUtility::VAR_INT, 0);
+        $afileIsSvg = FatApp::getPostedData('afile_attachment_type', FatUtility::VAR_INT, 0);
+
+        if (AttachedFile::FILE_ATTACHMENT_TYPE_SVG == $afileIsSvg) {
+            if (false == AttachedFile::isSvgType($_FILES['cropped_image'])) {
+                LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_SVG_FILE', $this->siteLangId), true);
+            }
+        }
 
         if (!$file_type) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -344,7 +351,8 @@ class ConfigurationsController extends ListingBaseController
         }
 
         $fileHandlerObj = new AttachedFile();
-        if (!$res = $fileHandlerObj->saveImage($_FILES['cropped_image']['tmp_name'], $file_type, 0, 0, $_FILES['cropped_image']['name'], -1, true, $lang_id, '', 0, $aspectRatio)) {
+        $fileHandlerObj->setAttachmentType($afileIsSvg);
+        if (!$res = $fileHandlerObj->saveImage($_FILES['cropped_image']['tmp_name'], $file_type, 0, 0, $_FILES['cropped_image']['name'], -1, true, $lang_id, $_FILES['cropped_image']['type'], 0, $aspectRatio)) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
@@ -1490,24 +1498,26 @@ class ConfigurationsController extends ListingBaseController
                 $fld =  $frm->addHtml('', 'Translatorseperator', '<div class="separator separator-dashed my-2"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
-                $frm->addHtml('', 'Microsoft Translator Text API', '<h3 class="form-section-head">' . Labels::getLabel("FRM_MICROSOFT_TRANSLATOR_TEXT_API", $langId) . '</h3>');
-
-                $frm->addHtml('', 'GoogleFontsAPI', '<h3 class="form-section-head">' . Labels::getLabel("FRM_GOOGLE_FONTS_API", $langId) . '</h3>');
+                $fld = $frm->addHtml('', 'Microsoft Translator Text API', '<h3 class="form-section-head">' . Labels::getLabel("FRM_MICROSOFT_TRANSLATOR_TEXT_API", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_SUBSCRIPTION_KEY", $langId), 'CONF_TRANSLATOR_SUBSCRIPTION_KEY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_MICROSOFT_TRANSLATOR_TEXT_API_3.0_SUBSCRIPTION_KEY.", $langId) . "</span>";
 
+                $fld = $frm->addTextBox(Labels::getLabel("FRM_SUBSCRIPTION_KEY_REGION", $langId), 'CONF_TRANSLATOR_SUBSCRIPTION_KEY_REGION');
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_MICROSOFT_TRANSLATOR_TEXT_API_3.0_SUBSCRIPTION_KEY_REGION_(OPTIONAL).", $langId) . "</span>";
 
-                $fld = $frm->addTextBox(Labels::getLabel("FRM_API_KEY", $langId), 'CONF_GOOGLE_FONTS_API_KEY');
                 $fld =  $frm->addHtml('', 'JWPlayerseperator', '<div class="separator separator-dashed my-2"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 /* JW player Settings */
                 $frm->addHtml('', 'JWPlayerSettings', '<h3 class="form-section-head">' . Labels::getLabel("FRM_JW_PLAYER_SETTINGS", $langId) . '</h3>');
+                $frm->addHtml('', 'GoogleFontsAPI', '<h3 class="form-section-head">' . Labels::getLabel("FRM_GOOGLE_FONTS_API", $langId) . '</h3>');
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_JW_PLAYER_KEY", $langId), 'CONF_JW_PLAYER_KEY');
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_KEY_PROVIDED_BY_JW_PLAYER", $langId) . "</span>";
                 /* JW player Settings */
+
+                $fld = $frm->addTextBox(Labels::getLabel("FRM_API_KEY", $langId), 'CONF_GOOGLE_FONTS_API_KEY');
                 break;
             case Configurations::FORM_REFERAL:
                 $fld = $frm->addRadioButtons(
@@ -1721,295 +1731,22 @@ class ConfigurationsController extends ListingBaseController
                 break;
             case Configurations::FORM_MEDIA:
                 $ratioArr = AttachedFile::getRatioTypeArray($langId);
-                /* block start */
 
-                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_ADMIN_LOGO", $langId) . ' </h6>
-                    <span class="form-text text-muted">
-                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("LBL_ADMIN_LOGO_IMAGE_DISCLAIMER", $langId) . '</span>');
-
-                $fileType = AttachedFile::FILETYPE_ADMIN_LOGO;
-
-                $imageArr = [];
-                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
-                    if (0 < $fileData['afile_id']) {
-                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteAdminLogo', array($langId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
-                    }
+                $fileTypeArr = [
+                    AttachedFile::FILETYPE_ADMIN_LOGO,
+                    AttachedFile::FILETYPE_FRONT_LOGO,
+                    AttachedFile::FILETYPE_FAVICON,
+                    AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE,
+                    AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO,
+                    AttachedFile::FILETYPE_WATERMARK_IMAGE,
+                    AttachedFile::FILETYPE_APPLE_TOUCH_ICON,
+                    AttachedFile::FILETYPE_MOBILE_LOGO,
+                    AttachedFile::FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE,
+                    AttachedFile::FILETYPE_META_IMAGE,
+                ];
+                foreach ($fileTypeArr as $fileType) {
+                    $this->getUploadMediaStructure($frm, $fileType, $langId, $ratioArr);
                 }
-
-                $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)', 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_ADMIN_LOGO", $langId)],
-                    $langId,
-                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    'editDropZoneImages(this)',
-                    $imageArr,
-                    'mt-3 dropzoneContainerJs'
-                ));
-
-                $fld = $frm->addHtml('', 'spacer', '<div class="separator separator-dashed my-5"></div>');
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-
-                /* block start */
-
-                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_DESKTOP_LOGO", $langId) . ' </h6>
-                    <span class="form-text text-muted">
-                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong>  ' . Labels::getLabel("LBL_DESKTOP_LOGO_IMAGE_DISCLAIMER", $langId) . '</span>');
-
-                $fileType = AttachedFile::FILETYPE_FRONT_LOGO;
-                $imageArr = [];
-                $selectedRadio = array_key_first($ratioArr);
-                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
-                    if (0 < $fileData['afile_id']) {
-                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
-                    }
-                }
-
-                $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)', 'data-frm' => 'frmShopLogo', 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_DESKTOP_LOGO", $langId)],
-                    $langId,
-                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    'editDropZoneImages(this)',
-                    $imageArr,
-                    'mt-3 dropzoneContainerJs'
-                ));
-                $fld =  $frm->addHtml('', 'spacer1', '<div class="separator separator-dashed my-5"></div>');
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-
-                /* block start */
-
-                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_WEBSITE_FAVICON", $langId) . ' </h6>
-                    <span class="form-text text-muted">
-                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("LBL_WEBSITE_FAVICON_IMAGE_DISCLAIMER", $langId) . '</span>');
-
-                $fileType = AttachedFile::FILETYPE_FAVICON;
-
-                $imageArr = [];
-                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
-                    if (0 < $fileData['afile_id']) {
-                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'favicon', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
-                    }
-                }
-                $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)', 'data-min_width' => 16, 'data-min_height' => 16, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_WEBSITE_FAVICON", $langId)],
-                    $langId,
-                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    'editDropZoneImages(this)',
-                    $imageArr,
-                    'mt-3 dropzoneContainerJs'
-                ));
-                $fld = $frm->addHtml('', 'spacer2', '<div class="separator separator-dashed my-5"></div>');
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-
-                /* block start */
-
-                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_SOCIAL_FEED_IMAGE", $langId) . ' </h6>
-                    <span class="form-text text-muted">
-                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel('LBL_SOCIAL_FEED_IMAGE_DISCLAIMER', $langId) . ' 160*240</span>');
-
-                $fileType = AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE;
-
-                $imageArr = [];
-                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
-                    if (0 < $fileData['afile_id']) {
-                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'socialFeed', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
-                    }
-                }
-
-                $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)', 'data-min_width' => 160, 'data-min_height' => 240, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_SOCIAL_FEED_IMAGE", $langId)],
-                    $langId,
-                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    'editDropZoneImages(this)',
-                    $imageArr,
-                    'mt-3 dropzoneContainerJs'
-                ));
-                $fld = $frm->addHtml('', 'spacer3', '<div class="separator separator-dashed my-5"></div>');
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-                /* block start */
-
-                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_PAYMENT_PAGE_LOGO", $langId) . ' </h6>
-                    <span class="form-text text-muted">
-                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("LBL_PAYMENT_PAGE_LOGO_IMAGE_DISCLAIMER", $langId) . ' </span>');
-
-                $fileType = AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO;
-                $imageArr = [];
-                $selectedRadio = array_key_first($ratioArr);
-                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
-                    if (0 < $fileData['afile_id']) {
-                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'paymentPageLogo', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
-                    }
-                }
-
-                $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)', 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_PAYMENT_PAGE_LOGO", $langId)],
-                    $langId,
-                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    'editDropZoneImages(this)',
-                    $imageArr,
-                    'mt-3 dropzoneContainerJs'
-                ));
-                $fld = $frm->addHtml('', 'spacer4', '<div class="separator separator-dashed my-5"></div>');
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-
-
-                /* block start */
-
-                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_WATERMARK_IMAGE", $langId) . ' </h6>
-                    <span class="form-text text-muted">
-                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel('LBL_WATERMARK_IMAGE_DISCLAIMER', $langId) . ' 120*90</span></span>');
-
-                $fileType = AttachedFile::FILETYPE_WATERMARK_IMAGE;
-
-                $imageArr = [];
-                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
-                    if (0 < $fileData['afile_id']) {
-                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'watermarkImage', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
-                    }
-                }
-
-                $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)', 'data-min_width' => 120, 'data-min_height' => 90, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_WATERMARK_IMAGE", $langId)],
-                    $langId,
-                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    'editDropZoneImages(this)',
-                    $imageArr,
-                    'mt-3 dropzoneContainerJs'
-                ));
-                $fld = $frm->addHtml('', 'spacer5', '<div class="separator separator-dashed my-5"></div>');
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-
-                /* block start */
-
-                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_APPLE_TOUCH_ICON", $langId) . ' </h6>
-                     <span class="form-text text-muted">
-                         <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("LBL_APPLE_TOUCH_ICON_IMAGE_DISCLAIMER", $langId) . '</span>');
-
-                $fileType = AttachedFile::FILETYPE_APPLE_TOUCH_ICON;
-
-                $imageArr = [];
-                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
-                    if (0 < $fileData['afile_id']) {
-                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'appleTouchIcon', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
-                    }
-                }
-
-                $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)',  'data-min_width' => 152, 'data-min_height' => 152, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_MOBILE_APPS_SHORTCUT_ICON", $langId)],
-                    $langId,
-                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    'editDropZoneImages(this)',
-                    $imageArr,
-                    'mt-3 dropzoneContainerJs'
-                ));
-
-                $fld = $frm->addHtml('', 'spacer6', '<div class="separator separator-dashed my-5"></div>');
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-
-                /* block start */
-                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_MOBILE_LOGO", $langId) . ' </h6>
-                      <span class="form-text text-muted">
-                          <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel('LBL_MOBILE_LOGO_IMAGE_DISCLAIMER', $langId) . ' 168*37</span>');
-
-                $fileType = AttachedFile::FILETYPE_MOBILE_LOGO;
-
-                $imageArr = [];
-                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
-                    if (0 < $fileData['afile_id']) {
-                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'mobileLogo', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
-                    }
-                }
-
-                $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)',  'data-min_width' => 168, 'data-min_height' => 37, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_MOBILE_LOGO", $langId)],
-                    $langId,
-                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    'editDropZoneImages(this)',
-                    $imageArr,
-                    'mt-3 dropzoneContainerJs'
-                ));
-                $fld = $frm->addHtml('', 'spacer7', '<div class="separator separator-dashed my-5"></div>');
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-
-                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_FIRST_PURCHASE_DISCOUNT_IMAGE", $langId) . ' </h6>
-                    <span class="form-text text-muted">
-                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel('LBL_FIRST_PURCHASE_DISCOUNT_IMAGE_DISCLAIMER', $langId) . ' 120*120</span>');
-
-                $fileType = AttachedFile::FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE;
-
-                $imageArr = [];
-                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
-                    if (0 < $fileData['afile_id']) {
-                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'firstPurchaseCoupon', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
-                    }
-                }
-
-                $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)',  'data-min_width' => 120, 'data-min_height' => 120, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_FIRST_PURCHASE_DISCOUNT_IMAGE", $langId)],
-                    $langId,
-                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    'editDropZoneImages(this)',
-                    $imageArr,
-                    'mt-3 dropzoneContainerJs'
-                ));
-                $fld = $frm->addHtml('', 'spacer9', '<div class="separator separator-dashed my-5"></div>');
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-
-                /* block start */
-
-                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_META_IMAGE", $langId) . ' </h6>
-                    <span class="form-text text-muted">
-                       <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("LBL_META_IMAGE_DISCLAIMER", $langId) . '</span>');
-
-                $fileType = AttachedFile::FILETYPE_META_IMAGE;
-                $imageArr = [];
-                $selectedRadio = array_key_first($ratioArr);
-                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
-                    if (0 < $fileData['afile_id']) {
-                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'metaImage', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
-                        $selectedRadio = $fileData['afile_aspect_ratio'];
-                    }
-                }
-
-                $fld = $frm->addRadioButtons(
-                    Labels::getLabel("FRM_ASPECT_RATIO", $langId),
-                    'ratio_type_' . $fileType,
-                    $ratioArr,
-                    $selectedRadio,
-                    [],
-                    ['class' => 'prefRatio-js']
-                );
-
-                $fld = HtmlHelper::configureRadioAsButton($frm, 'ratio_type_' . $fileType);
-
-                $fld1 = $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)',  'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_META_IMAGE", $langId)],
-                    $langId,
-                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    'editDropZoneImages(this)',
-                    $imageArr,
-                    'mt-3 dropzoneContainerJs'
-                ));
-                $fld->attachField($fld1);
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 break;
             case Configurations::FORM_SHARING:
                 $fld =  $frm->addHtml('', 'ShareAndEarn', '<h3 class="form-section-head">' . Labels::getLabel('FRM_SHARE_AND_EARN_SETTINGS', $langId) . '</h3>');
@@ -2038,6 +1775,201 @@ class ConfigurationsController extends ListingBaseController
         $frm->addHiddenField('', 'form_type', $type);
         $frm->addHiddenField('', 'lang_id', $langId);
         return $frm;
+    }
+
+    private function getUploadMediaStructure(Form $frm, int $fileType, int $langId, array $ratioArr)
+    {
+        $width = $height = '';
+        $hasRatio = false;
+        $imageArr = [];
+        $fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId);
+        $uploadedTime = !empty($fileData['afile_updated_at']) ? AttachedFile::setTimeParam($fileData['afile_updated_at']) : '';
+
+        if (AttachedFile::FILE_ATTACHMENT_TYPE_SVG == $fileData['afile_attachment_type']) {
+           $imgUrl = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']) . $uploadedTime;
+        }
+
+        $hasSvg = in_array($fileType, AttachedFile::getSvgFileType());
+
+        switch ($fileType) {
+            case AttachedFile::FILETYPE_ADMIN_LOGO:
+                $title = Labels::getLabel("FRM_ADMIN_LOGO", $langId);
+                $imageDisclaimer = Labels::getLabel("LBL_ADMIN_LOGO_IMAGE_DISCLAIMER", $langId);
+                if (0 < $fileData['afile_id']) {
+                    if (AttachedFile::FILE_ATTACHMENT_TYPE_OTHER == $fileData['afile_attachment_type']) {
+                        $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteAdminLogo', array($langId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    }
+                    $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $imgUrl];
+                }
+                break;
+            case AttachedFile::FILETYPE_FRONT_LOGO:
+                $title = Labels::getLabel("FRM_DESKTOP_LOGO", $langId);
+                $imageDisclaimer = Labels::getLabel("LBL_DESKTOP_LOGO_IMAGE_DISCLAIMER", $langId);
+                if (0 < $fileData['afile_id']) {
+                    if (AttachedFile::FILE_ATTACHMENT_TYPE_OTHER == $fileData['afile_attachment_type']) {
+                        $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    }
+                    $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $imgUrl];
+                }
+                break;
+            case AttachedFile::FILETYPE_FAVICON:
+                $title = Labels::getLabel("FRM_WEBSITE_FAVICON", $langId);
+                $imageDisclaimer = Labels::getLabel("LBL_WEBSITE_FAVICON_IMAGE_DISCLAIMER", $langId);
+                if (0 < $fileData['afile_id']) {
+                    $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'favicon', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $imgUrl];
+                }
+                $width = $height = 16;
+                break;
+            case AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE:
+                $title = Labels::getLabel("FRM_SOCIAL_FEED_IMAGE", $langId);
+                $imageDisclaimer = Labels::getLabel('LBL_SOCIAL_FEED_IMAGE_DISCLAIMER', $langId);
+                if (0 < $fileData['afile_id']) {
+                    if (AttachedFile::FILE_ATTACHMENT_TYPE_OTHER == $fileData['afile_attachment_type']) {
+                        $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'socialFeed', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    }
+                    $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $imgUrl];
+                }
+                $width = 160;
+                $height = 240;
+                break;
+            case AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO:
+                $title = Labels::getLabel("FRM_PAYMENT_PAGE_LOGO", $langId);
+                $imageDisclaimer = Labels::getLabel("LBL_PAYMENT_PAGE_LOGO_IMAGE_DISCLAIMER", $langId);
+                if (0 < $fileData['afile_id']) {
+                    if (AttachedFile::FILE_ATTACHMENT_TYPE_OTHER == $fileData['afile_attachment_type']) {
+                        $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'paymentPageLogo', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    }
+                    $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $imgUrl];
+                }
+                break;
+            case AttachedFile::FILETYPE_WATERMARK_IMAGE:
+                $title = Labels::getLabel("FRM_WATERMARK_IMAGE", $langId);
+                $imageDisclaimer = Labels::getLabel('LBL_WATERMARK_IMAGE_DISCLAIMER', $langId);
+                if (0 < $fileData['afile_id']) {
+                    $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'watermarkImage', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $imgUrl];
+                }
+                $width = 120;
+                $height = 90;
+                break;
+            case AttachedFile::FILETYPE_APPLE_TOUCH_ICON:
+                $title = Labels::getLabel("FRM_APPLE_TOUCH_ICON", $langId);
+                $imageDisclaimer = Labels::getLabel("LBL_APPLE_TOUCH_ICON_IMAGE_DISCLAIMER", $langId);
+                if (0 < $fileData['afile_id']) {
+                    $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'appleTouchIcon', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $imgUrl];
+                }
+                $width = $height = 152;
+                break;
+            case AttachedFile::FILETYPE_MOBILE_LOGO:
+                $title = Labels::getLabel("FRM_MOBILE_LOGO", $langId);
+                $imageDisclaimer = Labels::getLabel('LBL_MOBILE_LOGO_IMAGE_DISCLAIMER', $langId);
+                if (0 < $fileData['afile_id']) {
+                    if (AttachedFile::FILE_ATTACHMENT_TYPE_OTHER == $fileData['afile_attachment_type']) {
+                        $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'mobileLogo', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    }
+                    $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $imgUrl];
+                }
+                $width = 168;
+                $height = 37;
+                break;
+            case AttachedFile::FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE:
+                $title = Labels::getLabel("FRM_FIRST_PURCHASE_DISCOUNT_IMAGE", $langId);
+                $imageDisclaimer = Labels::getLabel('LBL_FIRST_PURCHASE_DISCOUNT_IMAGE_DISCLAIMER', $langId);
+                if (0 < $fileData['afile_id']) {
+                    $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'firstPurchaseCoupon', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $imgUrl];
+                }
+                $width = $height = 120;
+                break;
+            case AttachedFile::FILETYPE_META_IMAGE:
+                $title = Labels::getLabel("FRM_META_IMAGE", $langId);
+                $imageDisclaimer = Labels::getLabel("LBL_META_IMAGE_DISCLAIMER", $langId);
+                if (0 < $fileData['afile_id']) {
+                    if (AttachedFile::FILE_ATTACHMENT_TYPE_OTHER == $fileData['afile_attachment_type']) {
+                        $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'metaImage', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    }
+                    $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $imgUrl, 'ratio_type' => $fileData['afile_aspect_ratio']];
+                }
+                $width = $height = 150;
+                $hasRatio = true;
+                break;
+
+            default:
+                trigger_error(Labels::getLabel('ERR_INVALID_TYPE', $this->siteLangId), E_USER_ERROR);
+                break;
+        }
+
+        $headingFld = $frm->addHtml('', 'main_heading', '<h6>' . $title . ' </h6>
+                    <span class="form-text text-muted">
+                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . $imageDisclaimer . '</span>');
+
+        $ratioFld = $svgFld = '';
+        if ($hasSvg) {
+            $logoImageType = AttachedFile::getLogoImageTypeArr($langId);
+            $fileSvgType = $fileData['afile_attachment_type'] ?? array_key_first($logoImageType);
+            $svgFld = $frm->addRadioButtons(
+                Labels::getLabel("FRM_FILE_TYPE", $langId),
+                'afile_attachment_type_' . $fileType,
+                $logoImageType,
+                $fileSvgType,
+                [
+                    'class' => 'list-radio svgFileTypeSectionJs',
+                    'data-logo-type' => $fileType
+                ]
+            );
+            $svgFld->addFieldTagAttribute('class', 'svgFileTypeJs');
+            HtmlHelper::configureSwitchForRadio($svgFld);
+        }
+
+        if ($hasRatio) {
+            $selectedRadio = $imageArr['ratio_type'] ?? array_key_first($ratioArr);
+            $frm->addRadioButtons(
+                Labels::getLabel("FRM_ASPECT_RATIO", $langId),
+                'ratio_type_' . $fileType,
+                $ratioArr,
+                $selectedRadio,
+                [],
+                ['class' => 'prefRatio-js']
+            );
+
+            $ratioFld = HtmlHelper::configureRadioAsButton($frm, 'ratio_type_' . $fileType);
+            $ratioFld->setWrapperAttribute('class', 'prefRatioSectionJs' . $fileType);
+            if ($fileData['afile_attachment_type']) {
+                $ratioFld->setWrapperAttribute('style', 'display:none');
+            }
+        }
+
+        $fileInputAttr = ['onChange' => 'popupImage(this)', 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => $title];
+        if (0 < $width && 0 < $height) {
+            $fileInputAttr['data-min_width'] = $width;
+            $fileInputAttr['data-min_height'] = $height;
+        }
+
+        $fld = $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
+            $fileInputAttr,
+            $langId,
+            'removeMediaImage(' . $fileType . ',' . $langId . ')',
+            'editDropZoneImages(this)',
+            $imageArr,
+            'mt-3 dropzoneContainerJs'
+        ));
+
+        if ($hasRatio && !empty($ratioFld)) {
+            if (false == $hasSvg) {
+                $ratioFld->attachField($fld);
+            }
+        }
+
+        if ($hasSvg && !empty($svgFld)) {
+            if (!empty($hasRatio)) {
+                $headingFld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+            } else {
+                $svgFld->attachField($fld);
+            }
+        }
     }
 
     public function testEmail()

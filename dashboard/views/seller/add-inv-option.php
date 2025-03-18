@@ -31,7 +31,7 @@ $skuFieldName = 'selprod_sku' . $optionId;
                 <a href="javascript:void(0)" onclick="copyRowData(this)" title="<?php echo Labels::getLabel('LBL_COPY_TO_FORM', $siteLangId); ?>">
                     <svg class="svg" width="18" height="18">
                         <use
-                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#copy">
+                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#copy">
                         </use>
                     </svg>
                 </a>
@@ -41,7 +41,7 @@ $skuFieldName = 'selprod_sku' . $optionId;
                     <a href="javascript:void(0)" onclick="copyRowData(this, <?php echo $selprod_id; ?>)" title="<?php echo Labels::getLabel('LBL_EDIT', $siteLangId); ?>">
                         <svg class="svg" width="18" height="18">
                             <use
-                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#edit">
                             </use>
                         </svg>
                     </a>
@@ -50,7 +50,7 @@ $skuFieldName = 'selprod_sku' . $optionId;
                     <a href="javascript:void(0)" onclick="sellerProductDelete(this, <?php echo $selprod_id; ?>)" title="<?php echo Labels::getLabel('LBL_DELETE', $siteLangId); ?>">
                         <svg class="svg" width="18" height="18">
                             <use
-                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#delete">
                             </use>
                         </svg>
                     </a>

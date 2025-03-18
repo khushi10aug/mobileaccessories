@@ -63,7 +63,7 @@ if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_RECORDS)) {
     ];
 }
 
-if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_MEDIA) && !in_array($collection_layout_type, Collections::COLLECTIONS_FOR_WEB_ONLY)) {
+if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_MEDIA) && !in_array($collection_layout_type, Collections::COLLECTIONS_FOR_WEB_ONLY) || in_array($collection_layout_type, Collections::COLLECTION_WITH_MEDIA)) {
     $otherButtons[] = [
         'attr' => [
             'href' => 'javascript:void(0)',

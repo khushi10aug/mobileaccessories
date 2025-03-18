@@ -63,7 +63,7 @@ if (null != $btn) {
                                             <span class="value">
                                                 <a class="btn btn-outline-gray btn-icon" href="<?php echo UrlHelper::generateUrl('Seller', 'downloadAttachedFileForReturn', array($request['orrequest_id'], 0)); ?>">
                                                     <svg class="svg" width="18" height="18">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#download">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#download">
                                                         </use>
                                                     </svg>
                                                     <?php echo Labels::getLabel('LBL_DOWNLOAD'); ?>

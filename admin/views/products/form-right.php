@@ -40,7 +40,7 @@ if (null != $fld) {
                 $langFld->htmlAfterField = '<div class="input-group-append">
                                                             <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm(' . $langId . ',1)" class="btn" title="' . Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
                                                                 <svg class="svg" width="18" height="18">
-                                                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-translate">
+                                                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#icon-translate">
                                                                     </use>
                                                                 </svg>
                                                             </a>
@@ -257,7 +257,7 @@ if (null != $fld) {
                             <a class="btn btn-icon btn-outline-brand" href="<?php echo UrlHelper::generateUrl('options') ?>"
                                 target="_blank">
                                 <svg class="svg btn-icon-start" width="18" height="18">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#add">
                                     </use>
                                 </svg>
                                 <span><?php echo Labels::getLabel('NAV_ADD_PRODUCT_OPTION', $langId); ?></span>
@@ -432,7 +432,7 @@ if (null != $fld) {
                             <a class="btn btn-icon btn-outline-brand" href="javascript:void(0)"
                                 onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>);">
                                 <svg class="svg btn-icon-start" width="18" height="18">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#add">
                                     </use>
                                 </svg>
                                 <span><?php echo Labels::getLabel('BTN_DIGITAL_FILES', $langId); ?></span>
@@ -480,7 +480,7 @@ if (null != $fld) {
                             <a class="btn btn-icon btn-outline-brand" href="javascript:void(0)"
                                 onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>);">
                                 <svg class="svg btn-icon-start" width="18" height="18">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#add">
                                     </use>
                                 </svg>
                                 <span><?php echo Labels::getLabel('BTN_DIGITAL_LINKS', $langId); ?></span>

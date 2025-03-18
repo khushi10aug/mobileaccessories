@@ -38,7 +38,9 @@ class ShopsReportController extends ListingBaseController
 
     public function search($type = false)
     {
-        $this->getListingData($type);
+        $batchCount = FatApp::getPostedData('batch_count', FatUtility::VAR_INT, 0);
+        $batchNumber = FatApp::getPostedData('batch_number', FatUtility::VAR_INT, 1);
+        $this->getListingData($type, $batchCount, $batchNumber);
         $jsonData = [
             'headSection' => $this->_template->render(false, false, '_partial/listing/head-section.php', true),
             'listingHtml' => $this->_template->render(false, false, 'shops-report/search.php', true),
@@ -47,7 +49,7 @@ class ShopsReportController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    public function getListingData($type = false)
+    public function getListingData($type = false, $batchCount = 1, $batchNumber = 0)
     {
         $this->objPrivilege->canViewShopsReport();
         $db = FatApp::getDb();
@@ -156,8 +158,14 @@ class ShopsReportController extends ListingBaseController
         $srch->addMultipleFields(array('shop_id', 'shop_user_id', 's.shop_created_on', 'IFNULL(shop_name, shop_identifier) as shop_name', 'u.user_id', 'u.user_name as owner_name', 'u_cred.credential_email as owner_email', 'opq.*'));
 
         if ($type == 'export') {
-            $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
+            $pageSize = Report::MAX_LIMIT;
+            if (isset($batchCount) && $batchCount > 0 && $batchCount <= Report::MAX_LIMIT) {
+                $pageSize = $batchCount;
+            }
+            $pagenumber = (!$batchNumber) ? 1 : $batchNumber;
+
+            $srch->setPageNumber($pagenumber);
+            $srch->setPageSize($pageSize);
             $rs = $srch->getResultSet();
             $sheetData = array();
             array_push($sheetData, array_values($fields));
@@ -224,6 +232,36 @@ class ShopsReportController extends ListingBaseController
     public function export()
     {
         $this->search('export');
+    }
+
+    public function form()
+    {
+        $formTitle = Labels::getLabel('LBL_EXPORT_SHOPS_REPORT', $this->siteLangId);
+        $frm = $this->getExportForm($this->siteLangId);
+        $this->set('frm', $frm);
+        $this->set('includeTabs', false);
+        $this->set('formTitle', $formTitle);
+        $this->set('html', $this->_template->render(false, false, '_partial/listing/form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    protected function getExportForm($langId)
+    {
+
+        $frm = new Form('frmExport', array('id' => 'frmExport'));
+
+        /* Batch Count[ */
+        $fld =  $frm->addIntegerField(Labels::getLabel('FRM_COUNTS_PER_BATCH', $langId), 'batch_count', Report::MAX_LIMIT, array('id' => 'batch_count'));
+        $fld->requirements()->setRequired(true);
+        $fld->requirements()->setRange(1, Report::MAX_LIMIT);
+        /*]*/
+
+        /* Batch Number[ */
+        $fld = $frm->addIntegerField(Labels::getLabel('FRM_BATCH_NUMBER', $langId), 'batch_number', 1, array('id' => 'batch_number'));
+        $fld->requirements()->setRequired(true);
+        $fld->requirements()->setPositive();
+        $frm->setFormTagAttribute('onSubmit', 'exportRecords(); return false;');
+        return $frm;
     }
 
     public function getSearchForm($fields = [])

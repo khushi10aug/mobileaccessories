@@ -41,7 +41,7 @@ if ($showAddToFavorite) {
                     <li>
                         <a onclick="addToCart( $(this), event , <?php echo $isWishList; ?>);" href="javascript:void(0)" class="" title="<?php echo Labels::getLabel('LBL_Move_to_cart', $siteLangId); ?>" data-id='<?php echo $product['selprod_id']; ?>'>
                             <svg class="svg" width="18" height="18">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#cart">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#cart">
                                 </use>
                             </svg>
                         </a>
@@ -52,14 +52,14 @@ if ($showAddToFavorite) {
                 <?php if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::YES) { ?>
                     <a title='<?php echo Labels::getLabel('LBL_Move_to_trash', $siteLangId); ?>' onclick="removeFromWishlist(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event);" href="javascript:void(0)" class="">
                         <svg class="svg" width="18" height="18">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#delete">
                             </use>
                         </svg>
                     </a>
                 <?php } else { ?>
                     <a title='<?php echo Labels::getLabel('LBL_Move_to_trash', $siteLangId); ?>' href="javascript:void(0)" onclick="removeFromFavorite(<?php echo $product['selprod_id']; ?>, 'searchFavouriteListItems');" data-id="<?php echo $product['selprod_id']; ?>">
                         <svg class="svg" width="18" height="18">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#delete">
                             </use>
                         </svg>
                     </a>
@@ -96,7 +96,7 @@ if ($showAddToFavorite) {
         data-bs-auto-close="outside">
         <i class="icn">
             <svg class="svg">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#share">
                 </use>
             </svg>
         </i>
@@ -108,7 +108,7 @@ if ($showAddToFavorite) {
                     data-url="<?php echo UrlHelper::generateFullUrl('Products', 'view', array($product['selprod_id']), CONF_WEBROOT_FRONTEND); ?>/">
                     <i class="icn">
                         <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#fb"></use>
                         </svg>
                     </i>
                 </a>
@@ -117,7 +117,7 @@ if ($showAddToFavorite) {
                 <a href="javascript:void(0)" class="st-custom-button" data-network="twitter">
                     <i class="icn">
                         <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#tw"></use>
                         </svg>
                     </i>
                 </a>
@@ -126,7 +126,7 @@ if ($showAddToFavorite) {
                 <a href="javascript:void(0)" class="st-custom-button" data-network="pinterest">
                     <i class="icn">
                         <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#pt"></use>
                         </svg>
                     </i>
                 </a>
@@ -135,7 +135,7 @@ if ($showAddToFavorite) {
                 <a href="javascript:void(0)" class="st-custom-button" data-network="email">
                     <i class="icn">
                         <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#envelope">
                             </use>
                         </svg>
                     </i>

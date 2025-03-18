@@ -12,7 +12,7 @@ if (!empty($trackingData) && array_key_exists('detail', $trackingData) && !empty
     <h5 class="modal-title">
         <a class="btn-back" href="javascript:void(0)" onclick="getItemStatusHistory(<?php echo $orderId; ?> ,<?php echo $opId; ?>)">
             <svg class="svg" width="24" height="24">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL ?>images/retina/sprite-actions.svg#back">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#back">
                 </use>
             </svg>
         </a>
@@ -56,7 +56,7 @@ if (!empty($trackingData) && array_key_exists('detail', $trackingData) && !empty
             <a class="link link-third" href="<?php echo $trackingData['trackingUrl']; ?>" target="_blank">
                 <?php echo Labels::getLabel('LBL_CLICK_HERE_TO_TRACK_EXTERNALLY', $siteLangId); ?>
                 <svg class="svg" width="14" height="14">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL ?>images/retina/sprite-actions.svg#arrow-up-right">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#arrow-up-right">
                     </use>
                 </svg>
             </a>

@@ -28,7 +28,7 @@
                             <a class="catalog-carousal-link" title="<?php echo $category['prodcat_name']; ?>"
                                 href="<?php echo $prodCatUrl; ?>">
                                 <div class="catalog-carousal-block">
-                                    <img class="catalog-carousal-icon" src="<?php echo $catIconUrl; ?>">
+                                    <img class="catalog-carousal-icon" src="<?php echo $catIconUrl; ?>" alt="<?php echo $category['prodcat_name']; ?>">
                                     <div class="catalog-carousal-name"><?php echo $category['prodcat_name']; ?>
                                     </div>
                                 </div>

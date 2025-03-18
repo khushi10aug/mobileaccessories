@@ -41,7 +41,7 @@
                     $txt .= CommonHelper::displayNotApplicable($siteLangId, $row['ocreason_title']);
                     $txt .= '<br/><strong>' . Labels::getLabel('LBL_Comments', $siteLangId) . ': </strong>';
                     if (strlen((string)$row['ocrequest_message']) > 25) {
-                        $txt .= nl2br(substr($row['ocrequest_message'], 0, 25)). '<button class="btn btn-view" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="' . Labels::getLabel('LBL_VIEW_MORE', $siteLangId) . '" onclick="getCancellationRequestComment(' . $row['ocrequest_id'] . ')"><svg class="svg" width="10" height="10"><use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#more"></use></svg></button>';
+                        $txt .= nl2br(substr($row['ocrequest_message'], 0, 25)). '<button class="btn btn-view" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="' . Labels::getLabel('LBL_VIEW_MORE', $siteLangId) . '" onclick="getCancellationRequestComment(' . $row['ocrequest_id'] . ')"><svg class="svg" width="10" height="10"><use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#more"></use></svg></button>';
                     } else {
                         $txt .= nl2br(CommonHelper::displayNotApplicable($siteLangId, $row['ocrequest_message']));
                     }

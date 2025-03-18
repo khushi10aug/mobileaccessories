@@ -46,7 +46,7 @@ class AdminPermissionsController extends ListingBaseController
                 ],
                 'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                 <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#not-allowed">
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#not-allowed">
                                 </use>
                             </svg><span>' . Labels::getLabel('BTN_NONE', $this->siteLangId) . '</span>',
             ],
@@ -59,7 +59,7 @@ class AdminPermissionsController extends ListingBaseController
                 ],
                 'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                 <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#view">
                                 </use>
                             </svg><span>' . Labels::getLabel('BTN_READ', $this->siteLangId) . '</span>',
             ],
@@ -72,7 +72,7 @@ class AdminPermissionsController extends ListingBaseController
                 ],
                 'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                 <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#edit">
                                 </use>
                             </svg><span>' . Labels::getLabel('BTN_READ_AND_WRITE', $this->siteLangId) . '</span>',
             ],

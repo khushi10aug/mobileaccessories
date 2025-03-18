@@ -41,7 +41,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                     <?php echo $sharingFrm->getFieldHTML('email'); ?>
                                     <button type="submit" disabled="disabled" class="btn-fly submitBtnJs">
                                         <svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#submitfly">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#submitfly">
                                             </use>
                                         </svg>
                                     </button>
@@ -55,7 +55,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                         <span class="icon">
                                             <i class="svg--icon">
                                                 <svg class="svg">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icon_link">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon_link">
                                                     </use>
                                                 </svg>
                                             </i>
@@ -67,7 +67,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                         <span class="icon">
                                             <i class="svg--icon">
                                                 <svg class="svg">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-facebook" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-facebook">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#share-facebook" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#share-facebook">
                                                     </use>
                                                 </svg>
                                             </i>
@@ -79,7 +79,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                         <span class="icon">
                                             <i class="svg--icon">
                                                 <svg class="svg">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-linkedin" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-linkedin">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#share-linkedin" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#share-linkedin">
                                                     </use>
                                                 </svg>
                                             </i>
@@ -91,7 +91,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                         <span class="icon">
                                             <i class="svg--icon">
                                                 <svg class="svg">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-reddit" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-reddit">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#share-reddit" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#share-reddit">
                                                     </use>
                                                 </svg>
                                             </i>
@@ -103,7 +103,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                         <span class="icon">
                                             <i class="svg--icon">
                                                 <svg class="svg">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-skype" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-skype">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#share-skype" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#share-skype">
                                                     </use>
                                                 </svg>
                                             </i>
@@ -115,7 +115,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                         <span class="icon">
                                             <i class="svg--icon">
                                                 <svg class="svg">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-telegram" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-telegram">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#share-telegram" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#share-telegram">
                                                     </use>
                                                 </svg>
                                             </i>
@@ -127,7 +127,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                         <span class="icon">
                                             <i class="svg--icon">
                                                 <svg class="svg">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-twitter" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-twitter">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#share-twitter" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#share-twitter">
                                                     </use>
                                                 </svg>
                                             </i>
@@ -139,7 +139,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                         <span class="icon">
                                             <i class="svg--icon">
                                                 <svg class="svg">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-whatsapp" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-whatsapp">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#share-whatsapp" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#share-whatsapp">
                                                     </use>
                                                 </svg>
                                             </i>

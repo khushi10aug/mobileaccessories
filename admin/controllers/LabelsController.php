@@ -30,7 +30,7 @@ class LabelsController extends ListingBaseController
                 ],
                 'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                 <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#laptop">
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#laptop">
                                 </use>
                             </svg><span>' . Labels::getLabel('BTN_WEB', $this->siteLangId) . '</span>',
             ],
@@ -43,7 +43,7 @@ class LabelsController extends ListingBaseController
                 ],
                 'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                 <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#mobile">
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#mobile">
                                 </use>
                             </svg><span>' . Labels::getLabel('BTN_APP', $this->siteLangId) . '</span>',
             ],

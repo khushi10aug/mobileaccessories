@@ -55,7 +55,7 @@ foreach ($arrListing as $sn => $row) {
                         ],
                         'label' => '<i class="icn">
                         <svg class="svg" width="18" height="18">
-                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#add">
                             </use>
                         </svg>
                     </i>'
@@ -68,7 +68,7 @@ foreach ($arrListing as $sn => $row) {
                         ],
                         'label' => '<i class="icn">
                                             <svg class="svg" width="18" height="18">
-                                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#history">
+                                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#history">
                                                 </use>
                                             </svg>
                                         </i>'

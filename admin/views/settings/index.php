@@ -60,7 +60,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#general-settings">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#general-settings">
                                             </use>
                                         </svg>
                                     </span>
@@ -77,7 +77,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#plugins">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#plugins">
                                             </use>
                                         </svg>
                                     </span>
@@ -94,7 +94,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#labels">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#labels">
                                             </use>
                                         </svg>
                                     </span>
@@ -110,7 +110,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#shop-reports">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#shop-reports">
                                             </use>
                                         </svg>
                                     </span>
@@ -127,7 +127,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#theme">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#theme">
                                             </use>
                                         </svg>
                                     </span>
@@ -144,7 +144,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#currencies">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#currencies">
                                             </use>
                                         </svg>
                                     </span>
@@ -161,7 +161,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#site-commission">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#site-commission">
                                             </use>
                                         </svg>
                                     </span>
@@ -178,7 +178,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#affiliate-commision">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#affiliate-commision">
                                             </use>
                                         </svg>
                                     </span>
@@ -195,7 +195,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#subscriptions-packages">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#subscriptions-packages">
                                             </use>
                                         </svg>
                                     </span>
@@ -212,7 +212,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#zones">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#zones">
                                             </use>
                                         </svg>
                                     </span>
@@ -228,7 +228,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#countries">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#countries">
                                             </use>
                                         </svg>
                                     </span>
@@ -245,7 +245,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#states">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#states">
                                             </use>
                                         </svg>
                                     </span>
@@ -262,7 +262,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#abusive-keywords">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#abusive-keywords">
                                             </use>
                                         </svg>
                                     </span>
@@ -279,7 +279,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#empty-cart">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#empty-cart">
                                             </use>
                                         </svg>
                                     </span>
@@ -295,7 +295,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#shop-reports">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#shop-reports">
                                             </use>
                                         </svg>
                                     </span>
@@ -311,7 +311,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#star-outline">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-outline">
                                             </use>
                                         </svg>
                                     </span>
@@ -327,7 +327,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#sms-notification">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#sms-notification">
                                             </use>
                                         </svg>
                                     </span>
@@ -343,7 +343,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#email">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#email">
                                             </use>
                                         </svg>
                                     </span>
@@ -359,7 +359,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#shop-reports">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#shop-reports">
                                             </use>
                                         </svg>
                                     </span>
@@ -375,7 +375,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#shop-reports">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#shop-reports">
                                             </use>
                                         </svg>
                                     </span>
@@ -391,7 +391,7 @@
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#app-update">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#app-update">
                                             </use>
                                         </svg>
                                     </span>

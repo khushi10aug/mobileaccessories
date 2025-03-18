@@ -23,21 +23,30 @@ if (null != $captchaFld) {
 <div class="login-page login-1">
     <div class="container">
         <div class="login-block">
-            <div class="logo">
+            <?php
+            $imgDataType = '';
+            $logoWidth = '';
+            $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $siteLangId, false);
+            $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+            if (AttachedFile::FILE_ATTACHMENT_TYPE_SVG == $fileData['afile_attachment_type']) {
+                $imgUrl = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']) . $uploadedTime;
+                $imgDataType = 'data-type="svg"';
+                $logoWidth = 'width="120"';
+            } else {
+                $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
+                $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            }
+            ?>
+            <div class="logo" <?php echo  $imgDataType; ?>>
                 <a href="<?php echo UrlHelper::generateUrl(); ?>">
-                    <?php
-                    $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $siteLangId, false);
-                    $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
-                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                    ?>
-                    <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
+                    <img <?php if (AttachedFile::FILE_ATTACHMENT_TYPE_OTHER == $fileData['afile_attachment_type'] && $fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo $imgUrl; ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" <?php echo $logoWidth; ?>>
                 </a>
             </div>
 
             <div class="card">
                 <div class="card-head">
                     <div class="title">
-                        <h2><?php echo Labels::getLabel('LBL_Forgot_Your_Password?', CommonHelper::getLangId()); ?></h2>
+                        <h2><?php echo Labels::getLabel('LBL_FORGOT_PASSWORD?', CommonHelper::getLangId()); ?></h2>
                         <p class="text-muted"><?php echo Labels::getLabel('LBL_Enter_The_E-mail_Address_Associated_With_Your_Account', $siteLangId) ?></p>
                     </div>
                 </div>

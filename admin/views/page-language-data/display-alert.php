@@ -1,7 +1,7 @@
 <?php if (isset($pageData['plang_warring_msg']) && !empty($pageData['plang_warring_msg'])) { ?>
     <div class="alert alert-solid-warning fade alertWarningJs show" role="alert">
         <div class="alert-icon"> <svg class="svg" width="20" height="20">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#warning">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#warning">
                 </use>
             </svg></div>
         <div class="alert-text"><?php echo nl2br($pageData['plang_warring_msg']); ?></div>

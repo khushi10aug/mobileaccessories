@@ -36,7 +36,7 @@ foreach ($arrListing as $sn => $row) {
                 $class = (applicationConstants::NO == $row[$key]) ? 'is-verified' : '';
                 $img = '<div class="verified '. $class .'"><svg class="svg" >
                             <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-verified">
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#icon-verified">
                             </use>
                         </svg>';
                 $td->appendElement('plaintext', $tdAttr, $img, true);
@@ -57,7 +57,7 @@ foreach ($arrListing as $sn => $row) {
                             ],
                             'label' => '<svg class="svg" width="18" height="18">
                                             <use
-                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#icon-restore">
+                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#icon-restore">
                                             </use>
                                         </svg>'
                         ]

@@ -20,7 +20,7 @@ $fld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_COMMENTS_FOR_SEL
 $fld->htmlAfterField = '<a class="btn btn-attachment attachmentJs" >
                             <input class="attachment-file rfqDocumentJs" type="file" name="document" >
                             <svg class="svg" width="16" height="16">
-                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#attachment">
+                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#attachment">
                                 </use>
                             </svg>' . Labels::getLabel('LBL_Add_ATTACHMENT') . '
                         </a><ul class="uploaded-list rfqFileNameJs"></ul>';
@@ -52,7 +52,7 @@ if (!$isUserLogged) {
 $fld = $frm->getField('rfq_title');
 if (1 > $selprodId && null != $fld) {
     $fld->addFieldTagAttribute('class', 'form-input');
-    $fld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_TYPE_HERE..', $siteLangId));
+    $fld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_I_am_looking_for...', $siteLangId));
     $fld->addFieldTagAttribute('id', 'rfqItemNameJs');
 }
 
@@ -170,7 +170,7 @@ if (null != $fld) {
                                         <div class="rating-stars">
                                             <svg class="svg svg-star" width="16" height="16">
                                                 <use
-                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-yellow">
                                                 </use>
                                             </svg>
                                         </div>

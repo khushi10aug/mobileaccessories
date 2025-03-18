@@ -573,16 +573,18 @@
 		/* flex-flow: row wrap; */
 		margin-bottom: 1.5rem;
 		gap: 1.5rem;
+
 		@include media-breakpoint-down(sm) {
 			flex-flow: row wrap;
 		}
+
 		&-toolbar {
 			>ul {
 				display: flex;
 				gap: 5px;
 
 				@include media-breakpoint-down(sm) {
-					/* flex-flow: row wrap; */
+					flex-flow: row wrap;
 				}
 
 				li {

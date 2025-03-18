@@ -28,7 +28,7 @@
                         <ul class="phone-list">
                             <li class="phone-list-item phone-txt">
                                 <svg class="svg" width="20" height="20">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#mobile-alt">
                                     </use>
                                 </svg>
                                 <?php

@@ -373,7 +373,7 @@ class PushNotification extends MyAppModel
                 return '<i title="' . $msg . '" data-bs-toggle="tooltip">
                             <svg class="svg" width="18" height="18">
                                 <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#android-icon">
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#android-icon">
                                 </use>
                             </svg>
                         </i>';
@@ -382,7 +382,7 @@ class PushNotification extends MyAppModel
                 return '<i title="' . $msg . '" data-bs-toggle="tooltip">
                             <svg class="svg" width="18" height="18">
                                 <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#apple-icon">
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#apple-icon">
                                 </use>
                             </svg>
                         </i>';
@@ -392,7 +392,7 @@ class PushNotification extends MyAppModel
                 return '<i title="' . $msg . '" data-bs-toggle="tooltip">
                             <svg class="svg" width="18" height="18">
                                 <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#utility-icons">
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#utility-icons">
                                 </use>
                             </svg>
                         </i>';

@@ -42,7 +42,7 @@
             data-bs-target="#search-main" title="<?php echo Labels::getLabel('LBL_GLOBAL_SEARCH', $siteLangId); ?>">
             <span class="icon">
                 <svg class="svg" width="20" height="20">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-search">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-search">
                     </use>
                 </svg>
             </span>
@@ -53,7 +53,7 @@
             title="<?php echo Labels::getLabel('LBL_VIEW_STORE', $siteLangId); ?>">
             <span class="icon">
                 <svg class="svg" width="20" height="20">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-store">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-store">
                     </use>
                 </svg>
             </span>
@@ -63,7 +63,7 @@
         <a href="#" href="javascript:void(0);" class="footer-action__trigger" data-trigger="sidebar">
             <span class="icon">
                 <svg class="svg" width="20" height="20">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#menu">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#menu">
                     </use>
                 </svg>
             </span>
@@ -74,7 +74,7 @@
             title="<?php echo Labels::getLabel('LBL_CLEAR_CACHE', $siteLangId); ?>">
             <span class="icon">
                 <svg class="svg" width="20" height="20">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-cache">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-cache">
                     </use>
                 </svg>
             </span>
@@ -86,7 +86,7 @@
             title="<?php echo Labels::getLabel('LBL_NOTIFICATIONS', $siteLangId); ?>">
             <span class="icon">
                 <svg class="svg" width="20" height="20">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-notification">
                     </use>
                 </svg>
             </span>

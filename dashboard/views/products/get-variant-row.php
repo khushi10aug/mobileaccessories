@@ -24,7 +24,7 @@ if (!empty($productOption)) {
                 <li class="<?php echo $deleteClass; ?> optionsDeleteJs">
                     <a href="javascript:void(0)" class="">
                         <svg class="svg" width="18" height="18">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#delete">
                             </use>
                         </svg>
                     </a>
@@ -32,7 +32,7 @@ if (!empty($productOption)) {
                 <li>
                     <a href="javascript:void(0)" class="optionsAddJs">
                         <svg class="svg" width="18" height="18">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#add">
                             </use>
                         </svg>
                     </a>

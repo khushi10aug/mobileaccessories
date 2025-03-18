@@ -188,6 +188,12 @@ class StatesController extends ListingBaseController
             LibHelper::exitWithError($msg, true);
         }
 
+        if(applicationConstants::INACTIVE == $post['state_active']) {
+            if(!Shop::updateShopsDisplayStatus(stateId: $recordId)){
+                LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_UPDATE_DISPLAY_STATUS_OF_SHOP'), true);
+            }
+        }
+
         $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
 
         CacheHelper::clear(CacheHelper::TYPE_ZONE);
@@ -274,6 +280,12 @@ class StatesController extends ListingBaseController
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId || -1 == $status) {
             LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        if(applicationConstants::INACTIVE == $status) {
+            if(!Shop::updateShopsDisplayStatus(stateId: $recordId)){
+                LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_UPDATE_DISPLAY_STATUS_OF_SHOP'), true);
+            }
         }
 
         $stateObj = new States($recordId);

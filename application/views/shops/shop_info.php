@@ -23,7 +23,7 @@
             <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && $shopTotalReviews > 0) { ?>
             <div class="product-ratings">
                 <svg class="svg svg-star" width="14" height="14">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-yellow"></use>
                 </svg>
                 <span class="rate">
                     <?php echo round($shopRating, 1), ' ', Labels::getLabel('Lbl_Out_of', $siteLangId), ' ', '5'; ?>
@@ -41,7 +41,7 @@
                 <a class="contact-social-link" href="javascript:void(0)" data-bs-toggle="modal"
                     data-bs-target="#shareIcon">
                     <svg class="svg" width="20" height="20">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share"></use>
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#share"></use>
                     </svg>
                 </a>
             </li>
@@ -57,7 +57,7 @@
                     onclick="toggleShopFavorite(<?php echo $shop['shop_id']; ?>);"
                     id="shop_<?php echo $shop['shop_id']; ?>">
                     <svg class="svg" width="20" height="20">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart"></use>
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#heart"></use>
                     </svg>
                 </a>
             </li>
@@ -74,7 +74,7 @@
                     href="<?php echo UrlHelper::generateUrl('Shops', 'ReportSpam', array($shop['shop_id'])); ?>"
                     title="<?php echo Labels::getLabel('Lbl_Report_Spam', $siteLangId); ?>">
                     <svg class="svg" width="20" height="20">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#report"></use>
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#report"></use>
                     </svg>
 
                 </a>
@@ -86,7 +86,7 @@
                     href="<?php echo UrlHelper::generateUrl('shops', 'sendMessage', array($shop['shop_id'])); ?>"
                     title="<?php echo Labels::getLabel('Lbl_Send_Message', $siteLangId); ?>">
                     <svg class="svg" width="20" height="20">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#send-msg"></use>
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#send-msg"></use>
                     </svg> </a>
             </li>
             <?php } ?>
@@ -99,7 +99,7 @@
                     href="<?php echo ($row['splatform_url'] != '') ? $row['splatform_url'] : 'javascript:void(0)'; ?>">
                     <svg class="svg" width="20" height="20">
                         <use
-                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#<?php echo $row['splatform_icon_class']; ?>">
+                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#<?php echo $row['splatform_icon_class']; ?>">
                         </use>
                     </svg>
                 </a>
@@ -125,7 +125,7 @@
                             <a href="javascript:void(0)" class="social-link st-custom-button" data-network="facebook"
                                 data-url="<?php echo UrlHelper::generateFullUrl('Shops', 'view', array($shop['shop_id'])); ?>/">
                                 <svg class="svg" width="20" height="20">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#facebook">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#facebook">
                                     </use>
                                 </svg>
                             </a>
@@ -133,7 +133,7 @@
                         <li class="social-twitter">
                             <a href="javascript:void(0)" class="social-link st-custom-button" data-network="twitter">
                                 <svg class="svg" width="20" height="20">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#twitter">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#twitter">
                                     </use>
                                 </svg>
                             </a>
@@ -141,7 +141,7 @@
                         <li class="social-pintrest">
                             <a href="javascript:void(0)" class="social-link st-custom-button" data-network="pinterest">
                                 <svg class="svg" width="20" height="20">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pinterest">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.#pinterest">
                                     </use>
                                 </svg>
                             </a>
@@ -149,7 +149,7 @@
                         <li class="social-email">
                             <a href="javascript:void(0)" class="social-link st-custom-button" data-network="email">
                                 <svg class="svg" width="20" height="20">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#envelope">
                                     </use>
                                 </svg>
                             </a>
@@ -165,7 +165,7 @@
                             title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>">
                             <svg class="svg" width="18" height="18">
                                 <use
-                                    xlink:href="<?php echo  CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#copy-to-all">
+                                    xlink:href="<?php echo  CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#copy-to-all">
                                 </use>
                             </svg>
                         </button>

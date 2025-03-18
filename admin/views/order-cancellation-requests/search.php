@@ -96,7 +96,7 @@ foreach ($arrListing as $sn => $row) {
                         ],
                         'label' => '<i class="icn">
                                         <svg class="svg" width="18" height="18">
-                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#comment">
+                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#comment">
                                             </use>
                                         </svg>
                                     </i>',
@@ -112,7 +112,7 @@ foreach ($arrListing as $sn => $row) {
                         ],
                         'label' => '<i class="icn">
                                         <svg class="svg" width="18" height="18">
-                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#form">
+                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#form">
                                             </use>
                                         </svg>
                                     </i>',
@@ -127,7 +127,7 @@ foreach ($arrListing as $sn => $row) {
                         ],
                         'label' => '<i class="icn">
                                         <svg class="svg" width="18" height="18">
-                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#admin-reply">
+                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#admin-reply">
                                             </use>
                                         </svg>
                                     </i>',

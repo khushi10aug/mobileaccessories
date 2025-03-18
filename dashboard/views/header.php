@@ -69,7 +69,12 @@ $additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'directi
     $description = (isset($metaData['meta_description'])) ? $metaData['meta_description'] : $title;
     $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_META_IMAGE, 0, 0, $siteLangId);
     $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'metaImage', array($siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    if (AttachedFile::FILE_ATTACHMENT_TYPE_SVG == $fileData['afile_attachment_type']) {
+        $image = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']);
+    } else {
+        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'metaImage', array($siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    }
     ?>
     <meta property="og:type" content="website" />
     <meta property="og:title" content="<?php echo $title; ?>" />

@@ -46,7 +46,7 @@ foreach ($arrListing as $sn => $row) {
                         'onclick' => 'getComments(' . $row['urp_id'] . ')'
                     ],
                     'label' => '<svg class="svg" width="18" height="18">
-                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#comment">
+                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#comment">
                                     </use>
                                 </svg>',
                 ];
@@ -59,7 +59,7 @@ foreach ($arrListing as $sn => $row) {
                             'onclick' => 'deleteRecord(' . $row['urp_id'] . ')'
                         ],
                         'label' => '<svg class="svg" width="18" height="18">
-                                        <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#counterclockwise">
+                                        <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#counterclockwise">
                                         </use>
                                     </svg>',
                     ];

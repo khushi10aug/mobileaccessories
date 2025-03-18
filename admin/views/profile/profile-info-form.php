@@ -39,7 +39,7 @@ $profileImg  = UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAu
                     </div>
                     <label class="avatar__upload" data-bs-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_EDIT_IMAGE', $siteLangId); ?>">
                         <svg class="svg" width="12" height="12">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#edit">
                             </use>
                         </svg>
                         <?php echo $imageFld->getHTML(); ?>
@@ -48,7 +48,7 @@ $profileImg  = UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAu
                     <?php if (!$isNewImage) { ?>
                         <label class="avatar__cancel" data-bs-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_REMOVE_IMAGE', $siteLangId); ?>" onclick="removeProfileImage();">
                             <svg class="svg" width="12" height="12">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#delete">
                                 </use>
                             </svg>
                         </label>

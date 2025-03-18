@@ -96,6 +96,15 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_BADGE_IMAGE_PATH = 'badge-images/';
     public const FILETYPE_BADGE_REQUEST_IMAGE_PATH = 'badge-request-images/';
 
+    public const FILETYPE_SVG_LOGO_FILE_PATH = 'media/logos/';
+    public const FILETYPE_VIDEOS_FILE_PATH = 'media/videos/';
+    public const FILE_ATTACHMENT_TYPE_OTHER = 0;
+    public const FILE_ATTACHMENT_TYPE_SVG = 1;
+    public const FILE_ATTACHMENT_TYPE_VIDEO = 2;
+    private $attachmentType = self::FILE_ATTACHMENT_TYPE_OTHER;
+
+    private bool $isThumbnailImage = false;
+
     public function __construct($fileId = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $fileId);
@@ -231,7 +240,7 @@ class AttachedFile extends MyAppModel
         $srch->addCondition('afile_type', '=', 'mysql_func_' . $fileType, 'AND', true);
         $srch->addCondition('afile_record_id', '=', 'mysql_func_' . $recordId, 'AND', true);
 
-        $attr = ['afile_id', 'afile_type', 'afile_record_id', 'afile_record_subid', 'afile_lang_id', 'afile_screen', 'afile_physical_path', 'afile_name', 'afile_attribute_title', 'afile_attribute_alt', 'afile_aspect_ratio', 'afile_display_order', 'afile_updated_at'];
+        $attr = ['afile_id', 'afile_type', 'afile_record_id', 'afile_record_subid', 'afile_lang_id', 'afile_screen', 'afile_physical_path', 'afile_name', 'afile_attachment_type', 'afile_attribute_title', 'afile_attribute_alt', 'afile_aspect_ratio', 'afile_display_order', 'afile_updated_at'];
 
         if ($fileType != AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP && $fileType != AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP) {
             $attr[] = 'afile_downloaded_times';
@@ -308,6 +317,7 @@ class AttachedFile extends MyAppModel
             'afile_screen' => 0,
             'afile_physical_path' => '',
             'afile_name' => '',
+            'afile_attachment_type' => '',
             'afile_attribute_title' => '',
             'afile_attribute_alt' => '',
             'afile_aspect_ratio' => 0,
@@ -352,26 +362,40 @@ class AttachedFile extends MyAppModel
 
         $path = $this->fileLocToSave($fileType, $path);
 
-        /* creation of folder date wise [ */
-        $date_wise_path = date('Y') . '/' . date('m') . '/';
-        /* ] */
-        $path = $path . $date_wise_path;
-
-        $saveName = time() . '-' . preg_replace('/[^a-zA-Z0-9.]/', '', $name);
-        if (strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
-            $fileExt = pathinfo($name, PATHINFO_EXTENSION);
-            $fileExt = strtolower($fileExt);
-            if ('zip' == $fileExt) {
+        $date_wise_path = '';
+        $langCode = '';
+        if (in_array($this->attachmentType, [self::FILE_ATTACHMENT_TYPE_SVG, self::FILE_ATTACHMENT_TYPE_VIDEO])) {
+            $fileLangId = (0 == $langId ? CommonHelper::getLangId() : $langId);
+            $langCode = strtolower(Language::getAttributesById($fileLangId, 'language_code'));
+            $path .= $langCode . '/';
+            if (self::FILE_ATTACHMENT_TYPE_SVG == $this->attachmentType) {
+                $saveName = $fileType . '.svg';
+            } else {
                 $saveName = time() . '-' . preg_replace('/[^a-zA-Z0-9.]/', '', $name);
             }
-        }
+        } else {
+            /* creation of folder date wise [ */
+            $date_wise_path = date('Y') . '/' . date('m') . '/';
+            /* ] */
+            $path = $path . $date_wise_path;
 
+            $saveName = time() . '-' . preg_replace('/[^a-zA-Z0-9.]/', '', $name);
+            if (strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
+                $fileExt = pathinfo($name, PATHINFO_EXTENSION);
+                $fileExt = strtolower($fileExt);
+                if ('zip' == $fileExt) {
+                    $saveName = time() . '-' . preg_replace('/[^a-zA-Z0-9.]/', '', $name);
+                }
+            }
+        }
         if (!file_exists($path)) {
             mkdir($path, 0777, true);
         }
 
-        while (file_exists($path . $saveName)) {
-            $saveName = rand(10, 99) . '-' . $saveName;
+        if (self::FILE_ATTACHMENT_TYPE_OTHER == $this->attachmentType) {
+            while (file_exists($path . $saveName)) {
+                $saveName = rand(10, 99) . '-' . $saveName;
+            }
         }
 
         if (!move_uploaded_file($fl, $path . $saveName)) {
@@ -382,11 +406,18 @@ class AttachedFile extends MyAppModel
         if (strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
             if (isset($fileExt) && $fileExt == 'zip') {
                 $saveName = preg_replace('/[^a-zA-Z0-9-]/', '', $saveName);
-            }else{
+            } else {
                 $saveName = preg_replace('/[^a-zA-Z0-9-.]/', '', $saveName);
             }
         }
-        $fileLoc = $date_wise_path . $saveName;
+
+        if (self::FILE_ATTACHMENT_TYPE_SVG == $this->attachmentType) {
+            $fileLoc = self::FILETYPE_SVG_LOGO_FILE_PATH . $langCode . '/' . $saveName;
+        } else if (self::FILE_ATTACHMENT_TYPE_VIDEO == $this->attachmentType) {
+            $fileLoc = self::FILETYPE_VIDEOS_FILE_PATH . $langCode . '/' . $saveName;
+        } else {
+            $fileLoc = $date_wise_path . $saveName;
+        }
 
         return $this->updateFileToDb($fileType, $recordId, $recordSubid, $fileLoc, $name, $langId, $screen, $displayOrder, $uniqueRecord, $aspectRatio);
     }
@@ -403,20 +434,34 @@ class AttachedFile extends MyAppModel
         }
 
         $path = $this->fileLocToSave($fileType, $path);
+        $date_wise_path = '';
+        $langCode = '';
+        if (in_array($this->attachmentType, [self::FILE_ATTACHMENT_TYPE_SVG, self::FILE_ATTACHMENT_TYPE_VIDEO])) {
+            $fileLangId = (0 == $langId ? CommonHelper::getLangId() : $langId);
+            $langCode = strtolower(Language::getAttributesById($fileLangId, 'language_code'));
+            $path .= $langCode . '/';
+            if (self::FILE_ATTACHMENT_TYPE_SVG == $this->attachmentType) {
+                $saveName = $fileType . '.svg';
+            } else {
+                $saveName = time() . '-' . preg_replace('/[^a-zA-Z0-9]/', '', $name) . '.' . pathinfo($name, PATHINFO_EXTENSION);
+            }
+        } else {
+            /* creation of folder date wise [ */
+            $date_wise_path = date('Y') . '/' . date('m') . '/';
+            /* ] */
+            $path = $path . $date_wise_path;
 
-        /* creation of folder date wise [ */
-        $date_wise_path = date('Y') . '/' . date('m') . '/';
-        /* ] */
-        $path = $path . $date_wise_path;
-
-        $saveName = time() . '-' . preg_replace('/[^a-zA-Z0-9]/', '', $name);
+            $saveName = time() . '-' . preg_replace('/[^a-zA-Z0-9]/', '', $name);
+        }
 
         if (!file_exists($path)) {
             mkdir($path, 0777, true);
         }
 
-        while (file_exists($path . $saveName)) {
-            $saveName = rand(10, 99) . '-' . $saveName;
+        if (self::FILE_ATTACHMENT_TYPE_OTHER == $this->attachmentType) {
+            while (file_exists($path . $saveName)) {
+                $saveName = rand(10, 99) . '-' . $saveName;
+            }
         }
 
         if (false === copy($file, $path . $saveName)) {
@@ -424,7 +469,13 @@ class AttachedFile extends MyAppModel
             return false;
         }
 
-        $fileLoc = $date_wise_path . $saveName;
+        if (self::FILE_ATTACHMENT_TYPE_SVG == $this->attachmentType) {
+            $fileLoc = self::FILETYPE_SVG_LOGO_FILE_PATH . $langCode . '/' . $saveName;
+        } else if (self::FILE_ATTACHMENT_TYPE_VIDEO == $this->attachmentType) {
+            $fileLoc = self::FILETYPE_VIDEOS_FILE_PATH . $langCode . '/' . $saveName;
+        } else {
+            $fileLoc = $date_wise_path . $saveName;
+        }
 
         return $this->updateFileToDb($fileType, $recordId, $recordSubid, $fileLoc, $name, $langId, $screen, $displayOrder, $uniqueRecord);
     }
@@ -439,6 +490,7 @@ class AttachedFile extends MyAppModel
                 'afile_record_subid' => $recordSubid,
                 'afile_physical_path' => $fileLoc,
                 'afile_name' => $name,
+                'afile_attachment_type' => $this->attachmentType,
                 'afile_lang_id' => $langId,
                 'afile_screen' => $screen,
                 'afile_aspect_ratio' => $aspectRatio
@@ -511,12 +563,24 @@ class AttachedFile extends MyAppModel
                 break;
         }
         /* ] */
+
+        if (self::FILE_ATTACHMENT_TYPE_SVG == $this->attachmentType) {
+            $path .= self::FILETYPE_SVG_LOGO_FILE_PATH;
+        } else if (self::FILE_ATTACHMENT_TYPE_VIDEO == $this->attachmentType) {
+            $path .= self::FILETYPE_VIDEOS_FILE_PATH;
+        }
+
         return $path;
+    }
+
+    public function setAttachmentType(int $attachmentType = self::FILE_ATTACHMENT_TYPE_OTHER)
+    {
+        $this->attachmentType = $attachmentType;
     }
 
     public function saveImage($fl, $fileType, $recordId, $recordSubid, $name, $displayOrder = 0, $uniqueRecord = false, $lang_id = 0, $mimeType = '', $screen = 0, $aspectRatio = 0)
     {
-        if (getimagesize($fl) === false && $mimeType != 'image/svg+xml') {
+        if (getimagesize($fl) === false && !in_array($mimeType, ['image/svg+xml'])) {
             $this->error = Labels::getLabel('ERR_UNRECOGNISED_IMAGE_FILE', $this->commonLangId);
             return false;
         }
@@ -1417,5 +1481,52 @@ class AttachedFile extends MyAppModel
             return $recordObj->updateModifiedTime();
         }
         return false;
+    }
+    public static function getLogoImageTypeArr(int $langId): array
+    {
+        $svgImageTypeArr = CacheHelper::get('svgImageTypeArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($svgImageTypeArr) {
+            return json_decode($svgImageTypeArr, true);
+        }
+        $arr = [
+            self::FILE_ATTACHMENT_TYPE_OTHER => Labels::getLabel('LBL_NON_SVG', $langId),
+            self::FILE_ATTACHMENT_TYPE_SVG => Labels::getLabel('LBL_SVG', $langId),
+        ];
+
+        CacheHelper::create('svgImageTypeArr' . $langId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    public static function getSvgFileType()
+    {
+        return [
+            AttachedFile::FILETYPE_ADMIN_LOGO,
+            AttachedFile::FILETYPE_FRONT_LOGO,
+            AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE,
+            AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO,
+            AttachedFile::FILETYPE_MOBILE_LOGO,
+            AttachedFile::FILETYPE_META_IMAGE
+        ];
+    }
+
+    public static function isSvgType(array $file): bool
+    {
+        return ('image/svg+xml' == $file['type'] && 'svg' == pathinfo($file['name'], PATHINFO_EXTENSION));
+    }
+
+    public static function getFileAttachmentTypeArr(int $langId): array
+    {
+        $fileAttachmentTypeArr = CacheHelper::get('fileAttachmentTypeArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($fileAttachmentTypeArr) {
+            return json_decode($fileAttachmentTypeArr, true);
+        }
+        $arr = [
+            self::FILE_ATTACHMENT_TYPE_OTHER => Labels::getLabel('LBL_OTHER', $langId),
+            self::FILE_ATTACHMENT_TYPE_SVG => Labels::getLabel('LBL_SVG', $langId),
+            self::FILE_ATTACHMENT_TYPE_VIDEO => Labels::getLabel('LBL_VIDEO', $langId),
+        ];
+
+        CacheHelper::create('fileAttachmentTypeArr' . $langId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
     }
 }

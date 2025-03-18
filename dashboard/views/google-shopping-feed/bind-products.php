@@ -38,7 +38,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                     'title' => Labels::getLabel('LBL_UNLINK', $siteLangId)
                                 ],
                                 'label' => '<svg class="svg btn-icon-start" width="18" height="18">
-                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
                                             </use>
                                         </svg><span class="btn-txt">' . Labels::getLabel('LBL_UNLINK', $siteLangId) . '</span>'
                             ]

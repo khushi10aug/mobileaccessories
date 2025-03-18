@@ -22,17 +22,23 @@ if (false === $exculdeMainFooterElement) {
                 <div class="footer-layout">
                     <div class="footer-layout-col footer-logo-wrap">
                         <div class="footer-logo">
-                            <?php
-                            $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
-                            $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
-                            $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                            $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                            ?>
-                            <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?>
-                                data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?>
-                                src="<?php echo $siteLogo; ?>"
-                                alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>"
-                                title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>">
+                            <a href="<?php echo UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND); ?>">
+                                <?php
+                                $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
+                                $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                                if (AttachedFile::FILE_ATTACHMENT_TYPE_SVG == $fileData['afile_attachment_type']) {
+                                    $siteLogo = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']) . $uploadedTime;
+                                } else {
+                                    $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
+                                    $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                }
+                                ?>
+                                <img <?php if (AttachedFile::FILE_ATTACHMENT_TYPE_OTHER == $fileData['afile_attachment_type'] && $fileData['afile_aspect_ratio'] > 0) { ?>
+                                    data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?>
+                                    src="<?php echo $siteLogo; ?>"
+                                    alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>"
+                                    title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>">
+                            </a>
                         </div>
 
                         <ul class="contact-info">
@@ -140,7 +146,7 @@ if (false === $exculdeMainFooterElement) {
                     <a class="mobile-actions-link <?php echo (rtrim($currentUrl, '/') == rtrim(UrlHelper::generateFullUrl(), '/') ? 'active' : '') ?>"
                         href="<?php echo UrlHelper::generateUrl(); ?>">
                         <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-home">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#mbl-home">
                             </use>
                         </svg>
                         <span class="txt"><?php echo Labels::getLabel("NAV_HOME", $siteLangId); ?></span>
@@ -152,7 +158,7 @@ if (false === $exculdeMainFooterElement) {
                         type="button" data-bs-toggle="offcanvas" data-bs-target="#categories-menu"
                         aria-controls="categories-menu" onclick="openMobileMenu();">
                         <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-category">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#mbl-category">
                             </use>
                         </svg>
                         <span class="txt"><?php echo Labels::getLabel("NAV_MENU", $siteLangId); ?></span>
@@ -161,7 +167,7 @@ if (false === $exculdeMainFooterElement) {
                 <div class="mobile-actions-item">
                     <button class="mobile-actions-link wishListJs">
                         <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-wishlist">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#mbl-wishlist">
                             </use>
                         </svg>
                         <span class="txt"><?php echo Labels::getLabel('NAV_WISHLIST', $siteLangId); ?></span>
@@ -175,7 +181,7 @@ if (false === $exculdeMainFooterElement) {
                             <button class="mobile-actions-link sign-in-popup-js" type="button">
                             <?php } ?>
                             <svg class="svg" width="24" height="24">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-account">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#mbl-account">
                                 </use>
                             </svg>
                             <span class="txt"><?php echo Labels::getLabel("LBL_Account", $siteLangId); ?></span>
@@ -187,7 +193,7 @@ if (false === $exculdeMainFooterElement) {
                         <button class="mobile-actions-link" type="button" data-bs-toggle="offcanvas"
                             data-bs-target="#offcanvas-gps-location">
                             <svg class="svg" width="24" height="24">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-location">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#mbl-location">
                                 </use>
                             </svg>
                             <span class="txt"><?php echo Labels::getLabel("NAV_LOCATION", $siteLangId); ?></span>
@@ -231,7 +237,7 @@ if (false === $exculdeMainFooterElement) {
 <?php }
 if (!isset($_SESSION['geo_location']) && FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '') != '') { ?>
     <script
-        src="https://maps.google.com/maps/api/js?key=<?php echo FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''); ?>&libraries=places&callback=initMap">
+        src="https://maps.google.com/maps/api/js?key=<?php echo FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''); ?>&libraries=places&callback=initMap" loading="async" defer>
     </script>
 <?php }
 if (FatApp::getConfig('CONF_ENABLE_LIVECHAT', FatUtility::VAR_STRING, '')) {
@@ -348,7 +354,7 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
 <?php include(CONF_THEME_PATH . '_partial/footer-part/offcanvas-elements.php'); ?>
 <button class="back-to-top no-print" aria-label="back to top">
     <svg class="svg" width="16" height="16">
-        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#up-arrow"></use>
+        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#up-arrow"></use>
     </svg>
     <span>
         <?php echo Labels::getLabel('LBL_TOP', $siteLangId); ?></span>

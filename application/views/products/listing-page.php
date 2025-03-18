@@ -1,4 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$viewType = $viewType ?? '';
 if (empty($products)) {
     $pSrchFrm = Common::getSiteSearchForm();
     // $pSrchFrm->fill(array('btnSiteSrchSubmit' => Labels::getLabel('LBL_Submit', $siteLangId)));
@@ -166,7 +167,7 @@ $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearc
                                                 <?php echo Labels::getLabel('LBL_ALL_FILTERS', $siteLangId); ?>
                                                 <svg class="svg" width="18" height="18">
                                                     <use
-                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#filter">
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#filter">
                                                     </use>
                                                 </svg>
                                                 <span class="dot-count" id="mapFilterJs"></span>
@@ -220,7 +221,7 @@ $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearc
                         <button class="btn btn-float link__filter btn--filters-control" data-bs-toggle="offcanvas"
                             data-bs-target="#filters-right">
                             <svg class="svg" width="18" height="18">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#filter"></use>
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#filter"></use>
                             </svg>
                             <span class="dot-count" id="mapFilterJs"></span>
                         </button>

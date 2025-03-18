@@ -49,7 +49,7 @@
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
                                             <use
-                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-filters">
+                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-filters">
                                             </use>
                                         </svg>
                                     </span>

@@ -257,10 +257,25 @@ class BrandRequestsController extends ListingBaseController
             $brand->rewriteUrl($post['urlrewrite_custom']);
         }
         /* ] */
+        $newTabLangId = 0;
+        $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
+        if (0 < count($languages)) {
+            foreach ($languages as $langId => $langName) {
+                if (!Brand::getAttributesByLangId($langId, $recordId)) {
+                    $newTabLangId = $langId;
+                    break;
+                }
+            }
+        }
+
+        if ($newTabLangId == 0 && !$this->isMediaUploaded($recordId)) {
+            $this->set('openMediaForm', true);
+        }
         CalculativeDataRecord::updateBrandRequestCount();
         Product::updateMinPrices(0, 0, $recordId);
         $this->set('msg', $this->str_setup_successful);
         $this->set('recordId', $recordId);
+        $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 

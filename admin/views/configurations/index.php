@@ -9,7 +9,7 @@
                 <div class="grid-layout-left">
                     <button class="float-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#card-aside" aria-controls="card-aside">
                         <svg class="svg" width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#nav">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#nav">
                             </use>
                         </svg>
                     </button>
@@ -38,7 +38,7 @@
                                             <a class="settings-inner-link" rel="<?php echo $tabsId; ?>" href="javascript:void(0)" onclick="getForm(<?php echo $formType ?>, <?php echo $defaultLangId ?>);">
                                                 <i class="settings-inner-icn">
                                                     <svg class="svg" width="20" height="20">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#<?php echo isset($svgIconNames[$formType]) ? $svgIconNames[$formType] : 'icon-system-setting' ?>">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#<?php echo isset($svgIconNames[$formType]) ? $svgIconNames[$formType] : 'icon-system-setting' ?>">
                                                         </use>
                                                     </svg>
                                                 </i>

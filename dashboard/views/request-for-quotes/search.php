@@ -75,7 +75,7 @@
                             ),
                             '<svg class="svg" width="18" height="18">
                                 <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#view">
                                 </use>
                             </svg>',
                             true
@@ -96,7 +96,7 @@
                                     '<svg class="svg" width="18" height="18">
 
                                     <use
-                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#list">
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#list">
                                     </use>
                                 </svg>',
                                     true
@@ -113,7 +113,7 @@
                                     ),
                                     '<svg class="svg" width="18" height="18">
                                         <use
-                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#add">
                                         </use>
                                     </svg>',
                                     true
@@ -133,7 +133,7 @@
                                 ),
                                 '<svg class="svg" width="18" height="18">
                                     <use
-                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#download">
                                     </use>
                                 </svg>',
                                 true

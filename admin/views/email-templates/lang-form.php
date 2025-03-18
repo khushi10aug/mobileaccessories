@@ -19,7 +19,7 @@ if (!isset($fld->htmlAfterField) || empty($fld->htmlAfterField)) {
         $fld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
         $fld->htmlAfterField = '<a href="javascript:void(0);" onclick="editLangForm(\'' . $etplCode . '\', ' . $lang_id . ', 1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $lang_id) . '">
                             <svg class="svg" width="18" height="18">
-                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-translate">
+                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#icon-translate">
                                 </use>
                             </svg>
                         </a>';
@@ -29,7 +29,7 @@ if (!isset($fld->htmlAfterField) || empty($fld->htmlAfterField)) {
 $fld = $langFrm->getField('test_email');
 $fld->value = '<button type="button" class="btn btn-outline-brand btn-test btn-icon" onclick="sendTestEmail()">
 <svg class="svg btn-icon-start" width="18" height="18">
-    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#send-email"> 
+    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#send-email"> 
 </use>
 </svg>' . Labels::getLabel('LBL_SEND_TEST_EMAIL', $lang_id) . '</button>';
 

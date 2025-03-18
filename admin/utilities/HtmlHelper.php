@@ -420,7 +420,7 @@ class HtmlHelper
                                         <a href="javascript:void(0)"  onclick="' . $editFn . '" data-bs-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('FRM_CLICK_HERE_TO_EDIT', $langId) . '">
                                             <svg class="svg" width="18" height="18">
                                                 <use
-                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#edit">
                                                 </use>
                                             </svg>
                                         </a>
@@ -430,7 +430,7 @@ class HtmlHelper
                                             <a href="javascript:void(0)"  onclick="' . $removeFn . '" data-bs-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('FRM_CLICK_HERE_TO_REMOVE', $langId) . '">
                                                 <svg class="svg" width="18" height="18">
                                                     <use
-                                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
                                                     </use>
                                                 </svg>
                                                 </a>

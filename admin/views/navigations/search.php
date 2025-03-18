@@ -23,13 +23,13 @@
                                     <?php if ($canEdit) { ?>
                                         <button onclick="editRecord('<?php echo $row['nav_id']; ?>')" title="<?php echo  Labels::getLabel('LBL_Edit', $siteLangId); ?>" class="btn btn-clean btn-sm clickable" data-bs-toggle="tooltip" data-placement="top">
                                             <svg class="svg clickable" width="18" height="18">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#edit">
                                                 </use>
                                             </svg>
                                         </button>
                                         <button onclick="addNewLinkForm(<?php echo $row['nav_id']; ?>)" title="<?php echo  Labels::getLabel('LBL_ADD_NEW_LINK', $siteLangId); ?>" class="btn btn-clean btn-sm clickable" data-bs-toggle="tooltip" data-placement="top">
                                             <svg class="svg clickable" width="18" height="18">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#add">
                                                 </use>
                                             </svg>
                                         </button>

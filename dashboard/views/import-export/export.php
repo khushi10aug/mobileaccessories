@@ -20,7 +20,7 @@
                             <div class="setting__icon">
                                 <span class="icon">
                                     <svg class="icon" width="40" height="40">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#general-settings">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#general-settings">
                                         </use>
                                     </svg>
                                 </span>

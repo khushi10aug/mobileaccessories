@@ -81,6 +81,20 @@ foreach ($arrListing as $sn => $row) {
                 if ($canEdit) {
                     $data['editButton'] = ['onclick' => 'editRecord(' . $row['shop_id'] . ', false, "modal-dialog-vertical-md")'];
                 }
+                $data['otherButtons'] = [
+                    [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'onclick' => "shopMissingInfo(" . $row['shop_id'] . ")",
+                            'title' => Labels::getLabel('LBL_SHOP_MISSING_INFO', $siteLangId)
+                        ],
+                        'label' => '<svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#warning">
+                                        </use>
+                                    </svg>'
+                    ]
+                ];
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;

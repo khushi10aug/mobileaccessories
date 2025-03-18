@@ -18,7 +18,7 @@ $this->includeTemplate('_partial/product-reviews.php', [
                         <div class="col-md-4 column">
                             <div class="products__rating overall-rating-count">
                                 <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-icon"></use>
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-icon"></use>
                                 </svg>
                                 <span class="rate"><?php echo round($avgRating, 1); ?></span>
                             </div>

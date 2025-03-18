@@ -111,7 +111,7 @@ $submitBtnFld->developerTags['noCaptionTag'] = true;
                                 <?php if ($canEdit) { ?>
                                     <a class="btn btn-outline-gray btn-icon " href="javascript:void(0);" onclick="zoneForm(<?php echo $profile_id; ?>, 0)" title="<?php echo Labels::getLabel('LBL_ADD_ZONE', $siteLangId); ?>">
                                         <svg class="svg btn-icon-start" width="18" height="18">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#add">
                                             </use>
                                         </svg><?php echo Labels::getLabel('LBL_ADD', $siteLangId); ?>
                                     </a>

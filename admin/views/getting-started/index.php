@@ -16,7 +16,7 @@
                                             <a class="target" href="<?php echo SiteTourHelper::getUrl($tourId); ?>">
                                                 <div class="list-started_icon">
                                                     <svg class="svg" width="36" height="36">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-getting-started.svg#setup-logo-address">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-getting-started.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#setup-logo-address">
                                                         </use>
                                                     </svg>
                                                 </div>

@@ -320,9 +320,17 @@ class AddressesController extends LoggedUserController
         $activeDate = '';
         if (!empty($slotDays)) {
             $daysArr = TimeSlot::getDaysArr($this->siteLangId);
-            $currentDay = date('w', strtotime(date('Y-m-d')));
+            $addressArr = Address::getAttributesById($addrId, ['addr_record_id', 'addr_type']);
+            $pickupInterval = FatApp::getConfig('CONF_TIME_SLOT_ADDITION', FatUtility::VAR_INT, 2);
+            if ($addressArr['addr_type'] == Address::TYPE_SHOP_PICKUP) {
+                $pickupInterval = ShopSpecifics::getAttributesById($addressArr['addr_record_id'], 'shop_pickup_interval');
+            }
+
+            $displayTime = date("Y-m-d H:i:s", strtotime('+' . $pickupInterval . ' hour'));
+            $currentDay = date('w', strtotime($displayTime));
+            $displayDate = date("Y-m-d", strtotime($displayTime));
+
             if (in_array($currentDay, $slotDays)) {
-                $addressArr = Address::getAttributesById($addrId, ['addr_record_id', 'addr_type']);
                 if (!$addressArr) {
                     $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
                     if (true === MOBILE_APP_API_CALL) {
@@ -331,17 +339,11 @@ class AddressesController extends LoggedUserController
                     Message::addErrorMessage($message);
                     LibHelper::dieJsonError(Message::getHtml());
                 }
-                $pickupInterval = FatApp::getConfig('CONF_TIME_SLOT_ADDITION', FatUtility::VAR_INT, 2);
-                if ($addressArr['addr_type'] == Address::TYPE_SHOP_PICKUP) {
-                    $pickupInterval = ShopSpecifics::getAttributesById($addressArr['addr_record_id'], 'shop_pickup_interval');
-                }
-
-                $displayTime = date("H:i:s", strtotime('+' . $pickupInterval . ' hour'));
-
                 $currentDateSlots = $timeSlot->timeSlotsByAddrIdAndDay($addrId, $currentDay);
                 foreach ($currentDateSlots as $data) {
-                    if (strtotime($data['tslot_from_time']) > strtotime($displayTime)) {
-                        $activeDate = date('Y-m-d');
+                    $timestamp = strtotime($displayDate . ' ' . $data['tslot_from_time']);
+                    if ($timestamp > strtotime($displayTime)) {
+                        $activeDate = $displayDate;
                         break;
                     }
                 }
@@ -349,9 +351,9 @@ class AddressesController extends LoggedUserController
                     $index = array_search($currentDay, $slotDays);
                     if ($index < count($slotDays) - 1) {
                         $next = $slotDays[$index + 1];
-                        $activeDate = date('Y-m-d', strtotime('+' . ($next - $currentDay) . ' days'));
+                        $activeDate = date('Y-m-d', strtotime($displayTime.'+' . ($next - $currentDay) . ' days'));
                     } else {
-                        $activeDate = date('Y-m-d', strtotime('+' . (count($daysArr) - $currentDay) . ' days'));
+                        $activeDate = date('Y-m-d', strtotime($displayTime.'+' . (count($daysArr) - $currentDay) . ' days'));
                     }
                 }
             }
@@ -359,13 +361,13 @@ class AddressesController extends LoggedUserController
             if (!in_array($currentDay, $slotDays)) {
                 foreach ($slotDays as $slotDay) {
                     if ($slotDay > $currentDay) {
-                        $activeDate = date('Y-m-d', strtotime('+' . ($slotDay - $currentDay) . ' days'));
+                        $activeDate = date('Y-m-d', strtotime($displayTime.'+' . ($slotDay - $currentDay) . ' days'));
                         break;
                     }
                 }
                 if (empty($activeDate)) {
                     $needToAddDays = count($daysArr) - $currentDay + min($slotDays);
-                    $activeDate = date('Y-m-d', strtotime('+' . $needToAddDays . ' days'));
+                    $activeDate = date('Y-m-d', strtotime($displayTime.'+' . $needToAddDays . ' days'));
                 }
             }
         }

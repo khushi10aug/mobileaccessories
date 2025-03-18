@@ -2,7 +2,7 @@
     <?php /* if(round($product['prod_rating'])>0 && FatApp::getConfig("CONF_ALLOW_REVIEWS",FatUtility::VAR_INT,0)){ ?>
 <?php if(round($product['prod_rating'])>0 ){ ?>
 <div class="product-ratings"> <i class="icn"><svg class="svg svg-star" width="14" height="14">
-           <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
+           <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-yellow"></use>
        </svg></i> <?php if(round($product['prod_rating'])>0 ){ ?>
    <span class="rate"><?php echo round($product['prod_rating'],1);?></span>
    <?php } ?>

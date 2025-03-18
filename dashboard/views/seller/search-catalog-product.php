@@ -133,7 +133,7 @@
                                     '<i class="icn">
                                 <svg class="svg" width="18" height="18">
                                     <use
-                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#inventories">
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#inventories">
                                     </use>
                                 </svg>
                             </i>',
@@ -149,7 +149,7 @@
                                     '<i class="icn">
                                     <svg class="svg" width="18" height="18">
                                         <use
-                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#add">
                                         </use>
                                     </svg>
                                 </i>',
@@ -165,7 +165,7 @@
                                     '<i class="icn">
                                         <svg class="svg" width="18" height="18">
                                             <use
-                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#icon-download">
+                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#icon-download">
                                             </use>
                                         </svg>
                                     </i>',
@@ -178,7 +178,7 @@
                                 $li->appendElement('a', array('class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "href" => UrlHelper::generateUrl('products', 'form', array($row['product_id']))), '<i class="icn">
                                     <svg class="svg" width="18" height="18">
                                         <use
-                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#edit">
                                         </use>
                                     </svg>
                                 </i>', true);
@@ -189,7 +189,7 @@
                                 $li->appendElement("a", array('title' => Labels::getLabel('LBL_Edit_Shipping', $siteLangId), 'onclick' => 'sellerShippingForm(' . $row['product_id'] . ')', 'href' => 'javascript:void(0)'), '<i class="icn">
                                 <svg class="svg" width="18" height="18">
                                     <use
-                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#shipping">
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#shipping">
                                     </use>
                                 </svg>
                             </i>', true);
@@ -203,7 +203,7 @@
                             '<i class="icn">
                                 <svg class="svg" width="18" height="18">
                                     <use
-                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#view">
                                     </use>
                                 </svg>
                             </i>',
@@ -218,7 +218,7 @@
                                 '<i class="icn">
                                 <svg class="svg" width="18" height="18">
                                     <use
-                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
                                     </use>
                                 </svg>
                             </i>',
@@ -234,7 +234,7 @@
                                 '<i class="icn">
                                     <svg class="svg" width="18" height="18">
                                         <use
-                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#warning">
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#warning">
                                         </use>
                                     </svg>
                                 </i>',

@@ -640,4 +640,108 @@ class Shop extends MyAppModel
         }
         return true;
     }
+
+    public static function getShopMissingInfo(int $shopId, $langId): array
+    {
+        $validationArr = [
+            'user_deleted' => ['title' => Labels::getLabel('LBL_SELLER_DELETED', $langId), 'currentStatus' => '', 'valid' => false],
+            'credential_active' => ['title' => Labels::getLabel('LBL_SELLER_ACTIVE', $langId), 'currentStatus' => '', 'valid' => false],
+            'credential_verified' => ['title' => Labels::getLabel('LBL_SELLER_VERIFIED', $langId), 'currentStatus' => '', 'valid' => false],
+            'shop_active' => ['title' => Labels::getLabel('LBL_SHOP_ACTIVE', $langId), 'currentStatus' => '', 'valid' => false],
+            'shop_supplier_display_status' => ['title' => Labels::getLabel('LBL_SHOP_DISPLAY_STATUS', $langId), 'currentStatus' => '', 'valid' => false],
+            'country_active' => ['title' => Labels::getLabel('LBL_SHOP_COUNTRY_ACTIVE', $langId), 'currentStatus' => '', 'valid' => false],
+            'state_active' => ['title' => Labels::getLabel('LBL_SHOP_STATE_ACTIVE', $langId), 'currentStatus' => '', 'valid' => false],
+            'user_is_supplier' => ['title' => Labels::getLabel('LBL_USER_IS_SELLER', $langId), 'currentStatus' => '', 'valid' => false],
+        ];
+
+        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+            $validationArr['subscription'] = ['title' => Labels::getLabel('LBL_SELLER_SUBSCRIPTION_ACTIVE', $langId), 'currentStatus' => '', 'valid' => false];
+        }
+
+        $shop = Shop::getAttributesById($shopId, ['shop_user_id', 'shop_active', 'shop_supplier_display_status', 'shop_country_id', 'shop_state_id']);
+
+        if ($shop) {
+            if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+                $validationArr['subscription']['valid']  = false;
+                $validationArr['subscription']['currentStatus']  = 0;
+
+                $currentActivePlan = OrderSubscription::getUserCurrentActivePlanDetails($langId, $shop['shop_user_id'], array(OrderSubscription::DB_TBL_PREFIX . 'till_date', OrderSubscription::DB_TBL_PREFIX . 'price', OrderSubscription::DB_TBL_PREFIX . 'type'));
+                if ($currentActivePlan) {
+                    $validationArr['subscription']['valid'] = FatDate::diff(date("Y-m-d"), $currentActivePlan[OrderSubscription::DB_TBL_PREFIX . 'till_date']) > 0;
+                    $validationArr['subscription']['currentStatus'] = $validationArr['subscription']['valid'] ? 1 : 0;
+                }
+            }
+
+            $userObj = User::getSearchObject(true, 0, false);
+            $userObj->addMultipleFields(['user_deleted', 'credential_active', 'credential_verified', 'user_is_supplier']);
+            $userObj->addCondition('user_id', '=', $shop['shop_user_id']);
+            $userObj->doNotCalculateRecords();
+            $userObj->setPageSize(1);
+            $seller = FatApp::getDb()->fetch($userObj->getResultSet());
+            if ($seller) {
+                $validationArr['user_deleted']['valid'] = $seller['user_deleted'] === applicationConstants::NO;
+                $validationArr['user_deleted']['currentStatus'] = $seller['user_deleted'];
+                $validationArr['credential_active']['valid'] = $seller['credential_active'] === applicationConstants::YES;
+                $validationArr['credential_active']['currentStatus'] = $seller['credential_active'];
+                $validationArr['credential_verified']['valid'] = $seller['credential_verified'] === applicationConstants::YES;
+                $validationArr['credential_verified']['currentStatus'] = $seller['credential_verified'];
+                $validationArr['user_is_supplier']['valid'] = $seller['user_is_supplier'] === applicationConstants::YES;
+                $validationArr['user_is_supplier']['currentStatus'] = $seller['user_is_supplier'];
+
+                $validationArr['shop_active']['valid'] = $shop['shop_active'] === applicationConstants::YES;
+                $validationArr['shop_active']['currentStatus'] = $shop['shop_active'];
+                $validationArr['shop_supplier_display_status']['valid'] = $shop['shop_supplier_display_status'] === applicationConstants::YES;
+                $validationArr['shop_supplier_display_status']['currentStatus'] = $shop['shop_supplier_display_status'];
+                $shopCountry = Countries::getAttributesById($shop['shop_country_id'], ['country_active']);
+                if ($shopCountry) {
+                    $validationArr['country_active']['valid'] = $shopCountry['country_active'] === applicationConstants::YES;
+                    $validationArr['country_active']['currentStatus'] = $shopCountry['country_active'];
+                }
+
+                $shopState = States::getAttributesById($shop['shop_state_id'], ['state_active']);
+                if ($shopState) {
+                    $validationArr['state_active']['valid'] = $shopState['state_active'] === applicationConstants::YES;
+                    $validationArr['state_active']['currentStatus'] = $shopState['state_active'];
+                }
+            }
+        }
+
+        return $validationArr;
+    }
+
+    
+        /**
+     * updateShopsDisplayStatus
+     * disable shop_supplier_display_status when an country or state marked disabled
+     * 
+     * @param  mixed $countryId
+     * @param  mixed $stateId
+     * @return bool
+     */
+    public static function updateShopsDisplayStatus(int $countryId = 0, int $stateId = 0)
+    {
+        $where = '';
+        $values = [];
+
+        if ($countryId) {
+            $where .= static::tblFld('country_id') . " = ?";
+            array_push($values, $countryId);
+        }
+
+        if ($stateId) {
+            if ($where != '') {
+                $where .= ' and ';
+            }
+            $where .= static::tblFld('state_id') . " = ?";
+            array_push($values, $stateId);
+        }
+
+        if (!empty($values)) {
+            $whereCondition = ['smt' => $where, 'vals' => $values];
+            if (!FatApp::getDb()->updateFromArray(static::DB_TBL, array(static::tblFld('supplier_display_status') => 0), $whereCondition)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

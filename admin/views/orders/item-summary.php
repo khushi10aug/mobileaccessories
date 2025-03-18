@@ -66,7 +66,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                 <td colspan="6">
                     <div class="sold_by">
                         <svg class="svg" width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-store">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-store">
                             </use>
                         </svg> <?php echo $op['op_shop_name']; ?>
                     </div>
@@ -197,7 +197,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                             'label' => '<i class="icn">
                                                         <svg class="svg" width="18" height="18">
                                                             <use
-                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#view">
                                                             </use>
                                                         </svg>
                                                     </i>',
@@ -214,7 +214,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                             'label' => '<i class="icn">
                                                         <svg class="svg" width="18" height="18">
                                                             <use
-                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#form">
+                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#form">
                                                             </use>
                                                         </svg>
                                                     </i>',
@@ -230,7 +230,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                             'label' => '<i class="icn">
                                                         <svg class="svg" width="18" height="18">
                                                             <use
-                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#print">
+                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#print">
                                                             </use>
                                                         </svg>
                                                     </i>' . Labels::getLabel('LBL_SELLER_ORDER_RECEIPT', $siteLangId),
@@ -243,7 +243,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                             'label' => '<i class="icn">
                                                         <svg class="svg" width="18" height="18">
                                                             <use
-                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#print">
+                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#print">
                                                             </use>
                                                         </svg>
                                                     </i>' . Labels::getLabel('LBL_BUYER_ORDER_RECEIPT', $siteLangId),
@@ -256,7 +256,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                             'label' => '<i class="icn">
                                                         <svg class="svg" width="18" height="18">
                                                             <use
-                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#history">
+                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#history">
                                                             </use>
                                                         </svg>
                                                     </i>' . Labels::getLabel('MSG_STATUS_HISTORY', $siteLangId),
@@ -290,7 +290,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                 'label' => '<i class="icn">
                                                             <svg class="svg" width="18" height="18">
                                                                 <use
-                                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#list-paper">
+                                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#list-paper">
                                                                 </use>
                                                             </svg>
                                                         </i>' . Labels::getLabel('LBL_FETCH_SHIPPING_RATES', $siteLangId),
@@ -306,7 +306,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                         'label' => '<i class="icn">
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use
-                                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#print-label">
+                                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#print-label">
                                                                         </use>
                                                                     </svg>
                                                                 </i>' . Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId),
@@ -322,7 +322,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                         'label' => '<i class="icn">
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use
-                                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#export">
+                                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#export">
                                                                         </use>
                                                                     </svg>
                                                                 </i>' . Labels::getLabel($title, $siteLangId),
@@ -342,7 +342,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                         'label' => '<i class="icn">
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use
-                                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-shipping-pickup">
+                                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#icon-shipping-pickup">
                                                                         </use>
                                                                     </svg>
                                                                 </i>' . $label,
@@ -359,7 +359,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                             'label' => '<i class="icn">
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#pickup">
+                                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#pickup">
                                                                             </use>
                                                                         </svg>
                                                                     </i>' . Labels::getLabel('LBL_CREATE_PICKUP', $siteLangId),
@@ -373,7 +373,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                             'label' => '<i class="icn">
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#not-allowed">
+                                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#not-allowed">
                                                                             </use>
                                                                         </svg>
                                                                     </i>' . Labels::getLabel('LBL_CANCEL_PICKUP', $siteLangId),
@@ -395,7 +395,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                             'label' => '<i class="icn">
                                             <svg class="svg" width="18" height="18">
                                                 <use
-                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#link">
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#link">
                                                 </use>
                                             </svg>
                                         </i>' . Labels::getLabel('LBL_VIEW_ATTACHMENTS', $siteLangId),
@@ -414,7 +414,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                             'label' => '<i class="icn">
                                             <svg class="svg" width="18" height="18">
                                                 <use
-                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#close">
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#close">
                                                 </use>
                                             </svg>
                                         </i>' . Labels::getLabel('LBL_CANCEL_ORDER', $siteLangId),

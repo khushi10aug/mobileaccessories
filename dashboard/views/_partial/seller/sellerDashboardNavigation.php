@@ -18,7 +18,7 @@ $plugin = new Plugin();
             <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#nav-shop" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
                 <span class="dashboard-menu-icon">
                     <svg class="svg" width="18" height="18">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#manage-shop">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#manage-shop">
                         </use>
                     </svg>
                 </span>
@@ -105,7 +105,7 @@ $plugin = new Plugin();
             <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#nav-shipping" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
                 <span class="dashboard-menu-icon">
                     <svg class="svg" width="18" height="18">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#shipping-profile">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#shipping-profile">
                         </use>
                     </svg>
                 </span>
@@ -149,7 +149,7 @@ $plugin = new Plugin();
             <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#nav-sales" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
                 <span class="dashboard-menu-icon">
                     <svg class="svg" width="18" height="18">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#order-sales">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#order-sales">
                         </use>
                     </svg>
                 </span>
@@ -214,7 +214,7 @@ $plugin = new Plugin();
             <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#nav-promotions" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
                 <span class="dashboard-menu-icon">
                     <svg class="svg" width="18" height="18">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#my-promotions">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#my-promotions">
                         </use>
                     </svg>
                 </span>
@@ -290,7 +290,7 @@ $plugin = new Plugin();
             <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#nav-channel" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
                 <span class="dashboard-menu-icon">
                     <svg class="svg" width="18" height="18">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#manage-shop">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#manage-shop">
                         </use>
                     </svg>
                 </span>
@@ -330,7 +330,7 @@ $plugin = new Plugin();
             <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#nav-seo" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
                 <span class="dashboard-menu-icon">
                     <svg class="svg" width="18" height="18">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#URL-rewriting">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#URL-rewriting">
                         </use>
                     </svg>
                 </span>
@@ -365,7 +365,7 @@ $plugin = new Plugin();
             <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#nav-subscription" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
                 <span class="dashboard-menu-icon">
                     <svg class="svg" width="18" height="18">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#subscription-packages">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#subscription-packages">
                         </use>
                     </svg>
                 </span>
@@ -405,7 +405,7 @@ $plugin = new Plugin();
             <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#nav-sales-report" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
                 <span class="dashboard-menu-icon">
                     <svg class="svg" width="18" height="18">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#products-inventory">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#products-inventory">
                         </use>
                     </svg>
                 </span>
@@ -439,7 +439,7 @@ $plugin = new Plugin();
                 <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#nav-financial-report" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
                     <span class="dashboard-menu-icon">
                         <svg class="svg" width="18" height="18">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#product-profit">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#product-profit">
                             </use>
                         </svg>
                     </span>
@@ -473,7 +473,7 @@ $plugin = new Plugin();
             <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#nav-inventory-report" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
                 <span class="dashboard-menu-icon">
                     <svg class="svg" width="18" height="18">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#product-performance-report">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#product-performance-report">
                         </use>
                     </svg>
                 </span>
@@ -513,7 +513,7 @@ $plugin = new Plugin();
         <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#nav-profile" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
             <span class="dashboard-menu-icon">
                 <svg class="svg" width="18" height="18">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#my-account">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#my-account">
                     </use>
                 </svg>
             </span>
@@ -589,7 +589,7 @@ $plugin = new Plugin();
             <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#nav-plugins" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
                 <span class="dashboard-menu-icon">
                     <svg class="svg" width="18" height="18">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#plugin-data-migration">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#plugin-data-migration">
                         </use>
                     </svg>
                 </span>
@@ -622,7 +622,7 @@ $plugin = new Plugin();
             <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#nav-import-export" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
                 <span class="dashboard-menu-icon">
                     <svg class="svg" width="18" height="18">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#import-export">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#import-export">
                         </use>
                     </svg>
                 </span>

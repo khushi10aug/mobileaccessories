@@ -56,7 +56,7 @@
                         '<i class="icn">
                     <svg class="svg" width="18" height="18">
                         <use
-                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
                         </use>
                     </svg>
                 </i>',
@@ -66,7 +66,7 @@
                     $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Download', $siteLangId), "onclick" => "downloadPathsFile('" . base64_encode($fullPath) . "')"), '<i class="icn">
                 <svg class="svg" width="18" height="18">
                     <use
-                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#icon-download">
+                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#icon-download">
                     </use>
                 </svg>
             </i>', true);

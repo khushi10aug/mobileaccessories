@@ -1,6 +1,6 @@
 <button class="restore-btn restoreBtnJs" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRestore" aria-label="restore button">
     <svg class="svg" width="24" height="24">
-        <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite-restore.svg#gear">
+        <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite-restore.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#gear">
         </use>
     </svg>    
 </button>
@@ -12,8 +12,8 @@
         <div class="demo">
             <div class="demo-restore timerSectionJs">
                 <button class="demo-restore-btn" type="button" onclick="showRestorePopup()" aria-label="data restore">
-                    <svg class="svg" width="20" height="20">
-                        <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite-restore.svg#clock">
+                    <svg class="svg" width="20" height="20">                       
+                        <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite-restore.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#clock">
                         </use>
                     </svg>
                     <span class="restore-counter restoreCounterJs">00:00:00</span>
@@ -48,7 +48,7 @@
                         <li class="views-item <?php echo $admin; ?> restoreElementJs">
                             <a class="views-links" title="Admin" href="<?php echo UrlHelper::generateUrl($adminUrl, '', [], CONF_WEBROOT_FRONTEND, null, false, false, false); ?>">
                                 <svg class="svg" width="32" height="32">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite-restore.svg#admin">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite-restore.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#admin">
                                     </use>
                                 </svg>
                                 <span class="label"> Admin </span>
@@ -57,7 +57,7 @@
                         <li class="views-item <?php echo $desktopSite; ?> restoreElementJs">
                             <a class="views-links" title="Marketplace" href="<?php echo UrlHelper::generateUrl('', '', array(), CONF_WEBROOT_FRONTEND); ?>">
                                 <svg class="svg" width="32" height="32">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite-restore.svg#marketplace">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite-restore.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#marketplace">
                                     </use>
                                 </svg>
                                 <span class="label"> Marketplace </span>
@@ -68,7 +68,7 @@
                             <a class="views-links" title="Marketplace Mobile View" href="<?php echo UrlHelper::generateUrl('SiteDemo', 'mobile', array(), CONF_WEBROOT_FRONTEND); ?>">
 
                                 <svg class="svg" width="32" height="32">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite-restore.svg#mobile">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite-restore.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#mobile">
                                     </use>
                                 </svg>
                                 <span class="label">

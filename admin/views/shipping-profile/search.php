@@ -58,7 +58,7 @@ foreach ($arrListing as $sn => $row) {
                         ],
                         'label' => '<svg class="svg" width="18" height="18">
         <use
-            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#edit">
         </use>
     </svg>'
                     ]
@@ -71,7 +71,7 @@ foreach ($arrListing as $sn => $row) {
                             'title' => Labels::getLabel('LBL_Delete', $siteLangId)
                         ],
                         'label' => '<svg class="svg" width="18" height="18">
-                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
                                             </use>
                                         </svg>'
                     ]);

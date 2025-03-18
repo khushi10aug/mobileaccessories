@@ -86,7 +86,7 @@ foreach ($arrListing as $sn => $row) {
 
                         $icon = '<svg class="svg" width="18" height="18">
                                     <use
-                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#edit">
                                     </use>
                                 </svg>';
                         $title = Labels::getLabel('LBL_EDIT', $siteLangId);
@@ -94,7 +94,7 @@ foreach ($arrListing as $sn => $row) {
                         if ($row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_REQUIRED) {
                             $icon = '<svg class="svg" width="18" height="18">
                                         <use
-                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#view">
                                         </use>
                                     </svg>';
                             $title = Labels::getLabel('LBL_VIEW', $siteLangId);
@@ -105,7 +105,7 @@ foreach ($arrListing as $sn => $row) {
                             $li = $ul->appendElement("li");
                             $li->appendElement('a', array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_DELETE', $siteLangId), "onclick" => "unlink(event, " . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ")"), '<svg class="svg" width="18" height="18">
                             <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
                             </use>
                         </svg>', true);
                         }
@@ -124,7 +124,7 @@ foreach ($arrListing as $sn => $row) {
                         $href = UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $row[Badge::DB_TBL_PREFIX . 'type'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id']]);
                         $icon = '<svg class="svg" width="18" height="18">
                                     <use
-                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#view">
                                     </use>
                                 </svg>';
                         $title = Labels::getLabel('LBL_VIEW', $siteLangId);

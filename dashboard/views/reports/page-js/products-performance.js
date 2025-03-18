@@ -20,8 +20,8 @@ $(document).on("click", ".headerColumnJs", function (e) {
 $(function () {
 	$("#sortable").sortable({
 		handle: ".handleJs",
-        helper: fixWidthHelper,
-        start: fixPlaceholderStyle,
+		helper: fixWidthHelper,
+		start: fixPlaceholderStyle,
 		stop: function () {
 			reloadList(false);
 		}
@@ -59,15 +59,44 @@ $(function () {
 		}
 
 		fcom.ajax(fcom.makeUrl(controllerName, 'searchProductsPerformance'), data, function (res) {
-            fcom.removeLoader();
+			fcom.removeLoader();
 			$(dv).html(res);
 		});
 	};
 
 	exportReport = function () {
+		if (!$('#frmExport').validate()) { return; }
 		setColumnsData(document.frmRecordSearch);
+		setBatch(document.frmRecordSearch);
 		document.frmRecordSearch.action = fcom.makeUrl(controllerName, 'searchProductsPerformance', ['export']);
 		document.frmRecordSearch.submit();
+	}
+
+	setBatch = function (frm){
+		if ("undefined" == typeof frm) {
+			return;
+		}
+		$('<input>').attr({
+			type: 'hidden',
+			name: 'batch_count',
+			value: $('#batch_count').val()
+		}).appendTo(frm);
+		$('<input>').attr({
+			type: 'hidden',
+			name: 'batch_number',
+			value: $('#batch_number').val()
+		}).appendTo(frm);
+	}
+	
+	  exportForm = function (displayInPopup = false, dialogClass = ''){
+		if (false === checkControllerName()) {
+			return false;
+		}
+		fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), "", function (t) {
+			fcom.closeProcessing();
+			$.ykmodal(t.html, displayInPopup, dialogClass);
+			fcom.removeLoader();
+		});
 	}
 
 	clearSearch = function () {

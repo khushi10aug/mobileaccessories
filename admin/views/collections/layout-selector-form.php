@@ -27,28 +27,28 @@
                                 <?php if (in_array($layoutId, $appOnlyCollections)) { ?>
                                     <div class="app-only">
                                         <svg class="svg" width="14" height="14">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-layout.svg#mobile">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-layout.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#mobile">
                                             </use>
                                         </svg>
                                     </div>
                                 <?php  } else if (in_array($layoutId, $webOnlyCollections)) { ?>
                                     <div class="app-only">
                                         <svg class="svg" width="14" height="14">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-layout.svg#web">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-layout.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#web">
                                             </use>
                                         </svg>
                                     </div>
                                 <?php  } else { ?>
                                     <div class="app-only">
                                         <svg class="svg" width="14" height="14">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-layout.svg#device">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-layout.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#device">
                                             </use>
                                         </svg>
                                     </div>
                                 <?php } ?>
                                 <svg class="svg" width="140" height="70">
                                     <use
-                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-layout.svg#<?php echo Collections::layoutIconClass($layoutId); ?>">
+                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-layout.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#<?php echo Collections::layoutIconClass($layoutId); ?>">
                                     </use>
                                 </svg>
                             </div>

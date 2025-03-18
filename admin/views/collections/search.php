@@ -19,7 +19,7 @@ foreach ($arrListing as $sn => $row) {
                 $div = $td->appendElement('div', ['class' => 'handleJs']);
                 $div->appendElement('plaintext', $tdAttr, '<svg class="svg" width="18" height="18">
                                                             <use
-                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#drag">
+                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#drag">
                                                             </use>
                                                         </svg>', true);
                 break;
@@ -33,9 +33,9 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, Collections::getTypeArr($siteLangId)[$row[$key]]);
                 break;
             case 'collection_layout_type':
-                $td->appendElement('plaintext', $tdAttr, '<div class="layout-type" data-bs-toggle="tooltip" title="'.($collectionLayoutTypeArr[$row[$key]] ?? '').'"><svg class="svg"  width="164" height="94">
+                $td->appendElement('plaintext', $tdAttr, '<div class="layout-type" data-bs-toggle="tooltip" title="' . ($collectionLayoutTypeArr[$row[$key]] ?? '') . '"><svg class="svg"  width="164" height="94">
                 <use
-                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-layout.svg#' . Collections::layoutIconClass($row[$key]) . '">
+                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-layout.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#' . Collections::layoutIconClass($row[$key]) . '">
                 </use>
             </svg></div>', true);
                 break;
@@ -47,7 +47,7 @@ foreach ($arrListing as $sn => $row) {
             case 'applicable_for':
                 $str = $this->includeTemplate('collections/layout_applicable_for.php', ['row' => $row, 'applicableTypes' => $applicableTypes], false, true);
                 $td->appendElement('plaintext', $tdAttr, $str, true);
-                break;     
+                break;
             case 'action':
                 $data = [
                     'siteLangId' => $siteLangId,

@@ -36,8 +36,10 @@ class SalesReportController extends ListingBaseController
     }
 
     public function search($type = false)
-    {
-        $this->getListingData($type);
+    {        
+        $batchCount = FatApp::getPostedData('batch_count', FatUtility::VAR_INT, 0);
+        $batchNumber = FatApp::getPostedData('batch_number', FatUtility::VAR_INT, 1);
+        $this->getListingData($type, '', $batchCount, $batchNumber);
         $jsonData = [
             'headSection' => $this->_template->render(false, false, '_partial/listing/head-section.php', true),
             'listingHtml' => $this->_template->render(false, false, 'sales-report/search.php', true),
@@ -67,7 +69,7 @@ class SalesReportController extends ListingBaseController
         return $frm;
     }
 
-    private function getListingData($type = false, $orderDate = '')
+    private function getListingData($type = false, $orderDate = '', $batchCount = 1, $batchNumber = 0)
     {
         $db = FatApp::getDb();
         $post = FatApp::getPostedData();
@@ -130,8 +132,14 @@ class SalesReportController extends ListingBaseController
         $srch->doNotCalculateRecords();
         $srch->setOrderBy($sortBy, $sortOrder);
         if ($type == 'export') {
-            $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
+            $pageSize = Report::MAX_LIMIT;
+            if (isset($batchCount) && $batchCount > 0 && $batchCount <= Report::MAX_LIMIT) {
+                $pageSize = $batchCount;
+            }
+            $pagenumber = ($batchNumber < 1) ? 1 : $batchNumber;
+
+            $srch->setPageNumber($pagenumber);
+            $srch->setPageSize($pageSize);
             $rs = $srch->getResultSet();
             $sheetData = array();
 
@@ -244,6 +252,36 @@ class SalesReportController extends ListingBaseController
         }
 
         return $arr;
+    }
+
+    public function form()
+    {
+        $formTitle = Labels::getLabel('LBL_EXPORT_SALES_REPORT', $this->siteLangId);
+        $frm = $this->getExportForm($this->siteLangId);
+        $this->set('frm', $frm);
+        $this->set('includeTabs', false);
+        $this->set('formTitle', $formTitle);
+        $this->set('html', $this->_template->render(false, false, '_partial/listing/form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    protected function getExportForm($langId)
+    {
+
+        $frm = new Form('frmExport', array('id' => 'frmExport'));
+
+        /* Batch Count[ */
+        $fld =  $frm->addIntegerField(Labels::getLabel('FRM_COUNTS_PER_BATCH', $langId), 'batch_count', Report::MAX_LIMIT, array('id' => 'batch_count'));
+        $fld->requirements()->setRequired(true);
+        $fld->requirements()->setRange(1, Report::MAX_LIMIT);
+        /*]*/
+
+        /* Batch Number[ */
+        $fld = $frm->addIntegerField(Labels::getLabel('FRM_BATCH_NUMBER', $langId), 'batch_number', 1, array('id' => 'batch_number'));
+        $fld->requirements()->setRequired(true);
+        $fld->requirements()->setPositive();
+        $frm->setFormTagAttribute('onSubmit', 'exportRecords(); return false;');
+        return $frm;
     }
 
     protected function getDefaultColumns($orderDate = ''): array

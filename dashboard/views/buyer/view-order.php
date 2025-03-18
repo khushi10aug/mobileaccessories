@@ -68,7 +68,7 @@ if (!$print) {
                         'title' => Labels::getLabel('LBL_CANCEL_ORDER', $siteLangId)
                     ],
                     'icon' => '<svg class="svg btn-icon-start" width="18" height="18">
-                        <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#close">
+                        <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#close">
                         </use>
                     </svg>',
                     'label' => Labels::getLabel('LBL_CANCEL_ORDER', $siteLangId)

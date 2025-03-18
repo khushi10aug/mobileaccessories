@@ -39,7 +39,7 @@ foreach ($arrListing as $sn => $row) {
                                 'title' => Labels::getLabel('BTN_EDIT', $siteLangId)
                             ],
                             'label' => '<svg class="svg" width="20" height="20">
-                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#edit">
                                             </use>
                                         </svg>'
                         ],
@@ -91,7 +91,7 @@ include(CONF_THEME_PATH . '_partial/listing/no-record-found.php'); ?>
                             ],
                             'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                             <use 
-                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#add">
                                             </use>
                                         </svg>
                                         <span> ' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>'

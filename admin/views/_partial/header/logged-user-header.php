@@ -39,7 +39,7 @@
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
                                             <use
-                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-getting-started">
+                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-getting-started">
                                             </use>
                                         </svg>
                                     </span>
@@ -52,7 +52,7 @@
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
                                             <use
-                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-search">
+                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-search">
                                             </use>
                                         </svg>
                                     </span>
@@ -65,7 +65,7 @@
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
                                             <use
-                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-store">
+                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-store">
                                             </use>
                                         </svg>
                                     </span>
@@ -77,7 +77,7 @@
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
                                             <use
-                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-cache">
+                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-cache">
                                             </use>
                                         </svg>
                                     </span>
@@ -94,7 +94,7 @@
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
                                             <use
-                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification">
+                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-notification">
                                             </use>
                                         </svg>
                                     </span>
@@ -207,7 +207,7 @@
             <?php if (isset($pageData['plang_recommendations']) && !empty($pageData['plang_recommendations'])) { ?>
                 <div class="alert alert-solid-info fade show" role="alert">
                     <div class="alert-icon"><svg class="svg" width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#info">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#info">
                             </use>
                         </svg></div>
                     <div class="alert-text"><?php echo nl2br($pageData['plang_recommendations']); ?></div>
@@ -217,7 +217,7 @@
                 <div class="alert alert-solid-warning fade alertWarningJs show " role="alert">
                     <div class="alert-icon">
                         <svg class="svg" width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#warning">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#warning">
                             </use>
                         </svg>
                     </div>

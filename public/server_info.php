@@ -1,5 +1,5 @@
 <?php
-phpinfo();
+//phpinfo();
 
 function getInBytes($value)
 {

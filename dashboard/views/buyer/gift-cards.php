@@ -15,7 +15,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             'title' => Labels::getLabel('BTN_SHARE_GIFT_CARD', $siteLangId),
         ],
         'label' => '<svg class="svg btn-icon-start" width="18" height="18">
-                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#add">
                             </use>
                         </svg>' . Labels::getLabel('BTN_ADD_GIFT_CARD', $siteLangId)
     ];

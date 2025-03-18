@@ -16,8 +16,7 @@
     @include media-breakpoint-down(sm) {
         overflow: hidden;
         overflow-x: auto;
-        //width: fill-available;
-        width: stretch;
+        width: 100%;
     }
 
     &-center {
@@ -73,4 +72,13 @@
             }
         }
     }
+}
+
+.tabs-masking {
+    // overflow: hidden;
+    // mask: linear-gradient(90deg,
+    //         transparent,
+    //         white 20%,
+    //         white 80%,
+    //         transparent);
 }

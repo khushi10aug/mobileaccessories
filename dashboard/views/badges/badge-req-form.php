@@ -40,7 +40,7 @@ if (null != $fld) {
                                     <li>
                                         <a title="' . Labels::getLabel('LBL_DOWNLOAD_FILE', $siteLangId) . '" href="' . UrlHelper::generateUrl('SellerRequests', 'downloadFile', array($badgeReqId)) . '">
                                             <svg class="svg btn-icon-start" width="18" height="18">
-                                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#download">
                                                 </use>
                                             </svg>
                                         </a>
@@ -48,7 +48,7 @@ if (null != $fld) {
                                     <li>
                                         <a title="' . Labels::getLabel('LBL_DELETE_FILE', $siteLangId) . '" href="javascript:void(0);" onclick="removeBadgeRequestRefFile(' . $badgeReqId . ')">
                                             <svg class="svg btn-icon-start" width="18" height="18">
-                                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
                                                 </use>
                                             </svg>
                                         </a>

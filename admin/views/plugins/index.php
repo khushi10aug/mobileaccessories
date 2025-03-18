@@ -16,7 +16,7 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
                 <div class="grid-layout-left">
                     <button class="float-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#card-aside" aria-controls="card-aside">
                         <svg class="svg" width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#nav">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#nav">
                             </use>
                         </svg>
                     </button>
@@ -40,7 +40,7 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
                                             <a class="settings-inner-link" href="javascript:void(0)" onclick="searchRecords(<?php echo $formType; ?>);">
                                                 <i class="settings-inner-icn">
                                                     <svg class="svg" width="20" height="20">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#<?php echo isset($svgIconNames[$formType]) ? $svgIconNames[$formType] : 'icon-extension'; ?>">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#<?php echo isset($svgIconNames[$formType]) ? $svgIconNames[$formType] : 'icon-extension'; ?>">
                                                         </use>
                                                     </svg>
                                                 </i>

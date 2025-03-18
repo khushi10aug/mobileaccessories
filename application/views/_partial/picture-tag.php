@@ -58,5 +58,5 @@ $title = isset($title) ? htmlspecialchars_decode($title) : $alt;
 
         <source srcset="<?php echo $url; ?>" type="image/jpeg" <?php echo $media; ?>>
     <?php } ?>
-    <img <?php (true == $lazyLoading) ? "loading='lazy'" : ""; ?> <?php !empty($ratio) ? "data-ratio='" . $ratio . "'" : ""; ?> src="<?php echo empty($imageUrl) ? rtrim($jpgImageUrl[ImageDimension::VIEW_DESKTOP], ',') : rtrim($imageUrl, ','); ?>" alt="<?php echo $alt; ?>" title="<?php echo $title; ?>">
+    <img <?php (true == $lazyLoading) ? "loading='lazy'" : ""; ?> <?php echo !empty($ratio) ? "data-ratio='" . $ratio . "'" : ""; ?> src="<?php echo empty($imageUrl) ? rtrim($jpgImageUrl[ImageDimension::VIEW_DESKTOP], ',') : rtrim($imageUrl, ','); ?>" alt="<?php echo $alt; ?>" title="<?php echo $title; ?>">
 </picture>

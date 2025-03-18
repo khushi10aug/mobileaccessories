@@ -88,7 +88,7 @@ trait Options
           } */
         $userId = $this->userParentId;
         $post['option_seller_id'] = $userId;
-        $post[$optionObj::tblFld('identifier')] = $post[$optionObj::tblFld('name')];
+        $post[$optionObj::tblFld('identifier')] = $post[$optionObj::tblFld('name')] . '-' . $userId;
         $optionObj->assignValues($post);
         if (!$optionObj->save()) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_OPTION_IDENTIFIER_ALREADY_EXISTS', $this->siteLangId));

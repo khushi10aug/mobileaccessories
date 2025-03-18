@@ -407,7 +407,7 @@ class MyAppController extends FatController
         }
 
         if (false === $signInWithPhone) {
-            $frm->addRequiredField(Labels::getLabel('FRM_USERNAME_OR_EMAIL', $siteLangId), 'username', $userName);
+            $frm->addRequiredField(Labels::getLabel('FRM_USERNAME', $siteLangId), 'username', $userName);
             $pwd = $frm->addPasswordField(Labels::getLabel('FRM_PASSWORD', $siteLangId), 'password', $pass, array('placeholder' => Labels::getLabel('FRM_PASSWORD', $siteLangId)));
             $pwd->requirements()->setRequired();
 

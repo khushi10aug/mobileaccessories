@@ -267,7 +267,7 @@ class UsersController extends ListingBaseController
             $db->rollbackTransaction();
             LibHelper::exitWithError($userObj->getError(), true);
         }
-        /* [ new user    */
+                /* [ new user    */
         if (1 > $recordId) {
             if (!$userObj->setLoginCredentials($post['credential_username'], $post['credential_email'], null, applicationConstants::ACTIVE, $post['user_verify'])) {
                 $db->rollbackTransaction();
@@ -285,6 +285,21 @@ class UsersController extends ListingBaseController
                 $db->rollbackTransaction();
                 LibHelper::exitWithError(Labels::getLabel("ERR_ERROR_IN_SENDING_WELCOME_EMAIL", $this->admin_id), true);
                 return false;
+            }
+            if (!empty($post['credential_email'])) {
+                if (!$userObj->assignGiftCard($post['credential_email'])) {
+                    $db->rollbackTransaction();
+                    LibHelper::exitWithError(Labels::getLabel('MSG_USER_COULD_NOT_BE_SET'));
+                    return false;
+                }
+            }
+
+            if (!empty($post['credential_email'])) {
+                if (!$userObj->assignGiftCard($post['credential_email'])) {
+                    $db->rollbackTransaction();
+                    LibHelper::exitWithError(Labels::getLabel('MSG_USER_COULD_NOT_BE_SET'));
+                    return false;
+                }
             }
         }
         /*  new user ] */

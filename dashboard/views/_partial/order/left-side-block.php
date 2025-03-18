@@ -26,7 +26,7 @@ $cancelOrder = $cancelOrder ?? false;;
                     <button class="btn btn-icon btn-outline-gray btn-sm" type="button" id="dropdownMenuButton1"
                         data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                         <svg class="svg" width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#three-dots">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#three-dots">
                             </use>
                         </svg>
                     </button>

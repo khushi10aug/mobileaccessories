@@ -35,7 +35,7 @@ if ($reviewsList) { ?>
             <li class="rated-by-item">
                 <div class="product-ratings">
                     <svg class="svg svg-star" width="10" height="10">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-yellow">
                         </use>
                     </svg>
                     <span class="rate"><?php echo $rating['sprating_rating']; ?>/5</span>
@@ -69,7 +69,7 @@ if ($reviewsList) { ?>
                         title="<?php echo Labels::getLabel('LBL_LIKE', $siteLangId); ?>"
                         onclick="markReviewHelpful(<?php echo FatUtility::int($review['spreview_id']); ?>,1)">
                         <svg class="svg" width="16" height="16">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#like">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#like">
                             </use>
                         </svg>
                         <span class="counts">(<?php echo $review['helpful']; ?>)</span>
@@ -80,7 +80,7 @@ if ($reviewsList) { ?>
                         title="<?php echo Labels::getLabel('LBL_DISLIKE', $siteLangId); ?>"
                         onclick="markReviewHelpful(<?php echo FatUtility::int($review['spreview_id']); ?>, 0)">
                         <svg class="svg" width="16" height="16">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#dislike">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#dislike">
                             </use>
                         </svg>
                         <span class="counts">(<?php echo $review['notHelpful']; ?>)</span>

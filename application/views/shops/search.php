@@ -53,7 +53,7 @@ if (!empty($allShops)) {
                         <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && round($shop['shopRating']) > 0) { ?>
                             <div class="product-ratings">
                                 <svg class="svg svg-star" width="14" height="14">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-yellow"></use>
                                 </svg>
                                 <span class="rate"><?php echo round($shop['shopRating'], 1); ?> </span>
                             </div>

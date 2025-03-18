@@ -20,7 +20,7 @@
                                 'title' => Labels::getLabel('BTN_NEW_RECORD', $siteLangId)
                             ],
                             'label' => '<svg class="svg btn-icon-start" width="18" height="18">
-                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#add">
                                     </use>
                                 </svg><span>' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>'
                         ],
@@ -103,7 +103,7 @@
                                 ),
                                 '<svg class="svg" width="18" height="18">
                                     <use
-                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#edit">
                                     </use>
                                 </svg>',
                                 true
@@ -118,7 +118,7 @@
                                 ),
                                 '<svg class="svg" width="18" height="18">
                                     <use
-                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#delete">
                                     </use>
                                 </svg>',
                                 true

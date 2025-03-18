@@ -13,7 +13,7 @@ foreach ($images as $image) {
                             <li>
                                 <a href="javascript:void(0)" onclick="deleteImage(<?php echo $image['afile_record_id']; ?>, <?php echo $image['afile_id']; ?>, <?php echo $image['afile_type']; ?>);">
                                     <svg class="svg" width="18" height="18">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#delete">
                                         </use>
                                     </svg>
                                 </a>

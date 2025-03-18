@@ -43,7 +43,8 @@ class AdminAuthentication extends FatModel
         }
         $db = FatApp::getDb();
         $srch = new SearchBase('tbl_admin');
-        $srch->addCondition('admin_username', '=', $username);
+        $condition = $srch->addCondition('admin_username', '=', $username);
+        $condition->attachCondition('admin_email', '=', $username, 'OR');
         $rs = $srch->getResultSet();
 
         if (!$row = $db->fetch($rs)) {

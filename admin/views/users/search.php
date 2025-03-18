@@ -56,7 +56,7 @@ foreach ($arrListing as $sn => $row) {
                 $class = (applicationConstants::NO == $row[$key]) ? 'is-verified' : '';
                 $img = '<div class="verified ' . $class . '"><svg class="svg" >
                             <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-verified">
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#icon-verified">
                             </use>
                         </svg>';
                 $td->appendElement('plaintext', $tdAttr, $img, true);
@@ -89,7 +89,7 @@ foreach ($arrListing as $sn => $row) {
                             'label' => '<i class="icn">
                                             <svg class="svg" width="18" height="18">
                                                 <use
-                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#password">
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#password">
                                                 </use>
                                             </svg>
                                         </i>' . Labels::getLabel('LBL_CHANGE_PASSWORD', $siteLangId),
@@ -105,7 +105,7 @@ foreach ($arrListing as $sn => $row) {
                             'label' => '<i class="icn">
                                             <svg class="svg" width="18" height="18">
                                                 <use
-                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#login">
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#login">
                                                 </use>
                                             </svg>
                                         </i>' . Labels::getLabel('LBL_LOGIN_TO_USER_ACCOUNT', $siteLangId),
@@ -118,7 +118,7 @@ foreach ($arrListing as $sn => $row) {
                             'label' => '<i class="icn">
                                             <svg class="svg" width="18" height="18">
                                                 <use
-                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-mail">
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#icon-mail">
                                                 </use>
                                             </svg>
                                         </i>' . Labels::getLabel('LBL_SEND_EMAIL', $siteLangId),
@@ -133,7 +133,7 @@ foreach ($arrListing as $sn => $row) {
                             'label' => '<i class="icn">
                                             <svg class="svg" width="18" height="18">
                                                 <use
-                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#password-email">
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#password-email">
                                                 </use>
                                             </svg>
                                         </i>' . Labels::getLabel('LBL_RESEND_SET_PASSWORD_EMAIL', $siteLangId),
@@ -149,7 +149,7 @@ foreach ($arrListing as $sn => $row) {
                             'label' => '<i class="icn">
                                             <svg class="svg" width="18" height="18">
                                                 <use
-                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-users">
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#icon-users">
                                                 </use>
                                             </svg>
                                         </i>' . Labels::getLabel('LBL_MARK_AS_BUYER', $siteLangId),
@@ -177,7 +177,7 @@ foreach ($arrListing as $sn => $row) {
                         'label' => '<i class="icn">
                                         <svg class="svg" width="18" height="18">
                                             <use
-                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#sync-currency">
+                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#sync-currency">
                                             </use>
                                         </svg>
                                     </i>' . Labels::getLabel('LBL_TRANSACTIONS', $siteLangId),

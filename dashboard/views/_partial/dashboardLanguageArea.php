@@ -5,7 +5,7 @@ if ($languages && count($languages) > 1) { ?>
         <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?> data-bs-toggle="collapse" data-bs-target="#nav-language" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
             <span class="dashboard-menu-icon">
                 <svg class="svg" width="18" height="18">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#language">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#language">
                     </use>
                 </svg>
             </span>
@@ -35,7 +35,7 @@ if ($currencies && count($currencies) > 1) { ?>
         <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?> data-bs-toggle="collapse" data-bs-target="#nav-currency" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
             <span class="dashboard-menu-icon">
                 <svg class="svg" width="18" height="18">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#currency">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#currency">
                     </use>
                 </svg>
             </span>

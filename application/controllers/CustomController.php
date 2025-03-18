@@ -711,10 +711,10 @@ class CustomController extends MyAppController
         $contentPages = ContentPage::getPagesForSelectBox($this->siteLangId);
 
         $srch = new ShopSearch($this->siteLangId);
-        $srch->setDefinedCriteria($this->siteLangId);
-        $srch->joinShopCountry();
+        $srch->setDefinedCriteria($this->siteLangId, true);
+        /* $srch->joinShopCountry();
         $srch->joinShopState();
-        $srch->joinSellerSubscription();
+        $srch->joinSellerSubscription(); */
         $srch->doNotCalculateRecords();
         $srch->addOrder('shop_name');
         $shopRs = $srch->getResultSet();

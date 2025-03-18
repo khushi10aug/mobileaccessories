@@ -103,7 +103,7 @@ $productView = $productView ?? false;
                                                         <span class="rate"><?php echo round($avgRating, 1); ?>
                                                             <svg class="svg svg-star" width="16" height="16">
                                                                 <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-yellow">
                                                                 </use>
                                                             </svg>
                                                         </span>

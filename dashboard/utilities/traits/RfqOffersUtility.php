@@ -110,7 +110,7 @@ trait RfqOffersUtility
                         'title' => Labels::getLabel('LBL_OFFER', $this->siteLangId)
                     ],
                     'icon' => "<svg class='svg btn-icon-start' width='18' height='18'>
-                            <use xlink:href='" . CONF_WEBROOT_URL . "images/retina/sprite-actions.svg#add'>
+                            <use xlink:href='" . CONF_WEBROOT_URL . "images/retina/sprite-actions.svg" . AttachedFile::setTimeParam(RELEASE_DATE) . "#add'>
                             </use>
                         </svg>",
                     'label' => Labels::getLabel('LBL_NEW_OFFER', $this->siteLangId)
@@ -137,7 +137,7 @@ trait RfqOffersUtility
                         'title' => $title
                     ],
                     'icon' => "<svg class='svg btn-icon-start' width='18' height='18'>
-                            <use xlink:href='" . CONF_WEBROOT_URL . "images/retina/sprite-actions.svg#inventories'>
+                            <use xlink:href='" . CONF_WEBROOT_URL . "images/retina/sprite-actions.svg" . AttachedFile::setTimeParam(RELEASE_DATE) . "#inventories'>
                             </use>
                         </svg>",
                     'label' => $label
@@ -151,7 +151,7 @@ trait RfqOffersUtility
                 'title' => Labels::getLabel('LBL_VIEW_RFQ_INFORMATION', $this->siteLangId)
             ],
             'icon' => "<svg class='svg btn-icon-start' width='18' height='18'>
-                            <use xlink:href='" . CONF_WEBROOT_URL . "images/retina/sprite-actions.svg#view'>
+                            <use xlink:href='" . CONF_WEBROOT_URL . "images/retina/sprite-actions.svg" . AttachedFile::setTimeParam(RELEASE_DATE) . "#view'>
                             </use>
                         </svg>",
             'label' => Labels::getLabel('LBL_VIEW', $this->siteLangId)
@@ -165,7 +165,7 @@ trait RfqOffersUtility
                     'title' => Labels::getLabel('LBL_MARK_RFQ_AS_CLOSED!', $this->siteLangId)
                 ],
                 'icon' => "<svg class='svg btn-icon-start' width='18' height='18'>
-                            <use xlink:href='" . CONF_WEBROOT_URL . "images/retina/sprite-actions.svg#close'>
+                            <use xlink:href='" . CONF_WEBROOT_URL . "images/retina/sprite-actions.svg" . AttachedFile::setTimeParam(RELEASE_DATE) . "#close'>
                             </use>
                         </svg>",
                 'label' => Labels::getLabel('LBL_CLOSE', $this->siteLangId)

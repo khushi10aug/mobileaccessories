@@ -85,6 +85,18 @@ class RazorpayPayController extends PaymentController
                 //execute post
                 $result = curl_exec($ch);
                 $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+				
+				// DEBUG ONLY — DO NOT KEEP IN PRODUCTION
+			    //file_put_contents(__DIR__ . '/razorpay_debug.log', "Key ID: " . $this->settings['merchant_key_id'] . "\nSecret: " . $this->settings['merchant_key_secret'], FILE_APPEND);
+               
+                //echo"<pre>";			   
+				//print_r($result);
+				
+				//echo"<hr>";
+				//print_r($http_status);
+				//die;
+				  
+
                 if ($result === false) {
                     $success = false;
                     $error = 'Curl error: ' . curl_error($ch);

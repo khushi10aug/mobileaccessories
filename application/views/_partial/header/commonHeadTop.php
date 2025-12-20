@@ -88,3 +88,4 @@ $additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'directi
             <meta name="twitter:image" content="<?php echo $image; ?>">
     <?php }
     } ?>
+	

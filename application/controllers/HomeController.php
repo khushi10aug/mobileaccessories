@@ -95,7 +95,11 @@ class HomeController extends MyAppController
                 case Collections::TYPE_HERO_SLIDES_LAYOUT1:
                     $tpl = new FatTemplate('', '');
                     $tpl->set('siteLangId', $this->siteLangId);
-                    $tpl->set('slides', $collection['slides']);
+                    if (true === MOBILE_APP_API_CALL) {
+                        $tpl->set('slides', $collection['slides']);
+                    } else {
+                        $tpl->set('slides', $slides);
+                    }
                     $tpl->set('fullWidth', $collection['collection_full_width']);
                     $sponsoredProdsLayout = $tpl->render(false, false, '_partial/homePageSlides.php', true, true);
                     $collectionTemplates[$collection['collection_id']]['html'] = $sponsoredProdsLayout;
@@ -1531,6 +1535,15 @@ class HomeController extends MyAppController
     private function getSlides($recordLimit = 0)
     {
         $langId = $this->siteLangId;
+        $slidesCache = CacheHelper::get('slidesCache' . $langId, 7200, '.txt');
+        if ($slidesCache) {
+            $data = unserialize($slidesCache);
+            if ($recordLimit == 1) {
+                $data = array_slice($data, 0, 1);
+            }
+            return $data;
+        }
+
         $db = FatApp::getDb();
         $srchSlide = new SlideSearch($langId);
         $srchSlide->doNotCalculateRecords();
@@ -1543,13 +1556,13 @@ class HomeController extends MyAppController
         $srchSlide->joinAttachedFile();
         $srchSlide->addMultipleFields(array('slide_id', 'slide_record_id', 'slide_type', 'IFNULL(promotion_name, promotion_identifier) as promotion_name,IFNULL(slide_title, slide_identifier) as slide_title', 'slide_target', 'slide_url', 'promotion_id', 'daily_cost', 'weekly_cost', 'monthly_cost', 'total_cost', 'slide_img_updated_on'));
 
-        if ($recordLimit == 1) {
-            $totalSlidesPageSize = 1;
-            $ppcSlidesPageSize = 1;
-        } else {
-            $totalSlidesPageSize = FatApp::getConfig('CONF_TOTAL_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
-            $ppcSlidesPageSize = FatApp::getConfig('CONF_PPC_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
-        }
+        // if ($recordLimit == 1) {
+        //     $totalSlidesPageSize = 1;
+        //     $ppcSlidesPageSize = 1;
+        // } else {
+        $totalSlidesPageSize = FatApp::getConfig('CONF_TOTAL_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
+        $ppcSlidesPageSize = FatApp::getConfig('CONF_PPC_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
+        // }
 
         $ppcSlides = array();
         $adminSlides = array();
@@ -1586,7 +1599,13 @@ class HomeController extends MyAppController
             $adminSlides = $db->fetchAll($slideRs, 'slide_id');
         }
 
-        return array_merge($ppcSlides, $adminSlides);
+        $data = array_merge($ppcSlides, $adminSlides);
+        $data = CommonHelper::sortArray($data, 'slide_id');
+        CacheHelper::create('slidesCache' . $langId, serialize($data), CacheHelper::TYPE_COLLECTIONS);
+        if ($recordLimit == 1) {
+            $data = array_slice($data, 0, 1);
+        }
+        return $data;
     }
 
     private function getSponsoredShops()

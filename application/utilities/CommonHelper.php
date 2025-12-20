@@ -322,7 +322,7 @@ class CommonHelper extends FatUtility
         foreach ($tempArr as $key => $val) {
             $codeArr = explode($separater, $key);
             // Sort the codeArr based on the order of the input array
-            usort($codeArr, function($a, $b) use ($arr, $useKey) {
+            usort($codeArr, function ($a, $b) use ($arr, $useKey) {
                 $aIndex = $bIndex = -1;
                 foreach ($arr as $index => $item) {
                     if (array_key_exists($a, $item[$useKey])) {
@@ -1373,7 +1373,7 @@ class CommonHelper extends FatUtility
                 $weight = $val * 453.592;
                 break;
 
-                /* case 'OU':
+            /* case 'OU':
             case 'OUNCE':
                 $weight = $val * 28.3495;
             break; */
@@ -1962,7 +1962,7 @@ class CommonHelper extends FatUtility
     }
 
     public static function cleanArray($obj)
-    {        
+    {
         ini_set('memory_limit', '100M');
         $orig_obj = $obj;
 
@@ -2289,5 +2289,12 @@ class CommonHelper extends FatUtility
             }
         }
         return $str;
+    }
+    public static function sortArray($data, $key)
+    {
+        usort($data, function ($a, $b) use ($key) {
+            return $a[$key] <=> $b[$key];
+        });
+        return $data;
     }
 }

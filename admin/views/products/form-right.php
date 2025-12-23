@@ -76,6 +76,8 @@ if (null != $fld) {
                 echo HtmlHelper::getFieldHtml($frm, 'selprod_url_keyword', 12);
 
                 echo HtmlHelper::getFieldHtml($frm, 'product_brand_id', 6, ['id' => 'product_brand_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_BRAND', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addBrand()', 'class' => 'link']]);
+                echo HtmlHelper::getFieldHtml($frm, 'product_cbrand_id', 6, ['id' => 'product_cbrand_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_COMPATIBLE_BRAND', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addCompatibleBrand()', 'class' => 'link']]);
+
                 echo HtmlHelper::getFieldHtml($frm, 'ptc_prodcat_id', 6, ['id' => 'ptc_prodcat_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addCategory()', 'class' => 'link']]);
                 echo HtmlHelper::getFieldHtml($frm, 'product_model', 6);
 

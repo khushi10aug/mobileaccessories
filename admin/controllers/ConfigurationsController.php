@@ -625,6 +625,9 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_BRAND_WILL_BE_MANDATORY_FOR_PRODUCTS", $langId), 'CONF_PRODUCT_BRAND_MANDATORY', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld);
+                
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_COMPATIBLE_BRAND_WILL_BE_MANDATORY_FOR_PRODUCTS", $langId), 'CONF_PRODUCT_COMPATIBLE_BRAND_MANDATORY', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld);
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_PRODUCT_PRICES_WILL_BE_INCLUSIVE_OF_TAX", $langId), 'CONF_PRODUCT_INCLUSIVE_TAX', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_ENABLING_THIS,_TAX_AFTER_DISCOUNT_FEATURE_WILL_BE_DEACTIVED', $langId));

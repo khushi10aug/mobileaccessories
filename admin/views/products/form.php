@@ -74,6 +74,10 @@ if (0 < $recordId) {
                 brand_active: 1,
                 langId: langId
             });
+            select2('product_cbrand_id', fcom.makeUrl('CompatibleBrands', 'autoComplete'), {
+                brand_active: 1,
+                langId: langId
+            });            
             select2('ptc_prodcat_id', fcom.makeUrl('ProductCategories', 'autoComplete'), {
                 langId
             });

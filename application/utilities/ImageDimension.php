@@ -43,6 +43,8 @@ class ImageDimension extends FatUtility
     public const TYPE_CATEGORY_BANNER = 40;
     public const TYPE_ADMIN_BADGE_REQUEST = 41;
     public const TYPE_PUSH_NOTIFICATION = 42;
+    public const TYPE_CBRAND_LOGO = 43;
+    public const TYPE_CBRAND_IMAGE = 44;
 
     public const WIDTH = 'width';
     public const HEIGHT = 'height';
@@ -112,9 +114,15 @@ class ImageDimension extends FatUtility
             case self::TYPE_BRAND_LOGO:
                 $imageDimensions = self::getBrandLogoImageData($aspectRatioType, $sizeType);
                 break;
+            case self::TYPE_CBRAND_LOGO:
+                $imageDimensions = self::getBrandLogoImageData($aspectRatioType, $sizeType);
+                break;                
             case self::TYPE_BRAND_IMAGE:
                 $imageDimensions = self::getBrandImageData($sizeType);
                 break;
+            case self::TYPE_CBRAND_IMAGE:
+                $imageDimensions = self::getBrandImageData($sizeType);
+                break;                
             case self::TYPE_EMAIL_LOGO:
                 $imageDimensions = self::getEmailLogoImageData($aspectRatioType, $sizeType);
                 break;

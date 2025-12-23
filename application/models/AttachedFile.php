@@ -81,6 +81,9 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_RFQ = 67;
     public const FILETYPE_RFQ_OFFER_FILE = 68;
     public const FILETYPE_SHIPPING_COMPANY_USER_DOCUMENT = 69;
+    public const FILETYPE_CBRAND_LOGO = 70;
+    public const FILETYPE_CBRAND_IMAGE = 71;
+    
 
     public const APP_IMAGE_WIDTH = 640;
     public const APP_IMAGE_HEIGHT = 480;
@@ -176,6 +179,9 @@ class AttachedFile extends MyAppModel
         $arr = array(
             static::FILETYPE_PRODUCT_IMAGE => Labels::getLabel('LBL_PRODUCTS', $langId),
             static::FILETYPE_BRAND_LOGO => Labels::getLabel('LBL_BRAND_LOGO', $langId),
+            static::FILETYPE_CBRAND_LOGO => Labels::getLabel('LBL_COMPATIBLE_BRAND_LOGO', $langId),
+            static::FILETYPE_CBRAND_IMAGE => Labels::getLabel('LBL_COMPATIBLE_BRAND_BANNER', $langId),
+
             static::FILETYPE_BRAND_IMAGE => Labels::getLabel('LBL_BRAND_BANNER', $langId),
             /* static::FILETYPE_CATEGORY_IMAGE => Labels::getLabel('LBL_CATEGORIES', $langId), */
             static::FILETYPE_CATEGORY_BANNER => Labels::getLabel('LBL_CATEGORY_BANNER', $langId),
@@ -1443,6 +1449,10 @@ class AttachedFile extends MyAppModel
             case self::FILETYPE_BRAND_IMAGE:
                 $recordObj = new Brand($recordId);
                 break;
+            case self::FILETYPE_CBRAND_IMAGE:    
+            case self::FILETYPE_CBRAND_LOGO:
+                $recordObj = new CompatibleBrand($recordId);
+                break;                
             case self::FILETYPE_USER_IMAGE:
             case self::FILETYPE_USER_PROFILE_IMAGE:
                 $recordObj = new User($recordId);

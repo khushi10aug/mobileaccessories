@@ -43,6 +43,10 @@ trait CatalogProduct
         if (FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
             $fld->requirements()->setRequired();
         }
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_COMPARTIBLE_BRAND', $langId), 'product_cbrand_id', []);
+        if (FatApp::getConfig("CONF_PRODUCT_COMPATIBLE_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
+            $fld->requirements()->setRequired();
+        }        
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY', $langId), 'ptc_prodcat_id', []);
         $fld->requirements()->setRequired();
 

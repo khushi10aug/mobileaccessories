@@ -313,6 +313,14 @@ class ProductsController extends ListingBaseController
                 }
             }
 
+            if (0 < $productData['product_cbrand_id']) {
+                $brandData = CompatibleBrand::getAttributesByLangId($langId, $productData['product_cbrand_id'], [CompatibleBrand::tblFld('name'), CompatibleBrand::tblFld('identifier')], applicationConstants::JOIN_RIGHT, applicationConstants::YES, applicationConstants::NO);
+                if (false != $brandData) {
+                    $fld = $frm->getField('product_cbrand_id');
+                    $fld->options = [$productData['product_cbrand_id'] => $brandData[CompatibleBrand::tblFld('name')] ?? $brandData[CompatibleBrand::tblFld('identifier')]];
+                }
+            }            
+
             $productCategories = $this->modelObj->getProductCategories($recordId);
             if (!empty($productCategories)) {
                 $selectedCat = current($productCategories)['prodcat_id'];
@@ -501,6 +509,7 @@ class ProductsController extends ListingBaseController
         }
         /* [select2 data */
         $post['product_brand_id'] = FatApp::getPostedData('product_brand_id', FatUtility::VAR_INT, 0);
+        $post['product_cbrand_id'] = FatApp::getPostedData('product_cbrand_id', FatUtility::VAR_INT, 0);
         $post['ptc_prodcat_id'] = FatApp::getPostedData('ptc_prodcat_id', FatUtility::VAR_INT, 0);
         $post['ptt_taxcat_id'] = FatApp::getPostedData('ptt_taxcat_id', FatUtility::VAR_INT, 0);
         $post['ps_from_country_id'] = FatApp::getPostedData('ps_from_country_id', FatUtility::VAR_INT, 0);

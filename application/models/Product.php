@@ -1508,6 +1508,7 @@ class Product extends MyAppModel
         /* $srch->joinShopCountry();
         $srch->joinShopState(); */
         $srch->joinBrands($langId);
+        $srch->joincBrands($langId);
         $srch->joinProductToCategory($langId);
         $srch->joinProductToTax();
         $srch->addCondition('selprod_code', 'IS NOT', 'mysql_func_null', 'and', true);
@@ -1546,6 +1547,8 @@ class Product extends MyAppModel
                 'splprice_end_date',
                 'brand_id',
                 'COALESCE(brand_name, brand_identifier) as brand_name',
+                'cbrand_id',
+                'COALESCE(cbrand_name, cbrand_identifier) as cbrand_name',
                 'shop_name as user_name',
                 'IF(selprod_stock > 0, 1, 0) AS in_stock',
                 'selprod_sold_count',
@@ -1651,6 +1654,15 @@ END,   special_price_found ) as special_price_found'
                 $srch->addBrandCondition($criteria['brand']);
             }
         }
+        if (array_key_exists('cbrand', $criteria)) {
+            if (!empty($criteria['cbrand'])) {
+                if (true === MOBILE_APP_API_CALL && !is_array($criteria['cbrand'])) {
+                    $criteria['cbrand'] = json_decode($criteria['cbrand'], true);
+                }
+                $srch->addCbrandCondition($criteria['cbrand']);
+            }
+        }
+
 
         if (array_key_exists('optionvalue', $criteria)) {
             if (!empty($criteria['optionvalue'])) {

@@ -38,6 +38,7 @@ class FilterHelper extends FatUtility
         /* $prodSrchObj->joinShopCountry();
         $prodSrchObj->joinShopState(); */
         $prodSrchObj->joinBrands($langId);
+        $prodSrchObj->joincBrands($langId);
         $prodSrchObj->joinProductToCategory($langId);
         $prodSrchObj->validateAndJoinDeliveryLocation();
         $prodSrchObj->joinProductToTax();
@@ -62,6 +63,10 @@ class FilterHelper extends FatUtility
         $brandId = FatApp::getPostedData('brand_id', FatUtility::VAR_INT, 0);
         if (0 < $brandId) {
             $prodSrchObj->addBrandCondition($brandId);
+        }
+        $cbrandId = FatApp::getPostedData('cbrand_id', FatUtility::VAR_INT, 0);
+        if (0 < $cbrandId) {
+            $prodSrchObj->addCbrandCondition($cbrandId);
         }
 
         $featured = FatApp::getPostedData('featured', FatUtility::VAR_INT, 0);
@@ -133,6 +138,22 @@ class FilterHelper extends FatUtility
         return array();
     }
 
+    public static function selectedcBrands($post)
+    {
+        if (array_key_exists('cbrand', $post)) {
+            if (true === MOBILE_APP_API_CALL) {
+                $post['cbrand'] = json_decode($post['cbrand'], true);
+            }
+
+            if (is_array($post['cbrand'])) {
+                return $post['cbrand'];
+            }
+
+            return explode(',', $post['cbrand']);
+        }
+        return array();
+    }
+
     public static function brands($prodSrchObj, $langId, $post, $doNotLimitRecord = false, $includePriority = false)
     {
         $brandId = 0;
@@ -198,6 +219,73 @@ class FilterHelper extends FatUtility
             $brands = array_values(array_filter($brands));
         }
         return $brands;
+    }
+
+    public static function cbrands($prodSrchObj, $langId, $post, $doNotLimitRecord = false, $includePriority = false)
+    {
+        $cbrandId = 0;
+        if (array_key_exists('cbrand_id', $post)) {
+            $cbrandId = FatUtility::int($post['cbrand_id']);
+        }
+
+        $cbrandsCheckedArr = array();
+        if (true == $includePriority) {
+            $cbrandsCheckedArr = static::selectedcBrands($post);
+        }
+
+        if (FatApp::getConfig('CONF_DEFAULT_PLUGIN_' . Plugin::TYPE_FULL_TEXT_SEARCH, FatUtility::VAR_INT, 0)) {
+            $pageSize = max(count($brandsCheckedArr), 10);
+
+            $srch = FullTextSearch::getListingObj($post, $langId);
+            $srch->setFields(array('cbrand.brand_id', 'cbrand.cbrand_name'));
+            $srch->setPageNumber(0);
+            $srch->setPageSize($pageSize);
+            $srch->setSortFields(array('cbrand.cbrand_name.keyword' => array('order' => 'asc')));
+            $srch->setGroupByField('cbrand.cbrand_name');
+            return $srch->convertToSystemData($srch->fetch(), 'cbrand');
+        }
+
+        $cbrandSrch = clone $prodSrchObj;
+        if (true == $doNotLimitRecord) {
+            $cbrandSrch->doNotLimitRecords();
+        } else {
+            $pageSize = max(count($cbrandsCheckedArr), 10);
+            $cbrandSrch->setPageSize($pageSize);
+        }
+
+        $cbrandSrch->joincBrandsLang($langId);
+        $cbrandSrch->addGroupBy('cbrand.cbrand_id');
+        $cbrandSrch->addMultipleFields(array('cbrand.cbrand_id', 'COALESCE(ctb_l.cbrand_name,cbrand.cbrand_identifier) as cbrand_name'));
+        if ($cbrandId) {
+            $cbrandSrch->addCondition('cbrand_id', '=', $cbrandId);
+            $cbrandsCheckedArr = array($cbrandId);
+        }
+
+        if (!empty($cbrandsCheckedArr) && true == $includePriority) {
+            $cbrandSrch->addFld('IF(FIND_IN_SET(cbrand.cbrand_id, "' . implode(',', $cbrandsCheckedArr) . '"), 1, 0) as priority');
+            $cbrandSrch->addOrder('priority', 'desc');
+        } else {
+            $cbrandSrch->addFld('0 as priority');
+        }
+        $cbrandSrch->addOrder('ctb_l.cbrand_name');
+        $cbrandSrch->addCondition('cbrand_id', '!=', 'null');
+        /* if needs to show product counts under brands[ */
+        //$brandSrch->addFld('count(selprod_id) as totalProducts');
+        /* ] */
+        $cbrandSrch->doNotCalculateRecords();
+        $cbrandRs = $cbrandSrch->getResultSet();
+        $cbrands = FatApp::getDb()->fetchAll($cbrandRs);
+
+        if (count($cbrands) > 0 && !FatApp::getConfig('CONF_PRODUCT_COMPARTIBLE_BRAND_MANDATORY', FatUtility::VAR_INT, 1) && in_array(null, array_column($cbrands, 'cbrand_id'))) {
+            array_push($cbrands, array(
+                'cbrand_id' => '-1',
+                'cbrand_name' => Labels::getLabel('LBL_Unbranded', CommonHelper::getLangId()),
+                'priority' => 9999
+            ));
+            $cbrands = array_map('array_filter', $cbrands);
+            $cbrands = array_values(array_filter($cbrands));
+        }
+        return $cbrands;
     }
 
     public static function getPrice($post, $langId)

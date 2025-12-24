@@ -98,6 +98,7 @@ class CategoryController extends MyAppController
         $get['pageSize'] = $pageSize;
 
         $srch = Product::getListingObj($get, $this->siteLangId, $userId);
+        //echo $srch->getQuery(); die;
         $flds = array(
             'prodcat_code',
             'product_id',
@@ -120,6 +121,8 @@ class CategoryController extends MyAppController
             'splprice_end_date',
             'brand_id',
             'COALESCE(brand_name, brand_identifier) as brand_name',
+            'cbrand_id',
+            'COALESCE(cbrand_name, cbrand_identifier) as cbrand_name',
             'user_name',
             'IF(selprod_stock > 0, 1, 0) AS in_stock',
             'selprod_sold_count',

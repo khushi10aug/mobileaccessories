@@ -801,6 +801,49 @@ class ProductSearch extends SearchBase
         $this->joinTable(Brand::DB_TBL_LANG, $joinBy, 'brand.brand_id = tb_l.brandlang_brand_id AND brandlang_lang_id = ' . $langId . $joinCondition, 'tb_l');
     }
 
+    public function joincBrands($langId = 0, $isActive = true, $isDeleted = true, $useInnerJoin = true, $criteria = [])
+    {
+        $langId = FatUtility::int($langId);
+        if ($this->langId && 1 > $langId) {
+            $langId = $this->langId;
+        }
+        $join = ($useInnerJoin && FatApp::getConfig("CONF_PRODUCT_COMPATIBLE_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) ? 'INNER JOIN' : 'LEFT OUTER JOIN';
+
+        $cbrandCondition = '';
+        if ($isActive && FatApp::getConfig("CONF_PRODUCT_COMPATIBLE_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
+            $cbrandCondition = ' and cbrand.cbrand_active = ' . applicationConstants::ACTIVE;
+            $this->addCondition('cbrand.cbrand_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        }
+
+
+        if ($isDeleted && FatApp::getConfig("CONF_PRODUCT_COMPATIBLE_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
+            $cbrandCondition .= ' and cbrand.cbrand_deleted = ' . applicationConstants::NO;
+            $this->addCondition('cbrand.cbrand_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        }
+
+        if (array_key_exists('cbrand_id', $criteria) && 0 < $criteria['cbrand_id']) {
+            $cbrandCondition .= ' and cbrand.cbrand_id = ' . $criteria['cbrand_id'];
+            $this->addCondition('cbrand.cbrand_id', '=', 'mysql_func_' . $criteria['cbrand_id'], 'AND', true);
+        }
+
+        $this->joinTable(CompatibleBrand::DB_TBL, $join, 'p.product_cbrand_id = cbrand.cbrand_id' . $cbrandCondition, 'cbrand');
+
+        if ($langId) {
+            $this->joincBrandsLang($langId);
+        }
+    }
+
+    public function joincBrandsLang($langId, $keyword = '')
+    {
+        $joinCondition = '';
+        $joinBy = 'LEFT OUTER JOIN';
+        if (!empty($keyword)) {
+            $joinBy = 'INNER JOIN';
+            $joinCondition = ' and ctb_l.cbrand_name like ' . FatApp::getDb()->quoteVariable($keyword);
+        }
+        $this->joinTable(CompatibleBrand::DB_TBL_LANG, $joinBy, 'cbrand.cbrand_id = ctb_l.cbrandlang_cbrand_id AND cbrandlang_lang_id = ' . $langId . $joinCondition, 'ctb_l');
+    }
+
     public function joinProductToCategory($langId = 0, $isActive = true, $isDeleted = true, $useInnerJoin = true, $useRelationTable = false, $criteria = [])
     {
         $langId = FatUtility::int($langId);
@@ -1074,6 +1117,50 @@ class ProductSearch extends SearchBase
                     $brand = array_filter(array_unique($brand));
                     $brandString = str_replace('-1', '0', implode(',', $brand));
                     $this->addDirectCondition('product_brand_id IN (' . $brandString . ')');
+                }
+            }
+        }
+    }
+
+    public function addCbrandCondition($cbrand)
+    {
+        //@todo enhancements
+        if (FatApp::getConfig('CONF_PRODUCT_COMPATIBLE_BRAND_MANDATORY', FatUtility::VAR_INT, 1) == 1) {
+            if (is_numeric($cbrand)) {
+                $cbrandId = FatUtility::int($cbrand);
+                $this->addCondition('cbrand_id', '=', 'mysql_func_' . $cbrandId, 'AND', true);
+            } elseif (is_array($cbrand) && 0 < count($cbrand)) {
+                $cbrand = array_filter(array_unique($cbrand));
+                if (!empty($cbrand)) {
+                    $this->addDirectCondition('cbrand_id IN (' . implode(',', $cbrand) . ')');
+                }
+            } else {
+                if (!empty($cbrand)) {
+                    $cbrand = explode(",", $cbrand);
+                    $cbrand = array_filter(array_unique($cbrand));
+                    $this->addDirectCondition('cbrand_id IN (' . implode(',', $cbrand) . ')');
+                }
+            }
+        } else {
+            if (is_numeric($cbrand)) {
+                $cbrandId = FatUtility::int($cbrand);
+                $cbrandId = ($cbrandId <= 0) ? 0 : $cbrandId;
+                $this->addCondition('product_cbrand_id', '=', 'mysql_func_' . $cbrandId, 'AND', true);
+            } elseif (is_array($cbrand) && 0 < count($cbrand)) {
+                
+                $cbrand = array_filter(array_unique($cbrand));
+                $cbrandString = str_replace('-1', '0', implode(',', $cbrand));
+                $this->addDirectCondition('product_cbrand_id IN (' . $cbrandString . ')');
+            } else {
+               
+                if (!empty($cbrand)) {
+                    $cbrand = explode(",", $cbrand);
+                    $cbrand = array_filter(array_unique($cbrand));
+                    $cbrandString = str_replace('-1', '0', implode(',', $cbrand));
+                //    echo '<pre>';print_r($cbrandString); die;
+                //    $cbrandString = implode(',', array_filter(array_map(fn($v) => explode('-', $v)[0], explode(',', $cbrand)), 'is_numeric'));
+
+                    $this->addDirectCondition('product_cbrand_id IN (' . $cbrandString . ')');
                 }
             }
         }

@@ -32,6 +32,7 @@ echo $frmProductSearch->getFieldHtml('join_price');
 echo $frmProductSearch->getFieldHtml('featured');
 echo $frmProductSearch->getFieldHtml('currency_id');
 echo $frmProductSearch->getFieldHtml('brand_id');
+echo $frmProductSearch->getFieldHtml('cbrand_id');
 echo $frmProductSearch->getFieldHtml('top_products');
 echo $frmProductSearch->getFieldHtml('vtype');
 echo $frmProductSearch->getFieldHtml('viewType');

@@ -89,6 +89,46 @@ if (isset($priceArr) && $priceArr && 1 > FatApp::getConfig('CONF_HIDE_PRICES', F
 } ?>
 
 
+<?php if (isset($cbrandsArr) && count($cbrandsArr) > 1) {
+    
+    $cbrandsCheckedArr = (isset($cbrandsCheckedArr) && !empty($cbrandsCheckedArr)) ? $cbrandsCheckedArr : array(); 
+        
+    ?>
+
+    <div class="sidebar-widget">
+        <div class="sidebar-widget_head" data-bs-toggle="collapse" data-bs-target="#cbrand" aria-expanded="true">
+            <?php echo Labels::getLabel('LBL_Compatible_Brand', $siteLangId); ?></div>
+        <div class="sidebar-widget_body collapse show" id="cbrand">
+            <div class="scrollbar-filters scroll scroll-y" id="scrollbar-filters">
+                <ul class="list-vertical cbrandFilter-js">
+                    <?php foreach ($cbrandsArr as $cbrand) {
+                        if ($cbrand['cbrand_id'] == null) {
+                            continue;
+                        } ?>
+                        <li><label class="checkbox cbrand" id="cbrand_<?php echo $cbrand['cbrand_id']; ?>"><input name="cbrands" data-id="cbrand_<?php echo $cbrand['cbrand_id']; ?>" value="<?php echo $cbrand['cbrand_id']; ?>" data-title="<?php echo $cbrand['cbrand_name']; ?>" type="checkbox" <?php if (in_array($cbrand['cbrand_id'], $cbrandsCheckedArr)) {
+                                                                                                                                                                                                                                                                                                echo "checked='true'";
+                                                                                                                                                                                                                                                                                            } ?>><span class="lb-txt"><?php echo $cbrand['cbrand_name']; ?></span> </label>
+                        </li>
+                    <?php
+                    } ?>
+                </ul>
+            </div>
+
+
+            <?php if (count($cbrandsArr) >= 10) { ?>
+                <div class="view-all">
+                    <button type="button" onClick="cbrandFilters()" class="link-underline">
+                        <?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?> </button>
+                </div>
+            <?php } ?>
+        </div>
+    </div>
+    </div>
+<?php
+} ?>
+
+
+
 
 <?php
 $optionIds = array();

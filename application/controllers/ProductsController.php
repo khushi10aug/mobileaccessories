@@ -237,7 +237,45 @@ class ProductsController extends MyAppController
         echo $this->_template->render(false, false, 'products/brand-filters.php', true);
         exit;
     }
+    public function cbrandFilters()
+    {
+        $post = FilterHelper::getParamsAssocArr();
 
+        $langIdForKeywordSeach = 0;
+        if (array_key_exists('keyword', $post) && !empty($post['keyword'])) {
+            $langIdForKeywordSeach = $this->siteLangId;
+        }
+
+        $post['doNotJoinSpecialPrice'] = true;
+        $prodSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $post);
+        $prodSrchObj->doNotCalculateRecords();
+
+        $cbrandsCheckedArr = FilterHelper::selectedcBrands($post);
+        //$prodSrchObj->addFld('count(selprod_id) as totalProducts');
+        $cacheKey = FilterHelper::getCacheKey($this->siteLangId, $post);
+
+        $cbrandFilter = CacheHelper::get('cbrandFilter' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
+        if (!$cbrandFilter) {
+            $cbrandsArr = FilterHelper::cbrands($prodSrchObj, $this->siteLangId, $post, true);
+            CacheHelper::create('cbrandFilter' . $cacheKey, serialize($cbrandsArr));
+        } else {
+            $cbrandsArr = unserialize($cbrandFilter);
+        }
+
+        if (true === MOBILE_APP_API_CALL) {
+            $this->set('data', [
+                'cbrandsArr' => $cbrandsArr,
+                'cbrandsCheckedArr' => $cbrandsCheckedArr,
+            ]);
+            $this->_template->render();
+        }
+
+        $this->set('cbrandsArr', $cbrandsArr);
+        $this->set('cbrandsCheckedArr', $cbrandsCheckedArr);
+
+        echo $this->_template->render(false, false, 'products/cbrand-filters.php', true);
+        exit;
+    }
     public function catFilter()
     {
         $headerFormParamsAssocArr = FilterHelper::getParamsAssocArr();
@@ -335,6 +373,11 @@ class ProductsController extends MyAppController
         /* Brand Filters Data[ */
         $brandsCheckedArr = FilterHelper::selectedBrands($headerFormParamsAssocArr);
         $brandsArr = FilterHelper::brands($prodSrchObj, $this->siteLangId, $headerFormParamsAssocArr, MOBILE_APP_API_CALL, true);
+        /* ] */
+
+        /* Compartible Brand Filters Data[ */
+        $cbrandsCheckedArr = FilterHelper::selectedcBrands($headerFormParamsAssocArr);
+        $cbrandsArr = FilterHelper::cbrands($prodSrchObj, $this->siteLangId, $headerFormParamsAssocArr, MOBILE_APP_API_CALL, true);
         /* ] */
 
         /* {Can modify the logic fetch data directly from query . will implement later}
@@ -446,6 +489,8 @@ class ProductsController extends MyAppController
         // $this->set('productCategories',$productCategories);
         $this->set('brandsArr', $brandsArr);
         $this->set('brandsCheckedArr', $brandsCheckedArr);
+        $this->set('cbrandsArr', $cbrandsArr);
+        $this->set('cbrandsCheckedArr', $cbrandsCheckedArr);
         $this->set('optionValueCheckedArr', $optionValueCheckedArr);
         $this->set('conditionsArr', $conditionsArr);
         $this->set('conditionsCheckedArr', $conditionsCheckedArr);

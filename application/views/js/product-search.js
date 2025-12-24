@@ -46,7 +46,7 @@ $(function () {
         $("input[name=brands]").parent("label").addClass("disabled");
     }
 
-    $(document).on("change", "input[name=brands]", function () {
+    $(document).on("change", "input[name=brands]", function () { 
         var id = $(this).attr("data-id");
         var val = $(this).val();
         var title = $(this).attr("data-title");
@@ -68,6 +68,41 @@ $(function () {
             }
 
             $("input:checkbox[name=brands]").each(function () {
+                if ($(this).attr("data-id") == id) {
+                    $(this).prop("checked", true);
+                }
+            });
+            addFilter(id, this);
+            addToSearchQueryString(id, this);
+        } else {
+            removeFilter(id, false);
+        }
+        removePaginationFromLink();
+        reloadProductListing(frm);
+    });
+
+    $(document).on("change", "input[name=cbrands]", function () { 
+        var id = $(this).attr("data-id");
+        var val = $(this).val();
+        var title = $(this).attr("data-title");
+        if ($(this).is(":checked")) {
+            if ($("#" + id).length == 0) {
+                $("ul.cbrandFilter-js").prepend(
+                    '<li><label class="checkbox cbrand" id="cbrand_' +
+                    val +
+                    '"><input name="cbrands" data-id="cbrand_' +
+                    val +
+                    '" value="' +
+                    val +
+                    '" data-title="' +
+                    title +
+                    '" type="checkbox" checked="true"><i class="input-helper">' +
+                    title +
+                    "</i><label></li>"
+                );
+            }
+
+            $("input:checkbox[name=cbrands]").each(function () {
                 if ($(this).attr("data-id") == id) {
                     $(this).prop("checked", true);
                 }
@@ -345,6 +380,32 @@ function brandFilters() {
     if (brands.length) {
         data = data + "&brand=" + [brands];
     }
+
+    $("body").removeClass("collection-sidebar--on");
+    fcom.ajax(url, data, function (ans) {
+        $.facebox(ans, "modal-xl");
+    });
+}
+function cbrandFilters() {
+    var frm = document.frmProductSearch;
+    var url = window.location.href;
+    if ($currentPageUrl == removeLastSpace(url) + "/index") {
+        url = fcom.makeUrl("Products", "cbrandFilters");
+    } else {
+        url = url.replace(
+            $currentPageUrl,
+            fcom.makeUrl("Products", "cbrandFilters")
+        );
+    }
+    if (url.indexOf("products/cbrandFilters") == -1) {
+        url = fcom.makeUrl("Products", "cbrandFilters");
+    }
+
+    var data = fcom.frmData(frm);
+    var cbrands = getSelectedcBrands();
+    if (cbrands.length) {
+        data = data + "&cbrand=" + [cbrands];
+    }
     $("body").removeClass("collection-sidebar--on");
     fcom.ajax(url, data, function (ans) {
         $.facebox(ans, "modal-xl");
@@ -456,6 +517,12 @@ function removeFilter(id, reload) {
             $(this).prop("checked", false);
         }
     });
+    $("input:checkbox[name=cbrands]").each(function () {
+        if ($(this).attr("data-id") == id) {
+            $(this).prop("checked", false);
+        }
+    });
+
     var frm = document.frmProductSearch;
     /* form submit upon onchange of form elements select box[ */
     removeFromSearchQueryString(id);
@@ -856,6 +923,17 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         return brands;
     };
 
+    getSelectedcBrands = function () {
+        var cbrands = [];
+        $("input:checkbox[name=cbrands]:checked").each(function () {
+            var id = $(this).attr("data-id");
+            addToSearchQueryString(id, this);
+            addFilter(id, this);
+            cbrands.push($(this).val()); 
+        });
+        return cbrands;
+    };
+    
     getSetSelectedOptionsUrl = function (frm) {
         var data = fcom.frmData(frm);
 
@@ -876,6 +954,13 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         var brands = getSelectedBrands();
         if (brands.length) {
             data = data + "&brand=" + [brands];
+        }
+        /* ] */
+
+        /* compatible brands filter value pickup[ */
+        var cbrands = getSelectedcBrands();
+        if (cbrands.length) {
+            data = data + "&cbrand=" + [cbrands];
         }
         /* ] */
 

@@ -561,6 +561,7 @@ class MyAppController extends FatController
         $frm->addHiddenField('', 'category', 0);
         $frm->addHiddenField('', 'shop_id', 0);
         $frm->addHiddenField('', 'brand_id', 0);
+        $frm->addHiddenField('', 'cbrand_id', 0);
         $frm->addHiddenField('', 'collection_id', 0);
         $frm->addHiddenField('', 'join_price', 0);
         $frm->addHiddenField('', 'featured', 0);

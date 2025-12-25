@@ -28,6 +28,7 @@ class CategoryController extends MyAppController
         } else {
             $get = Product::convertArrToSrchFiltersAssocArr(FatApp::getParameters());
         }
+        //echo 'here<pre>';print_r($get);die;
         $viewType = FatApp::getPostedData('viewType', FatUtility::VAR_STRING, '');
         $get['category'] = $categoryId;
         $get['join_price'] = 1;

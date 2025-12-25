@@ -1509,6 +1509,7 @@ class Product extends MyAppModel
         $srch->joinShopState(); */
         $srch->joinBrands($langId);
         $srch->joincBrands($langId);
+        $srch->joinModel($langId);
         $srch->joinProductToCategory($langId);
         $srch->joinProductToTax();
         $srch->addCondition('selprod_code', 'IS NOT', 'mysql_func_null', 'and', true);
@@ -1662,7 +1663,12 @@ END,   special_price_found ) as special_price_found'
                 $srch->addCbrandCondition($criteria['cbrand']);
             }
         }
-
+        if (array_key_exists('model', $criteria)) {
+            if (!empty($criteria['model'])) {
+                //echo 'tumer<pre>';print_r($criteria['model']); 
+                $srch->addModelCondition($criteria['model']);
+            }
+        }
 
         if (array_key_exists('optionvalue', $criteria)) {
             if (!empty($criteria['optionvalue'])) {

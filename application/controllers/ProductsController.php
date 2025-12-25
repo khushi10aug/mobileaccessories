@@ -237,6 +237,7 @@ class ProductsController extends MyAppController
         echo $this->_template->render(false, false, 'products/brand-filters.php', true);
         exit;
     }
+
     public function cbrandFilters()
     {
         $post = FilterHelper::getParamsAssocArr();
@@ -276,6 +277,54 @@ class ProductsController extends MyAppController
         echo $this->_template->render(false, false, 'products/cbrand-filters.php', true);
         exit;
     }
+
+    public function modelFilters()
+    {
+        $post = FilterHelper::getParamsAssocArr();
+
+        $langIdForKeywordSeach = 0;
+        if (array_key_exists('keyword', $post) && !empty($post['keyword'])) {
+            $langIdForKeywordSeach = $this->siteLangId;
+        }
+
+        $post['doNotJoinSpecialPrice'] = true;
+        $prodSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $post);
+        $prodSrchObj->doNotCalculateRecords();
+
+        $modelCheckedArr = FilterHelper::selectedModel($post);
+        //$prodSrchObj->addFld('count(selprod_id) as totalProducts');
+        $cacheKey = FilterHelper::getCacheKey($this->siteLangId, $post);
+
+        $modelFilter = CacheHelper::get('modelFilter' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
+        if (!$modelFilter) {
+
+            $modelSrch = clone $prodSrchObj;
+            $modelSrch->addMultipleFields(array('product_model','product_id'));
+            $modelSrch->doNotCalculateRecords();
+            $modelSrch->addGroupBy('product_model');
+            $modelRs = $modelSrch->getResultSet(); 
+            $modelArr = FatApp::getDb()->fetchAll($modelRs, 'product_model');
+
+            CacheHelper::create('modelFilter' . $cacheKey, serialize($modelArr));
+        } else {
+            $modelArr = unserialize($modelFilter);
+        }
+
+        if (true === MOBILE_APP_API_CALL) {
+            $this->set('data', [
+                'modelArr' => $modelArr,
+                'modelCheckedArr' => $modelCheckedArr,
+            ]);
+            $this->_template->render();
+        }
+
+        $this->set('modelArr', $modelArr);
+        $this->set('modelCheckedArr', $modelCheckedArr);
+
+        echo $this->_template->render(false, false, 'products/model-filters.php', true);
+        exit;
+    }    
+    
     public function catFilter()
     {
         $headerFormParamsAssocArr = FilterHelper::getParamsAssocArr();
@@ -380,6 +429,7 @@ class ProductsController extends MyAppController
         $cbrandsArr = FilterHelper::cbrands($prodSrchObj, $this->siteLangId, $headerFormParamsAssocArr, MOBILE_APP_API_CALL, true);
         /* ] */
 
+        
         /* {Can modify the logic fetch data directly from query . will implement later}
         Option Filters Data[ */
         $options = FilterHelper::getOptions($this->siteLangId, $categoryId, $prodSrchObj);
@@ -467,6 +517,26 @@ class ProductsController extends MyAppController
         }
         /*] */
 
+        /* Model Filters[ */
+        $modelCheckedArr = FilterHelper::selectedModel($headerFormParamsAssocArr);
+        $model = CacheHelper::get('model' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
+        if (!$model) {
+            $modelSrch = clone $prodSrchObj;
+            $modelSrch->setPageSize(1);
+            $modelSrch->setPageSize(10);
+            $modelSrch->addMultipleFields(array('product_model','product_id'));
+            $modelSrch->doNotCalculateRecords();
+            $modelSrch->addGroupBy('product_model');
+            $modelRs = $modelSrch->getResultSet(); 
+            $modelArr = $db->fetchAll($modelRs, 'product_model');
+            //echo $modelSrch->getQuery(); die;
+            CacheHelper::create('model' . $cacheKey, serialize($modelArr));
+        } else {
+            $modelArr = unserialize($model);
+        }
+        
+        /*] */        
+
         $optionValueCheckedArr = array();
         if (array_key_exists('optionvalue', $headerFormParamsAssocArr)) {
             $optionValueCheckedArr = $headerFormParamsAssocArr['optionvalue'];
@@ -493,6 +563,8 @@ class ProductsController extends MyAppController
         $this->set('cbrandsCheckedArr', $cbrandsCheckedArr);
         $this->set('optionValueCheckedArr', $optionValueCheckedArr);
         $this->set('conditionsArr', $conditionsArr);
+        $this->set('modelArr',$modelArr);
+        $this->set('modelCheckedArr',$modelCheckedArr);
         $this->set('conditionsCheckedArr', $conditionsCheckedArr);
         $this->set('options', $options);
         $this->set('priceArr', $priceArr);

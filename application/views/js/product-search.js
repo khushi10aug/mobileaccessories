@@ -116,6 +116,81 @@ $(function () {
         reloadProductListing(frm);
     });
 
+
+/*
+    $(document).on("change", "input[name=model]", function () { 
+        var id = $(this).attr("data-id");
+        var val = $(this).val();
+        var safeVal = makeModelId(val); // remove spaces
+        var title = $(this).attr("data-title");
+        if ($(this).is(":checked")) {
+            if ($("#model_" + safeVal).length === 0) {
+                $("ul.modelFilter-js").prepend(
+                    '<li><label class="checkbox model" id="model_' +
+                    safeVal +
+                    '"><input name="model" data-id="model_' +
+                    safeVal +
+                    '" value="' +
+                    val +
+                    '" data-title="' +
+                    title +
+                    '" type="checkbox" checked="true"><i class="input-helper">' +
+                    title +
+                    "</i><label></li>"
+                );
+            }
+
+            $("input:checkbox[name=model]").each(function () {
+                if ($(this).attr("data-id") == id) {
+                    $(this).prop("checked", true);
+                }
+            });
+            safeVal = 'model_'+safeVal;
+            addFilter(safeVal, this);
+            addToSearchQueryString(safeVal, this);
+        } else {
+            removeFilter(safeVal, false);
+        }
+        removePaginationFromLink();
+        reloadProductListing(frm);
+    });
+*/
+
+$(document).on("change", "input[name=model]", function () { 
+    var id = $(this).attr("data-id");
+    var val = $(this).val();
+    var title = $(this).attr("data-title");
+    if ($(this).is(":checked")) {
+        if ($("#" + id).length == 0) {
+            $("ul.modelFilter-js").prepend(
+                '<li><label class="checkbox model" id="model_' +
+                val +
+                '"><input name="model" data-id="model_' +
+                val +
+                '" value="' +
+                val +
+                '" data-title="' +
+                title +
+                '" type="checkbox" checked="true"><i class="input-helper">' +
+                title +
+                "</i><label></li>"
+            );
+        }
+
+        $("input:checkbox[name=model]").each(function () {
+            if ($(this).attr("data-id") == id) {
+                $(this).prop("checked", true);
+            }
+        });
+        addFilter(id, this);
+        addToSearchQueryString(id, this);
+    } else {
+        removeFilter(id, false);
+    }
+    removePaginationFromLink();
+    reloadProductListing(frm);
+});
+
     $(document).on("change", "input[name=category]", function () {
         var id = $(this).parent().parent().find("label").attr("id");
         if ($(this).is(":checked")) {
@@ -412,18 +487,44 @@ function cbrandFilters() {
     });
 }
 
+function modelFilters() {
+    var frm = document.frmProductSearch;
+    var url = window.location.href;
+    if ($currentPageUrl == removeLastSpace(url) + "/index") {
+        url = fcom.makeUrl("Products", "modelFilters");
+    } else {
+        url = url.replace(
+            $currentPageUrl,
+            fcom.makeUrl("Products", "modelFilters")
+        );
+    }
+    if (url.indexOf("products/modelFilters") == -1) {
+        url = fcom.makeUrl("Products", "modelFilters");
+    }
+
+    var data = fcom.frmData(frm);
+    var model = getSelectedModel();
+    if (model.length) {
+        data = data + "&model=" + [model];
+    }
+    $("body").removeClass("collection-sidebar--on");
+    fcom.ajax(url, data, function (ans) {
+        $.facebox(ans, "modal-xl");
+    });
+}
+
 function htmlEncode(value) {
     return $("<div/>").text(value).html();
 }
 
-function addFilter(id, obj) {
+function addFilter(id, obj) { console.log(id);
     if (typeof id === "undefined") {
         return;
     }
     removePaginationFromLink();
     var click = "onclick=removeFilter('" + id + "')";
-    $filter = $(obj).parent().text();
-    $filterVal = htmlEncode($(obj).parent().text());
+    $filter = $(obj).parent().text();console.log($filter);
+    $filterVal = htmlEncode($(obj).parent().text());console.log($filterVal);
     if (!$(".selectedFiltersJs").find("a").hasClass(id)) {
         $(".selectedFiltersJs").prepend(
             "<span class='chip'>" +
@@ -522,7 +623,11 @@ function removeFilter(id, reload) {
             $(this).prop("checked", false);
         }
     });
-
+    $("input:checkbox[name=model]").each(function () {
+        if ($(this).attr("data-id") == id) {
+            $(this).prop("checked", false);
+        } 
+    });
     var frm = document.frmProductSearch;
     /* form submit upon onchange of form elements select box[ */
     removeFromSearchQueryString(id);
@@ -933,7 +1038,18 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         });
         return cbrands;
     };
-    
+
+    getSelectedModel = function () {
+        var models = [];
+        $("input:checkbox[name=model]:checked").each(function () {
+            var id = $(this).attr("data-id");
+            addToSearchQueryString(id, this);
+            addFilter(id, this);
+            models.push($(this).val()); 
+        });
+        return models;
+    };
+
     getSetSelectedOptionsUrl = function (frm) {
         var data = fcom.frmData(frm);
 
@@ -963,6 +1079,13 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
             data = data + "&cbrand=" + [cbrands];
         }
         /* ] */
+
+        /* compatible brands filter value pickup[ */
+        var models = getSelectedModel();
+        if (models.length) {
+            data = data + "&model=" + [models];
+        }
+        /* ] */        
 
         /* Option filter value pickup[ */
         var optionvalues = [];

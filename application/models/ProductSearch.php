@@ -833,6 +833,17 @@ class ProductSearch extends SearchBase
         }
     }
 
+    public function joinModel($langId = 0, $isActive = true, $isDeleted = true, $useInnerJoin = true, $criteria = [])
+    {
+        
+        $join = ($useInnerJoin && FatApp::getConfig("CONF_PRODUCT_MODEL_MANDATORY", FatUtility::VAR_INT, 1)) ? 'INNER JOIN' : 'LEFT OUTER JOIN';
+
+        if (array_key_exists('model', $criteria) && !empty($criteria['model'])) {
+            $this->addCondition('product_model', 'IN', $criteria['model']);
+        }
+
+    }    
+
     public function joincBrandsLang($langId, $keyword = '')
     {
         $joinCondition = '';
@@ -1166,6 +1177,44 @@ class ProductSearch extends SearchBase
         }
     }
 
+    public function addModelCondition($params)
+    {
+        $params = FatApp::getParameters();
+        $models = [];
+    
+        foreach ($params as $param) {
+    
+            // Only model filters
+            if (strpos($param, 'model-') === 0) {
+    
+                // Remove "model-"
+                $value = str_replace('model-', '', $param);
+                // Example: "646-iphone-14"
+    
+                $parts = explode('-', $value);
+    
+                // Remove numeric ID if exists
+                if (is_numeric($parts[0])) {
+                    array_shift($parts);
+                }
+    
+                // Convert to readable model name
+                $modelName = implode(' ', $parts); // "iphone 14"
+    
+                $models[] = $modelName;
+            }
+        }
+    
+        if (!empty($models)) {
+    
+            // Escape values for SQL
+            $modelList = "'" . implode("','", array_map('addslashes', $models)) . "'";
+    
+            $this->addDirectCondition("product_model IN ($modelList)");
+        }
+    }
+    
+    
     public function addOptionCondition($optionValue, $obj = false, $alias = '')
     {
         if ($obj === false) {

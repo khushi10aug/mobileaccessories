@@ -111,6 +111,16 @@ class FilterHelper extends FatUtility
             $cacheKey .= '-' . $post['brand_id'];
         }
 
+        if (array_key_exists('cbrand_id', $post)) {
+            $cacheKey .= '-' . $post['cbrand_id'];
+        }
+
+        if (array_key_exists('model', $post) && !empty($post['model'])) {
+            // Convert array to string separated by dashes
+            $cacheKey .= '-' . $post['model'];
+        }
+             
+
         if (array_key_exists('featured', $post)) {
             $cacheKey .= '-f';
         }
@@ -153,6 +163,21 @@ class FilterHelper extends FatUtility
         }
         return array();
     }
+    public static function selectedModel($post)
+    {
+        if (array_key_exists('model', $post)) {
+            if (true === MOBILE_APP_API_CALL) {
+                $post['model'] = json_decode($post['model'], true);
+            }
+
+            if (is_array($post['model'])) {
+                return $post['model'];
+            }
+
+            return explode(',', $post['model']);
+        }
+        return array();
+    }    
 
     public static function brands($prodSrchObj, $langId, $post, $doNotLimitRecord = false, $includePriority = false)
     {

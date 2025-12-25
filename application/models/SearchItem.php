@@ -122,7 +122,40 @@ class SearchItem extends MyAppModel
                             if (!in_array($id, $arr_url_params[$keyString])) {
                                 array_push($arr_url_params[$keyString], $id);
                             }
-                            break;                        
+                            break;    
+                            case 'model':
+                                $dashPosition = strpos($valueString, '-');
+                                if ($dashPosition == 0) {
+                                    $dashPosition = strpos(substr($valueString, 1), '-') + 1;
+                                }
+                                $id = substr($valueString, 0, $dashPosition);
+                                $valueString = substr($valueString, $dashPosition + 1);
+                                if (!array_key_exists($keyString, $arr_url_params)) {
+                                    $arr_url_params[$keyString] = array();
+                                }
+                                if (!in_array($id, $arr_url_params[$keyString])) {
+                                    array_push($arr_url_params[$keyString], $id);
+                                }
+                                break; 
+                            /*case 'model':
+                                if (!array_key_exists('model', $arr_url_params)) {
+                                    $arr_url_params['model'] = [];
+                                }
+                            
+                                $parts = explode('-', $valueString);
+                            
+                                // Remove numeric ID at the start
+                                if (count($parts) > 1 && is_numeric($parts[0])) {
+                                    array_shift($parts);
+                                }
+                            
+                                $slug = implode(' ', $parts);
+                            
+                                if (!in_array($slug, $arr_url_params['model'])) {
+                                    $arr_url_params['model'][] = $slug;
+                                }
+                                break;*/
+                                                    
                     case 'prodcat':
                     case 'optionvalue':
                     case 'condition':

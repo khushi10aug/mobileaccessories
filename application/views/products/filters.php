@@ -128,7 +128,48 @@ if (isset($priceArr) && $priceArr && 1 > FatApp::getConfig('CONF_HIDE_PRICES', F
 } ?>
 
 
+<?php if (isset($modelArr) && count($modelArr) > 1) {
+    
+    $modelCheckedArr = (isset($modelCheckedArr) && !empty($modelCheckedArr)) ? $modelCheckedArr : array(); 
 
+    ?>
+
+    <div class="sidebar-widget">
+        <div class="sidebar-widget_head" data-bs-toggle="collapse" data-bs-target="#model" aria-expanded="true">
+            <?php echo Labels::getLabel('LBL_Model', $siteLangId); ?></div>
+        <div class="sidebar-widget_body collapse show" id="model">
+            <div class="scrollbar-filters scroll scroll-y" id="scrollbar-filters">
+                <ul class="list-vertical modelFilter-js">
+                    <?php foreach ($modelArr as $model) {
+                        if ($model['product_model'] == null) {
+                            continue;
+                        }
+                        $model['product_model'] = trim($model['product_model']);
+
+                        ?>
+                        <li><label class="checkbox model" id="model_<?php echo $model['product_id']; ?>">
+                        <input name="model" data-id="model_<?php echo $model['product_id']; ?>" value="<?php echo $model['product_id']; ?>" data-title="<?php echo $model['product_model']; ?>" type="checkbox" <?php if (in_array( $model['product_id'] , $modelCheckedArr)) 
+                            {
+                             echo "checked='true'";
+                            } ?>><span class="lb-txt"><?php echo $model['product_model']; ?></span> </label>
+                        </li>
+                    <?php
+                    } ?>
+                </ul>
+            </div>
+
+
+            <?php if (count($modelArr) >= 10) { ?>
+                <div class="view-all">
+                    <button type="button" onClick="modelFilters()" class="link-underline">
+                        <?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?> </button>
+                </div>
+            <?php } ?>
+        </div>
+    </div>
+    </div>
+<?php
+} ?>
 
 <?php
 $optionIds = array();

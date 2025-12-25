@@ -527,6 +527,7 @@ class ProductsController extends MyAppController
             $modelSrch->setPageSize(10);
             $modelSrch->addMultipleFields(array('product_model','product_id'));
             $modelSrch->doNotCalculateRecords();
+            $modelSrch->addOrder('product_model', 'ASC');
             $modelSrch->addGroupBy('product_model');
             $modelRs = $modelSrch->getResultSet(); 
             $modelArr = $db->fetchAll($modelRs, 'product_model');

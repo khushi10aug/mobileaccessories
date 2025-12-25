@@ -302,6 +302,7 @@ class ProductsController extends MyAppController
             $modelSrch->addMultipleFields(array('product_model','product_id'));
             $modelSrch->doNotCalculateRecords();
             $modelSrch->addGroupBy('product_model');
+            $modelSrch->addOrder('product_model', 'ASC');
             $modelRs = $modelSrch->getResultSet(); 
             $modelArr = FatApp::getDb()->fetchAll($modelRs, 'product_model');
 

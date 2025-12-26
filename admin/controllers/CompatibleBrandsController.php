@@ -10,7 +10,7 @@ class CompatibleBrandsController extends ListingBaseController
     {
         parent::__construct($action);
         $this->objPrivilege->canViewBrands();
-        $this->rewriteUrl = Brand::REWRITE_URL_PREFIX;
+        $this->rewriteUrl = CompatibleBrand::REWRITE_URL_PREFIX;
     }
 
     public function index()
@@ -128,19 +128,6 @@ class CompatibleBrandsController extends ListingBaseController
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
-
-            /* url data[ */
-            $urlSrch = UrlRewrite::getSearchObject();
-            $urlSrch->doNotCalculateRecords();
-            $urlSrch->setPageSize(1);
-            $urlSrch->addFld('urlrewrite_custom');
-            $urlSrch->addCondition('urlrewrite_original', '=', $this->rewriteUrl . $recordId);
-            $rs = $urlSrch->getResultSet();
-            $urlRow = FatApp::getDb()->fetch($rs);
-            if ($urlRow) {
-                $data['urlrewrite_custom'] = $urlRow['urlrewrite_custom'];
-            }
-            /* ] */
             $frm->fill($data);
         }
 
@@ -186,8 +173,8 @@ class CompatibleBrandsController extends ListingBaseController
         $data['cbrand_identifier'] = $data['cbrand_name'];
 
         if ($recordId == 0) {
-            $record = Brand::getAttributesByIdentifier($data['cbrand_identifier']);
-            if (!empty($record) && $record['cbrand_deleted'] == applicationConstants::YES) {
+            $record = CompatibleBrand::getAttributesByIdentifier($data['cbrand_identifier']);
+            if (!empty($record) /*&& $record['cbrand_deleted'] == applicationConstants::YES*/) {
                 $recordId = $record['cbrand_id'];
                 $data['cbrand_deleted'] = applicationConstants::NO;
             }
@@ -213,7 +200,7 @@ class CompatibleBrandsController extends ListingBaseController
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(Brand::DB_TBL_LANG);
+            $updateLangDataobj = new TranslateLangData(CompatibleBrand::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
@@ -234,7 +221,7 @@ class CompatibleBrandsController extends ListingBaseController
         $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         if (0 < count($languages)) {
             foreach ($languages as $langId => $langName) {
-                if (!Brand::getAttributesByLangId($langId, $recordId)) {
+                if (!CompatibleBrand::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }
@@ -491,14 +478,14 @@ class CompatibleBrandsController extends ListingBaseController
 
         $prodBrandLangFrm = $this->getLangForm($brand_id, $lang_id);
         if (0 < $autoFillLangData) {
-            $updateLangDataobj = new TranslateLangData(Brand::DB_TBL_LANG);
+            $updateLangDataobj = new TranslateLangData(CompatibleBrand::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($brand_id, $lang_id, CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
-            $langData = Brand::getAttributesByLangId($lang_id, $brand_id);
+            $langData = CompatibleBrand::getAttributesByLangId($lang_id, $brand_id);
         }
 
         if ($langData) {
@@ -618,7 +605,7 @@ class CompatibleBrandsController extends ListingBaseController
             $srch->addCondition('cbrand_id', 'NOT IN', $excludeRecords);
         }
 
-        $srch->addCondition('cbrand_status', '=', Brand::BRAND_REQUEST_APPROVED);
+        $srch->addCondition('cbrand_status', '=', CompatibleBrand::BRAND_REQUEST_APPROVED);
         $doNotLimitRecords = FatApp::getPostedData('doNotLimitRecords', FatUtility::VAR_INT, 0);
         if (0 < $doNotLimitRecords) {
             $srch->doNotCalculateRecords();

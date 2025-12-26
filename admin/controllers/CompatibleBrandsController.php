@@ -257,7 +257,7 @@ class CompatibleBrandsController extends ListingBaseController
         $this->objPrivilege->canEditBrands();
         $recordId = FatUtility::int($recordId);
 
-        $frm = new Form('frmProdBrand', array('id' => 'frmProdBrand'));
+        $frm = new Form('frmProdcBrand', array('id' => 'frmProdcBrand'));
         $frm->addHiddenField('', 'cbrand_id', $recordId);
         $frm->addRequiredField(Labels::getLabel('FRM_COMPATIBLE_BRAND_NAME', $this->siteLangId), 'cbrand_name');
         //$frm->addRequiredField(Labels::getLabel('FRM_Brand_Identifier', $this->siteLangId), 'brand_identifier');
@@ -279,7 +279,7 @@ class CompatibleBrandsController extends ListingBaseController
     protected function getLangForm($recordId = 0, $langId = 0)
     {
         $langId = 1 > $langId ? $this->siteLangId : $langId;
-        $frm = new Form('frmProdBrandLang', array('id' => 'frmProdBrandLang'));
+        $frm = new Form('frmProdcBrandLang', array('id' => 'frmProdcBrandLang'));
         $frm->addHiddenField('', 'cbrand_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_BRAND_NAME', $langId), 'cbrand_name');

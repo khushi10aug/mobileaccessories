@@ -52,7 +52,14 @@
             fcom.removeLoader();
         });
     };
-
+    addCompatibleBrand = function () {
+        fcom.resetEditorInstance();
+        fcom.updateWithAjax(fcom.makeUrl('compatibleBrands', "form"), "", function (t) {
+            fcom.closeProcessing();
+            $.ykmodal(t.html);
+            fcom.removeLoader();
+        });
+    };
     addCategory = function () {
         fcom.resetEditorInstance();
         fcom.updateWithAjax(fcom.makeUrl('ProductCategories', "form"), "", function (t) {

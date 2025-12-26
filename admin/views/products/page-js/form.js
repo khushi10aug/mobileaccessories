@@ -73,7 +73,7 @@ $(document).ready(function () {
 
     addCompatibleBrand = function () {
         fcom.resetEditorInstance();
-        fcom.updateWithAjax(fcom.makeUrl('CompatibleBrands', "form"), "", function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('compatibleBrands', "form"), "", function (t) {
             fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();

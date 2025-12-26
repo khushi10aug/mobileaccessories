@@ -2,7 +2,7 @@
 $frm->setFormTagAttribute('class', 'form');
 
 $fld = $frm->getField('cbrand_name');
-$fld->addFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','brand_id');
+$fld->addFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','cbrand_id');
 getSlugUrl($(\"#urlrewrite_custom\"),$(\"#urlrewrite_custom\").val())");
 
 $fld = $frm->getField('cbrand_id');

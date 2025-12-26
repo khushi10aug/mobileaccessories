@@ -1,10 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $frm->setFormTagAttribute('class', 'form');
 
-$fld = $frm->getField('cbrand_name');
-$fld->addFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','cbrand_id');
-getSlugUrl($(\"#urlrewrite_custom\"),$(\"#urlrewrite_custom\").val())");
-
 $fld = $frm->getField('cbrand_id');
 $fld->setFieldTagAttribute('id', "cbrand_id");
 

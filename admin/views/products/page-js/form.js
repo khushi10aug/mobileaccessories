@@ -969,7 +969,7 @@ $(document).on('click', '.stockNavJs > ul > li a', function (e) {
 });
 
 
-$('#backBtn').on('click', function () {
+$(document).on('click', '#backBtn', function () {
     // Get current URL
     let currentUrl = window.location.href;
 

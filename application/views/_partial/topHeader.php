@@ -169,7 +169,7 @@
                             if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && 0 < FatApp::getConfig('CONF_GLOBAL_RFQ_MODULE', FatUtility::VAR_INT, 0) && (User::isBuyer(true) || !UserAuthentication::isUserLogged())) { ?>
 
                                 <button class="btn btn-brand btn-rfq" type="button" onclick="requestForQuoteFn(0);">
-                                    <?php echo Labels::getLabel('LBL_REQUEST_FOR_QUOTE', $siteLangId); ?>
+                                    <?php echo Labels::getLabel('LBL_REQUEST_B2B_QUOTE', $siteLangId); ?>
                                 </button>
                         <?php }
                         } ?>

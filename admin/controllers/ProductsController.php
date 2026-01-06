@@ -83,7 +83,7 @@ class ProductsController extends ListingBaseController
         $jsonData = [
             'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
         ];
-
+       
         if (!$loadPagination || !FatUtility::isAjaxCall()) {
             $jsonData['listingHtml'] = $this->_template->render(false, false, 'products/search.php', true);
         }
@@ -112,6 +112,11 @@ class ProductsController extends ListingBaseController
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
         $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
+ 
+        $sendQueryPost = ['page'=>$page];
+        unset($sendQueryPost['total_record_count']);
+        $queryString = http_build_query($sendQueryPost);
+        $this->set('queryString', $queryString);
 
         $srch = Product::getSearchObject($this->siteLangId);
         //$srch->joinTable(AttributeGroup::DB_TBL, 'LEFT OUTER JOIN', 'product_attrgrp_id = attrgrp_id', 'attrgrp');

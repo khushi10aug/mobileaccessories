@@ -967,3 +967,24 @@ $(document).on('click', '.stockNavJs > ul > li a', function (e) {
     $(this).closest('li').siblings().removeClass('is-active');
     $(this).closest('li').addClass('is-active');
 });
+
+
+$('#backBtn').on('click', function () {
+    // Get current URL
+    let currentUrl = window.location.href;
+
+    // Create URL object to easily parse it
+    let url = new URL(currentUrl);
+
+    // Get the query string part
+    let queryString = url.search; // includes ?page=2&sortBy=...
+
+    // Build your base list page URL
+    let baseUrl = fcom.makeUrl('Products'); // Yo!Kart helper for controller URL
+
+    // Combine them
+    let finalUrl = baseUrl + queryString;
+
+    // Redirect back with filters intact
+    window.location.href = finalUrl;
+});

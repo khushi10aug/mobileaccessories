@@ -13,6 +13,14 @@ if (0 < $recordId) {
 ?>
 <main class="main mainJs" <?php echo CommonHelper::getLayoutDirection() != $formLayout ? 'dir="' . $formLayout . '"' : ''; ?>>
     <div class="container">
+
+    <a style="float:left;" id="backBtn" class="btn-back" href="javascript:void(0);">
+        <svg class="svg" width="24" height="24">
+            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
+            </use>
+        </svg>
+    </a>
+
         <?php
         $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false);
         $frm->setFormTagAttribute('id', 'addProductfrm');

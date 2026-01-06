@@ -73,10 +73,15 @@ foreach ($arrListing as $sn => $row) {
                     'recordId' => $row['product_id']
                 ];
 
+                $url = UrlHelper::generateUrl('Products', 'form', array($row['product_id']));
+                if (!empty($queryString)) {
+                    $url .= '?' . $queryString;
+                }
+
                 if ($canEdit) {
                     $data['otherButtons'][] = [
                         'attr' => [
-                            'href' => UrlHelper::generateUrl('Products', 'form', array($row['product_id'])),
+                            'href' => $url,//UrlHelper::generateUrl('Products', 'form', array($row['product_id'])),
                             'title' => Labels::getLabel('LBL_EDIT', $siteLangId)
                         ],
                         'label' => '<svg class="svg" width="18" height="18">

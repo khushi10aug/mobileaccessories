@@ -898,6 +898,7 @@ $(document).on("click", ".selectItemJs", function () {
     }
 }); */
 
+
 $(window).on('load', function () {
     fixTableColumnWidth();
     frm = document.frmRecordSearchPaging;

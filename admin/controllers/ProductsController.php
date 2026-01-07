@@ -113,7 +113,7 @@ class ProductsController extends ListingBaseController
         $page = ($page <= 0) ? 1 : $page;
         $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
  
-        $sendQueryPost = ['page'=>$page];
+        $sendQueryPost = ['page'=>$page,'keyword'=>$post['keyword']];
         unset($sendQueryPost['total_record_count']);
         $queryString = http_build_query($sendQueryPost);
         $this->set('queryString', $queryString);
@@ -220,7 +220,7 @@ class ProductsController extends ListingBaseController
         $records = [];
         if (!$loadPagination) {
             $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-        }
+        } //echo $srch->getQuery(); die;
 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set("arrListing", $records);

@@ -75,7 +75,7 @@ foreach ($arrListing as $sn => $row) {
 
                 $url = UrlHelper::generateUrl('Products', 'form', array($row['product_id']));
                 if (!empty($queryString)) {
-                    $url .= '?' . $queryString;
+                    $url .= '?' . html_entity_decode($queryString);
                 }
 
                 if ($canEdit) {

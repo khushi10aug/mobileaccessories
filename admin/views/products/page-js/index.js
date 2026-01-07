@@ -12,64 +12,107 @@ $(document).ready(function () {
 
 
 document.addEventListener("DOMContentLoaded", function () {
+
     const form = document.forms.frmRecordSearch;
     const pagingForm = document.forms['frmRecordSearchPaging'] || form;
 
-    function getCurrentPage() {
-        const params = new URLSearchParams(window.location.search);
-        return parseInt(params.get('page')) || 1;
-    }
+    /* ===============================
+       1. DECODE URL PROPERLY
+    =============================== */
+    let rawQuery = window.location.search;
+    rawQuery = decodeHtmlParams(rawQuery); // handles &amp;amp;
 
-    function setPageInForm(page) {
-        if (pagingForm && pagingForm.page) pagingForm.page.value = page;
-        if (form && form.page) form.page.value = page;
+    const urlParams = new URLSearchParams(rawQuery);
+
+    const currentPage = parseInt(urlParams.get('page')) || 1;
+    const keyword = urlParams.get('keyword') || '';
+
+    /* ===============================
+       2. SET VALUES
+    =============================== */
+    if (form.page) form.page.value = currentPage;
+    if (form.keyword) form.keyword.value = keyword;
+
+    /* ===============================
+       3. RESTORE OTHER FIELDS
+    =============================== */
+    restoreFormFromUrl(urlParams);
+
+    /* ===============================
+       4. PAGINATION
+    =============================== */
+    setActivePagination(currentPage);
+
+    /* ===============================
+       5. AUTO SEARCH
+    =============================== */
+    setTimeout(() => {
+
+
+        const params = new URLSearchParams(window.location.search);
+        if (params.size > 0) {
+            const cleanUrl = window.location.pathname; // same page, no query string
+            window.history.replaceState({}, '', cleanUrl);
+        }
+
+        searchRecords(form, currentPage);
+    }, 50);
+
+    /* ===============================
+       FUNCTIONS
+    =============================== */
+
+    function restoreFormFromUrl(params) {
+        params.forEach((value, key) => {
+            const $el = $(
+                `#frmRecordSearch [name="${key}"], 
+                 #frmRecordSearchPaging [name="${key}"]`
+            );
+            if ($el.length) {
+                $el.val(value);
+            }
+        });
     }
 
     function setActivePagination(page) {
         const pagination = document.querySelector('.pagination');
         if (!pagination) return;
-    
-        // Only remove "selected" if not page 1
-        if (page > 1) {
-            pagination.querySelectorAll('li').forEach(li => li.classList.remove('selected'));
-        }
-    
+
+        pagination.querySelectorAll('li').forEach(li => li.classList.remove('selected'));
+
         pagination.querySelectorAll('a').forEach(a => {
             const onclickAttr = a.getAttribute('onclick') || '';
             if (onclickAttr.includes(`goToSearchPage(${page})`)) {
-                const li = a.closest('li');
-                if (li) li.classList.add('selected');
+                a.closest('li')?.classList.add('selected');
             }
         });
     }
 
-    const currentPage = getCurrentPage();
-    setPageInForm(currentPage);
-    restoreFormFromUrl();
-    setActivePagination(currentPage);
-
-    // ✅ Remove query string from URL (without reload)
-    setTimeout(function () {
-    const params = new URLSearchParams(window.location.search);
-    if (params.size > 0) {
-        const cleanUrl = window.location.pathname; // same page, no query string
-        window.history.replaceState({}, '', cleanUrl);
-       searchRecords(form, currentPage);
-    }
-}, 100);
-
-    function restoreFormFromUrl() {
-        let rawQuery = window.location.search.replace(/&amp;/g, '&');
-        const params = new URLSearchParams(rawQuery);
-        if (!params.size) return;
-
-        params.forEach((value, key) => {
-            const $el = $(`#frmRecordSearch [name="${key}"], #frmRecordSearchPaging [name="${key}"]`);
-            if (!$el.length) return;
-
-            $el.val(value);
-        });
+    function decodeHtmlParams(query) {
+        const txt = document.createElement('textarea');
+        txt.innerHTML = query;
+        return txt.value;
     }
 
 });
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.forms.frmRecordSearch;
+
+    if (!form) return;
+
+    //  Reset page on Search button click
+    document.querySelectorAll('.submitBtnJs').forEach(btn => {
+        btn.addEventListener('click', function () {
+            if (form.page) {
+                form.page.value = 0; // or 1 if your system uses 1-based pages
+            }
+        });
+    });
+
+});
+
 

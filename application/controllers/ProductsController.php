@@ -304,6 +304,7 @@ class ProductsController extends MyAppController
             $modelSrch->addGroupBy('product_model');
             $modelSrch->addOrder('product_model', 'ASC');
             $modelRs = $modelSrch->getResultSet(); 
+            
             $modelArr = FatApp::getDb()->fetchAll($modelRs, 'product_model');
 
             CacheHelper::create('modelFilter' . $cacheKey, serialize($modelArr));

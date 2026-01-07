@@ -587,7 +587,7 @@ class ProductsController extends ListingBaseController
         $prodObj = new Product($recordId);
         $db = FatApp::getDb();
         $db->startTransaction();
-
+        $post['product_model'] = trim($post['product_model']);
         if (!$prodObj->saveProductData($post)) {
             $db->rollbackTransaction();
             LibHelper::exitWithError($prodObj->getError(), true);

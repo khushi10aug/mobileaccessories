@@ -1727,4 +1727,22 @@ class ProductCategory extends MyAppModel
     {
         FatApp::getDb()->query('CALL UpdateHasChildCategoryFlag(' . $catId . ')');
     }
+
+    public static function sortCategoriesByNameAsc(array $categories): array
+    {
+        uasort($categories, function ($a, $b) {
+            return strcasecmp($a['prodcat_name'], $b['prodcat_name']);
+        });
+    
+        foreach ($categories as &$category) {
+            if (!empty($category['children']) && is_array($category['children'])) {
+                $category['children'] = self::sortCategoriesByNameAsc($category['children']);
+            }
+        }
+    
+        return $categories;
+    }
+    
+    
+
 }

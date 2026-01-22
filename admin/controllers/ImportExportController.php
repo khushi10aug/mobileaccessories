@@ -185,6 +185,7 @@ class ImportExportController extends ListingBaseController
                 $this->objPrivilege->canViewProductCategories();
                 break;
             case Importexport::TYPE_BRANDS:
+            case Importexport::TYPE_CBRANDS:
                 $this->objPrivilege->canViewBrands();
                 break;
             case Importexport::TYPE_PRODUCTS:
@@ -464,6 +465,11 @@ class ImportExportController extends ListingBaseController
                 $this->objPrivilege->canViewBrands();
                 $displayMediaTab = true;
                 break;
+            case Importexport::TYPE_CBRANDS:
+                    $formTitle = Labels::getLabel('LBL_EXPORT_COMPATIBLE_BRANDS', $this->siteLangId);
+                    $this->objPrivilege->canViewBrands();
+                   // $displayMediaTab = true;
+                    break;                
             case Importexport::TYPE_PRODUCTS:
                 $formTitle = Labels::getLabel('LBL_EXPORT_PRODUCTS', $this->siteLangId);
                 $this->objPrivilege->canViewProducts();

@@ -33,8 +33,11 @@
             $headerCategories = ProductCategory::getArray($siteLangId, 0, false, true, false, CONF_USE_FAT_CACHE);
             CacheHelper::create('headerCategories_' . $siteLangId, serialize($headerCategories), CacheHelper::TYPE_NAVIGATION);
         }
+        
         if ($isMegaMenuEnabled == Navigations::LAYOUT_MEGA_MENU && !empty($headerCategories)) {
             $catCount = 0;
+         
+            $headerCategories = ProductCategory::sortCategoriesByNameAsc($headerCategories);
             foreach ($headerCategories as $link) {
                 $href = UrlHelper::generateUrl('category', 'view', array($link['prodcat_id']));
                 $OrgnavUrl = UrlHelper::generateUrl('category', 'view', array($link['prodcat_id']), '', false);

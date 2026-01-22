@@ -23,6 +23,7 @@ class Importexport extends ImportexportCommon
     public const TYPE_SELLER_PRODUCTS = 15;
     public const TYPE_ORDER_PRODUCTS = 16;
     public const TYPE_ZONES = 17;
+    public const TYPE_CBRANDS = 18;
 
     public const MAX_LIMIT = 1000;
 
@@ -74,6 +75,8 @@ class Importexport extends ImportexportCommon
                 $arr[static::TYPE_INVENTORIES] = Labels::getLabel('NAV_PRODUCT_INVENTORIES', $langId);
                 // $arr[static::TYPE_INVENTORY_UPDATE] = Labels::getLabel('NAV_INVENTORY_UPDATE', $langId);
                 $arr[static::TYPE_BRANDS] = Labels::getLabel('NAV_BRANDS', $langId);
+                $arr[static::TYPE_CBRANDS] = Labels::getLabel('NAV_COMPATIBLE_BRANDS', $langId);
+
                 if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
                     $arr[static::TYPE_OPTIONS] = Labels::getLabel('NAV_OPTIONS', $langId);
                     $arr[static::TYPE_OPTION_VALUES] = Labels::getLabel('NAV_OPTION_VALUES', $langId);
@@ -101,6 +104,7 @@ class Importexport extends ImportexportCommon
                 if (!$sellerDashboard) {
                     $arr[static::TYPE_CATEGORIES] = Labels::getLabel('NAV_CATEGORIES', $langId);
                     $arr[static::TYPE_BRANDS] = Labels::getLabel('NAV_BRANDS', $langId);
+
                     if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
                         $arr[static::TYPE_OPTIONS] = Labels::getLabel('NAV_OPTIONS', $langId);
                         $arr[static::TYPE_OPTION_VALUES] = Labels::getLabel('NAV_OPTION_VALUES', $langId);
@@ -137,6 +141,8 @@ class Importexport extends ImportexportCommon
                 $arr[static::TYPE_INVENTORIES] = Labels::getLabel('MSG_EXPORT_PRODUCT_INVENTORIES_DATA_THROUGH_CSV_FILE', $langId);
                 // $arr[static::TYPE_INVENTORY_UPDATE] = Labels::getLabel('NAV_INVENTORY_UPDATE', $langId);
                 $arr[static::TYPE_BRANDS] = Labels::getLabel('MSG_EXPORT_PRODUCT_BRANDS_DATA_THROUGH_CSV_FILE', $langId);
+                $arr[static::TYPE_CBRANDS] = Labels::getLabel('MSG_EXPORT_PRODUCT_COMPATIBLE_BRANDS_DATA_THROUGH_CSV_FILE', $langId);
+
                 if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
                     $arr[static::TYPE_OPTIONS] = Labels::getLabel('MSG_EXPORT_PRODUCT_OPTIONS_DATA_THROUGH_CSV_FILE', $langId);
                     $arr[static::TYPE_OPTION_VALUES] = Labels::getLabel('MSG_EXPORT_PRODUCT_OPTION_VALUES_THROUGH_CSV_FILE', $langId);
@@ -163,6 +169,7 @@ class Importexport extends ImportexportCommon
                 if (!$sellerDashboard) {
                     $arr[static::TYPE_CATEGORIES] = Labels::getLabel('MSG_IMPORT_CATEGORIES_THROUGH_CSV_FILE', $langId);
                     $arr[static::TYPE_BRANDS] = Labels::getLabel('MSG_IMPORT_BRAND_THROUGH_CSV_FILE', $langId);
+
                     if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
                         $arr[static::TYPE_OPTIONS] = Labels::getLabel('MSG_IMPORT_PRODUCT_OPTIONS_THROUGH_CSV_FILE', $langId);
                         $arr[static::TYPE_OPTION_VALUES] = Labels::getLabel('MSG_IMPORT_PRODUCT_OPTION_VALUES_THROUGH_CSV_FILE', $langId);
@@ -321,6 +328,11 @@ class Importexport extends ImportexportCommon
                 $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
                 $this->exportBrands($langId, $userId);
                 break;
+            case Importexport::TYPE_CBRANDS:
+                    $sheetName = Labels::getLabel('LBL_CBRANDS', $langId) . $sheetName;
+                    $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
+                    $this->exportcBrands($langId, $userId);
+                    break;                
             case Importexport::TYPE_CATEGORIES:
                 $sheetName = Labels::getLabel('LBL_CATEGORY', $langId) . $sheetName;
                 $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
@@ -537,7 +549,7 @@ class Importexport extends ImportexportCommon
                 $sheetName = Labels::getLabel('LBL_BRANDS_MEDIA', $langId) . $sheetName;
                 $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
                 $this->exportBrandMedia($langId);
-                break;
+                break;              
             case Importexport::TYPE_CATEGORIES:
                 $sheetName = Labels::getLabel('LBL_CATEGORY_MEDIA', $langId) . $sheetName;
                 $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
@@ -1215,6 +1227,54 @@ class Importexport extends ImportexportCommon
         CommonHelper::writeExportDataToCSV($this->CSVfileObj, array(), true, $this->CSVfileName);
     }
 
+    public function exportcBrands($langId, $userId = 0)
+    {
+        $userId = FatUtility::int($userId);
+        if (!$userId) {
+            /*Fetch all seo keyword [*/
+            $urlKeywords = $this->getAllRewriteUrls(Brand::REWRITE_URL_PREFIX);
+            /*]*/
+        }
+
+        $srch = CompatibleBrand::getSearchObject($langId, false);
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addMultipleFields(array('cbrand_id', 'cbrand_identifier', 'iFNULL(cbrand_name,cbrand_identifier) as cbrand_name', 'cbrand_active','cbrand_deleted'));
+        $srch->addCondition('cbrand_status', '=', applicationConstants::ACTIVE);
+        if ($userId) {
+            $srch->addCondition('cbrand_active', '=', applicationConstants::ACTIVE);
+            $srch->addOrder('cbrand_id');
+        }
+        $rs = $srch->getResultSet();
+
+        $sheetData = array();
+
+        /* Sheet Heading Row [ */
+        $headingsArr = $this->getcBrandColoumArr($langId, $userId);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
+        /* ] */
+        // $data = $this->db->fetchAll($rs);
+
+        while ($row = $this->db->fetch($rs)) {
+            $sheetData = array();
+            foreach ($headingsArr as $columnKey => $heading) {
+                $colValue = array_key_exists($columnKey, $row) ? $row[$columnKey] : '';
+                switch ($columnKey) {
+                    case 'cbrand_active':
+                    case 'cbrand_deleted':
+                        if (!$this->settings['CONF_USE_O_OR_1']) {
+                            $colValue = (FatUtility::int($colValue) == 1) ? 'YES' : 'NO';
+                        }
+                        break;
+                }
+
+                $sheetData[] = $this->parseContentForExport($colValue);
+            }
+            CommonHelper::writeExportDataToCSV($this->CSVfileObj, $sheetData);
+        }
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, array(), true, $this->CSVfileName);
+    }
+
     public function importBrands($csvFilePointer, $post, $langId, $userId = null)
     {
         $rowIndex = 1;
@@ -1563,6 +1623,7 @@ class Importexport extends ImportexportCommon
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = tp.product_seller_id', 'u');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.credential_user_id = tp.product_seller_id', 'uc');
         $srch->joinTable(Brand::DB_TBL, 'LEFT OUTER JOIN', 'b.brand_id = tp.product_brand_id', 'b');
+        $srch->joinTable(CompatibleBrand::DB_TBL, 'LEFT OUTER JOIN', 'cb.cbrand_id = tp.product_cbrand_id', 'cb');
 
         if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
             $cond = ' and ps.ps_user_id = 0';
@@ -1581,7 +1642,7 @@ class Importexport extends ImportexportCommon
         $srch->joinTable(ShippingPackage::DB_TBL, 'LEFT OUTER JOIN', 'spp.shippack_id = tp.product_ship_package', 'spp'); */
         //$srch->joinTable(Countries::DB_TBL,'LEFT OUTER JOIN','c.country_id = tp.product_ship_country','c');
         $srch->doNotCalculateRecords();
-        $srch->addMultipleFields(['tp.*', 'tp_l.*', 'ps.ps_from_country_id', 'ps.ps_free', 'user_id', 'credential_username', 'brand_id', 'brand_identifier', 'country_id', 'country_code', 'product_warranty', 'sppro.shippro_shipprofile_id']);
+        $srch->addMultipleFields(['tp.*', 'tp_l.*', 'ps.ps_from_country_id', 'ps.ps_free', 'user_id', 'credential_username', 'brand_id', 'brand_identifier','cbrand_id', 'cbrand_identifier','product_cbrand_id', 'country_id', 'country_code', 'product_warranty', 'sppro.shippro_shipprofile_id']);
 
         switch ($this->actionType) {
             case self::ACTION_ADMIN_PRODUCTS:
@@ -1612,7 +1673,7 @@ class Importexport extends ImportexportCommon
         if (isset($minId) && isset($maxId)) {
             $srch->addCondition('product_id', '>=', $minId);
             $srch->addCondition('product_id', '<=', $maxId);
-        }
+        } 
         $rs = $srch->getResultSet();
 
         $sheetData = array();
@@ -1622,6 +1683,7 @@ class Importexport extends ImportexportCommon
         /* ] */
 
         while ($row = $this->db->fetch($rs)) {
+           
             $taxData = $this->getTaxCategoryByProductId($row['product_id']);
 
             if (!empty($taxData)) {
@@ -1746,6 +1808,7 @@ class Importexport extends ImportexportCommon
         $shippingProfileArr = ShippingProfile::getProfileArr($langId, 0, true, true, true);
         $adminDefaultShipProfileId =  array_key_first($shippingProfileArr);
         $coloumArr = $this->getProductsCatalogColoumArr($langId, $sellerId, $this->actionType);
+        
         $this->validateCSVHeaders($csvFilePointer, $coloumArr, $langId);
 
         $errInSheet = false;
@@ -1926,6 +1989,8 @@ class Importexport extends ImportexportCommon
                             }
                             $colValue = isset($brandIdentifierArr[$colValue]) ? $brandIdentifierArr[$colValue] : 0;
                             break;
+
+
                         case 'product_type_identifier':
                             $columnKey = 'product_type';
                             $colValue = mb_strtolower($colValue);

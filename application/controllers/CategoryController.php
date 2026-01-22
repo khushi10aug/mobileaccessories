@@ -10,6 +10,7 @@ class CategoryController extends MyAppController
     public function index()
     {
         $headerCategories = ProductCategory::getArray($this->siteLangId, 0, false, true, false, CONF_USE_FAT_CACHE);
+        
         $this->_template->addJs('js/imagesloaded.pkgd.min.js');
         $this->set('categoriesArr', $headerCategories);
         $this->_template->render();

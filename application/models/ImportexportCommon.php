@@ -285,6 +285,32 @@ class ImportexportCommon extends FatModel
         return $arr;
     }
 
+    public function getcBrandColoumArr($langId, $userId = 0)
+    {
+        $arr = array();
+
+        if ($this->settings['CONF_USE_BRAND_ID']) {
+            $arr['cbrand_id'] = Labels::getLabel('LBL_CBRAND_ID', $langId);
+            if ($this->isDefaultSheetData($langId)) {
+                $arr['cbrand_identifier'] = Labels::getLabel('LBL_CBRAND_IDENTIFIER', $langId);
+            }
+        } else {
+            $arr['cbrand_id'] = Labels::getLabel('LBL_CBRAND_ID', $langId);
+            $arr['cbrand_identifier'] = Labels::getLabel('LBL_CBRAND_IDENTIFIER', $langId);
+        }
+        $arr['cbrand_name'] = Labels::getLabel('LBL_NAME', $langId);
+
+        if (!$userId) {
+            /*$arr['brand_short_description'] = Labels::getLabel('LBL_Description', $langId);*/
+
+            if ($this->isDefaultSheetData($langId)) {
+                $arr['cbrand_active'] = Labels::getLabel('LBL_ACTIVE', $langId);
+                $arr['cbrand_deleted'] = Labels::getLabel('LBL_DELETED', $langId);
+            }
+        }
+        return $arr;
+    }    
+
     public function getBrandMediaColoumArr($langId)
     {
         $arr = array();
@@ -349,6 +375,9 @@ class ImportexportCommon extends FatModel
             } else {
                 $arr['brand_identifier'] = Labels::getLabel('LBL_BRAND_IDENTIFIER', $langId);
             }
+           
+            $arr['product_cbrand_id'] = Labels::getLabel('LBL_COMPATIBLE_BRAND_ID', $langId);
+            
 
             if ($this->settings['CONF_USE_PRODUCT_TYPE_ID']) {
                 $arr['product_type'] = Labels::getLabel('LBL_PRODUCT_TYPE_ID', $langId);

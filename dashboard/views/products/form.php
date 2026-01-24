@@ -100,7 +100,11 @@ if (null != $fld) {
                             echo HtmlHelper::getFieldHtml($frm, 'selprod_url_keyword', 12);
 
                             echo HtmlHelper::getFieldHtml($frm, 'product_brand_id', 6, ['id' => 'product_brand_id'], '', '', ['label' => FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0) ? Labels::getLabel('FRM_REQUEST_FOR_BRAND', $langId) : Labels::getLabel('FRM_ADD_BRAND', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addBrandReqForm(0)', 'class' => 'link']]);
-                            echo HtmlHelper::getFieldHtml($frm, 'ptc_prodcat_id', 6, ['id' => 'ptc_prodcat_id'], '', '', ['label' => FatApp::getConfig('CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', FatUtility::VAR_INT, 0) ? Labels::getLabel('FRM_REQUEST_FOR_CATEGORY', $langId) : Labels::getLabel('FRM_ADD_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addCategoryReqForm(0)', 'class' => 'link']]);
+
+                            echo HtmlHelper::getFieldHtml($frm, 'ptc_prodcat_id', 6, ['id' => 'ptc_prodcat_id', 'multiple' => 'multiple', 'name' => 'ptc_prodcat_id[]', 'data-close-on-select' => 'false'], '', '', ['label' => FatApp::getConfig('CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', FatUtility::VAR_INT, 0) ? Labels::getLabel('FRM_REQUEST_FOR_CATEGORY', $langId) : Labels::getLabel('FRM_ADD_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addCategoryReqForm(0)', 'class' => 'link']]);
+
+
+
                             echo HtmlHelper::getFieldHtml($frm, 'product_model', 6);
                             $fld = $frm->getField('product_warranty');
                             if (null !== $fld) {
@@ -633,6 +637,9 @@ if (null != $fld) {
             brand_active: 1,
             langId: langId
         });
+        
+        $('#ptc_prodcat_id').data('closeOnSelect', false);
+
         select2('ptc_prodcat_id', fcom.makeUrl('Products', 'linksAutocomplete', [], siteConstants.webrootfront), {
             langId
         });

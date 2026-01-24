@@ -1179,37 +1179,53 @@ class ProductSearch extends SearchBase
 
     public function addModelCondition($params)
     {
-        $params = FatApp::getParameters();
+        if (empty($params)) {
+            return;
+        }
+        if (true === MOBILE_APP_API_CALL && !is_array($params)) {
+            $params = json_decode($params, true);
+        }
+        if (!is_array($params)) {
+            $params = array_filter(explode(',', $params));
+        }
+        $params = array_unique(array_filter($params));
+        if (empty($params)) {
+            return;
+        }
+
         $models = [];
-    
-        foreach ($params as $param) {
-    
-            // Only model filters
-            if (strpos($param, 'model-') === 0) {
-    
-                // Remove "model-"
-                $value = str_replace('model-', '', $param);
-                // Example: "646-iphone-14"
-    
-                $parts = explode('-', $value);
-    
-                // Remove numeric ID if exists
-                if (is_numeric($parts[0])) {
-                    array_shift($parts);
-                }
-    
-                // Convert to readable model name
-                $modelName = implode(' ', $parts); // "iphone 14"
-    
-                $models[] = $modelName;
+        $productIds = [];
+        foreach ($params as $p) {
+            $p = trim($p);
+            if (is_numeric($p)) {
+                $productIds[] = FatUtility::int($p);
+            } else {
+                $models[] = $p;
             }
         }
-    
+
+        if (!empty($productIds)) {
+            $productIds = array_filter($productIds);
+            $srch = new SearchBase(Product::DB_TBL, 'pm');
+            $srch->addMultipleFields(['product_model']);
+            $srch->addCondition('product_id', 'IN', $productIds);
+            $srch->addCondition('product_model', 'IS NOT', 'mysql_func_null', 'and', true);
+            $srch->addCondition('product_model', '!=', '');
+            $srch->doNotCalculateRecords();
+            $srch->doNotLimitRecords();
+            $rs = $srch->getResultSet();
+            while ($row = FatApp::getDb()->fetch($rs)) {
+                if (!empty($row['product_model'])) {
+                    $models[] = $row['product_model'];
+                }
+            }
+        }
+
         if (!empty($models)) {
-    
-            // Escape values for SQL
-            $modelList = "'" . implode("','", array_map('addslashes', $models)) . "'";
-    
+            $models = array_unique(array_filter($models));
+            $modelList = "'" . implode("','", array_map(function ($m) {
+                return addslashes($m);
+            }, $models)) . "'";
             $this->addDirectCondition("product_model IN ($modelList)");
         }
     }

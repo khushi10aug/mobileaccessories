@@ -120,12 +120,18 @@ class ProductsController extends SellerBaseController
 
             $productCategories = (new Product())->getProductCategories($recordId);
             if (!empty($productCategories)) {
-                $selectedCat = current($productCategories)['prodcat_id'];
-                $productData['ptc_prodcat_id'] = $selectedCat;
-                $catData = ProductCategory::getAttributesByLangId($langId, $selectedCat, [ProductCategory::tblFld('name'), ProductCategory::tblFld('identifier')], applicationConstants::JOIN_RIGHT, applicationConstants::YES, applicationConstants::NO);
-                if (false != $catData) {
+                $categoryIds = array_column($productCategories, 'prodcat_id');
+                $productData['ptc_prodcat_id'] = $categoryIds;
+                $catOptions = [];
+                foreach ($categoryIds as $prodcatId) {
+                    $catData = ProductCategory::getAttributesByLangId($langId, $prodcatId, [ProductCategory::tblFld('name'), ProductCategory::tblFld('identifier')], applicationConstants::JOIN_RIGHT, applicationConstants::YES, applicationConstants::NO);
+                    if (false != $catData) {
+                        $catOptions[$prodcatId] = $catData[ProductCategory::tblFld('name')] ?? $catData[ProductCategory::tblFld('identifier')];
+                    }
+                }
+                if (!empty($catOptions)) {
                     $fld = $frm->getField('ptc_prodcat_id');
-                    $fld->options = [$productData['ptc_prodcat_id'] => $catData[ProductCategory::tblFld('name')] ?? $catData[ProductCategory::tblFld('identifier')]];
+                    $fld->options = $catOptions;
                 }
             }
 
@@ -279,7 +285,9 @@ class ProductsController extends SellerBaseController
         }
         /* [select2 data */
         $post['product_brand_id'] = FatApp::getPostedData('product_brand_id', FatUtility::VAR_INT, 0);
-        $post['ptc_prodcat_id'] = FatApp::getPostedData('ptc_prodcat_id', FatUtility::VAR_INT, 0);
+
+        $ptcIds = FatApp::getPostedData('ptc_prodcat_id');
+        $post['ptc_prodcat_id'] = is_array($ptcIds) ? array_values(array_filter(array_map('intval', $ptcIds))) : (FatUtility::int($ptcIds) > 0 ? [FatUtility::int($ptcIds)] : []);
         $post['ptt_taxcat_id'] = FatApp::getPostedData('ptt_taxcat_id', FatUtility::VAR_INT, 0);
         $post['ps_from_country_id'] = FatApp::getPostedData('ps_from_country_id', FatUtility::VAR_INT, 0);
         /* select2 data ] */
@@ -323,6 +331,10 @@ class ProductsController extends SellerBaseController
             }
         }
 
+      //  $productCategories = $post['ptc_prodcat_id'];
+      //  unset($post['ptc_prodcat_id']);
+
+
         $prodObj = new Product($recordId);
         $db = FatApp::getDb();
         $db->startTransaction();
@@ -352,7 +364,11 @@ class ProductsController extends SellerBaseController
             }
         }
 
-        if (!$prodObj->saveProductCategory($post['ptc_prodcat_id'])) {
+        if (empty($post['ptc_prodcat_id'])) {
+            $db->rollbackTransaction();
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_AT_LEAST_ONE_CATEGORY', $langId), true);
+        }
+        if (!$prodObj->addUpdateProductCategories($recordId, $post['ptc_prodcat_id'])) {
             $db->rollbackTransaction();
             LibHelper::exitWithError($prodObj->getError(), true);
         }

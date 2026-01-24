@@ -33,6 +33,20 @@ $(document).ready(function () {
             return;
         }
         var data = fcom.frmData(frm);
+
+        /* Ensure multiple categories from Select2 are included (serialize can miss them) */
+        var catIds = $('#ptc_prodcat_id').val();
+        catIds = $.isArray(catIds) ? catIds : (catIds ? [catIds] : []);
+        if (catIds.length) {
+            var parts = data.split('&').filter(function (p) {
+                return p.indexOf('ptc_prodcat_id%5B%5D=') !== 0 && p.indexOf('ptc_prodcat_id[]=') !== 0;
+            });
+            $.each(catIds, function (i, id) {
+                parts.push('ptc_prodcat_id%5B%5D=' + encodeURIComponent(id));
+            });
+            data = parts.join('&');
+        }
+
         fcom.updateWithAjax(fcom.makeUrl('Products', 'setup'), data, function (t) {
             $(".cartTypeJs").trigger('change');
             fcom.displaySuccessMessage(t.msg);

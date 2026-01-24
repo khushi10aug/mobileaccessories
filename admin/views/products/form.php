@@ -86,6 +86,7 @@ if (0 < $recordId) {
                 brand_active: 1,
                 langId: langId
             });            
+            $('#ptc_prodcat_id').data('closeOnSelect', false);
             select2('ptc_prodcat_id', fcom.makeUrl('ProductCategories', 'autoComplete'), {
                 langId
             });

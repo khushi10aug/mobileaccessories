@@ -328,12 +328,18 @@ class ProductsController extends ListingBaseController
 
             $productCategories = $this->modelObj->getProductCategories($recordId);
             if (!empty($productCategories)) {
-                $selectedCat = current($productCategories)['prodcat_id'];
-                $productData['ptc_prodcat_id'] = $selectedCat;
-                $catData = ProductCategory::getAttributesByLangId($langId, $selectedCat, [ProductCategory::tblFld('name'), ProductCategory::tblFld('identifier')], applicationConstants::JOIN_RIGHT, applicationConstants::YES, applicationConstants::NO);
-                if (false != $catData) {
+                $categoryIds = array_column($productCategories, 'prodcat_id');
+                $productData['ptc_prodcat_id'] = $categoryIds;
+                $catOptions = [];
+                foreach ($categoryIds as $prodcatId) {
+                    $catData = ProductCategory::getAttributesByLangId($langId, $prodcatId, [ProductCategory::tblFld('name'), ProductCategory::tblFld('identifier')], applicationConstants::JOIN_RIGHT, applicationConstants::YES, applicationConstants::NO);
+                    if (false != $catData) {
+                        $catOptions[$prodcatId] = $catData[ProductCategory::tblFld('name')] ?? $catData[ProductCategory::tblFld('identifier')];
+                    }
+                }
+                if (!empty($catOptions)) {
                     $fld = $frm->getField('ptc_prodcat_id');
-                    $fld->options = [$productData['ptc_prodcat_id'] => $catData[ProductCategory::tblFld('name')] ?? $catData[ProductCategory::tblFld('identifier')]];
+                    $fld->options = $catOptions;
                 }
             }
 
@@ -476,7 +482,7 @@ class ProductsController extends ListingBaseController
             return;
         }
 
-        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/jquery-sortable-lists.js', 'brands/page-js/index.js', 'product-categories/page-js/add-media.js', 'product-categories/page-js/saveCategoryRecord.js'));
+        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/jquery-sortable-lists.js', 'products/page-js/form.js', 'brands/page-js/index.js', 'product-categories/page-js/add-media.js', 'product-categories/page-js/saveCategoryRecord.js'));
         $this->_template->addCss(['css/cropper.css', 'css/tagify.min.css', 'css/select2.min.css']);
         $this->set("includeEditor", true);
         $this->_template->render();
@@ -515,7 +521,8 @@ class ProductsController extends ListingBaseController
         /* [select2 data */
         $post['product_brand_id'] = FatApp::getPostedData('product_brand_id', FatUtility::VAR_INT, 0);
         $post['product_cbrand_id'] = FatApp::getPostedData('product_cbrand_id', FatUtility::VAR_INT, 0);
-        $post['ptc_prodcat_id'] = FatApp::getPostedData('ptc_prodcat_id', FatUtility::VAR_INT, 0);
+        $ptcIds = FatApp::getPostedData('ptc_prodcat_id');
+        $post['ptc_prodcat_id'] = is_array($ptcIds) ? array_values(array_filter(array_map('intval', $ptcIds))) : (FatUtility::int($ptcIds) > 0 ? [FatUtility::int($ptcIds)] : []);
         $post['ptt_taxcat_id'] = FatApp::getPostedData('ptt_taxcat_id', FatUtility::VAR_INT, 0);
         $post['ps_from_country_id'] = FatApp::getPostedData('ps_from_country_id', FatUtility::VAR_INT, 0);
         $post['product_seller_id'] = FatApp::getPostedData('product_seller_id', FatUtility::VAR_INT, 0);
@@ -608,7 +615,11 @@ class ProductsController extends ListingBaseController
             }
         }
 
-        if (!$prodObj->saveProductCategory($post['ptc_prodcat_id'])) {
+        if (empty($post['ptc_prodcat_id'])) {
+            $db->rollbackTransaction();
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_AT_LEAST_ONE_CATEGORY', $langId), true);
+        }
+        if (!$prodObj->addUpdateProductCategories($recordId, $post['ptc_prodcat_id'])) {
             $db->rollbackTransaction();
             LibHelper::exitWithError($prodObj->getError(), true);
         }

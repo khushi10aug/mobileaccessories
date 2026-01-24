@@ -1647,27 +1647,22 @@ END,   special_price_found ) as special_price_found'
             $sortBy = 'popularity';
         }
 
-        if (array_key_exists('brand', $criteria)) {
-            if (!empty($criteria['brand'])) {
-                if (true === MOBILE_APP_API_CALL && !is_array($criteria['brand'])) {
-                    $criteria['brand'] = json_decode($criteria['brand'], true);
-                }
-                $srch->addBrandCondition($criteria['brand']);
+        $brandVal = $criteria['brand'] ?? $criteria['brands'] ?? null;
+        if (!empty($brandVal)) {
+            if (true === MOBILE_APP_API_CALL && !is_array($brandVal)) {
+                $brandVal = json_decode($brandVal, true);
             }
+            $srch->addBrandCondition($brandVal);
         }
-        if (array_key_exists('cbrand', $criteria)) {
-            if (!empty($criteria['cbrand'])) {
-                if (true === MOBILE_APP_API_CALL && !is_array($criteria['cbrand'])) {
-                    $criteria['cbrand'] = json_decode($criteria['cbrand'], true);
-                }
-                $srch->addCbrandCondition($criteria['cbrand']);
+        $cbrandVal = $criteria['cbrand'] ?? $criteria['cbrands'] ?? null;
+        if (!empty($cbrandVal)) {
+            if (true === MOBILE_APP_API_CALL && !is_array($cbrandVal)) {
+                $cbrandVal = json_decode($cbrandVal, true);
             }
+            $srch->addCbrandCondition($cbrandVal);
         }
-        if (array_key_exists('model', $criteria)) {
-            if (!empty($criteria['model'])) {
-                //echo 'tumer<pre>';print_r($criteria['model']); 
-                $srch->addModelCondition($criteria['model']);
-            }
+        if (array_key_exists('model', $criteria) && !empty($criteria['model'])) {
+            $srch->addModelCondition($criteria['model']);
         }
 
         if (array_key_exists('optionvalue', $criteria)) {

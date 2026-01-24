@@ -19,7 +19,10 @@ class FilterHelper extends FatUtility
     public static function getSearchObj($langId, $headerFormParamsAssocArr)
     {
         $langId = FatUtility::int($langId);
-        $post = FatApp::getPostedData();
+        $post = array_merge(
+            FatApp::getPostedData(),
+            array_intersect_key($headerFormParamsAssocArr, array_flip(['category', 'brand', 'brands', 'cbrand', 'cbrands', 'model', 'shop_id', 'top_products', 'featured', 'keyword']))
+        );
 
         $prodSrchObj = new ProductSearch($langId);
         if (array_key_exists('addFld', $headerFormParamsAssocArr)) {
@@ -44,32 +47,43 @@ class FilterHelper extends FatUtility
         $prodSrchObj->joinProductToTax();
         $prodSrchObj->addCondition('selprod_code', 'IS NOT', 'mysql_func_null', 'and', true);
 
-        if (array_key_exists('category', $post)) {
+        if (array_key_exists('category', $post) && !empty($post['category'])) {
             $joinWithRelationTableInstead = $headerFormParamsAssocArr['joinWithRelationTableInstead'] ?? false;
             $prodSrchObj->addCategoryCondition($post['category'], $joinWithRelationTableInstead);
         }
 
-        $shopId = FatApp::getPostedData('shop_id', FatUtility::VAR_INT, 0);
+        $shopId = isset($post['shop_id']) ? FatUtility::int($post['shop_id']) : FatApp::getPostedData('shop_id', FatUtility::VAR_INT, 0);
         if (0 < $shopId) {
             $prodSrchObj->addShopIdCondition($shopId);
         }
 
-        $topProducts = FatApp::getPostedData('top_products', FatUtility::VAR_INT, 0);
+        $topProducts = isset($post['top_products']) ? FatUtility::int($post['top_products']) : FatApp::getPostedData('top_products', FatUtility::VAR_INT, 0);
         if (0 < $topProducts) {
-            // $prodSrchObj->joinProductRating();
             $prodSrchObj->addCondition('product_rating', '>=', 3);
         }
 
         $brandId = FatApp::getPostedData('brand_id', FatUtility::VAR_INT, 0);
+        $brandArr = $post['brand'] ?? $post['brands'] ?? null;
         if (0 < $brandId) {
             $prodSrchObj->addBrandCondition($brandId);
-        }
-        $cbrandId = FatApp::getPostedData('cbrand_id', FatUtility::VAR_INT, 0);
-        if (0 < $cbrandId) {
-            $prodSrchObj->addCbrandCondition($cbrandId);
+        } elseif (!empty($brandArr)) {
+            $prodSrchObj->addBrandCondition(is_array($brandArr) ? $brandArr : explode(',', $brandArr));
         }
 
-        $featured = FatApp::getPostedData('featured', FatUtility::VAR_INT, 0);
+        $cbrandId = FatApp::getPostedData('cbrand_id', FatUtility::VAR_INT, 0);
+        $cbrandArr = $post['cbrand'] ?? $post['cbrands'] ?? null;
+        if (0 < $cbrandId) {
+            $prodSrchObj->addCbrandCondition($cbrandId);
+        } elseif (!empty($cbrandArr)) {
+            $prodSrchObj->addCbrandCondition(is_array($cbrandArr) ? $cbrandArr : explode(',', $cbrandArr));
+        }
+
+        $modelArr = $post['model'] ?? null;
+        if (!empty($modelArr)) {
+            $prodSrchObj->addModelCondition(is_array($modelArr) ? $modelArr : explode(',', $modelArr));
+        }
+
+        $featured = isset($post['featured']) ? FatUtility::int($post['featured']) : FatApp::getPostedData('featured', FatUtility::VAR_INT, 0);
         if (0 < $featured) {
             $prodSrchObj->addCondition('product_featured', '=', applicationConstants::YES);
         }
@@ -78,6 +92,8 @@ class FilterHelper extends FatUtility
         if (array_key_exists('keyword', $headerFormParamsAssocArr) && !empty($headerFormParamsAssocArr['keyword'])) {
             $keyword = $headerFormParamsAssocArr['keyword'];
             $prodSrchObj->addKeywordSearch($keyword, false, false);
+        } elseif (array_key_exists('keyword', $post) && !empty($post['keyword'])) {
+            $prodSrchObj->addKeywordSearch($post['keyword'], false, false);
         }
         return $prodSrchObj;
     }
@@ -95,8 +111,9 @@ class FilterHelper extends FatUtility
     {
         $cacheKey = $langId;
 
-        if (array_key_exists('category', $post)) {
-            $cacheKey .= '-' . FatUtility::int($post['category']);
+        if (array_key_exists('category', $post) && !empty($post['category'])) {
+            $cat = $post['category'];
+            $cacheKey .= '-' . (is_array($cat) ? implode(',', $cat) : FatUtility::int($cat));
         }
 
         if (array_key_exists('shop_id', $post)) {
@@ -109,17 +126,28 @@ class FilterHelper extends FatUtility
 
         if (array_key_exists('brand_id', $post)) {
             $cacheKey .= '-' . $post['brand_id'];
+        } elseif (array_key_exists('brand', $post) && !empty($post['brand'])) {
+            $b = $post['brand'];
+            $cacheKey .= '-b' . (is_array($b) ? implode(',', $b) : $b);
+        } elseif (array_key_exists('brands', $post) && !empty($post['brands'])) {
+            $b = $post['brands'];
+            $cacheKey .= '-b' . (is_array($b) ? implode(',', $b) : $b);
         }
 
         if (array_key_exists('cbrand_id', $post)) {
             $cacheKey .= '-' . $post['cbrand_id'];
+        } elseif (array_key_exists('cbrand', $post) && !empty($post['cbrand'])) {
+            $c = $post['cbrand'];
+            $cacheKey .= '-c' . (is_array($c) ? implode(',', $c) : $c);
+        } elseif (array_key_exists('cbrands', $post) && !empty($post['cbrands'])) {
+            $c = $post['cbrands'];
+            $cacheKey .= '-c' . (is_array($c) ? implode(',', $c) : $c);
         }
 
         if (array_key_exists('model', $post) && !empty($post['model'])) {
-            // Convert array to string separated by dashes
-            $cacheKey .= '-' . $post['model'];
+            $m = $post['model'];
+            $cacheKey .= '-m' . (is_array($m) ? implode(',', $m) : $m);
         }
-             
 
         if (array_key_exists('featured', $post)) {
             $cacheKey .= '-f';
@@ -134,32 +162,32 @@ class FilterHelper extends FatUtility
 
     public static function selectedBrands($post)
     {
-        if (array_key_exists('brand', $post)) {
-            if (true === MOBILE_APP_API_CALL) {
-                $post['brand'] = json_decode($post['brand'], true);
+        $key = array_key_exists('brand', $post) ? 'brand' : (array_key_exists('brands', $post) ? 'brands' : null);
+        if ($key !== null) {
+            $val = $post[$key];
+            if (true === MOBILE_APP_API_CALL && !is_array($val)) {
+                $val = json_decode($val, true);
             }
-
-            if (is_array($post['brand'])) {
-                return $post['brand'];
+            if (is_array($val)) {
+                return $val;
             }
-
-            return explode(',', $post['brand']);
+            return array_filter(explode(',', $val));
         }
         return array();
     }
 
     public static function selectedcBrands($post)
     {
-        if (array_key_exists('cbrand', $post)) {
-            if (true === MOBILE_APP_API_CALL) {
-                $post['cbrand'] = json_decode($post['cbrand'], true);
+        $key = array_key_exists('cbrand', $post) ? 'cbrand' : (array_key_exists('cbrands', $post) ? 'cbrands' : null);
+        if ($key !== null) {
+            $val = $post[$key];
+            if (true === MOBILE_APP_API_CALL && !is_array($val)) {
+                $val = json_decode($val, true);
             }
-
-            if (is_array($post['cbrand'])) {
-                return $post['cbrand'];
+            if (is_array($val)) {
+                return $val;
             }
-
-            return explode(',', $post['cbrand']);
+            return array_filter(explode(',', $val));
         }
         return array();
     }
@@ -259,7 +287,7 @@ class FilterHelper extends FatUtility
         }
 
         if (FatApp::getConfig('CONF_DEFAULT_PLUGIN_' . Plugin::TYPE_FULL_TEXT_SEARCH, FatUtility::VAR_INT, 0)) {
-            $pageSize = max(count($brandsCheckedArr), 10);
+            $pageSize = max(count($cbrandsCheckedArr), 10);
 
             $srch = FullTextSearch::getListingObj($post, $langId);
             $srch->setFields(array('cbrand.brand_id', 'cbrand.cbrand_name'));

@@ -20,6 +20,18 @@ var advanceMedia = false; /* open via advance media*/
             return;
         }
         var data = fcom.frmData(frm);
+        var catIds = $('#ptc_prodcat_id').val();
+        catIds = $.isArray(catIds) ? catIds : (catIds ? [catIds] : []);
+        if (catIds.length) {
+            var parts = data.split('&').filter(function(p) {
+                return p.indexOf('ptc_prodcat_id%5B%5D=') !== 0 && p.indexOf('ptc_prodcat_id[]=') !== 0;
+            });
+            $.each(catIds, function(i, id) {
+                parts.push('ptc_prodcat_id%5B%5D=' + encodeURIComponent(id));
+            });
+            data = parts.join('&');
+        }
+
         fcom.updateWithAjax(fcom.makeUrl('Products', 'setup'), data, function(res) {
             $(".cartTypeJs").trigger('change');
             langForm(res.langId, 0, res.recordId);

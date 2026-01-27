@@ -83,6 +83,19 @@
             system_order_id: "<?php echo $orderInfo["id"]; ?>"
         },
         handler: function(transaction) {
+            // Show loader and processing message before form submission
+            var formContainer = document.querySelector('.payable-amount-body');
+            if (formContainer) {
+                formContainer.innerHTML = '<div class="text-center" style="padding: 40px;"><div class="spinner spinner--sm spinner--brand" style="margin: 0 auto 20px;"></div><p style="font-size: 16px; color: #333;">' + (typeof langLbl !== 'undefined' && langLbl.waitingForResponse ? langLbl.waitingForResponse : 'Processing your payment. Please wait...') + '</p><p style="font-size: 14px; color: #666; margin-top: 10px;">' + (typeof langLbl !== 'undefined' && langLbl.dontReloadPageWhilePayment ? langLbl.dontReloadPageWhilePayment : 'Do not reload or close this page.') + '</p></div>';
+            }
+            
+            // Disable form submission button if exists
+            var submitBtn = document.querySelector('input[type="submit"], button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+            }
+            
+            // Set payment ID and submit form
             document.getElementById('razorpay_payment_id').value = transaction.razorpay_payment_id;
             document.getElementById('razorpay-form').submit();
         }

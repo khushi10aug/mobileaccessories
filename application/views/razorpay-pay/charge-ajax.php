@@ -36,10 +36,30 @@ if (!FatUtility::isAjaxCall()) { ?>
             system_order_id: "<?php echo $orderInfo["id"]; ?>"
         },
         handler: function(transaction) {
-            // Show loader and processing message before form submission
+            // Get form and payment ID field BEFORE modifying DOM
+            var paymentIdField = document.getElementById('razorpay_payment_id');
+            var form = document.getElementById('razorpay-form');
+            
+            if (!paymentIdField || !form) {
+                console.error('Razorpay form elements not found');
+                return;
+            }
+            
+            // Set payment ID value
+            paymentIdField.value = transaction.razorpay_payment_id;
+            
+            // Show loader and processing message (hide form, show loader)
             var formContainer = document.querySelector('.text-center');
             if (formContainer) {
-                formContainer.innerHTML = '<div style="padding: 40px;"><div class="spinner spinner--sm spinner--brand" style="margin: 0 auto 20px;"></div><p style="font-size: 16px; color: #333;">' + (typeof langLbl !== 'undefined' && langLbl.waitingForResponse ? langLbl.waitingForResponse : 'Processing your payment. Please wait...') + '</p><p style="font-size: 14px; color: #666; margin-top: 10px;">' + (typeof langLbl !== 'undefined' && langLbl.dontReloadPageWhilePayment ? langLbl.dontReloadPageWhilePayment : 'Do not reload or close this page.') + '</p></div>';
+                // Hide the form but keep it in DOM
+                var formElement = formContainer.querySelector('form');
+                if (formElement) {
+                    formElement.style.display = 'none';
+                }
+                
+                // Add loader overlay
+                var loaderHtml = '<div class="razorpay-loader-overlay" style="padding: 40px; position: relative; z-index: 10;"><div class="spinner spinner--sm spinner--brand" style="margin: 0 auto 20px;"></div><p style="font-size: 16px; color: #333;">' + (typeof langLbl !== 'undefined' && langLbl.waitingForResponse ? langLbl.waitingForResponse : 'Processing your payment. Please wait...') + '</p><p style="font-size: 14px; color: #666; margin-top: 10px;">' + (typeof langLbl !== 'undefined' && langLbl.dontReloadPageWhilePayment ? langLbl.dontReloadPageWhilePayment : 'Do not reload or close this page.') + '</p></div>';
+                formContainer.insertAdjacentHTML('afterbegin', loaderHtml);
             }
             
             // Disable form submission button if exists
@@ -48,9 +68,8 @@ if (!FatUtility::isAjaxCall()) { ?>
                 submitBtn.disabled = true;
             }
             
-            // Set payment ID and submit form
-            document.getElementById('razorpay_payment_id').value = transaction.razorpay_payment_id;
-            document.getElementById('razorpay-form').submit();
+            // Submit the form
+            form.submit();
         }
     };
     var razorpay_submit_btn, razorpay_instance;

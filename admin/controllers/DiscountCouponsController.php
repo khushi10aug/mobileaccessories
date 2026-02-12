@@ -200,8 +200,58 @@ class DiscountCouponsController extends ListingBaseController
 
         $post['coupon_start_date'] = !empty($startDate) ? $startDate : date('Y-m-d');
         $post['coupon_end_date'] = !empty($endDate) ? $endDate : date('Y-m-d', strtotime('+50 year'));
-        $record = new DiscountCoupons($recordId);
         $post['coupon_identifier'] = $post['coupon_title'];
+
+        $couponCodes = array_map('trim', array_filter(explode(',', $post['coupon_code'])));
+        if (empty($couponCodes)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_ENTER_AT_LEAST_ONE_COUPON_CODE', $this->siteLangId), true);
+        }
+        $isBulkCreate = (0 == $recordId && count($couponCodes) > 1);
+
+        if ($isBulkCreate) {
+            $created = 0;
+            $skipped = [];
+            foreach ($couponCodes as $code) {
+                if (empty($code)) {
+                    continue;
+                }
+                $couponPost = $post;
+                $couponPost['coupon_code'] = $code;
+                $couponPost['coupon_title'] = $code;
+                $couponPost['coupon_identifier'] = $code;
+                $record = new DiscountCoupons(0);
+                $record->assignValues($couponPost);
+                if (!$record->save()) {
+                    $msg = $record->getError();
+                    if (false !== strpos(strtolower($msg), 'duplicate')) {
+                        $skipped[] = $code;
+                    } else {
+                        LibHelper::exitWithError($msg, true);
+                    }
+                    continue;
+                }
+                $this->setLangData($record, [
+                    $record::tblFld('title') => $couponPost[$record::tblFld('title')],
+                    $record::tblFld('description') => $couponPost[$record::tblFld('description')]
+                ]);
+                $created++;
+            }
+            $msg = Labels::getLabel('MSG_COUPONS_CREATED_SUCCESSFULLY', $this->siteLangId);
+            $msg = CommonHelper::replaceStringData($msg, ['{count}' => $created]);
+            if (!empty($skipped)) {
+                $msg .= ' ' . Labels::getLabel('MSG_COUPONS_SKIPPED_DUPLICATE', $this->siteLangId) . ': ' . implode(', ', $skipped);
+            }
+            $this->set('msg', $msg);
+            $this->set('recordId', 0);
+            $this->_template->render(false, false, 'json-success.php');
+            return;
+        }
+
+        if ($isBulkCreate === false && count($couponCodes) === 1) {
+            $post['coupon_code'] = $couponCodes[0];
+        }
+
+        $record = new DiscountCoupons($recordId);
         $record->assignValues($post);
 
         if (!$record->save()) {
@@ -309,6 +359,10 @@ class DiscountCouponsController extends ListingBaseController
         $frm->addRequiredField(Labels::getLabel('FRM_COUPON_TITLE', $this->siteLangId), 'coupon_title');
 
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_COUPON_CODE', $this->siteLangId), 'coupon_code');
+        if (0 == $recordId) {
+            $hint = Labels::getLabel('FRM_COUPON_CODE_MULTIPLE_HINT', $this->siteLangId);
+            //$fld->placeholder(($hint !== 'FRM_COUPON_CODE_MULTIPLE_HINT' ? $hint : 'e.g. SAVE10, SAVE20, WELCOME5'));
+        }
         $fld->setUnique(DiscountCoupons::DB_TBL, 'coupon_code', 'coupon_id', 'coupon_id', 'coupon_id');
 
         $frm->addTextArea(Labels::getLabel('FRM_COUPON_DESCRIPTION', $this->siteLangId), 'coupon_description');

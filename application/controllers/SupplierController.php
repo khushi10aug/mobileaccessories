@@ -2,6 +2,8 @@
 
 class SupplierController extends MyAppController
 {
+    private const SESSION_SELECTED_SELLER_PLAN = 'selected_seller_subscription_plan_id';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -9,6 +11,7 @@ class SupplierController extends MyAppController
 
     public function index()
     {
+        $this->redirectToSubscriptionCheckoutIfPlanSelected();
         if (UserAuthentication::isUserLogged() && (User::isSeller() || User::isSigningUpForSeller())) {
             FatApp::redirectUser(UrlHelper::generateUrl('seller', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false));
         }
@@ -67,6 +70,7 @@ class SupplierController extends MyAppController
 
     public function account()
     {
+        $this->redirectToSubscriptionCheckoutIfPlanSelected();
         if (UserAuthentication::isUserLogged()) {
             FatApp::redirectUser(UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false));
         }
@@ -90,6 +94,81 @@ class SupplierController extends MyAppController
         $this->set('postedData', $postedData);
         $this->set('siteLangId', $this->siteLangId);
         $this->_template->render();
+    }
+
+    public function packages()
+    {
+        if (!FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl());
+        }
+
+        $this->redirectToSubscriptionCheckoutIfPlanSelected();
+        $packagesArr = SellerPackages::getSellerVisiblePackages($this->siteLangId, true);
+        foreach ($packagesArr as $key => $package) {
+            $packagesArr[$key]['plans'] = SellerPackagePlans::getSellerVisiblePackagePlans($package[SellerPackages::DB_TBL_PREFIX . 'id']);
+            $packagesArr[$key]['cheapPlan'] = SellerPackagePlans::getCheapestPlanByPackageId($package[SellerPackages::DB_TBL_PREFIX . 'id']);
+        }
+
+        $obj = new Extrapage();
+        $pageData = $obj->getContentByPageType(Extrapage::SUBSCRIPTION_PAGE_BLOCK, $this->siteLangId);
+
+        $this->set('pageData', $pageData);
+        $this->set('packagesArr', $packagesArr);
+        $this->set('pendingPlanId', FatUtility::int($_SESSION[static::SESSION_SELECTED_SELLER_PLAN] ?? 0));
+        $this->_template->render();
+    }
+
+    public function selectPackage($spplanId = 0)
+    {
+        if (!FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl());
+        }
+
+        $spplanId = FatUtility::int(FatApp::getPostedData('spplan_id', FatUtility::VAR_INT, $spplanId));
+        if (1 > $spplanId) {
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_PLAN_REQUEST', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('supplier', 'packages'));
+        }
+
+        $srch = new SellerPackagePlansSearch($this->siteLangId);
+        $srch->addCondition(SellerPackagePlans::DB_TBL_PREFIX . 'active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition(SellerPackagePlans::DB_TBL_PREFIX . 'id', '=', $spplanId);
+        $srch->addMultipleFields(array('spplan_id'));
+        $srch->setPageSize(1);
+        $srch->doNotCalculateRecords();
+        $sellerPlanRow = FatApp::getDb()->fetch($srch->getResultSet());
+        if (!$sellerPlanRow) {
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('supplier', 'packages'));
+        }
+        $spplanId = FatUtility::int($sellerPlanRow['spplan_id']);
+        $_SESSION[static::SESSION_SELECTED_SELLER_PLAN] = $spplanId;
+
+        if (!UserAuthentication::isUserLogged()) {
+            Message::addMessage(Labels::getLabel('MSG_Please_complete_seller_registration_to_continue', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('supplier', 'account'));
+        }
+
+        if (!(User::isSeller() || User::isSigningUpForSeller())) {
+            Message::addMessage(Labels::getLabel('MSG_Please_complete_seller_profile_to_continue', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('account', 'supplierApprovalForm', [], CONF_WEBROOT_DASHBOARD, null, false, false, false));
+        }
+
+        $userId = User::getUserParentId(UserAuthentication::getLoggedUserId(true));
+        if (!UserPrivilege::canSellerUpgradeOrDowngradePlan($userId, $spplanId, $this->siteLangId)) {
+            unset($_SESSION[static::SESSION_SELECTED_SELLER_PLAN]);
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_PLAN_REQUEST', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('seller', 'packages', [], CONF_WEBROOT_DASHBOARD, null, false, false, false));
+        }
+
+        $subsObj = new SubscriptionCart($userId);
+        $subsObj->add($spplanId);
+        $subsObj->adjustPreviousPlan($this->siteLangId);
+
+        unset($_SESSION[static::SESSION_SELECTED_SELLER_PLAN]);
+        FatApp::redirectUser(UrlHelper::generateUrl('SubscriptionCheckout', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false));
     }
 
     public function form()
@@ -265,8 +344,23 @@ class SupplierController extends MyAppController
             $this->set('msg', Labels::getLabel("MSG_SUCCESS_USER_SIGNUP", $this->siteLangId));
         }
 
-        $_SESSION['registered_supplier']['id'] = $userObj->getMainTableRecordId();
-        $this->set('userId', $userObj->getMainTableRecordId());
+        $userId = $userObj->getMainTableRecordId();
+        $_SESSION['registered_supplier']['id'] = $userId;
+        $this->set('userId', $userId);
+
+        $redirectUrl = '';
+        $selectedPlanId = FatUtility::int($_SESSION[static::SESSION_SELECTED_SELLER_PLAN] ?? 0);
+        if ($selectedPlanId > 0 && $active == applicationConstants::YES && $verify == applicationConstants::YES) {
+            $userData = User::getAttributesById($userId, ['user_is_supplier']);
+            if (!empty($userData) && FatUtility::int($userData['user_is_supplier']) == applicationConstants::YES) {
+                $auth = new UserAuthentication();
+                if ($auth->login($post['user_email'], $post['user_password'], CommonHelper::getClientIp())) {
+                    unset($_SESSION['registered_supplier']['id']);
+                    $redirectUrl = UrlHelper::generateUrl('Supplier', 'selectPackage', [$selectedPlanId]);
+                }
+            }
+        }
+        $this->set('redirectUrl', $redirectUrl);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -410,6 +504,14 @@ class SupplierController extends MyAppController
         $db->commitTransaction();
         $this->set('userId', $userId);
         $this->set('msg', $msg);
+
+        $redirectUrl = '';
+        $selectedPlanId = FatUtility::int($_SESSION[static::SESSION_SELECTED_SELLER_PLAN] ?? 0);
+        if ($selectedPlanId > 0 && $approval_request == 0 && UserAuthentication::isUserLogged()) {
+            unset($_SESSION['registered_supplier']['id']);
+            $redirectUrl = UrlHelper::generateUrl('Supplier', 'selectPackage', [$selectedPlanId]);
+        }
+        $this->set('redirectUrl', $redirectUrl);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -745,5 +847,21 @@ class SupplierController extends MyAppController
     {
         unset($_SESSION['registered_supplier']['id']);
         FatApp::redirectUser(UrlHelper::generateUrl('supplier'));
+    }
+
+    private function redirectToSubscriptionCheckoutIfPlanSelected()
+    {
+        if (!UserAuthentication::isUserLogged()) {
+            return;
+        }
+
+        $spplanId = FatUtility::int($_SESSION[static::SESSION_SELECTED_SELLER_PLAN] ?? 0);
+        if (1 > $spplanId) {
+            return;
+        }
+
+        if (User::isSeller() || User::isSigningUpForSeller()) {
+            FatApp::redirectUser(UrlHelper::generateUrl('supplier', 'selectPackage', array($spplanId)));
+        }
     }
 }

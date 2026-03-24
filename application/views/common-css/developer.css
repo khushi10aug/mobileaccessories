@@ -1,0 +1,133 @@
+.seller-packages-page .section-head .section-heading h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.seller-packages-page .section-head p {
+    color: #4b5563;
+    line-height: 1.7;
+}
+
+.seller-packages-page .alert--info {
+    border: 1px solid #f7c9d2;
+    background: #fff5f7;
+    color: #be123c;
+    border-radius: 8px;
+    padding: 12px 16px;
+}
+
+.seller-packages-page .packages-box {
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    text-align: center;
+    margin-top: 2rem;
+    padding: 0;
+    list-style: none;
+}
+
+.seller-packages-page .packages-box-item {
+    border: 1px solid #e5e7eb;
+    border-radius: 2px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+}
+
+.seller-packages-page .packages-box-item.two {
+    border-color: #fecdd3;
+}
+
+.seller-packages-page .packages-box-item.three {
+    border-color: #fda4af;
+}
+
+.seller-packages-page .packages-box-body {
+    flex: 1;
+}
+
+.seller-packages-page .packages-box-foot {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 2rem;
+}
+
+.seller-packages-page .packages-box-foot p {
+    padding: 0;
+    font-size: 0.8rem;
+    margin: 0;
+    color: #6b7280;
+}
+
+.seller-packages-page .name {
+    padding: 0 0 20px 0;
+    font-size: 1.6rem;
+    line-height: 1.3;
+    color: #111827;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.seller-packages-page .name span {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #4b5563;
+    text-transform: none;
+}
+
+.seller-packages-page .valid {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: #111827;
+}
+
+.seller-packages-page .valid .currency-value {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.seller-packages-page .valid span {
+    font-size: 0.75rem;
+    font-weight: 300;
+    display: block;
+    color: #6b7280;
+}
+
+.seller-packages-page .trial {
+    padding: 20px;
+}
+
+.seller-packages-page .features-item {
+    color: #4b5563;
+    font-size: 0.9rem;
+    margin: 0;
+    padding: 3px;
+    list-style: none;
+}
+
+.seller-packages-page .features-item span {
+    font-weight: 600;
+    color: #111827;
+}
+
+.seller-packages-page .form-select {
+    height: 44px;
+    border-radius: 4px;
+    border-color: #d1d5db;
+    font-size: 0.95rem;
+}
+
+.seller-packages-page .btn.btn-brand.btn-block {
+    height: 44px;
+    font-size: 0.95rem;
+    font-weight: 700;
+}.seller-packages-page .section-head.section-head-center {
+    display: block;
+}

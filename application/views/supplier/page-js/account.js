@@ -22,6 +22,10 @@ $(function () {
 		fcom.updateWithAjax(fcom.makeUrl('Supplier', 'register'), data, function (t) {
 			fcom.closeProcessing();
 			fcom.removeLoader();
+			if (t.redirectUrl) {
+				window.location = t.redirectUrl;
+				return;
+			}
 			if (t.userId > 0) {
 				profileActivationForm();
 			}
@@ -44,6 +48,10 @@ $(function () {
 		fcom.updateWithAjax(fcom.makeUrl('Supplier', 'setupSupplierApproval'), data, function (t) {
 			fcom.closeProcessing();
 			fcom.removeLoader();
+			if (t.redirectUrl) {
+				window.location = t.redirectUrl;
+				return;
+			}
 			if (t.userId > 0) {
 				profileConfirmation();
 			}

@@ -116,18 +116,20 @@
     font-weight: 600;
     color: #111827;
 }
-
 .seller-packages-page .form-select {
     height: 44px;
     border-radius: 4px;
     border-color: #d1d5db;
     font-size: 0.95rem;
 }
-
 .seller-packages-page .btn.btn-brand.btn-block {
     height: 44px;
     font-size: 0.95rem;
     font-weight: 700;
 }.seller-packages-page .section-head.section-head-center {
     display: block;
+}.seller-packages-page {
+    font-size: 14px;
+}.seller-packages-page h3 {
+    font-size: 18px;
 }

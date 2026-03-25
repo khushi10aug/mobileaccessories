@@ -67,6 +67,11 @@ class OrderSubscription extends MyAppModel
 
     public static function getUserCurrentActivePlanDetails($langId = 0, $userId = 0, $flds = array(OrderSubscription::DB_TBL_PREFIX . 'id'))
     {
+        $userId = FatUtility::int($userId);
+        if ($userId === 1) {
+            return self::getBypassSubscriptionPlanRow($langId, $flds);
+        }
+
         $srch = new OrderSearch($langId);
         $srch->joinTableOrderSellerSubscription($langId);
         $srch->joinTableSubscriptionPlan();
@@ -86,6 +91,52 @@ class OrderSubscription extends MyAppModel
         $srch->doNotCalculateRecords(true);
         $srch->addOrder(Orders::DB_TBL_PREFIX . 'id', 'desc');
         return FatApp::getDb()->fetch($srch->getResultSet());
+    }
+
+    private static function getBypassSubscriptionPlanRow($langId, $flds)
+    {
+        $today = date('Y-m-d');
+        $defaults = [
+            'ossubs_id' => 0,
+            'ossubs_plan_id' => 0,
+            'ossubs_type' => SellerPackages::PAID_TYPE,
+            'ossubs_price' => 0,
+            'ossubs_interval' => 1,
+            'ossubs_frequency' => SellerPackagePlans::SUBSCRIPTION_PERIOD_UNLIMITED,
+            'ossubs_from_date' => $today,
+            'ossubs_till_date' => '2099-12-31',
+            'ossubs_status_id' => self::ACTIVE_SUBSCRIPTION,
+            'ossubs_subscription_name' => 'Subscription Bypassed',
+            'ossubs_products_allowed' => 9999999,
+            'ossubs_inventory_allowed' => 9999999,
+            'ossubs_images_allowed' => 9999999,
+            'ossubs_rfq_offers_allowed' => 9999999,
+            // common plan fields used via spp.* in some screens
+            'spplan_id' => 0,
+            'spplan_price' => 0,
+            'spplan_interval' => 1,
+            'spplan_frequency' => SellerPackagePlans::SUBSCRIPTION_PERIOD_UNLIMITED,
+            'spplan_trial_interval' => 0,
+            'spplan_trial_frequency' => SellerPackagePlans::SUBSCRIPTION_PERIOD_DAYS,
+            'spackage_name' => Labels::getLabel('LBL_Subscription', $langId) . ' (Bypass)',
+        ];
+
+        if (is_array($flds) && in_array('spp.*', $flds, true)) {
+            $flds = array_values(array_filter($flds, function ($f) {
+                return $f !== 'spp.*';
+            }));
+            $flds = array_merge($flds, array_keys($defaults));
+        }
+
+        if (!is_array($flds) || empty($flds)) {
+            return $defaults;
+        }
+
+        $out = [];
+        foreach ($flds as $field) {
+            $out[$field] = $defaults[$field] ?? null;
+        }
+        return $out;
     }
 
     public static function getOSSubIdArrByOrderId($orderId)

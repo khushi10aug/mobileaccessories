@@ -65,7 +65,7 @@ class SellerPackages extends MyAppModel
         $srch->joinTable(SellerPackagePlans::DB_TBL, 'INNER JOIN', 'sp.spackage_id =spp.spplan_spackage_id', 'spp');
         $srch->addMultipleFields(
             array(
-                "sp.spackage_id", "IFNULL( spl.spackage_name, sp.spackage_identifier ) as spackage_name", "spackage_text", "spackage_products_allowed", "spackage_inventory_allowed", "spackage_images_per_product", "spackage_commission_rate", "spackage_type", "spackage_rfq_offers_allowed"
+                "sp.spackage_id", "IFNULL( spl.spackage_name, sp.spackage_identifier ) as spackage_name", "spackage_text", "spackage_description", "spackage_products_allowed", "spackage_inventory_allowed", "spackage_images_per_product", "spackage_commission_rate", "spackage_type", "spackage_rfq_offers_allowed"
             )
         );
         $srch->addGroupBy('sp.spackage_id');

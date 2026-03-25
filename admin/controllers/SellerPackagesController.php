@@ -222,6 +222,8 @@ class SellerPackagesController extends ListingBaseController
         $fld->requirements()->setIntPositive();
         $fld->requirements()->setRange('1', '9999999');
 
+        $frm->addTextarea(Labels::getLabel('FRM_PACKAGE_DESCRIPTION', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'description');
+
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_PACKAGE_DISPLAY_ORDER', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'display_order');
         $fld->requirements()->setIntPositive();
 

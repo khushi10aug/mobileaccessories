@@ -60,6 +60,39 @@
                                             <span><?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_{LIMIT}_RFQ_OFFERS', $siteLangId), ['{LIMIT}' => $package[SellerPackages::DB_TBL_PREFIX . 'rfq_offers_allowed']]); ?></span>
                                         </li>
                                     </ul>
+                                    <?php
+                                    $descLines = [];
+                                    if (!empty($package['spackage_description'])) {
+                                        $descLines = preg_split("/\r\n|\n|\r/", (string) $package['spackage_description']);
+                                        $descLines = array_values(array_filter(array_map('trim', $descLines)));
+                                    }
+                                    if (!empty($descLines)) { ?>
+                                        <ul class="features p-0 package-desc-list">
+                                            <?php foreach ($descLines as $line) {
+                                                $iconType = 'check';
+                                                $text = $line;
+
+                                                $prefix = substr($line, 0, 1);
+                                                if ('+' === $prefix) {
+                                                    $iconType = 'check';
+                                                    $text = trim(substr($line, 1));
+                                                } elseif ('-' === $prefix) {
+                                                    $iconType = 'cross';
+                                                    $text = trim(substr($line, 1));
+                                                }
+
+                                                if ('' === $text) {
+                                                    continue;
+                                                } ?>
+                                                <li class="features-item features-item--desc">
+                                                    <span class="desc-check <?php echo ('cross' === $iconType) ? 'desc-check--cross' : ''; ?>">
+                                                        <?php echo ('cross' === $iconType) ? '×' : '✓'; ?>
+                                                    </span>
+                                                    <span class="desc-text"><?php echo $text; ?></span>
+                                                </li>
+                                            <?php } ?>
+                                        </ul>
+                                    <?php } ?>
                                 </div>
                             </div>
                             <div class="packages-box-foot">

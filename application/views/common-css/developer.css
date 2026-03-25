@@ -104,6 +104,16 @@
     padding: 20px;
 }
 
+.seller-packages-page .trial {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Keep description aligned across all package cards */
+.seller-packages-page .trial > ul.features:not(.package-desc-list) {
+    min-height: 160px;
+}
+
 .seller-packages-page .features-item {
     color: #4b5563;
     font-size: 0.9rem;
@@ -126,10 +136,62 @@
     height: 44px;
     font-size: 0.95rem;
     font-weight: 700;
-}.seller-packages-page .section-head.section-head-center {
+}
+
+.seller-packages-page .package-desc-list {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #f1f5f9;
+    text-align: left;
+}
+
+.seller-packages-page .features-item--desc {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 10px;
+    align-items: start;
+    padding: 6px 0;
+    list-style: none;
+}
+
+.seller-packages-page .features-item--desc .desc-check {
+    display: inline-flex;
+    width: 18px;
+    height: 18px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: #ecfeff;
+    color: #0f766e;
+    font-weight: 900;
+    font-size: 12px;
+    line-height: 1;
+    margin-top: 2px;
+}
+
+.seller-packages-page .features-item--desc .desc-check--cross {
+    background: #fff1f2;
+    color: #be123c;
+}
+
+.seller-packages-page .features-item--desc .desc-text {
+    font-weight: 500;
+    color: #374151;
+    line-height: 1.45;
+}
+
+@media (max-width: 767px) {
+    .seller-packages-page .trial > ul.features:not(.package-desc-list) {
+        min-height: 0;
+    }
+}
+
+.seller-packages-page .section-head.section-head-center {
     display: block;
 }.seller-packages-page {
     font-size: 14px;
 }.seller-packages-page h3 {
     font-size: 18px;
+}.packages-box-head {
+    min-height: 17%;
 }

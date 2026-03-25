@@ -27,4 +27,7 @@ $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $frm->getField('spackage_rfq_offers_allowed');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
+$fld = $frm->getField('spackage_description');
+$fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');

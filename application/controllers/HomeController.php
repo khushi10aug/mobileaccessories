@@ -91,6 +91,7 @@ class HomeController extends MyAppController
 
         $collectionTemplates = array();
         foreach ($collections as $collection) {
+            
             switch ($collection['collection_layout_type']) {
                 case Collections::TYPE_HERO_SLIDES_LAYOUT1:
                     $tpl = new FatTemplate('', '');

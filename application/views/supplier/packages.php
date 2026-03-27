@@ -7,7 +7,7 @@
                     <h2><?php echo Labels::getLabel('LBL_SELLER_SUBSCRIPTION_PACKAGES', $siteLangId); ?></h2>
                 </div>
                 <?php if (!empty($pageData['epage_content'])) { ?>
-                    <p><?php echo html_entity_decode($pageData['epage_content']); ?></p>
+                    <p><?php ///echo html_entity_decode($pageData['epage_content']); ?></p>
                 <?php } ?>
             </div>
 

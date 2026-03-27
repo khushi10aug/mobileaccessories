@@ -3,7 +3,8 @@
 <section class="section section--slide" style="background-image:url(<?php echo CONF_WEBROOT_URL; ?>images/page-bg.jpg)">
 	<div class="slide__text">
 		<h2><?php echo Labels::getLabel('LBL_SELL_ON_PLATFORM', $siteLangId); ?></h2>
-		<a href="<?php echo UrlHelper::generateUrl('Supplier', 'Account'); ?>"
+		<?php $sellerStartUrl = FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) ? UrlHelper::generateUrl('Supplier', 'packages') : UrlHelper::generateUrl('Supplier', 'Account'); ?>
+		<a href="<?php echo $sellerStartUrl; ?>"
 			class="btn btn-brand btn--h-large"><?php echo Labels::getLabel('LBL_Open_a_shop', $siteLangId); ?></a>
 	</div>
 	<div class="slide__caption">

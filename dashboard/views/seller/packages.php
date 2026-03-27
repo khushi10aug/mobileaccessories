@@ -69,6 +69,37 @@ $totalPackages = count($packagesArr);
                                         <span><?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_{LIMIT}_RFQ_OFFERS', $siteLangId), ['{LIMIT}' => $package[SellerPackages::DB_TBL_PREFIX . 'rfq_offers_allowed']]); ?></span>
                                     </li>
                                 </ul>
+                                <?php
+                                $descLines = [];
+                                if (!empty($package['spackage_description'])) {
+                                    $descLines = preg_split("/\r\n|\n|\r/", (string) $package['spackage_description']);
+                                    $descLines = array_values(array_filter(array_map('trim', $descLines)));
+                                }
+                                if (!empty($descLines)) { ?>
+                                    <ul class="features p-0 package-desc-list">
+                                        <?php foreach ($descLines as $line) {
+                                            $iconType = 'check';
+                                            $text = $line;
+                                            $prefix = substr($line, 0, 1);
+                                            if ('+' === $prefix) {
+                                                $iconType = 'check';
+                                                $text = trim(substr($line, 1));
+                                            } elseif ('-' === $prefix) {
+                                                $iconType = 'cross';
+                                                $text = trim(substr($line, 1));
+                                            }
+                                            if ('' === $text) {
+                                                continue;
+                                            } ?>
+                                            <li class="features-item features-item--desc">
+                                                <span class="desc-check <?php echo ('cross' === $iconType) ? 'desc-check--cross' : ''; ?>">
+                                                    <?php echo ('cross' === $iconType) ? '×' : '✓'; ?>
+                                                </span>
+                                                <span class="desc-text"><?php echo $text; ?></span>
+                                            </li>
+                                        <?php } ?>
+                                    </ul>
+                                <?php } ?>
                             </div>
                         </div>
                         <?php if ($canEdit) { ?>
@@ -112,3 +143,47 @@ $totalPackages = count($packagesArr);
 <script>
     var currentActivePlanId = <?php echo ($currentActivePlanId) ? $currentActivePlanId : 0; ?>
 </script>
+
+<style>
+    .packages-box .package-desc-list {
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        text-align: left;
+    }
+
+    .packages-box .features-item--desc {
+        display: grid;
+        grid-template-columns: 18px 1fr;
+        gap: 10px;
+        align-items: start;
+        padding: 6px 0;
+        list-style: none;
+        margin: 0;
+    }
+
+    .packages-box .features-item--desc .desc-check {
+        display: inline-flex;
+        width: 18px;
+        height: 18px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        background: rgba(16, 185, 129, 0.12);
+        color: #065f46;
+        font-weight: 900;
+        font-size: 12px;
+        line-height: 1;
+        margin-top: 2px;
+    }
+
+    .packages-box .features-item--desc .desc-check--cross {
+        background: rgba(244, 63, 94, 0.12);
+        color: #9f1239;
+    }
+
+    .packages-box .features-item--desc .desc-text {
+        font-weight: 500;
+        line-height: 1.45;
+    }
+</style>

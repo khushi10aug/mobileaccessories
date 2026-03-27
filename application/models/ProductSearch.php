@@ -524,7 +524,7 @@ class ProductSearch extends SearchBase
         $this->sellerUserJoined = true;
         $joinCondition = '';
         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
-            $joinCondition = ' and user_has_valid_subscription = ' . applicationConstants::YES;
+            $joinCondition = ' and (user_has_valid_subscription = ' . applicationConstants::YES . ' or seller_user.user_id = 1)';
         }
 
         $this->joinTable(User::DB_TBL, 'INNER JOIN', 'selprod_user_id = seller_user.user_id and seller_user.user_is_supplier = ' . applicationConstants::YES . ' AND seller_user.user_deleted = ' . applicationConstants::NO . $joinCondition, 'seller_user');
@@ -597,7 +597,7 @@ class ProductSearch extends SearchBase
         }
 
         if ($isActive && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
-            $shopCondition .= ' and shop_has_valid_subscription = ' . applicationConstants::YES;
+            $shopCondition .= ' and (shop.shop_has_valid_subscription = ' . applicationConstants::YES . ' or shop.shop_user_id = 1)';
         }
 
         $joinShopWithSubQuery = false;
@@ -614,7 +614,7 @@ class ProductSearch extends SearchBase
                         $shopSearch->addCondition('shop.' . Shop::tblFld('user_valid'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
                         $shopSearch->addFld('*');
                         if ($isActive && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
-                            $shopSearch->addCondition('shop' . Shop::tblFld('has_valid_subscription'), '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
+                            $shopSearch->addDirectCondition('(shop.' . Shop::tblFld('has_valid_subscription') . ' = ' . applicationConstants::YES . ' OR shop.' . Shop::tblFld('user_id') . ' = 1)');
                         }
                         /*  $shopSearch->addFld('( 6371 * acos( cos( radians(' . $this->geoAddress['ykGeoLat'] . ') ) * cos( radians( shop.`shop_lat` ) ) * cos( radians( shop.`shop_lng` ) - radians(' . $this->geoAddress['ykGeoLng'] . ') ) + sin( radians(' . $this->geoAddress['ykGeoLat'] . ') ) * sin( radians( shop.`shop_lat` ) ) ) ) AS distance'); */
                         $shopSearch->addFld('(ST_Distance_Sphere(point(' . $this->geoAddress['ykGeoLng'] . ', ' . $this->geoAddress['ykGeoLat'] . '), point(shop.`shop_lng`, shop.`shop_lat`)) / 1000) AS distance');
@@ -628,7 +628,7 @@ class ProductSearch extends SearchBase
                             $shopSearch->addCondition('sshop.' . Shop::tblFld('active'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
                             $shopSearch->addCondition('sshop.' . Shop::tblFld('user_valid'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
                             if ($isActive && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
-                                $shopSearch->addCondition('sshop.' . Shop::tblFld('has_valid_subscription'), '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
+                                $shopSearch->addDirectCondition('(sshop.' . Shop::tblFld('has_valid_subscription') . ' = ' . applicationConstants::YES . ' OR sshop.' . Shop::tblFld('user_id') . ' = 1)');
                             }
                             $shopSearch->addMultipleFields(array('sshop.*', 'shop.distance'));
                             $shopSearch->joinTable('(' . $shopSubQuery . ')', 'LEFT OUTER JOIN', 'shop.shop_id = sshop.shop_id', 'shop');

@@ -26,7 +26,7 @@ class ShopSearch extends SearchBase
             $this->addCondition('shop_user_valid', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
             $this->addCondition('shop_supplier_display_status', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
             if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
-                $this->addCondition('shop_has_valid_subscription', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
+                $this->addDirectCondition('(shop_has_valid_subscription = ' . applicationConstants::YES . ' OR shop_user_id = 1)');
             }
         }
         if ($shopSupplierDisplayStatus) {
@@ -123,8 +123,10 @@ class ShopSearch extends SearchBase
             $date = date("Y-m-d");
         }
         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE')) {
-            $this->addCondition('oss.ossubs_till_date', '>=', $date);
-            $this->addCondition('ossubs_status_id', 'IN ', Orders::getActiveSubscriptionStatusArr());
+            $activeStatuses = implode(',', array_map('intval', Orders::getActiveSubscriptionStatusArr()));
+            $this->addDirectCondition(
+                "((oss.ossubs_till_date >= '" . $date . "' AND ossubs_status_id IN (" . $activeStatuses . ")) OR shop_user_id = 1)"
+            );
         }
     }
 

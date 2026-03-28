@@ -429,7 +429,7 @@
 .seller-packages-page .supplier-pkg-plan {
     position: relative;
     flex: 1 1 calc(50% - 0.25rem);
-    min-width: 128px;
+    /*min-width: 128px;*/
     max-width: 100%;
     margin: 0;
     cursor: pointer;

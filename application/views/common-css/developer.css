@@ -29,11 +29,17 @@
 
 .seller-packages-page .packages-box-item {
     border: 1px solid #e5e7eb;
-    border-radius: 2px;
-    padding: 2rem;
+    border-radius: 16px;
+    padding: 1.25rem 1.25rem 1.35rem;
     display: flex;
     flex-direction: column;
     background: #fff;
+    box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.seller-packages-page .supplier-pkg-card:hover {
+    box-shadow: 0 8px 32px rgba(15, 23, 42, 0.1);
 }
 
 .seller-packages-page .packages-box-item.two {
@@ -51,8 +57,10 @@
 .seller-packages-page .packages-box-foot {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    padding-top: 2rem;
+    gap: 0.65rem;
+    padding-top: 1rem;
+    margin-top: auto;
+    border-top: 1px solid #f1f5f9;
 }
 
 .seller-packages-page .packages-box-foot p {
@@ -139,10 +147,16 @@
 }
 
 .seller-packages-page .package-desc-list {
-    margin-top: 14px;
-    padding-top: 14px;
-    border-top: 1px solid #f1f5f9;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
     text-align: left;
+}
+
+.seller-packages-page .supplier-pkg-details .package-desc-list {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #f1f5f9;
 }
 
 .seller-packages-page .features-item--desc {
@@ -188,10 +202,300 @@
 
 .seller-packages-page .section-head.section-head-center {
     display: block;
-}.seller-packages-page {
+}
+
+.seller-packages-page {
     font-size: 14px;
-}.seller-packages-page h3 {
-    font-size: 18px;
-}.packages-box-head {
-    min-height: 17%;
+}
+
+.seller-packages-page .supplier-pkg-hero {
+    margin-bottom: 0.5rem;
+}
+
+.seller-packages-page .supplier-pkg-intro {
+    max-width: 42rem;
+    margin: 0.75rem auto 0;
+    color: #4b5563;
+    line-height: 1.65;
+    font-size: 0.95rem;
+}
+
+.seller-packages-page .supplier-pkg-grid {
+    grid-template-columns: repeat(auto-fill, minmax(288px, 1fr));
+    grid-gap: 1.25rem;
+    align-items: stretch;
+}
+
+.seller-packages-page .supplier-pkg-card {
+    text-align: left;
+    overflow: hidden;
+}
+
+/* Header band: full-bleed top background inside rounded card */
+.seller-packages-page .supplier-pkg-card__head,
+.seller-packages-page .packages-box-head.supplier-pkg-card__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start;
+    justify-content: space-between;
+    gap: 12px 16px;
+    margin: -1.25rem -1.25rem 0.65rem;
+    padding: 1.1rem 1.25rem 0.9rem;
+    border-radius: 15px 15px 0 0;
+    box-sizing: border-box;
+    background: linear-gradient(165deg, #fff5f7 0%, #fdf2f8 38%, #f8fafc 72%, #ffffff 100%);
+    border-bottom: 1px solid rgba(241, 245, 249, 0.95);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.seller-packages-page .supplier-pkg-card__title-block {
+    flex: 1 1 160px;
+    min-width: 0;
+}
+
+.seller-packages-page .supplier-pkg-card__name {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: #111827;
+    letter-spacing: -0.02em;
+}
+
+.seller-packages-page .supplier-pkg-card__tagline {
+    margin: 6px 0 0;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.seller-packages-page .supplier-pkg-card__from {
+    flex: 0 0 auto;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    min-width: 7.5rem;
+    max-width: 100%;
+}
+
+.seller-packages-page .supplier-pkg-card__from-label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #9ca3af;
+    margin-bottom: 4px;
+}
+
+/* Single-line “From” price (amount + cadence); scroll horizontally if needed on narrow cards */
+.seller-packages-page .supplier-pkg-card__price-preview.valid {
+    font-size: 1.2rem;
+    font-weight: 800;
+    line-height: 1.25;
+    color: #111827;
+    text-align: right;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+.seller-packages-page .supplier-pkg-card__price-preview.valid .text-decoration-line-through {
+    display: inline;
+    margin-right: 0.35em;
+    font-size: 0.82em;
+    font-weight: 600;
+    color: #9ca3af;
+    vertical-align: baseline;
+}
+
+.seller-packages-page .supplier-pkg-card__price-preview.valid span:not(.text-decoration-line-through) {
+    display: inline;
+    margin-left: 0.35em;
+    font-size: 0.58em;
+    font-weight: 500;
+    color: #6b7280;
+    vertical-align: baseline;
+    white-space: nowrap;
+}
+
+.seller-packages-page .supplier-pkg-card__body {
+    padding: 0;
+}
+
+.seller-packages-page .supplier-pkg-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 12px;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.seller-packages-page .supplier-pkg-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: 8px 10px;
+    margin: 0;
+    background: #f9fafb;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    line-height: 1.35;
+    color: #4b5563;
+    text-align: left;
+}
+
+.seller-packages-page .supplier-pkg-stat span {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.seller-packages-page .supplier-pkg-details {
+    margin-top: 10px;
+    border-radius: 10px;
+    background: #fafafa;
+    padding: 0 10px;
+    border: 1px solid #f1f5f9;
+}
+
+.seller-packages-page .supplier-pkg-details__summary {
+    cursor: pointer;
+    list-style: none;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #be123c;
+    padding: 10px 4px;
+    user-select: none;
+}
+
+.seller-packages-page .supplier-pkg-details__summary::-webkit-details-marker {
+    display: none;
+}
+
+.seller-packages-page .supplier-pkg-details__summary::after {
+    content: "";
+    display: inline-block;
+    width: 0.4em;
+    height: 0.4em;
+    margin-left: 0.35em;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    vertical-align: 0.15em;
+    transition: transform 0.2s ease;
+}
+
+.seller-packages-page .supplier-pkg-details[open] .supplier-pkg-details__summary::after {
+    transform: rotate(-135deg);
+    vertical-align: -0.05em;
+}
+
+.seller-packages-page .supplier-pkg-details__list {
+    padding-bottom: 10px;
+}
+
+.seller-packages-page .supplier-pkg-card__pick-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #6b7280;
+    margin: 0 0 2px;
+}
+
+.seller-packages-page .supplier-pkg-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.seller-packages-page .supplier-pkg-plans {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: flex-start;
+}
+
+.seller-packages-page .supplier-pkg-plan {
+    position: relative;
+    flex: 1 1 calc(50% - 0.25rem);
+    min-width: 128px;
+    max-width: 100%;
+    margin: 0;
+    cursor: pointer;
+}
+
+.seller-packages-page .supplier-pkg-plan input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.seller-packages-page .supplier-pkg-plan__ui {
+    padding: 10px 12px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: #374151;
+    background: #fff;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.seller-packages-page .supplier-pkg-plan input[type="radio"]:checked + .supplier-pkg-plan__ui {
+    border-color: #be123c;
+    background: #fff5f7;
+    box-shadow: 0 0 0 1px rgba(190, 18, 60, 0.15);
+}
+
+.seller-packages-page .supplier-pkg-plan input[type="radio"]:focus-visible + .supplier-pkg-plan__ui {
+    outline: 2px solid #be123c;
+    outline-offset: 2px;
+}
+
+.seller-packages-page .supplier-pkg-plan:hover .supplier-pkg-plan__ui {
+    border-color: #d1d5db;
+}
+
+.seller-packages-page .supplier-pkg-submit {
+    border-radius: 12px;
+    margin-top: 0;
+}
+
+@media (max-width: 479px) {
+    .seller-packages-page .supplier-pkg-plan {
+        flex: 1 1 100%;
+    }
+
+    .seller-packages-page .supplier-pkg-card__from {
+        text-align: left;
+        width: 100%;
+        align-items: flex-start;
+    }
+
+    .seller-packages-page .supplier-pkg-card__price-preview.valid {
+        text-align: left;
+    }
+
+   
 }

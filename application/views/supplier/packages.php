@@ -32,7 +32,7 @@
                                     <span><?php echo $package['spackage_text']; ?></span>
                                 </div>
                                 <div class="valid">
-                                    <?php echo SellerPackagePlans::getCheapPlanPriceWithPeriod($package['cheapPlan'], $package['cheapPlan'][SellerPackagePlans::DB_TBL_PREFIX . 'price']); ?>
+                                    <?php echo SellerPackagePlans::getCheapPlanPriceDisplayForPackage($package['cheapPlan']); ?>
                                 </div>
                             </div>
                             <div class="packages-box-body">
@@ -101,7 +101,7 @@
                                     <select name="spplan_id" class="form-select" required>
                                         <?php foreach ($package['plans'] as $plan) { ?>
                                             <option value="<?php echo $plan[SellerPackagePlans::DB_TBL_PREFIX . 'id']; ?>">
-                                                <?php echo SellerPackagePlans::getPlanPriceWithPeriod($plan, $plan[SellerPackagePlans::DB_TBL_PREFIX . 'price']); ?>
+                                                <?php echo SellerPackagePlans::getPlanPriceDisplayForPackage($plan); ?>
                                             </option>
                                         <?php } ?>
                                     </select>

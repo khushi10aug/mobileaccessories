@@ -173,7 +173,7 @@ class SubscriptionCart extends FatModel
         $susbscriptions = $this->getSubscription($this->scart_lang_id);
 
         foreach ($susbscriptions as $subscription) {
-            $cartTotal = isset($subscription[SellerPackagePlans::DB_TBL_PREFIX . 'price']) ? $subscription[SellerPackagePlans::DB_TBL_PREFIX . 'price'] : 0;
+            $cartTotal += isset($subscription['spplan_payable_price']) ? $subscription['spplan_payable_price'] : (isset($subscription[SellerPackagePlans::DB_TBL_PREFIX . 'price']) ? $subscription[SellerPackagePlans::DB_TBL_PREFIX . 'price'] : 0);
         }
         return $cartTotal;
     }
@@ -201,7 +201,7 @@ class SubscriptionCart extends FatModel
         $orderNetAmount = 0;
         if (is_array($susbscriptions) && count($susbscriptions)) {
             foreach ($susbscriptions as $susbscription) {
-                $cartTotal += isset($susbscription[SellerPackagePlans::DB_TBL_PREFIX . 'price']) ? $susbscription[SellerPackagePlans::DB_TBL_PREFIX . 'price'] : 0;
+                $cartTotal += isset($susbscription['spplan_payable_price']) ? $susbscription['spplan_payable_price'] : (isset($susbscription[SellerPackagePlans::DB_TBL_PREFIX . 'price']) ? $susbscription[SellerPackagePlans::DB_TBL_PREFIX . 'price'] : 0);
             }
         }
 
@@ -253,7 +253,8 @@ class SubscriptionCart extends FatModel
                 $subTotal = 0;
                 foreach ($this->getSubscription($this->scart_lang_id) as $product) {
                     if (in_array($product[SellerPackagePlans::DB_TBL_PREFIX . 'id'], $couponInfo['products'])) {
-                        $subTotal += $product['spplan_price'];
+                        $line = isset($product['spplan_payable_price']) ? $product['spplan_payable_price'] : $product['spplan_price'];
+                        $subTotal += $line;
                     }
                 }
             }
@@ -278,10 +279,11 @@ class SubscriptionCart extends FatModel
 
 
                 if ($status) {
+                    $planLine = isset($product['spplan_payable_price']) ? $product['spplan_payable_price'] : $product['spplan_price'];
                     if ($couponInfo['coupon_discount_in_percent'] == applicationConstants::FLAT) {
-                        $discount = $couponInfo['coupon_discount_value'] * ($product['spplan_price'] / $subTotal);
+                        $discount = $couponInfo['coupon_discount_value'] * ($planLine / $subTotal);
                     } else {
-                        $discount = ($product['spplan_price'] / 100) * $couponInfo['coupon_discount_value'];
+                        $discount = ($planLine / 100) * $couponInfo['coupon_discount_value'];
                     }
                 }
                 $discountTotal += $discount;
@@ -304,14 +306,16 @@ class SubscriptionCart extends FatModel
             $discountedProdGroupIds = array();
             if (empty($couponInfo['products'])) {
                 foreach ($this->getSubscription($this->scart_lang_id) as $product) {
-                    $totalSelProdDiscount = round(($discountTotal * $product['spplan_price']) / $subTotal, 2);
+                    $planLine = isset($product['spplan_payable_price']) ? $product['spplan_payable_price'] : $product['spplan_price'];
+                    $totalSelProdDiscount = round(($discountTotal * $planLine) / $subTotal, 2);
                     $selProdDiscountTotal += $totalSelProdDiscount;
                     $discountedSelProdIds[$product[SellerPackagePlans::DB_TBL_PREFIX . 'id']] = round(($totalSelProdDiscount), 2);
                 }
             } else {
                 foreach ($this->getSubscription($this->scart_lang_id) as $product) {
                     if (in_array($product[SellerPackagePlans::DB_TBL_PREFIX . 'id'], $couponInfo['products'])) {
-                        $totalSelProdDiscount = round(($discountTotal * $product['spplan_price']) / $subTotal, 2);
+                        $planLine = isset($product['spplan_payable_price']) ? $product['spplan_payable_price'] : $product['spplan_price'];
+                        $totalSelProdDiscount = round(($discountTotal * $planLine) / $subTotal, 2);
                         $selProdDiscountTotal += $totalSelProdDiscount;
                         $discountedSelProdIds[$product[SellerPackagePlans::DB_TBL_PREFIX . 'id']] = round(($totalSelProdDiscount), 2);
                     }
@@ -399,7 +403,7 @@ class SubscriptionCart extends FatModel
     {
         $subTotal = 0;
         foreach ($this->getSubscription($this->scart_lang_id) as $product) {
-            $subTotal += isset($product['spplan_price']) ? $product['spplan_price'] : 0;
+            $subTotal += isset($product['spplan_payable_price']) ? $product['spplan_payable_price'] : (isset($product['spplan_price']) ? $product['spplan_price'] : 0);
         }
         $maxAdjustableAmount = $subTotal;
         if ($maxAdjustableAmount < $adjustableAmount) {
@@ -524,6 +528,7 @@ class SubscriptionCart extends FatModel
                         $this->removeCartKey($key);
                         continue;
                     }
+                    $sellerPlanRow['spplan_payable_price'] = SellerPackagePlans::getPlanPayableAmountFromRow($sellerPlanRow);
                     $this->subscriptions[$key] = $sellerPlanRow;
                 }
                 /* ] */

@@ -216,6 +216,7 @@ class SellerPackagePlansController extends ListingBaseController
             $frm->addFloatField(Labels::getLabel('FRM_PRICE', $this->siteLangId), 'spplan_price')->requirements()->setRange('0.01', '9999999999');
             $fldPckPrice = $frm->getField('spplan_price');
             $fldPckPrice->setWrapperAttribute('class', 'package_price');
+            $frm->addFloatField(Labels::getLabel('FRM_DISCOUNT_VALUE', $this->siteLangId), 'spplan_discount')->requirements()->setRange(0, '9999999999');
         }
 
         $fld = $frm->addIntegerField(Labels::getLabel('FRM_PLAN_DISPLAY_ORDER', $this->siteLangId), 'spplan_display_order');
@@ -248,6 +249,16 @@ class SellerPackagePlansController extends ListingBaseController
             $data[SellerPackagePlans::DB_TBL_PREFIX . 'trial_frequency'] = '';
             $data[SellerPackagePlans::DB_TBL_PREFIX . 'trial_interval'] = 0;
             $data[SellerPackagePlans::DB_TBL_PREFIX . 'price'] = 0;
+            $data[SellerPackagePlans::DB_TBL_PREFIX . 'discount'] = 0;
+        } else {
+            $data[SellerPackagePlans::DB_TBL_PREFIX . 'discount'] = FatUtility::float($data[SellerPackagePlans::DB_TBL_PREFIX . 'discount'] ?? 0);
+            $planPrice = FatUtility::float($data[SellerPackagePlans::DB_TBL_PREFIX . 'price'] ?? 0);
+            if ($data[SellerPackagePlans::DB_TBL_PREFIX . 'discount'] < 0) {
+                LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            }
+            if ($data[SellerPackagePlans::DB_TBL_PREFIX . 'discount'] > $planPrice) {
+                LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            }
         }
 
         $record = new SellerPackagePlans($post['spplan_id']);
@@ -275,7 +286,7 @@ class SellerPackagePlansController extends ListingBaseController
 
     protected function getFormColumns(): array
     {
-        $subsPkgTblHeadingCols = CacheHelper::get('subsPkgPlanTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $subsPkgTblHeadingCols = CacheHelper::get('subsPkgPlanTblHeadingCols_v2' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($subsPkgTblHeadingCols) {
             return json_decode($subsPkgTblHeadingCols, true);
         }
@@ -285,11 +296,12 @@ class SellerPackagePlansController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'spplan_display_order' => Labels::getLabel('LBL_DISPLAY_ORDER', $this->siteLangId),
             'spplan_price' => Labels::getLabel('LBL_PLAN_PRICE', $this->siteLangId),
+            'spplan_discount' => Labels::getLabel('FRM_DISCOUNT_VALUE', $this->siteLangId),
             'spplan_interval' => Labels::getLabel('LBL_INTERVAL', $this->siteLangId),
             'spplan_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('subsPkgPlanTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('subsPkgPlanTblHeadingCols_v2' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 
@@ -300,6 +312,7 @@ class SellerPackagePlansController extends ListingBaseController
             'select_all',
             'spplan_display_order',
             'spplan_price',
+            'spplan_discount',
             'spplan_interval',
             'spplan_active',
             'action',
@@ -329,10 +342,13 @@ class SellerPackagePlansController extends ListingBaseController
                 'width' => '10%'
             ],
             'spplan_price' => [
-                'width' => '15%'
+                'width' => '12%'
+            ],
+            'spplan_discount' => [
+                'width' => '12%'
             ],
             'spplan_interval' => [
-                'width' => '45%'
+                'width' => '36%'
             ],
             'spplan_active' => [
                 'width' => '10%'

@@ -55,7 +55,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $prodSrch->joinPackage();
 
         $prodSrch->addCondition('spplan_id', '=', $spplan_id);
-        $fields = array('spplan_id', 'spplan_price', 'spackage_images_per_product', 'spackage_type', 'spackage_products_allowed', 'spackage_inventory_allowed', 'spackage_rfq_offers_allowed', 'spplan_interval', 'spplan_frequency', 'spackage_commission_rate');
+        $fields = array('spplan_id', 'spplan_price', 'spplan_discount', 'spackage_images_per_product', 'spackage_type', 'spackage_products_allowed', 'spackage_inventory_allowed', 'spackage_rfq_offers_allowed', 'spplan_interval', 'spplan_frequency', 'spackage_commission_rate');
         $prodSrch->addMultipleFields($fields);
         $prodSrch->doNotCalculateRecords();
         $prodSrch->setPageSize(1);
@@ -192,8 +192,9 @@ class SubscriptionCheckoutController extends LoggedUserController
                         'ossubs_subscription_name' => $op_subscription_title,
                     );
                 }
+                $planPayable = SellerPackagePlans::getPlanPayableAmountFromRow($subscriptionInfo);
                 $orderData['subscriptions'][SUBSCRIPTIONCART::SUBSCRIPTION_CART_KEY_PREFIX_PRODUCT . $subscriptionInfo['spplan_id']] = array(
-                    OrderSubscription::DB_TBL_PREFIX . 'price' => $subscriptionInfo['spplan_price'],
+                    OrderSubscription::DB_TBL_PREFIX . 'price' => $planPayable,
                     OrderSubscription::DB_TBL_PREFIX . 'images_allowed' => $subscriptionInfo['spackage_images_per_product'],
                     OrderSubscription::DB_TBL_PREFIX . 'products_allowed' => $subscriptionInfo['spackage_products_allowed'],
                     OrderSubscription::DB_TBL_PREFIX . 'inventory_allowed' => $subscriptionInfo['spackage_inventory_allowed'],
@@ -222,7 +223,8 @@ class SubscriptionCheckoutController extends LoggedUserController
                 $rewardPoints = $orderData['order_reward_point_value'];
                 $usedRewardPoint = 0;
                 if ($rewardPoints > 0) {
-                    $selProdAmount = ($cartSubscription['spplan_price']) - $discount - $adjustedAmount;
+                    $planPayable = isset($cartSubscription['spplan_payable_price']) ? $cartSubscription['spplan_payable_price'] : SellerPackagePlans::getPlanPayableAmountFromRow($cartSubscription);
+                    $selProdAmount = ($planPayable) - $discount - $adjustedAmount;
                     $usedRewardPoint = round((($rewardPoints * $selProdAmount) / ($orderData['order_net_amount'] + $rewardPoints)), 2);
                 }
 

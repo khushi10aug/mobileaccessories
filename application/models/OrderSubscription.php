@@ -114,6 +114,7 @@ class OrderSubscription extends MyAppModel
             // common plan fields used via spp.* in some screens
             'spplan_id' => 0,
             'spplan_price' => 0,
+            'spplan_discount' => 0,
             'spplan_interval' => 1,
             'spplan_frequency' => SellerPackagePlans::SUBSCRIPTION_PERIOD_UNLIMITED,
             'spplan_trial_interval' => 0,

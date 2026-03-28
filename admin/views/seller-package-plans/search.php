@@ -39,6 +39,9 @@ foreach ($arrListing as $sn => $row) {
             case 'spplan_price':
                 $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key]));
                 break;
+            case 'spplan_discount':
+                $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key] ?? 0));
+                break;
             case 'spplan_interval':
                 $td->appendElement('plaintext', array(), SellerPackagePlans::getPlanPeriod($row), true);
                 break;

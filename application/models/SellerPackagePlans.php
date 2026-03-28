@@ -63,6 +63,37 @@ class SellerPackagePlans extends MyAppModel
             self::SUBSCRIPTION_PERIOD_UNLIMITED => 'YEAR',
         );
     }
+
+    /**
+     * Payable amount after flat spplan_discount (capped at list price).
+     */
+    public static function getPlanPayableAmountFromRow(array $row): float
+    {
+        $price = isset($row['spplan_price']) ? (float) $row['spplan_price'] : 0;
+        $disc = isset($row['spplan_discount']) ? (float) $row['spplan_discount'] : 0;
+        if ($disc < 0) {
+            $disc = 0;
+        }
+        if ($disc > $price) {
+            $disc = $price;
+        }
+        return round($price - $disc, 2);
+    }
+
+    /**
+     * Price label for package UIs: strikethrough list price when discount applies, then period text at payable price.
+     */
+    public static function getPlanPriceDisplayForPackage(array $plan): string
+    {
+        $list = (float) ($plan['spplan_price'] ?? 0);
+        $payable = static::getPlanPayableAmountFromRow($plan);
+        $disc = isset($plan['spplan_discount']) ? (float) $plan['spplan_discount'] : 0;
+        $periodPart = static::getPlanPriceWithPeriod($plan, $payable);
+        if ($disc > 0 && $payable < $list) {
+            return '<span class="text-decoration-line-through">' . CommonHelper::displayMoneyFormat($list) . '</span> ' . $periodPart;
+        }
+        return static::getPlanPriceWithPeriod($plan, $list);
+    }
     public static function getPlanPeriod($plan)
     {
         $subcriptionPeriodArr = self::getSubscriptionPeriods(CommonHelper::getLangId());
@@ -117,6 +148,20 @@ class SellerPackagePlans extends MyAppModel
 
         return CommonHelper::displayMoneyFormat($price) . " <span>" . " " . Labels::getLabel("LBL_PER", CommonHelper::getLangId()) . " " . (($interval > 1) ? $interval : '') . "  " . $period . "</span>";
     }
+
+    /** Package card headline: strikethrough list price when a flat discount applies, else same as getCheapPlanPriceWithPeriod at list price. */
+    public static function getCheapPlanPriceDisplayForPackage(array $plan): string
+    {
+        $list = (float) ($plan['spplan_price'] ?? 0);
+        $payable = static::getPlanPayableAmountFromRow($plan);
+        $disc = isset($plan['spplan_discount']) ? (float) $plan['spplan_discount'] : 0;
+        $cheapPart = static::getCheapPlanPriceWithPeriod($plan, $payable);
+        if ($disc > 0 && $payable < $list) {
+            return '<span class="text-decoration-line-through">' . CommonHelper::displayMoneyFormat($list) . '</span> ' . $cheapPart;
+        }
+        return static::getCheapPlanPriceWithPeriod($plan, $list);
+    }
+
     public static function getPlanByPackageId($spackageId = 0)
     {
         $spackageId = FatUtility::convertToType($spackageId, FatUtility::VAR_INT);
@@ -143,8 +188,9 @@ class SellerPackagePlans extends MyAppModel
         }
         $srch = new SellerPackagePlansSearch();
         $srch->addCondition(SellerPackagePlans::DB_TBL_PREFIX . 'spackage_id', '=', $spackageId);
-        $srch->addMultipleFields(array(SellerPackagePlans::DB_TBL_PREFIX . 'price', SellerPackagePlans::DB_TBL_PREFIX . 'interval', SellerPackagePlans::DB_TBL_PREFIX . 'frequency'));
-        $srch->addOrder(SellerPackagePlans::DB_TBL_PREFIX . 'price', 'asc');
+        $srch->addMultipleFields(array(SellerPackagePlans::DB_TBL_PREFIX . 'price', SellerPackagePlans::DB_TBL_PREFIX . 'discount', SellerPackagePlans::DB_TBL_PREFIX . 'interval', SellerPackagePlans::DB_TBL_PREFIX . 'frequency'));
+        $srch->addFld('(spp.spplan_price - LEAST(COALESCE(spp.spplan_discount, 0), spp.spplan_price)) AS spplan_effective_sort');
+        $srch->addOrder('spplan_effective_sort', 'ASC');
         $srch->addCondition('spp.spplan_active', '=', applicationConstants::YES);
         $srch->setPageSize(1);
         $srch->doNotCalculateRecords(true);
@@ -163,7 +209,7 @@ class SellerPackagePlans extends MyAppModel
 
         $srch->joinPlan();
         $srch->addCondition(SellerPackagePlans::DB_TBL_PREFIX . 'id', '=', $spplan_id);
-        $srch->addMultipleFields(array(SellerPackagePlans::DB_TBL_PREFIX . 'price', SellerPackages::DB_TBL_PREFIX . 'products_allowed', SellerPackages::DB_TBL_PREFIX . 'inventory_allowed', SellerPackages::DB_TBL_PREFIX . 'images_per_product', SellerPackages::DB_TBL_PREFIX . 'rfq_offers_allowed', SellerPackagePlans::DB_TBL_PREFIX . 'interval', SellerPackages::DB_TBL_PREFIX . 'type', SellerPackagePlans::DB_TBL_PREFIX . 'frequency', SellerPackages::DB_TBL_PREFIX . 'name', SellerPackagePlans::DB_TBL_PREFIX . 'trial_interval', SellerPackagePlans::DB_TBL_PREFIX . 'trial_frequency'));
+        $srch->addMultipleFields(array(SellerPackagePlans::DB_TBL_PREFIX . 'price', SellerPackagePlans::DB_TBL_PREFIX . 'discount', SellerPackages::DB_TBL_PREFIX . 'products_allowed', SellerPackages::DB_TBL_PREFIX . 'inventory_allowed', SellerPackages::DB_TBL_PREFIX . 'images_per_product', SellerPackages::DB_TBL_PREFIX . 'rfq_offers_allowed', SellerPackagePlans::DB_TBL_PREFIX . 'interval', SellerPackages::DB_TBL_PREFIX . 'type', SellerPackagePlans::DB_TBL_PREFIX . 'frequency', SellerPackages::DB_TBL_PREFIX . 'name', SellerPackagePlans::DB_TBL_PREFIX . 'trial_interval', SellerPackagePlans::DB_TBL_PREFIX . 'trial_frequency'));
         $srch->addOrder(SellerPackagePlans::DB_TBL_PREFIX . 'price', 'asc');
         $srch->addCondition('spp.spplan_active', '=', applicationConstants::YES);
         $srch->setPageSize(1);

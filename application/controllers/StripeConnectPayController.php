@@ -210,11 +210,12 @@ class StripeConnectPayController extends PaymentController
             }
         } else if ($this->orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION) {
             $stipePlanInfo = SellerPackagePlans::getAttributesById($orderProducts[key($orderProducts)]['ossubs_plan_id']);
+            $planPayable = SellerPackagePlans::getPlanPayableAmountFromRow($stipePlanInfo);
             $packageName = current(SellerPackages::getAttributesByLangId($this->siteLangId, $stipePlanInfo['spplan_spackage_id'], ['COALESCE(spackage_name, spackage_identifier) as spackage_name'], applicationConstants::JOIN_RIGHT));
             $nickname = Labels::getLabel('MSG_{NAME}_SUBSCRIPTION_PAYMENT', $this->siteLangId);
 
             $priceData = [
-                'unit_amount' => $this->convertInPaisa($stipePlanInfo['spplan_price']),
+                'unit_amount' => $this->convertInPaisa($planPayable),
                 'currency' => $this->orderInfo['order_currency_code'],
                 'product_data' => [
                     'name' => $packageName,

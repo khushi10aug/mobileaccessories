@@ -8993,6 +8993,7 @@ CREATE TABLE `tbl_seller_packages_plan` (
   `spplan_interval` int(11) NOT NULL,
   `spplan_frequency` char(11) NOT NULL,
   `spplan_price` decimal(10,2) NOT NULL,
+  `spplan_discount` decimal(10,2) NOT NULL DEFAULT 0.00,
   `spplan_display_order` int(11) NOT NULL,
   `spplan_active` int(11) NOT NULL,
   PRIMARY KEY (`spplan_id`)
@@ -9005,7 +9006,7 @@ CREATE TABLE `tbl_seller_packages_plan` (
 
 LOCK TABLES `tbl_seller_packages_plan` WRITE;
 /*!40000 ALTER TABLE `tbl_seller_packages_plan` DISABLE KEYS */;
-INSERT INTO `tbl_seller_packages_plan` VALUES (1,1,0,'',5,'M',0.00,0,1),(2,2,0,'',30,'D',100.00,0,1),(3,2,0,'',60,'D',150.00,1,1),(4,2,0,'',90,'D',200.00,2,1),(5,3,0,'',30,'D',150.00,0,1),(6,3,0,'',60,'D',200.00,1,1),(7,3,0,'',90,'D',250.00,2,1),(8,4,0,'',30,'D',80.00,0,1),(9,4,0,'',60,'D',110.00,1,1),(10,4,0,'',90,'D',140.00,2,1);
+INSERT INTO `tbl_seller_packages_plan` VALUES (1,1,0,'',5,'M',0.00,0.00,0,1),(2,2,0,'',30,'D',100.00,0.00,0,1),(3,2,0,'',60,'D',150.00,0.00,1,1),(4,2,0,'',90,'D',200.00,0.00,2,1),(5,3,0,'',30,'D',150.00,0.00,0,1),(6,3,0,'',60,'D',200.00,0.00,1,1),(7,3,0,'',90,'D',250.00,0.00,2,1),(8,4,0,'',30,'D',80.00,0.00,0,1),(9,4,0,'',60,'D',110.00,0.00,1,1),(10,4,0,'',90,'D',140.00,0.00,2,1);
 /*!40000 ALTER TABLE `tbl_seller_packages_plan` ENABLE KEYS */;
 UNLOCK TABLES;
 

@@ -37,9 +37,9 @@ $totalPackages = count($packagesArr);
                             <div class="valid">
                                 <?php
                                 if (in_array($currentActivePlanId, $planIds)) {
-                                    echo SellerPackagePlans::getCheapPlanPriceWithPeriod($currentPlanData, $currentPlanData[SellerPackagePlans::DB_TBL_PREFIX . 'price']);
+                                    echo SellerPackagePlans::getCheapPlanPriceDisplayForPackage($currentPlanData);
                                 } else {
-                                    echo SellerPackagePlans::getCheapPlanPriceWithPeriod($package['cheapPlan'], $package['cheapPlan'][SellerPackagePlans::DB_TBL_PREFIX . 'price']);
+                                    echo SellerPackagePlans::getCheapPlanPriceDisplayForPackage($package['cheapPlan']);
                                 }
                                 ?>
                             </div>
@@ -115,7 +115,7 @@ $totalPackages = count($packagesArr);
                                         $isActive = ($currentActivePlanId == $plan[SellerPackagePlans::DB_TBL_PREFIX . 'id']) ? 'selected=selected' : '';
                                     ?>
                                         <option value="<?php echo $plan[SellerPackagePlans::DB_TBL_PREFIX . 'id']; ?>" <?php echo $isActive; ?>>
-                                            <?php echo SellerPackagePlans::getPlanPriceWithPeriod($plan, $plan[SellerPackagePlans::DB_TBL_PREFIX . 'price']); ?>
+                                            <?php echo SellerPackagePlans::getPlanPriceDisplayForPackage($plan); ?>
                                         </option>
                                     <?php } ?>
                                 </select>

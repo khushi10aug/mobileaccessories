@@ -6551,6 +6551,7 @@ CREATE TABLE `tbl_seller_packages_plan` (
   `spplan_interval` int(11) NOT NULL,
   `spplan_frequency` char(11) NOT NULL,
   `spplan_price` decimal(10,2) NOT NULL,
+  `spplan_discount` decimal(10,2) NOT NULL DEFAULT 0.00,
   `spplan_display_order` int(11) NOT NULL,
   `spplan_active` int(11) NOT NULL,
   PRIMARY KEY (`spplan_id`)

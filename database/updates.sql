@@ -1016,3 +1016,8 @@ ALTER TABLE `tbl_products` ADD `product_cbrand_id` INT(11) NOT NULL AFTER `produ
 
 /* Seller package plan flat discount (list price minus discount = amount charged) */
 ALTER TABLE `tbl_seller_packages_plan` ADD `spplan_discount` decimal(10,2) NOT NULL DEFAULT 0.00 AFTER `spplan_price`;
+
+/* 301 removed SEO URLs (e.g. deleted products) to homepage — enable on live after deploy */
+INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES
+('CONF_REDIRECT_MISSING_REWRITE_TO_HOME', '1', 1)
+ON DUPLICATE KEY UPDATE `conf_val` = VALUES(`conf_val`);

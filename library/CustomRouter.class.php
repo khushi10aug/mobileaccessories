@@ -105,6 +105,22 @@ class CustomRouter
             }
 
             if (!$row && (!isset($customUrl[1]) || (isset($customUrl[1]) && strpos($customUrl[1], 'pagesize') === false))) {
+                $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
+                if (
+                    !empty($customUrl[0])
+                    && in_array($method, ['GET', 'HEAD'], true)
+                    && FatApp::getConfig('CONF_REDIRECT_MISSING_REWRITE_TO_HOME', FatUtility::VAR_INT, 0)
+                    && !FatUtility::isAjaxCall()
+                ) {
+                    $slug = $customUrl[0];
+                    /* Single-segment SEO paths (e.g. removed products); avoids multi-part routes like "a/b". */
+                    if (strpos($slug, '/') === false && preg_match('/^[a-zA-Z0-9][a-zA-Z0-9\-]*$/', $slug)) {
+                        header('HTTP/1.1 301 Moved Permanently');
+                        header('Location: ' . UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_URL));
+                        header('Connection: close');
+                        exit;
+                    }
+                }
                 return;
             }
             /*]*/

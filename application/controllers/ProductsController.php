@@ -624,6 +624,21 @@ class ProductsController extends MyAppController
         exit;
     }
 
+    private function redirectUnavailableCatalogSeoToHomeIfEnabled(): void
+    {
+        if (
+            false === MOBILE_APP_API_CALL
+            && FatApp::getConfig('CONF_REDIRECT_MISSING_REWRITE_TO_HOME', FatUtility::VAR_INT, 1)
+            && !FatUtility::isAjaxCall()
+            && in_array($_SERVER['REQUEST_METHOD'] ?? 'GET', ['GET', 'HEAD'], true)
+        ) {
+            header('HTTP/1.1 301 Moved Permanently');
+            header('Location: ' . UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_URL));
+            header('Connection: close');
+            exit;
+        }
+    }
+
     private function getSelProdReviewObj($forReviewsRating = true)
     {
         $selProdReviewObj = new SelProdReviewSearch();
@@ -650,6 +665,7 @@ class ProductsController extends MyAppController
             if (true === MOBILE_APP_API_CALL) {
                 LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_PRODUCT'));
             }
+            $this->redirectUnavailableCatalogSeoToHomeIfEnabled();
             FatUtility::exitWithErrorCode(404);
         }
         /* fetch requested product[ */
@@ -771,17 +787,7 @@ class ProductsController extends MyAppController
 
         $product = $this->getProductDetail($selprod_id);
         if (!$product) {
-            if (
-                false === MOBILE_APP_API_CALL
-                && FatApp::getConfig('CONF_REDIRECT_MISSING_REWRITE_TO_HOME', FatUtility::VAR_INT, 0)
-                && !FatUtility::isAjaxCall()
-                && in_array($_SERVER['REQUEST_METHOD'] ?? 'GET', ['GET', 'HEAD'], true)
-            ) {
-                header('HTTP/1.1 301 Moved Permanently');
-                header('Location: ' . UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_URL));
-                header('Connection: close');
-                exit;
-            }
+            $this->redirectUnavailableCatalogSeoToHomeIfEnabled();
             LibHelper::exitWithError(Labels::getLabel('ERR_CURRENTLY_THE_PRODUCT_IS_UNAVAILABLE', $this->siteLangId), false, true);
             FatUtility::exitWithErrorCode(404);
         }

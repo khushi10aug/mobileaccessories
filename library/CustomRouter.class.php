@@ -109,7 +109,7 @@ class CustomRouter
                 if (
                     !empty($customUrl[0])
                     && in_array($method, ['GET', 'HEAD'], true)
-                    && FatApp::getConfig('CONF_REDIRECT_MISSING_REWRITE_TO_HOME', FatUtility::VAR_INT, 0)
+                    && FatApp::getConfig('CONF_REDIRECT_MISSING_REWRITE_TO_HOME', FatUtility::VAR_INT, 1)
                     && !FatUtility::isAjaxCall()
                 ) {
                     $slug = $customUrl[0];

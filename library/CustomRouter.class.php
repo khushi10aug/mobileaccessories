@@ -49,6 +49,10 @@ class CustomRouter
 
         if (defined('SYSTEM_FRONT') && SYSTEM_FRONT === true/*  && !FatUtility::isAjaxCall() */) {
             $url = urldecode($_SERVER['REQUEST_URI']);
+            $reqPath = parse_url($url, PHP_URL_PATH);
+            if ($reqPath !== null && preg_match('#^/cdn-cgi/#i', $reqPath)) {
+                return;
+            }
 
             if (strpos($url, "index.php?url=") !== false || UrlHelper::staticContentProvider($controller, $action) == true) {
                 return;
@@ -62,14 +66,18 @@ class CustomRouter
             $customUrl = rtrim($customUrl, '/');
             $customUrl = explode('/?', $customUrl);
 
-            /* [ Handled lang code in url */
+            $strippedLangIdFromPath = null;
+            /* [ Handled lang code in url — strip "xx/rest" for any code length, not only substr(..., 3) */
             if (FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0)) {
-                $langCustomUrl = explode('/', $customUrl[0]);
-                if (isset($langCustomUrl[0]) && $langCustomUrl[0] != '') {
-                    if (in_array(strtoupper($langCustomUrl[0]), LANG_CODES_ARR)) {
-                        $customUrl[0] = substr($customUrl[0], 3);
-                        $customUrl[0] = ltrim($customUrl[0], '/');
+                $langParts = explode('/', $customUrl[0], 2);
+                if (isset($langParts[1]) && $langParts[0] !== '' && in_array(strtoupper($langParts[0]), LANG_CODES_ARR, true)) {
+                    foreach (LANG_CODES_ARR as $lid => $code) {
+                        if (strtoupper((string) $code) === strtoupper($langParts[0])) {
+                            $strippedLangIdFromPath = (int) $lid;
+                            break;
+                        }
                     }
+                    $customUrl[0] = $langParts[1];
                 }
             }
             /* ] */
@@ -121,7 +129,8 @@ class CustomRouter
                     $longProductSeo = strlen($slug) >= 48 && (bool) preg_match('#^[a-zA-Z0-9][a-zA-Z0-9\-/]*$#', $slug);
                     if ($shortSeo || $longProductSeo) {
                         header('HTTP/1.1 301 Moved Permanently');
-                        header('Location: ' . UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_URL));
+                        $langForHome = $strippedLangIdFromPath !== null && $strippedLangIdFromPath > 0 ? $strippedLangIdFromPath : SYSTEM_LANG_ID;
+                        header('Location: ' . UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_URL, null, false, false, true, $langForHome));
                         header('Connection: close');
                         exit;
                     }

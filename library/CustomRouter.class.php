@@ -67,18 +67,17 @@ class CustomRouter
             $customUrl = explode('/?', $customUrl);
 
             $strippedLangIdFromPath = null;
-            /* [ Handled lang code in url — strip "xx/rest" for any code length, not only substr(..., 3) */
-            if (FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0)) {
-                $langParts = explode('/', $customUrl[0], 2);
-                if (isset($langParts[1]) && $langParts[0] !== '' && in_array(strtoupper($langParts[0]), LANG_CODES_ARR, true)) {
-                    foreach (LANG_CODES_ARR as $lid => $code) {
-                        if (strtoupper((string) $code) === strtoupper($langParts[0])) {
-                            $strippedLangIdFromPath = (int) $lid;
-                            break;
-                        }
+            /* [ Strip leading "xx/rest" when xx is a real language code — must not depend on CONF_LANG_SPECIFIC_URL
+             * (live can have the setting off while Google still has /ar/… /es/… URLs; else slug keeps "/" and never matches SEO redirect rules). */
+            $langParts = explode('/', $customUrl[0], 2);
+            if (isset($langParts[1]) && $langParts[0] !== '' && in_array(strtoupper($langParts[0]), LANG_CODES_ARR, true)) {
+                foreach (LANG_CODES_ARR as $lid => $code) {
+                    if (strtoupper((string) $code) === strtoupper($langParts[0])) {
+                        $strippedLangIdFromPath = (int) $lid;
+                        break;
                     }
-                    $customUrl[0] = $langParts[1];
                 }
+                $customUrl[0] = $langParts[1];
             }
             /* ] */
 

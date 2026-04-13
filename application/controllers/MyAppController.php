@@ -586,8 +586,22 @@ class MyAppController extends FatController
             && !FatUtility::isAjaxCall()
             && in_array($_SERVER['REQUEST_METHOD'] ?? 'GET', ['GET', 'HEAD'], true)
         ) {
+            $langId = defined('SYSTEM_LANG_ID') ? SYSTEM_LANG_ID : CommonHelper::getLangId();
+            $reqPath = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+            if ($reqPath !== null && $reqPath !== '' && defined('LANG_CODES_ARR')) {
+                $trimPath = trim($reqPath, '/');
+                $pathSegs = explode('/', $trimPath, 2);
+                if (isset($pathSegs[1]) && $pathSegs[0] !== '' && in_array(strtoupper($pathSegs[0]), LANG_CODES_ARR, true)) {
+                    foreach (LANG_CODES_ARR as $lid => $code) {
+                        if (strtoupper((string) $code) === strtoupper($pathSegs[0])) {
+                            $langId = (int) $lid;
+                            break;
+                        }
+                    }
+                }
+            }
             header('HTTP/1.1 301 Moved Permanently');
-            header('Location: ' . UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_URL));
+            header('Location: ' . UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_URL, null, false, false, true, $langId));
             header('Connection: close');
             exit;
         }

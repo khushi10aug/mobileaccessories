@@ -390,6 +390,7 @@ class ShopsController extends MyAppController
         $shop = $db->fetch($shopRs);
 
         if (!$shop) {
+            $this->redirectMissingEntitySeoToHomeIfEnabled();
             FatUtility::exitWithErrorCode('404');
         }
 

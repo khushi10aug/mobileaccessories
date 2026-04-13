@@ -574,6 +574,25 @@ class MyAppController extends FatController
         return $frm;
     }
 
+    /**
+     * When CONF_REDIRECT_MISSING_REWRITE_TO_HOME is on: 301 to homepage instead of 404
+     * for missing catalog entities (product/shop/brand/category SEO URLs). Browser GET/HEAD only.
+     */
+    protected function redirectMissingEntitySeoToHomeIfEnabled(): void
+    {
+        if (
+            false === MOBILE_APP_API_CALL
+            && FatApp::getConfig('CONF_REDIRECT_MISSING_REWRITE_TO_HOME', FatUtility::VAR_INT, 1)
+            && !FatUtility::isAjaxCall()
+            && in_array($_SERVER['REQUEST_METHOD'] ?? 'GET', ['GET', 'HEAD'], true)
+        ) {
+            header('HTTP/1.1 301 Moved Permanently');
+            header('Location: ' . UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_URL));
+            header('Connection: close');
+            exit;
+        }
+    }
+
     public function fatActionCatchAll($action)
     {
         $this->_template->render(false, false, 'error-pages/404.php');

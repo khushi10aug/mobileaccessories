@@ -112,6 +112,7 @@ class BrandsController extends MyAppController
         $brand = FatApp::getDb()->fetch($brandRs);
 
         if (empty($brand)) {
+            $this->redirectMissingEntitySeoToHomeIfEnabled();
             FatUtility::exitWithErrorCode(404);
         }
 

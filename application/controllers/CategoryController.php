@@ -54,6 +54,7 @@ class CategoryController extends MyAppController
                 $message = Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId);
                 FatUtility::dieJsonError($message);
             }
+            $this->redirectMissingEntitySeoToHomeIfEnabled();
             FatUtility::exitWithErrorCode(404);
         }
 

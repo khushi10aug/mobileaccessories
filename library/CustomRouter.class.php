@@ -113,8 +113,13 @@ class CustomRouter
                     && !FatUtility::isAjaxCall()
                 ) {
                     $slug = $customUrl[0];
-                    /* Single-segment SEO paths (e.g. removed products); avoids multi-part routes like "a/b". */
-                    if (strpos($slug, '/') === false && preg_match('/^[a-zA-Z0-9][a-zA-Z0-9\-]*$/', $slug)) {
+                    if (strpos($slug, '..') !== false) {
+                        return;
+                    }
+                    /* Short slug: shop/brand-style. Long slug: product SEO URLs that include "/" (e.g. a1990-/-a1707-...). */
+                    $shortSeo = (bool) preg_match('/^[a-zA-Z0-9][a-zA-Z0-9\-]*$/', $slug);
+                    $longProductSeo = strlen($slug) >= 48 && (bool) preg_match('#^[a-zA-Z0-9][a-zA-Z0-9\-/]*$#', $slug);
+                    if ($shortSeo || $longProductSeo) {
                         header('HTTP/1.1 301 Moved Permanently');
                         header('Location: ' . UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_URL));
                         header('Connection: close');

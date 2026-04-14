@@ -57,6 +57,7 @@ class ReviewsController extends MyAppController
         $ratingAspects = SelProdRating::getProdRatingAspects($product['product_id'], $this->siteLangId);
         $this->set('ratingAspects', $ratingAspects);
 
+        $this->set('canonicalUrl', UrlHelper::generateFullUrl('Reviews', 'product', [$selprod_id, $reviewId]));
         $this->includeFeatherLight();
         $this->set('product', $product);
         $this->_template->render(true, true, 'reviews/product.php');
@@ -310,6 +311,7 @@ class ReviewsController extends MyAppController
             $this->set('userParentId', $userParentId);
         }
 
+        $this->set('canonicalUrl', UrlHelper::generateFullUrl('Reviews', 'shop', [$shop_id, $reviewId]));
         $this->includeFeatherLight();
         $this->_template->addJs(['js/jquery.fancybox.min.js']);
         if (1 > $reviewId) {

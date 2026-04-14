@@ -22,8 +22,10 @@
 <?php
 if ($canonicalUrl == '') {
     $canonicalUrl = UrlHelper::getCanonical($controllerName);
-} ?>
-<link rel="canonical" href="<?php echo $canonicalUrl; ?>" />
+}
+$canonicalUrl = is_string($canonicalUrl) ? trim($canonicalUrl) : '';
+?>
+<link rel="canonical" href="<?php echo htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8'); ?>" />
 <?php
 if (0 < FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0)) {
     $languages = Language::getAllCodesAssoc();
@@ -33,7 +35,7 @@ if (0 < FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0)) {
         }
         $canonicalUrl = UrlHelper::getCanonical($controllerName, $lid);
 ?>
-        <link rel="alternate" hreflang="<?php echo strtolower($langCode); ?>" href="<?php echo $canonicalUrl; ?>">
+        <link rel="alternate" hreflang="<?php echo strtolower($langCode); ?>" href="<?php echo htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8'); ?>">
 <?php }
 } ?>
 <?php

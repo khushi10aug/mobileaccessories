@@ -777,6 +777,9 @@ class ProductsController extends MyAppController
             FatUtility::exitWithErrorCode(404);
         }
 
+        /* Single preferred SEO URL for this listing (avoids duplicate signals from filters/query variants). */
+        $this->set('canonicalUrl', UrlHelper::generateFullUrl('Products', 'view', [$selprod_id]));
+
         $loggedUserId = 0;
         if (UserAuthentication::isUserLogged()) {
             $loggedUserId = UserAuthentication::getLoggedUserId();

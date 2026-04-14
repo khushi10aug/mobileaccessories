@@ -128,7 +128,8 @@ class CustomRouter
                     $shortSeo = (bool) preg_match('/^[a-zA-Z0-9][a-zA-Z0-9\-]*$/', $slug);
                     $longProductSeo = strlen($slug) >= 48 && (bool) preg_match('#^[a-zA-Z0-9][a-zA-Z0-9\-/]*$#', $slug);
                     $multiSegSeo = self::isCatalogSeoMultiSegmentRedirectCandidate($slug);
-                    if ($shortSeo || $longProductSeo || $multiSegSeo) {
+                    $seoSlugCandidate = ($shortSeo && !self::isDirectFrontendRoutePath($slug)) || $longProductSeo || $multiSegSeo;
+                    if ($seoSlugCandidate) {
                         header('HTTP/1.1 301 Moved Permanently');
                         $langForHome = $strippedLangIdFromPath !== null && $strippedLangIdFromPath > 0 ? $strippedLangIdFromPath : SYSTEM_LANG_ID;
                         header('Location: ' . UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_URL, null, false, false, true, $langForHome));
@@ -136,12 +137,17 @@ class CustomRouter
                         exit;
                     }
                 }
-                return;
+                /* Unknown slug without rewrite: let framework keep parsed route, or fall through to map direct MVC paths below. */
+                if (!empty($customUrl[0]) && !self::isDirectFrontendRoutePath($customUrl[0])) {
+                    return;
+                }
             }
             /*]*/
 
             $url = (!empty($row['urlrewrite_original'])) ? $row['urlrewrite_original'] : '';
             if (!$row && isset($customUrl[1])) {
+                $url = $customUrl[0];
+            } elseif (!$row && !empty($customUrl[0]) && self::isDirectFrontendRoutePath($customUrl[0])) {
                 $url = $customUrl[0];
             }
 
@@ -205,6 +211,30 @@ class CustomRouter
             $userType = intval($_SERVER['HTTP_X_USER_TYPE']);
         }
         define('MOBILE_APP_USER_TYPE', $userType);
+    }
+
+    /**
+     * True when the path should be routed as a normal controller/action URL (not a bare SEO slug for 301-to-home).
+     * First segment is lowercased and matched (same idea as blocked first segments for multi-segment SEO redirects).
+     */
+    private static function isDirectFrontendRoutePath($slug)
+    {
+        if ($slug === '' || strpos($slug, '..') !== false) {
+            return false;
+        }
+        $first = strtolower(explode('/', $slug, 2)[0]);
+        static $reserved = null;
+        if ($reserved === null) {
+            $reserved = [
+                'admin', 'dashboard', 'seller', 'buyer', 'cart', 'checkout', 'wallet', 'image', 'cache', 'install',
+                'public', 'scripts', 'app-api', 'user-uploads', 'products', 'shops', 'brands', 'category', 'cms',
+                'content', 'blog', 'banner', 'payment', 'order', 'orders', 'account', 'supplier', 'gift', 'rfq',
+                'notifications', 'payment-status', 'invoice', 'download', 'embed', 'oauth', 'cron', 'cronjob',
+                'reviews', 'navigation', 'common', 'guest-user', 'custom', 'wallet-pay', 'error', 'instagram-login',
+            ];
+        }
+
+        return in_array($first, $reserved, true);
     }
 
     /**

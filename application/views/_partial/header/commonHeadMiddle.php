@@ -141,6 +141,21 @@ $secondaryColorInverse = (false === strpos($secondaryColorInverse, 'rgb') ? 'rgb
 if (FatApp::getConfig("CONF_GOOGLE_TAG_MANAGER_HEAD_SCRIPT", FatUtility::VAR_STRING, '') /* && User::checkStatisticalCookiesEnabled() == true */) {
     echo FatApp::getConfig("CONF_GOOGLE_TAG_MANAGER_HEAD_SCRIPT", FatUtility::VAR_STRING, '');
 }
+if (trim(FatApp::getConfig('CONF_GOOGLE_TAG_MANAGER_HEAD_SCRIPT', FatUtility::VAR_STRING, '')) !== '') {
+    $ykGtmPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+    $ykGtmPath = is_string($ykGtmPath) ? $ykGtmPath : '/';
+    ?>
+<script>
+window.dataLayer = window.dataLayer || [];
+dataLayer.push({
+    event: 'yk_page_context',
+    yk_controller: <?php echo json_encode(FatApp::getController(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>,
+    yk_action: <?php echo json_encode(FatApp::getAction(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>,
+    page_path: <?php echo json_encode($ykGtmPath, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>
+});
+</script>
+<?php
+}
 if (FatApp::getConfig("CONF_HOTJAR_HEAD_SCRIPT", FatUtility::VAR_STRING, '') /* && User::checkStatisticalCookiesEnabled() == true */) {
     echo FatApp::getConfig("CONF_HOTJAR_HEAD_SCRIPT", FatUtility::VAR_STRING, '');
 }

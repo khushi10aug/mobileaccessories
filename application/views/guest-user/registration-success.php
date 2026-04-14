@@ -1,4 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<script>
+$(document).ready(function () {
+    if (typeof ykevents !== 'undefined' && typeof ykevents.signUp === 'function') {
+        ykevents.signUp({ method: 'buyer_registration' });
+    }
+});
+</script>
 <section class="section" data-section="section">
     <div class="container">
         <div class="row justify-content-center">

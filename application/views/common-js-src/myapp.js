@@ -242,8 +242,90 @@ var cart = {
 };
 
 var ykevents = {
-    /* 1: For FB, 2: For GA4. */
-    _validateAndTrigger: function (requestTo, event, data = '') {
+    /* 1: For FB, 2: For GA4 (gtag). Also pushes to GTM dataLayer when useGtmDataLayer is true (admin GTM scripts saved). */
+    _gtmOn: function () {
+        return typeof useGtmDataLayer !== 'undefined' && useGtmDataLayer === true;
+    },
+    _ensureDataLayer: function () {
+        window.dataLayer = window.dataLayer || [];
+    },
+    _ga4ItemsFromPayload: function (data) {
+        if (!data || typeof data !== 'object') {
+            return [];
+        }
+        if (Array.isArray(data.items) && data.items.length) {
+            return data.items.map(function (it, i) {
+                var row = {
+                    item_id: String(it.item_id != null ? it.item_id : ''),
+                    item_name: it.item_name || '',
+                    item_brand: it.item_brand || '',
+                    item_category: it.item_category || '',
+                    price: parseFloat(it.price) || 0,
+                    quantity: parseInt(it.quantity, 10) || 1,
+                    index: typeof it.index !== 'undefined' ? it.index : i
+                };
+                if (it.discount != null && it.discount !== '') {
+                    row.discount = parseFloat(it.discount) || 0;
+                }
+                return row;
+            });
+        }
+        if (data.item_id != null && data.item_id !== '') {
+            return [{
+                item_id: String(data.item_id),
+                item_name: data.item_name || '',
+                item_brand: data.item_brand || '',
+                item_category: data.item_category || '',
+                price: parseFloat(data.price) || 0,
+                quantity: parseInt(data.quantity, 10) || 1,
+                index: 0
+            }];
+        }
+        return [];
+    },
+    _pushGtmEcommerce: function (eventName, data) {
+        if (!ykevents._gtmOn()) {
+            return;
+        }
+        ykevents._ensureDataLayer();
+        var items = ykevents._ga4ItemsFromPayload(data || {});
+        var currency = (data && data.currency) ? data.currency : (typeof currencyCode !== 'undefined' ? currencyCode : '');
+        var value = (data && typeof data.value !== 'undefined') ? parseFloat(data.value) : 0;
+        window.dataLayer.push({ ecommerce: null });
+        var ecommerce = { currency: currency, value: isNaN(value) ? 0 : value };
+        if (items.length) {
+            ecommerce.items = items;
+        }
+        if (data && data.transaction_id) {
+            ecommerce.transaction_id = String(data.transaction_id);
+        }
+        if (data && data.tax != null) {
+            ecommerce.tax = parseFloat(data.tax) || 0;
+        }
+        if (data && data.shipping != null) {
+            ecommerce.shipping = parseFloat(data.shipping) || 0;
+        }
+        if (data && data.coupon) {
+            ecommerce.coupon = String(data.coupon);
+        }
+        window.dataLayer.push({ event: eventName, ecommerce: ecommerce });
+    },
+    _pushGtmEvent: function (eventName, payload) {
+        if (!ykevents._gtmOn()) {
+            return;
+        }
+        ykevents._ensureDataLayer();
+        var o = { event: eventName };
+        if (payload && typeof payload === 'object') {
+            for (var k in payload) {
+                if (Object.prototype.hasOwnProperty.call(payload, k)) {
+                    o[k] = payload[k];
+                }
+            }
+        }
+        window.dataLayer.push(o);
+    },
+    _validateAndTrigger: function (requestTo, event, data) {
         if (1 == requestTo && 'undefined' !== typeof fbPixel && true == fbPixel) {
             fbq('track', event, data);
         }
@@ -254,57 +336,77 @@ var ykevents = {
 
     viewItem: function (data) {
         ykevents._validateAndTrigger(2, 'view_item', data);
+        ykevents._pushGtmEcommerce('view_item', data);
     },
-    
+
     addToCart: function (data) {
         ykevents._validateAndTrigger(1, 'AddToCart');
         ykevents._validateAndTrigger(2, 'add_to_cart', data);
+        ykevents._pushGtmEcommerce('add_to_cart', data);
     },
 
     viewCart: function (data) {
         ykevents._validateAndTrigger(2, 'view_cart', data);
+        ykevents._pushGtmEcommerce('view_cart', data);
     },
 
     removeFromCart: function (data) {
         ykevents._validateAndTrigger(2, 'remove_from_cart', data);
+        ykevents._pushGtmEcommerce('remove_from_cart', data);
     },
 
     addToWishList: function () {
         ykevents._validateAndTrigger(1, 'AddToWishlist');
+        ykevents._pushGtmEvent('add_to_wishlist', { yk_source: 'yokart' });
     },
 
     contactUs: function () {
         ykevents._validateAndTrigger(1, 'Contact');
+        ykevents._pushGtmEvent('contact', { yk_source: 'yokart' });
     },
 
     customizeProduct: function () {
         ykevents._validateAndTrigger(1, 'CustomizeProduct');
+        ykevents._pushGtmEvent('customize_product', { yk_source: 'yokart' });
     },
 
     initiateCheckout: function (data) {
         ykevents._validateAndTrigger(1, 'InitiateCheckout');
         ykevents._validateAndTrigger(2, 'begin_checkout', data);
+        ykevents._pushGtmEcommerce('begin_checkout', data);
     },
 
-    search: function () {
+    search: function (extra) {
         ykevents._validateAndTrigger(1, 'search');
+        ykevents._pushGtmEvent('search', extra && typeof extra === 'object' ? extra : {});
     },
 
     purchase: function (data) {
         ykevents._validateAndTrigger(1, 'Purchase', data);
         ykevents._validateAndTrigger(2, 'purchase', data);
+        ykevents._pushGtmEcommerce('purchase', data);
     },
 
-    /* 
-        A visit to a web page you care about. For example, a product or landing page. View content tells you if someone visits a web page's URL, but not what they do or see on that web page.
+    /*
+        A visit to a web page you care about. For example, a product or landing page.
     */
     viewContent: function () {
         ykevents._validateAndTrigger(1, 'viewContent');
+        ykevents._pushGtmEvent('yk_view_content', {
+            yk_controller: typeof className !== 'undefined' ? className : '',
+            yk_action: typeof actionName !== 'undefined' ? actionName : ''
+        });
     },
 
     newsLetterSubscription: function () {
         ykevents._validateAndTrigger(1, 'CompleteRegistration');
+        ykevents._pushGtmEvent('newsletter_subscribe', { yk_source: 'yokart' });
     },
+
+    /** User completed signup (buyer registration success page). Maps to GA4 recommended event name in GTM. */
+    signUp: function (payload) {
+        ykevents._pushGtmEvent('sign_up', payload && typeof payload === 'object' ? payload : { method: 'web' });
+    }
 };
 
 /*sidebar.js */

@@ -198,6 +198,8 @@ class MyAppController extends FatController
         $jsVariables['controllerName'] = $controllerName;
         $jsVariables['defaultCountryCode'] = $defaultCountryCode;
         $jsVariables['siteCurrencyId'] = CommonHelper::getCurrencyId();
+        $jsVariables['useGtmDataLayer'] = trim(FatApp::getConfig('CONF_GOOGLE_TAG_MANAGER_HEAD_SCRIPT', FatUtility::VAR_STRING, '')) !== ''
+            || trim(FatApp::getConfig('CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT', FatUtility::VAR_STRING, '')) !== '';
 
         if (false === MOBILE_APP_API_CALL && (!isset($_COOKIE['_ykGeoLat']) || !isset($_COOKIE['_ykGeoLng']) || !isset($_COOKIE['_ykGeoCountryCode'])) && FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
             setcookie('_ykGeoLat', FatApp::getConfig('CONF_GEO_DEFAULT_LAT', FatUtility::VAR_INT, 40.72), time() + (86400 * 30), CONF_WEBROOT_FRONTEND,  $_SERVER['SERVER_NAME']); // 86400 = 1 day

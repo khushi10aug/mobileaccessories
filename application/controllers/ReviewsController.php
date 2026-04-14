@@ -22,6 +22,7 @@ class ReviewsController extends MyAppController
         $productRs = $prodSrch->getResultSet();
         $product = FatApp::getDb()->fetch($productRs);
         if (!$product) {
+            $this->redirectMissingEntitySeoToHomeIfEnabled();
             FatUtility::exitWithErrorCode(404);
         }
 
@@ -254,6 +255,7 @@ class ReviewsController extends MyAppController
         $shopRs = $srch->getResultSet();
         $shop = FatApp::getDb()->fetch($shopRs);
         if (!$shop) {
+            $this->redirectMissingEntitySeoToHomeIfEnabled();
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Home'));
         }
@@ -373,6 +375,7 @@ class ReviewsController extends MyAppController
         $srch->addCondition('shop_id', '=', $shop_id);
         $shop = FatApp::getDb()->fetch($srch->getResultSet());
         if (!$shop) {
+            $this->redirectMissingEntitySeoToHomeIfEnabled();
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Home'));
         }
@@ -418,6 +421,7 @@ class ReviewsController extends MyAppController
         $shop = $db->fetch($shopRs);
 
         if (!$shop) {
+            $this->redirectMissingEntitySeoToHomeIfEnabled();
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Home'));
         }

@@ -123,10 +123,12 @@ class CustomRouter
                     if (strpos($slug, '..') !== false) {
                         return;
                     }
-                    /* Short slug: shop/brand-style. Long slug: product SEO URLs that include "/" (e.g. a1990-/-a1707-...). */
+                    /* Short slug: shop/brand-style. Long slug: product SEO URLs that include "/" (e.g. a1990-/-a1707-...).
+                     * Multi-segment: e.g. reviews/product/24999/154 when no url_rewrite row (each segment = slug or digits). */
                     $shortSeo = (bool) preg_match('/^[a-zA-Z0-9][a-zA-Z0-9\-]*$/', $slug);
                     $longProductSeo = strlen($slug) >= 48 && (bool) preg_match('#^[a-zA-Z0-9][a-zA-Z0-9\-/]*$#', $slug);
-                    if ($shortSeo || $longProductSeo) {
+                    $multiSegSeo = self::isCatalogSeoMultiSegmentRedirectCandidate($slug);
+                    if ($shortSeo || $longProductSeo || $multiSegSeo) {
                         header('HTTP/1.1 301 Moved Permanently');
                         $langForHome = $strippedLangIdFromPath !== null && $strippedLangIdFromPath > 0 ? $strippedLangIdFromPath : SYSTEM_LANG_ID;
                         header('Location: ' . UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_URL, null, false, false, true, $langForHome));
@@ -203,5 +205,39 @@ class CustomRouter
             $userType = intval($_SERVER['HTTP_X_USER_TYPE']);
         }
         define('MOBILE_APP_USER_TYPE', $userType);
+    }
+
+    /**
+     * True for paths like reviews/product/123/456 or any multi-segment slug-only URL that is not a reserved app prefix.
+     */
+    private static function isCatalogSeoMultiSegmentRedirectCandidate($slug)
+    {
+        if ($slug === '' || strpos($slug, '/') === false || strpos($slug, '..') !== false) {
+            return false;
+        }
+        if (strlen($slug) > 220) {
+            return false;
+        }
+        static $blockedFirst = null;
+        if ($blockedFirst === null) {
+            $blockedFirst = [
+                'admin', 'dashboard', 'seller', 'buyer', 'cart', 'checkout', 'wallet', 'image', 'cache', 'install',
+                'public', 'scripts', 'app-api', 'user-uploads', 'products', 'shops', 'brands', 'category', 'cms',
+                'content', 'blog', 'banner', 'payment', 'order', 'orders', 'account', 'supplier', 'gift', 'rfq',
+                'notifications', 'payment-status', 'invoice', 'download', 'embed', 'oauth', 'cron', 'cronjob',
+            ];
+        }
+        $parts = explode('/', strtolower($slug));
+        $first = $parts[0] ?? '';
+        if ($first === '' || in_array($first, $blockedFirst, true)) {
+            return false;
+        }
+        foreach ($parts as $p) {
+            if ($p === '' || !preg_match('#^([a-z0-9][a-z0-9\-]*|\d+)$#', $p)) {
+                return false;
+            }
+        }
+
+        return count($parts) >= 2;
     }
 }

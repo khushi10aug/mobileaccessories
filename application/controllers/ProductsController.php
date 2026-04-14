@@ -1835,7 +1835,11 @@ class ProductsController extends MyAppController
         $selprod_code = (isset($post['selprod_code']) && $post['selprod_code'] != '') ? $post['selprod_code'] : '';
 
         if ($selprod_code == '') {
-            return false;
+            if (FatUtility::isAjaxCall()) {
+                http_response_code(204);
+                exit;
+            }
+            FatApp::redirectUser(UrlHelper::generateUrl('Home'));
         }
 
         $weightageKey = SmartWeightageSettings::PRODUCT_VIEW;

@@ -111,6 +111,11 @@ class CustomRouter
                 }
             }
 
+            /* Empty path after webroot = homepage; do not fall through (empty $url would map to Content/error404). */
+            if ($customUrl[0] === '' || $customUrl[0] === null) {
+                return;
+            }
+
             if (!$row && (!isset($customUrl[1]) || (isset($customUrl[1]) && strpos($customUrl[1], 'pagesize') === false))) {
                 $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
                 if (

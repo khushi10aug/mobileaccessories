@@ -1852,6 +1852,15 @@ class ProductsController extends MyAppController
         Product::recordProductWeightage($selprod_code, $weightageKey, $weightageSettings[$weightageKey]);
     }
 
+    /**
+     * Backward/alternate route alias for environments resolving dashed actions as underscored names.
+     */
+    public function log_weightage()
+    {
+        $this->logWeightage();
+    }
+
+
     private function getCartForm($formLangId)
     {
         $cart = new Cart();

@@ -12,7 +12,19 @@ function loadSlickSlider() {
     var _carousel = $(".js-carousel");
     _carousel.each(function (index) {
         var _this = $(this),
-            _slidesToShow = _this.data("slides").toString().split(",");
+            slidesData = _this.data("slides"),
+            _slidesToShow = (slidesData != undefined && slidesData !== null && slidesData !== "")
+                ? slidesData.toString().split(",")
+                : ["3", "2", "1", "1", "1"];
+
+        if (_this.hasClass("slick-initialized")) {
+            return;
+        }
+
+        var slideCount = _this.children().length;
+        if (slideCount < 1) {
+            return;
+        }
 
         var optionsArr = {
             slidesToShow: parseInt(
@@ -97,6 +109,14 @@ function loadSlickSlider() {
                 },
             ],
         };
+
+        /* Prevent Slick ADA init crash on low/empty slide sets when dots are enabled. */
+        if (slideCount <= 1) {
+            optionsArr["dots"] = false;
+            optionsArr["arrows"] = false;
+            optionsArr["swipe"] = false;
+            optionsArr["draggable"] = false;
+        }
         if (_this.data("arrows") == true) {
             if (
                 _this.data("customarrow") != undefined &&

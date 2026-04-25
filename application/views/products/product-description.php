@@ -24,6 +24,7 @@
 
     <?php if (!empty($optionRows)) { ?>
         <?php $selectedOptionsArr = $product['selectedOptionValues'] ?? [];
+        $selectedOptionValueIds = array_values((array) $selectedOptionsArr);
         $count = 0;
         foreach ($optionRows as $key => $option) {
             $selectedOptionValue = [];
@@ -47,7 +48,7 @@
                             class="select-options <?php echo ($option['option_is_color']) ? 'select-options-color' : 'select-options-size'; ?>">
                             <?php foreach ($option['values'] as $opVal) {
                                 $isAvailable = true;
-                                if (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) {
+                                if (in_array($opVal['optionvalue_id'], $selectedOptionValueIds)) {
                                     $optionUrl = UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']));
                                 } else {
                                     $optionUrl = Product::generateProductOptionsUrl($product['selprod_id'], $selectedOptionsArr, $option['option_id'], $opVal['optionvalue_id'], $product['product_id']);
@@ -74,7 +75,7 @@
                                 }
                             ?>
                                 <li
-                                    class="select-options-item <?php echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? 'selected' : ''; ?>">
+                                    class="select-options-item <?php echo (in_array($opVal['optionvalue_id'], $selectedOptionValueIds)) ? 'selected' : ''; ?>">
                                     <a class="btn-option <?php echo (!$optionUrl) ? ' is-disabled' : ''; ?>"
                                         data-optionValueId="<?php echo $opVal['optionvalue_id']; ?>"
                                         data-selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>"

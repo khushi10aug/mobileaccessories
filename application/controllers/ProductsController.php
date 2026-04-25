@@ -987,7 +987,8 @@ class ProductsController extends MyAppController
             $optionSrch->joinTable(Option::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'op.option_id = op_l.optionlang_option_id AND op_l.optionlang_lang_id = ' . $this->siteLangId, 'op_l');
             $optionSrch->addMultipleFields(array('option_id', 'option_is_color', 'COALESCE(option_name,option_identifier) as option_name'));
             $optionSrch->addCondition('option_id', '!=', 'NULL');
-            $optionSrch->addCondition('selprodoption_selprod_id', '=', $selprod_id);
+            // Build PDP option groups from the full product variant set, not only the current selprod.
+            // This keeps options visible even when the current variant has incomplete option linkage.
             $optionSrch->addGroupBy('option_id');
 
             $optionRs = $optionSrch->getResultSet();

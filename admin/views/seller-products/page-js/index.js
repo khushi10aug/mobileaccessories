@@ -1,5 +1,24 @@
 (function () {
-  
+
+    editSellerProductInventory = function (recordId, displayInPopup, dialogClass) {
+        recordId = parseInt(recordId, 10) || 0;
+        if (1 > recordId) {
+            return false;
+        }
+        if (typeof displayInPopup === 'undefined') {
+            displayInPopup = false;
+        }
+        if (typeof dialogClass === 'undefined') {
+            dialogClass = '';
+        }
+        fcom.resetEditorInstance();
+        fcom.updateWithAjax(fcom.makeUrl('SellerProducts', 'form'), 'recordId=' + recordId, function (t) {
+            fcom.closeProcessing();
+            $.ykmodal(t.html, displayInPopup, dialogClass);
+            fcom.removeLoader();
+        });
+    };
+
     sellerProductDownloadFrm = function (selprod_id) {
         if (false === checkControllerName()) {
             return false;
@@ -57,7 +76,24 @@
             
         });
     }
-    
+
+    selprodInventoryMetaLangForm = function (metaId, langId, selprodId, autoFillLangData) {
+        if (false === checkControllerName()) {
+            return false;
+        }
+        autoFillLangData = autoFillLangData || 0;
+        fcom.resetEditorInstance();
+        fcom.updateWithAjax(
+            fcom.makeUrl('MetaTags', 'langForm', [metaId, langId, 'product_view', selprodId, autoFillLangData]),
+            'sellerInvContext=1',
+            function (t) {
+                fcom.closeProcessing();
+                $.ykmodal(t.html);
+                fcom.removeLoader();
+            }
+        );
+    };
+
 })();
 
 $(function () {

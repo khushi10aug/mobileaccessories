@@ -15,10 +15,12 @@ $(document).on('blur', '.metaUrlJs', function () {
 (function () {
     var dv = '#metaTagsListing';
     var listingTableJs = '.listingTableJs';
+    /* Always hit MetaTags; do not use global controllerName (other admin pages embed this script). */
+    var metaTagsCtrl = 'MetaTags';
 
     tabSearchRecords = function (object) {
         $(':input', document.frmRecordSearch).not(':hidden').val('');
-        searchRecords(object);
+        metaTagsSearchRecords(object);
     };
 
     setTabActive = function (type) {
@@ -26,7 +28,8 @@ $(document).on('blur', '.metaUrlJs', function () {
         $('ul.metaTypesJs li.tabJs-' + type).addClass('is-active');
     }
 
-    searchRecords = function (object, replaceRowsOnly = false) {
+    /* Named metaTagsSearchRecords so we do not overwrite listing.js searchRecords (reloadList depends on it). */
+    metaTagsSearchRecords = function (object, replaceRowsOnly = false) {
         if (true === replaceRowsOnly) {
             $(listingTableJs).prepend(fcom.getLoader());
         } else {
@@ -58,7 +61,7 @@ $(document).on('blur', '.metaUrlJs', function () {
             data += '&loadRows=' + 1;
         }
 
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl(metaTagsCtrl, 'search'), data, function (res) {
             fcom.closeProcessing();
             fcom.removeLoader();
             setTabActive(type);
@@ -73,7 +76,7 @@ $(document).on('blur', '.metaUrlJs', function () {
 
 
     metaTagForm = function (id, metaType, metaTagRecordId) {
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form', [id, metaType, metaTagRecordId]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(metaTagsCtrl, 'form', [id, metaType, metaTagRecordId]), '', function (t) {
             fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
@@ -81,7 +84,7 @@ $(document).on('blur', '.metaUrlJs', function () {
     };
 
     editMetaTagForm = function (id, metaType, metaTagRecordId) {
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form', [id, metaType, metaTagRecordId]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(metaTagsCtrl, 'form', [id, metaType, metaTagRecordId]), '', function (t) {
             fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
@@ -89,9 +92,22 @@ $(document).on('blur', '.metaUrlJs', function () {
     };
 
     setupMetaTag = function (frm) {
-        if (!$(frm).validate()) return;
-        var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
+        var el = frm;
+        if (!el || !el.nodeName || el.nodeName.toLowerCase() !== 'form') {
+            el = document.getElementById('frmMetaTag') || ($('.' + $.ykmodal.element + ' form.modalFormJs')[0]) || ($('.' + $.ykmodal.element + ' form')[0]);
+        }
+        if (!el) {
+            return;
+        }
+        var $frm = $(el);
+        if (!$.data(el, 'validator')) {
+            $frm.validation({ errordisplay: 3 });
+        }
+        if (!$frm.validate()) {
+            return;
+        }
+        var data = fcom.frmData(el);
+        fcom.updateWithAjax(fcom.makeUrl(metaTagsCtrl, 'setup'), data, function (t) {
             fcom.displaySuccessMessage(t.msg);
             reloadList();
             if (t.langId > 0) {
@@ -99,10 +115,11 @@ $(document).on('blur', '.metaUrlJs', function () {
                 return;
             }
         });
-    }
+    };
 
-    editMetaTagLangForm = function (metaId, langId, metaType, metaTagRecordId, autoFillLangData = 0) {
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langForm', [metaId, langId, metaType, metaTagRecordId, autoFillLangData]), '', function (t) {
+    editMetaTagLangForm = function (metaId, langId, metaType, metaTagRecordId, autoFillLangData = 0, sellerInvContext = 0) {
+        var data = 0 < sellerInvContext ? 'sellerInvContext=1' : '';
+        fcom.updateWithAjax(fcom.makeUrl(metaTagsCtrl, 'langForm', [metaId, langId, metaType, metaTagRecordId, autoFillLangData]), data, function (t) {
             fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
@@ -110,13 +127,30 @@ $(document).on('blur', '.metaUrlJs', function () {
     };
 
     setupLangMetaTag = function (frm, metaType) {
-        if (!$(frm).validate()) return;
-        var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langSetup'), data, function (t) {
+        var el = frm;
+        if (!el || !el.nodeName || el.nodeName.toLowerCase() !== 'form') {
+            el = document.getElementById('frmMetaTagLang') || ($('.' + $.ykmodal.element + ' form.modalFormJs')[0]) || ($('.' + $.ykmodal.element + ' form')[0]);
+        }
+        if (!el) {
+            return;
+        }
+        var $frm = $(el);
+        if (!$.data(el, 'validator')) {
+            $frm.validation({ errordisplay: 3 });
+        }
+        if (!$frm.validate()) {
+            return;
+        }
+        var data = fcom.frmData(el);
+        fcom.updateWithAjax(fcom.makeUrl(metaTagsCtrl, 'langSetup'), data, function (t) {
             fcom.displaySuccessMessage(t.msg);
             reloadList();
             if (t.langId > 0) {
-                editMetaTagLangForm(t.metaId, t.langId, metaType);
+                if (0 < t.sellerInvContext && 0 < t.metaTagRecordId) {
+                    editMetaTagLangForm(t.metaId, t.langId, metaType, t.metaTagRecordId, 0, 1);
+                } else {
+                    editMetaTagLangForm(t.metaId, t.langId, metaType);
+                }
                 return;
             }
         });

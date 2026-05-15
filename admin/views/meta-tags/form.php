@@ -2,25 +2,35 @@
 
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('data-onclear', 'editMetaTagForm(' . $metaId . ', "' . $metaType . '", ' . $metaTagRecordId . ')');
-$frm->setFormTagAttribute('onsubmit', 'setupMetaTag(this); return(false);');
+$frm->setFormTagAttribute('onsubmit', 'setupMetaTag(document.getElementById("frmMetaTag")); return(false);');
 
 $formLayout = Language::getLayoutDirection(CommonHelper::getDefaultFormLangId());
 $frm->setFormTagAttribute('class', 'form modalFormJs layout--'.$formLayout);
 
 $fld = $frm->getField('url');
-$fld->addFieldTagAttribute('class', 'metaUrlJs');
+if (null != $fld) {
+    $fld->addFieldTagAttribute('class', 'metaUrlJs');
+}
 
 $fld = $frm->getField('meta_controller');
-$fld->addFieldTagAttribute('class', 'metaControllerJs');
+if (null != $fld) {
+    $fld->addFieldTagAttribute('class', 'metaControllerJs');
+}
 
 $fld = $frm->getField('meta_action');
-$fld->addFieldTagAttribute('class', 'metaActionJs');
+if (null != $fld) {
+    $fld->addFieldTagAttribute('class', 'metaActionJs');
+}
 
 $fld = $frm->getField('meta_record_id');
-$fld->addFieldTagAttribute('class', 'metaRecordIdJs');
+if (null != $fld) {
+    $fld->addFieldTagAttribute('class', 'metaRecordIdJs');
+}
 
 $fld = $frm->getField('meta_subrecord_id');
-$fld->addFieldTagAttribute('class', 'metaSubRecordIdJs');
+if (null != $fld) {
+    $fld->addFieldTagAttribute('class', 'metaSubRecordIdJs');
+}
 
 $activeGentab = true;
 $disabled = (isset($metaId) && 1 > $metaId) ? 'disabled' : '';

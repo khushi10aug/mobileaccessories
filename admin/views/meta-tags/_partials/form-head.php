@@ -30,4 +30,15 @@ $formSubTitle = !empty($formSubTitle) ? $formSubTitle : '';
                 <?php } ?>
             </nav>
         </div>
+    <?php } elseif (!empty($sellerInventorySelprodId)) { ?>
+        <div class="form-edit-head">
+            <nav class="nav nav-tabs navTabsJs">
+                <a class="nav-link" href="javascript:void(0);" onclick="editSellerProductInventory(<?php echo (int) $sellerInventorySelprodId; ?>);" title="<?php echo Labels::getLabel('LBL_GENERAL', $siteLangId); ?>">
+                    <?php echo Labels::getLabel('LBL_GENERAL', $siteLangId); ?>
+                </a>
+                <a class="nav-link active" href="javascript:void(0);" title="<?php echo Labels::getLabel('LBL_META_TAG_SETUP', $siteLangId); ?>">
+                    <?php echo Labels::getLabel('LBL_META_TAG_SETUP', $siteLangId); ?>
+                </a>
+            </nav>
+        </div>
     <?php } ?>

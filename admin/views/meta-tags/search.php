@@ -66,7 +66,7 @@ include(CONF_THEME_PATH . '_partial/listing/no-record-found.php'); ?>
 <div id="metaTagsListing" class="card listingTableJs">
     <?php $keyWordFld = $frmSearch->getField('keyword');
     if (1 > $loadRows) {
-        $onSubmit = 'searchRecords(this, true); return(false);';
+        $onSubmit = 'metaTagsSearchRecords(this, true); return(false);';
         require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php');
     } ?>
     <div class="card-head">

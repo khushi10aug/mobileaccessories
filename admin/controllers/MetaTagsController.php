@@ -469,6 +469,7 @@ class MetaTagsController extends ListingBaseController
         $this->set('metaId', $metaId);
         $this->set('metaType', $metaType);
         $this->set('languages', Language::getAllNames());
+        $this->set('sellerInventorySelprodId', 0);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
@@ -482,7 +483,22 @@ class MetaTagsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
+        $sellerInvContext = FatApp::getPostedData('sellerInvContext', FatUtility::VAR_INT, 0);
+        $sellerInventorySelprodId = 0;
+        if (
+            0 < $sellerInvContext
+            && $metaType === MetaTag::META_GROUP_PRODUCT_DETAIL
+            && 0 < FatUtility::int($metaTagRecordId)
+        ) {
+            $sellerInventorySelprodId = FatUtility::int($metaTagRecordId);
+        }
+        $this->set('sellerInventorySelprodId', $sellerInventorySelprodId);
+
         $langFrm = $this->getLangForm($metaId, $langId, $metaType, $metaTagRecordId);
+
+        if (0 < $sellerInventorySelprodId) {
+            $langFrm->addHiddenField('', 'seller_inv_context', 1);
+        }
 
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(MetaTag::DB_TBL_LANG);
@@ -661,6 +677,8 @@ class MetaTagsController extends ListingBaseController
         $this->set('msg', $this->str_setup_successful);
         $this->set('metaId', $metaId);
         $this->set('langId', $newTabLangId);
+        $this->set('metaTagRecordId', FatUtility::int(FatApp::getPostedData('meta_record_id', FatUtility::VAR_INT, 0)));
+        $this->set('sellerInvContext', FatApp::getPostedData('seller_inv_context', FatUtility::VAR_INT, 0));
         $this->_template->render(false, false, 'json-success.php');
     }
 

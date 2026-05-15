@@ -145,6 +145,32 @@ if (null != $fld) {
 }
 
 $formTitle = Labels::getLabel('LBL_SELLER_INVENTORY_SETUP', $siteLangId);
+
+if (!empty($showSellerProductMetaTab)) {
+    $frm->setFormTagAttribute('data-onclear', 'editSellerProductInventory(' . (int) $recordId . ')');
+    $generalTab = [
+        'attr' => [
+            'href' => 'javascript:void(0);',
+            'onclick' => 'editSellerProductInventory(' . (int) $recordId . ');',
+            'title' => Labels::getLabel('LBL_GENERAL', $siteLangId),
+        ],
+        'label' => Labels::getLabel('LBL_GENERAL', $siteLangId),
+        'isActive' => true,
+    ];
+    $defaultFormLangId = CommonHelper::getDefaultFormLangId();
+    $otherButtons = [
+        [
+            'attr' => [
+                'href' => 'javascript:void(0)',
+                'onclick' => 'selprodInventoryMetaLangForm(' . (int) $metaTagIdForSellerProduct . ', ' . (int) $defaultFormLangId . ', ' . (int) $recordId . ')',
+                'title' => Labels::getLabel('LBL_META_TAG_SETUP', $siteLangId),
+            ],
+            'label' => Labels::getLabel('LBL_META_TAG_SETUP', $siteLangId),
+            'isActive' => false,
+        ],
+    ];
+}
+
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');
 ?>
 

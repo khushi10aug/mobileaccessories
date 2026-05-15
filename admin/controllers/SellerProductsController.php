@@ -78,7 +78,7 @@ class SellerProductsController extends ListingBaseController
         $this->set('canEdit', $this->objPrivilege->canEditSellerProducts($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
         $this->set('includeEditor', true);
-        $this->_template->addJs(array('js/select2.js', 'seller-products/page-js/index.js'));
+        $this->_template->addJs(array('js/select2.js', 'seller-products/page-js/index.js', 'meta-tags/page-js/index.js'));
         $this->_template->addCss(array('css/select2.min.css'));
         $this->includeFeatherLightJsCss();
         $this->_template->render();
@@ -307,6 +307,28 @@ class SellerProductsController extends ListingBaseController
         $this->set('frm', $frmSellerProduct);
         $this->set('recordId', $selProdId);
         $this->set('productMinSellingPrice', $productRow['product_min_selling_price']);
+
+        $metaTagIdForSellerProduct = 0;
+        $showSellerProductMetaTab = $this->objPrivilege->canEditMetaTags($this->admin_id, true);
+        if ($showSellerProductMetaTab) {
+            $tabsArr = MetaTag::getTabsArr($this->siteLangId);
+            $detail = $tabsArr[MetaTag::META_GROUP_PRODUCT_DETAIL];
+            $mtSrch = MetaTag::getSearchObject();
+            $mtSrch->addCondition('meta_controller', '=', $detail['controller']);
+            $mtSrch->addCondition('meta_action', '=', $detail['action']);
+            $mtSrch->addCondition('meta_record_id', '=', $selProdId);
+            $mtSrch->addFld('meta_id');
+            $mtSrch->doNotCalculateRecords();
+            $mtSrch->setPageSize(1);
+            $mtRs = $mtSrch->getResultSet();
+            $metaRow = FatApp::getDb()->fetch($mtRs);
+            if ($metaRow) {
+                $metaTagIdForSellerProduct = FatUtility::int($metaRow['meta_id']);
+            }
+        }
+        $this->set('metaTagIdForSellerProduct', $metaTagIdForSellerProduct);
+        $this->set('showSellerProductMetaTab', $showSellerProductMetaTab);
+
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }

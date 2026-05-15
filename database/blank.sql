@@ -5425,6 +5425,8 @@ CREATE TABLE `tbl_products_lang` (
   `product_description` mediumtext NOT NULL,
   `product_tags_string` mediumtext NOT NULL,
   `product_youtube_video` varchar(250) NOT NULL,
+  `product_features` mediumtext NOT NULL,
+  `product_key_features` mediumtext NOT NULL,
   UNIQUE KEY `productlang_product_id` (`productlang_product_id`,`productlang_lang_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

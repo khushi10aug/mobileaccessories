@@ -55,7 +55,26 @@
                 </div>
             <?php } ?>
             <?php
-            if ('' != trim((string)$product['product_description'])) { ?>
+            if ('' != trim((string)($product['product_short_description'] ?? ''))) { ?>
+                <div class="descriptions-item accordianSectionJs">
+                    <h2 class="descriptions-head <?php echo ($firstIsVisible ? 'collapsed' : ''); ?>" data-bs-toggle="collapse" data-bs-target="#productShortDescription" aria-expanded="true"><?php echo Labels::getLabel('LBL_SHORT_DESCRIPTION', $siteLangId); ?>
+                        <svg class="svg plus toggleAccordianJs" width="16" height="16">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#plus">
+                            </use>
+                        </svg>
+                    </h2>
+                    <div id="productShortDescription" class="collapse <?php echo (false === $firstIsVisible ? 'show' : ''); ?>" data-bs-parent="#accordionExample">
+                        <div class="descriptions-data">
+                            <div class="cms">
+                                <p><?php echo nl2br(htmlspecialchars(trim((string)$product['product_short_description']), ENT_QUOTES, 'UTF-8')); ?></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php $firstIsVisible = true;
+            } ?>
+            <?php
+            if ('' != trim((string)($product['product_description'] ?? ''))) { ?>
                 <div class="descriptions-item accordianSectionJs">
                     <h2 class="descriptions-head  <?php echo ($firstIsVisible ? 'collapsed' : ''); ?>" data-bs-toggle="collapse" data-bs-target="#description" aria-expanded="true"><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?>
                         <svg class="svg plus toggleAccordianJs" width="16" height="16">
@@ -67,6 +86,44 @@
                         <div class="descriptions-data">
                             <div class="cms">
                                 <p><?php echo CommonHelper::renderHtml($product['product_description'], true); ?></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php $firstIsVisible = true;
+            } ?>
+            <?php
+            if ('' != trim((string)($product['product_features'] ?? ''))) { ?>
+                <div class="descriptions-item accordianSectionJs">
+                    <h2 class="descriptions-head <?php echo ($firstIsVisible ? 'collapsed' : ''); ?>" data-bs-toggle="collapse" data-bs-target="#productFeatures" aria-expanded="true"><?php echo Labels::getLabel('LBL_PRODUCT_FEATURES', $siteLangId); ?>
+                        <svg class="svg plus toggleAccordianJs" width="16" height="16">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#plus">
+                            </use>
+                        </svg>
+                    </h2>
+                    <div id="productFeatures" class="collapse <?php echo (false === $firstIsVisible ? 'show' : ''); ?>" data-bs-parent="#accordionExample">
+                        <div class="descriptions-data">
+                            <div class="cms">
+                                <p><?php echo nl2br(htmlspecialchars(trim((string)$product['product_features']), ENT_QUOTES, 'UTF-8')); ?></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php $firstIsVisible = true;
+            } ?>
+            <?php
+            if ('' != trim((string)($product['product_key_features'] ?? ''))) { ?>
+                <div class="descriptions-item accordianSectionJs">
+                    <h2 class="descriptions-head <?php echo ($firstIsVisible ? 'collapsed' : ''); ?>" data-bs-toggle="collapse" data-bs-target="#productKeyFeatures" aria-expanded="true"><?php echo Labels::getLabel('LBL_PRODUCT_KEY_FEATURES', $siteLangId); ?>
+                        <svg class="svg plus toggleAccordianJs" width="16" height="16">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#plus">
+                            </use>
+                        </svg>
+                    </h2>
+                    <div id="productKeyFeatures" class="collapse <?php echo (false === $firstIsVisible ? 'show' : ''); ?>" data-bs-parent="#accordionExample">
+                        <div class="descriptions-data">
+                            <div class="cms">
+                                <p><?php echo nl2br(htmlspecialchars(trim((string)$product['product_key_features']), ENT_QUOTES, 'UTF-8')); ?></p>
                             </div>
                         </div>
                     </div>

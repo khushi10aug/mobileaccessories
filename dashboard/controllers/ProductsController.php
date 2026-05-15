@@ -351,7 +351,10 @@ class ProductsController extends SellerBaseController
 
         $this->setLangData($prodObj, [
             $prodObj::tblFld('name') => $post[$prodObj::tblFld('name')],
+            $prodObj::tblFld('short_description') => $post[$prodObj::tblFld('short_description')] ?? '',
             $prodObj::tblFld('description') => $post[$prodObj::tblFld('description')],
+            $prodObj::tblFld('features') => $post[$prodObj::tblFld('features')] ?? '',
+            $prodObj::tblFld('key_features') => $post[$prodObj::tblFld('key_features')] ?? '',
             $prodObj::tblFld('youtube_video') => $post[$prodObj::tblFld('youtube_video')]
         ], $langId);
 

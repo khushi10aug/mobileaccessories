@@ -188,6 +188,9 @@ trait CatalogProduct
             $fld->requirements()->setPositive();
             $frm->addHiddenField('', 'product_warranty_unit');
         }
+        $frm->addTextArea(Labels::getLabel('FRM_SHORT_DESCRIPTION', $langId), 'product_short_description');
+        $frm->addTextArea(Labels::getLabel('FRM_PRODUCT_FEATURES', $langId), 'product_features');
+        $frm->addTextArea(Labels::getLabel('FRM_PRODUCT_KEY_FEATURES', $langId), 'product_key_features');
         $frm->addHtmlEditor(Labels::getLabel('FRM_DESCRIPTION', $langId), 'product_description');
         $frm->addTextBox(Labels::getLabel('FRM_YOUTUBE_VIDEO_URL', $langId), 'product_youtube_video');
         $frm->addTextBox(Labels::getLabel('FRM_HSN_CODE', $langId), 'product_hsn_code');

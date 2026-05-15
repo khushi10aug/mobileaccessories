@@ -1021,3 +1021,8 @@ ALTER TABLE `tbl_seller_packages_plan` ADD `spplan_discount` decimal(10,2) NOT N
 INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES
 ('CONF_REDIRECT_MISSING_REWRITE_TO_HOME', '1', 1)
 ON DUPLICATE KEY UPDATE `conf_val` = VALUES(`conf_val`);
+
+/* Product catalog: lang fields for features (run once on existing DBs) */
+ALTER TABLE `tbl_products_lang`
+  ADD `product_features` mediumtext NOT NULL AFTER `product_youtube_video`,
+  ADD `product_key_features` mediumtext NOT NULL AFTER `product_features`;

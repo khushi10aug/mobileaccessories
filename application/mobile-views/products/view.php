@@ -286,6 +286,15 @@ if (1 == $page) {
         ];
     }
 
+    $productShortDescription = html_entity_decode(trim((string)($product['product_short_description'] ?? '')), ENT_QUOTES, 'utf-8');
+    if ('' !== str_replace(["\r", "\n"], '', $productShortDescription)) {
+        $data['data'][] = [
+            'type' => Product::CONTENT_TYPE_PRODUCT_DESCRIPTION,
+            'title' => Labels::getLabel('LBL_SHORT_DESCRIPTION', $siteLangId),
+            'content' => nl2br(htmlspecialchars($productShortDescription, ENT_QUOTES, 'UTF-8')),
+        ];
+    }
+
     $productDescription = html_entity_decode($product['product_description'], ENT_QUOTES, 'utf-8');
     if (!empty(str_replace("\r\n", '', $productDescription))) {
         $productDescription = str_replace('/editor/editor-image/', FatUtility::generateFullUrl() . 'editor/editor-image/', $productDescription);
@@ -293,6 +302,24 @@ if (1 == $page) {
             'type' => Product::CONTENT_TYPE_PRODUCT_DESCRIPTION,
             'title' => Labels::getLabel('LBL_PRODUCT_DESCRIPTION', $siteLangId),
             'content' => $productDescription
+        ];
+    }
+
+    $productFeatures = html_entity_decode(trim((string)($product['product_features'] ?? '')), ENT_QUOTES, 'utf-8');
+    if ('' !== str_replace(["\r", "\n"], '', $productFeatures)) {
+        $data['data'][] = [
+            'type' => Product::CONTENT_TYPE_PRODUCT_DESCRIPTION,
+            'title' => Labels::getLabel('LBL_PRODUCT_FEATURES', $siteLangId),
+            'content' => nl2br(htmlspecialchars($productFeatures, ENT_QUOTES, 'UTF-8')),
+        ];
+    }
+
+    $productKeyFeatures = html_entity_decode(trim((string)($product['product_key_features'] ?? '')), ENT_QUOTES, 'utf-8');
+    if ('' !== str_replace(["\r", "\n"], '', $productKeyFeatures)) {
+        $data['data'][] = [
+            'type' => Product::CONTENT_TYPE_PRODUCT_DESCRIPTION,
+            'title' => Labels::getLabel('LBL_PRODUCT_KEY_FEATURES', $siteLangId),
+            'content' => nl2br(htmlspecialchars($productKeyFeatures, ENT_QUOTES, 'UTF-8')),
         ];
     }
 

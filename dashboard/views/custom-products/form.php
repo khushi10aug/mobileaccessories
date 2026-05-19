@@ -115,8 +115,6 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                             echo HtmlHelper::getFieldHtml($frm, 'product_youtube_video', 12);
                             echo HtmlHelper::getFieldHtml($frm, 'product_attachements_with_inventory', 6, ['class' => 'attachmentWithInventoryJs'], Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL_INFO', $langId));
                             echo HtmlHelper::getFieldHtml($frm, 'product_short_description', 12);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_features', 12);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_key_features', 12);
                             echo HtmlHelper::getFieldHtml($frm, 'product_description', 12);
                             echo HtmlHelper::getFieldHtml($frm, 'record_id', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'selprod_id', 6);

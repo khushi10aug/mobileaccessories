@@ -175,6 +175,30 @@ class SellerProductsController extends ListingBaseController
             $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT OUTER JOIN', 'p.product_id = ptc_product_id', 'ptcat');
             $srch->addCondition('ptcat.ptc_prodcat_id', '=', 'mysql_func_' . $post['prodcat_id'], 'AND', true);
         }
+
+        $tabsArr = MetaTag::getTabsArr($this->siteLangId);
+        $productDetailMeta = $tabsArr[MetaTag::META_GROUP_PRODUCT_DETAIL];
+        $metaJoinCond = 'mt.meta_record_id = sp.selprod_id'
+            . " AND mt.meta_controller = '" . $productDetailMeta['controller'] . "'"
+            . " AND mt.meta_action = '" . $productDetailMeta['action'] . "'"
+            . ' AND mt.meta_subrecord_id = 0';
+        $srch->joinTable(MetaTag::DB_TBL, 'LEFT OUTER JOIN', $metaJoinCond, 'mt');
+        $srch->joinTable(
+            MetaTag::DB_TBL_LANG,
+            'LEFT OUTER JOIN',
+            'mt_l.metalang_meta_id = mt.meta_id AND mt_l.metalang_lang_id = ' . $this->siteLangId,
+            'mt_l'
+        );
+
+        $metaAdded = FatApp::getPostedData('meta_added', FatUtility::VAR_INT, -1);
+        if (-1 != $metaAdded) {
+            if (applicationConstants::YES == $metaAdded) {
+                $srch->addDirectCondition("TRIM(IFNULL(mt_l.meta_description, '')) != ''");
+            } else {
+                $srch->addDirectCondition("TRIM(IFNULL(mt_l.meta_description, '')) = ''");
+            }
+        }
+
         $product_id = 0;
         if (isset($post['product_id'])) {
             $product_id = FatUtility::int($post['product_id']);
@@ -210,13 +234,15 @@ class SellerProductsController extends ListingBaseController
                 'u.user_name',
                 'uc.credential_email',
                 'product_type',
-                'product_updated_on'
+                'product_updated_on',
+                'mt_l.meta_description'
             )
         );
 
         if (!empty($sortBy)) {
-            $srch->addOrder($sortBy, $sortOrder);
+          //  $srch->addOrder($sortBy, $sortOrder);
         }
+        $srch->addOrder('selprod_id', 'DESC');
 
         $records = [];
         if (!$loadPagination) {
@@ -378,6 +404,10 @@ class SellerProductsController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY', $this->siteLangId), 'prodcat_id', $categories);
         $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_APPROVAL', $this->siteLangId), 'product_approved', applicationConstants::getYesNoArr($this->siteLangId));
         $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_STATUS', $this->siteLangId), 'product_active', applicationConstants::getActiveInactiveArr($this->siteLangId));
+        $metaAddedOptions = [
+            -1 => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId),
+        ] + applicationConstants::getYesNoArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('FRM_HAS_TAGS_ASSOCIATED', $this->siteLangId), 'meta_added', $metaAddedOptions, -1);
 
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'selprod_title');
@@ -2674,7 +2704,7 @@ class SellerProductsController extends ListingBaseController
 
     protected function getFormColumns(): array
     {
-        $inventoryHeadingCols = CacheHelper::get('inventoryHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $inventoryHeadingCols = CacheHelper::get('inventoryHeadingColsV2' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($inventoryHeadingCols) {
             return json_decode($inventoryHeadingCols, true);
         }
@@ -2686,10 +2716,11 @@ class SellerProductsController extends ListingBaseController
             'user_name' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
             'selprod_price' => Labels::getLabel('LBL_PRICE', $this->siteLangId),
             'selprod_stock' => Labels::getLabel('LBL_QUANTITY', $this->siteLangId),
+            'meta_added' => Labels::getLabel('LBL_META_TAGS', $this->siteLangId),
             'selprod_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('inventoryHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('inventoryHeadingColsV2' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 
@@ -2702,6 +2733,7 @@ class SellerProductsController extends ListingBaseController
             'user_name',
             'selprod_price',
             'selprod_stock',
+            'meta_added',
             'selprod_active',
             'action',
         ];

@@ -216,7 +216,8 @@ class ProductsController extends ListingBaseController
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder);
+       // $srch->addOrder($sortBy, $sortOrder);
+        $srch->addOrder('product_id', 'DESC');
         $records = [];
         if (!$loadPagination) {
             $records = FatApp::getDb()->fetchAll($srch->getResultSet());
@@ -605,8 +606,6 @@ class ProductsController extends ListingBaseController
             $prodObj::tblFld('name') => $post[$prodObj::tblFld('name')],
             $prodObj::tblFld('short_description') => $post[$prodObj::tblFld('short_description')] ?? '',
             $prodObj::tblFld('description') => $post[$prodObj::tblFld('description')],
-            $prodObj::tblFld('features') => $post[$prodObj::tblFld('features')] ?? '',
-            $prodObj::tblFld('key_features') => $post[$prodObj::tblFld('key_features')] ?? '',
             $prodObj::tblFld('youtube_video') => $post[$prodObj::tblFld('youtube_video')]
         ], $langId);
 

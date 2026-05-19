@@ -38,6 +38,12 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true), true);
                 break;
             
+            case 'meta_added':
+                $hasMeta = '' !== trim((string)($row['meta_description'] ?? ''));
+                $metaLabel = $hasMeta ? Labels::getLabel('LBL_YES', $siteLangId) : Labels::getLabel('LBL_NO', $siteLangId);
+                $metaClass = $hasMeta ? 'badge badge-success' : 'badge badge-danger';
+                $td->appendElement('plaintext', $tdAttr, '<span class="' . $metaClass . '">' . $metaLabel . '</span>', true);
+                break;
             case 'selprod_active':
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['selprod_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
                 $statusClass = ($canEdit) ? '' : 'disabled';

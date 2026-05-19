@@ -306,20 +306,22 @@ if (1 == $page) {
     }
 
     $productFeatures = html_entity_decode(trim((string)($product['product_features'] ?? '')), ENT_QUOTES, 'utf-8');
+    $productKeyFeatures = html_entity_decode(trim((string)($product['product_key_features'] ?? '')), ENT_QUOTES, 'utf-8');
+    $combinedFeaturesContent = '';
     if ('' !== str_replace(["\r", "\n"], '', $productFeatures)) {
+        $combinedFeaturesContent .= nl2br(htmlspecialchars($productFeatures, ENT_QUOTES, 'UTF-8'));
+    }
+    if ('' !== str_replace(["\r", "\n"], '', $productKeyFeatures)) {
+        if ('' !== $combinedFeaturesContent) {
+            $combinedFeaturesContent .= '<br><br>';
+        }
+        $combinedFeaturesContent .= nl2br(htmlspecialchars($productKeyFeatures, ENT_QUOTES, 'UTF-8'));
+    }
+    if ('' !== $combinedFeaturesContent) {
         $data['data'][] = [
             'type' => Product::CONTENT_TYPE_PRODUCT_DESCRIPTION,
             'title' => Labels::getLabel('LBL_PRODUCT_FEATURES', $siteLangId),
-            'content' => nl2br(htmlspecialchars($productFeatures, ENT_QUOTES, 'UTF-8')),
-        ];
-    }
-
-    $productKeyFeatures = html_entity_decode(trim((string)($product['product_key_features'] ?? '')), ENT_QUOTES, 'utf-8');
-    if ('' !== str_replace(["\r", "\n"], '', $productKeyFeatures)) {
-        $data['data'][] = [
-            'type' => Product::CONTENT_TYPE_PRODUCT_DESCRIPTION,
-            'title' => Labels::getLabel('LBL_PRODUCT_KEY_FEATURES', $siteLangId),
-            'content' => nl2br(htmlspecialchars($productKeyFeatures, ENT_QUOTES, 'UTF-8')),
+            'content' => $combinedFeaturesContent,
         ];
     }
 

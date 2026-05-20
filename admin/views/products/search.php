@@ -78,6 +78,7 @@ foreach ($arrListing as $sn => $row) {
                     $url .= '?' . html_entity_decode($queryString);
                 }
 
+                $data['otherButtons'] = [];
                 if ($canEdit) {
                     $data['otherButtons'][] = [
                         'attr' => [
@@ -91,6 +92,20 @@ foreach ($arrListing as $sn => $row) {
                         </svg>'
                     ];
                     $data['deleteButton'] = [];
+                }
+                if (!empty($canViewImageAttributes)) {
+                    $data['otherButtons'][] = [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'onclick' => 'openImageAttributeForm(' . $row['product_id'] . ', ' . AttachedFile::FILETYPE_PRODUCT_IMAGE . ')',
+                            'title' => Labels::getLabel('NAV_IMAGE_ATTRIBUTES', $siteLangId)
+                        ],
+                        'label' => '<svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#add">
+                            </use>
+                        </svg>'
+                    ];
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);

@@ -1,9 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 HtmlHelper::formatFormFields($frm);
 
-$frm->setFormTagAttribute('data-onclear', 'attributeForm(' . $recordId . ')');
+$frm->setFormTagAttribute('data-onclear', 'openImageAttributeForm(' . $recordId . ', ' . $moduleType . ')');
 $frm->setFormTagAttribute('id', 'frmImgAttributeJs');
-$frm->setFormTagAttribute('onsubmit', 'setup(this); return(false);');
+$frm->setFormTagAttribute('onsubmit', 'saveImageAttributes(this); return(false);');
 
 $formLayout = Language::getLayoutDirection(CommonHelper::getDefaultFormLangId());
 $frm->setFormTagAttribute('class', 'form modalFormJs layout--' . $formLayout);

@@ -65,7 +65,7 @@ class ProductsController extends ListingBaseController
         $this->getListingData($defaultSrchParm);
 
         $this->_template->addCss(array('css/select2.min.css'));
-        $this->_template->addJs(array('products/page-js/index.js', 'js/select2.js'));
+        $this->_template->addJs(array('products/page-js/index.js', 'image-attributes/page-js/index.js', 'js/select2.js'));
         $this->includeFeatherLightJsCss();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
@@ -233,6 +233,7 @@ class ProductsController extends ListingBaseController
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditProducts($this->admin_id, true));
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
+        $this->set('canViewImageAttributes', $this->objPrivilege->canViewImageAttributes($this->admin_id, true));
     }
 
     public function form($recordId = 0, $productType = 0)

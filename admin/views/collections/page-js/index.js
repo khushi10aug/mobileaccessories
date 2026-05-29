@@ -125,6 +125,11 @@ $(document).on('change', '.prefDimensionsJs', function () {
     };
 
     collectionMediaForm = function (collection_id, type) {
+        collection_id = parseInt(collection_id, 10) || 0;
+        if (collection_id < 1) {
+            fcom.displayErrorMessage(langLbl.invalidRequestId || langLbl.invalidRequest || 'Invalid request ID');
+            return;
+        }
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "media", [collection_id, type]), "",
             function (t) {
                 fcom.closeProcessing();
@@ -141,6 +146,10 @@ $(document).on('change', '.prefDimensionsJs', function () {
     };
 
     loadImages = function (recordId, langId = 0, screen = 0) {
+        recordId = parseInt(recordId, 10) || 0;
+        if (recordId < 1) {
+            return;
+        }
         if(0 == screen){
             screen = $("select[name='collection_screen']").val();
             screen = 'undefined' == typeof screen ? 0 : screen;

@@ -1,4 +1,7 @@
-<div class="wrapper">
+<?php
+$isWholesaleHome = ('Home' == $controllerName);
+?>
+<div class="wrapper<?php echo $isWholesaleHome ? ' wholesale-theme' : ''; ?>">
     <?php if (FatApp::getConfig('CONF_LOADER', FatUtility::VAR_INT, 0)) { ?>
         <div class="page-loader">
             <span><?php echo Labels::getLabel('LBL_Loading...'); ?><i class="loader-line"></i></span>
@@ -9,6 +12,10 @@
         class="header <?php echo (FatApp::getConfig('CONF_HEADER_FULL_WIDTH', FatUtility::VAR_INT, 1) ? 'fluid' : '') ?> no-print">
         <?php if (FatApp::getConfig('CONF_AUTO_RESTORE_ON', FatUtility::VAR_INT, 1) && CommonHelper::demoUrl()) {
             $this->includeTemplate('restore-system/top-header.php');
+        } ?>
+
+        <?php if ($isWholesaleHome) {
+            $this->includeTemplate('_partial/headerUtilityBar.php', array('siteLangId' => $siteLangId));
         } ?>
 
         <div class="top-bar no-print">
@@ -38,6 +45,9 @@
                                     title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" <?php echo $logoWidth; ?> />
                             </a>
                         </div>
+                        <?php if ($isWholesaleHome) { ?>
+                        <p class="wholesale-tagline"><?php echo Labels::getLabel('LBL_WHOLESALE_TAGLINE', $siteLangId); ?></p>
+                        <?php } ?>
                         <?php
                         $diplayGeoLocation = ($controllerName != 'Cart') ? true : false;
                         if ($controllerName == 'Cart' && !isset($_COOKIE['_ykGeoLat'])) {
@@ -155,7 +165,10 @@
         <div class="main-bar no-print">
             <div class="container">
                 <div class="main-bar__inner">
-                    <?php $this->includeTemplate('_partial/headerNavigation.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
+                    <?php $this->includeTemplate('_partial/headerNavigation.php', [
+                        'layoutType' => applicationConstants::SCREEN_DESKTOP,
+                        'controllerName' => $controllerName,
+                    ]); ?>
                     <div class="main-bar-end">
                         <?php
                         if (CommonHelper::demoUrl()) { ?>

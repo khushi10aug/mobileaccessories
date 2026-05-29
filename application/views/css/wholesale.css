@@ -1,0 +1,965 @@
+/* ==========================================================================
+   Wholesale Theme — desktop only (≥992px), TVCMALL typography
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap");
+
+/* --- TVCMALL hero: categories left + slider right (desktop layout) --- */
+.wholesale-hero-block {
+  padding: 0.75rem 0 1rem !important;
+  background: #f5f5f5;
+}
+
+.wholesale-hero-block .container {
+  max-width: 100%;
+}
+
+.wholesale-hero-block__row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: stretch;
+}
+
+@media (min-width: 992px) {
+  .wholesale-hero-block__row {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr) 220px;
+    grid-template-rows: 1fr;
+    gap: 0;
+    min-height: 420px;
+    max-height: 420px;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    overflow: visible;
+    align-items: stretch;
+  }
+
+  .wholesale-hero-categories {
+    grid-column: 1;
+    grid-row: 1;
+    flex: none;
+    width: auto;
+    max-width: 260px;
+    min-width: 0;
+  }
+
+  .wholesale-hero-block__slider {
+    grid-column: 2;
+    grid-row: 1;
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+  }
+
+  .wholesale-hero-services {
+    grid-column: 3;
+    grid-row: 1;
+    flex: none;
+    width: auto;
+    max-width: 220px;
+    min-width: 0;
+    position: relative;
+    z-index: 2;
+    background: #f7f7f7;
+  }
+}
+
+.wholesale-hero-categories {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  z-index: 6;
+}
+
+@media (min-width: 992px) {
+  .wholesale-hero-categories {
+    border: none;
+    border-radius: 0;
+    border-right: 1px solid #e5e5e5;
+    overflow: hidden;
+  }
+}
+
+.wholesale-hero-categories__head {
+  padding: 0.65rem 1rem;
+  font-weight: 600;
+  font-size: 14px;
+  background: #fafafa;
+  border-bottom: 1px solid #eee;
+  color: #222;
+}
+
+.wholesale-hero-categories__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 320px;
+  overflow-y: auto;
+  overflow-x: visible;
+}
+
+@media (min-width: 992px) {
+  .wholesale-hero-categories__list {
+    max-height: 378px;
+    height: 378px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+
+.wholesale-hero-categories__link {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.6rem 1rem;
+  text-decoration: none;
+  color: #333;
+  font-size: 13px;
+  line-height: 1.4;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.15s ease;
+}
+
+.wholesale-hero-categories__link:hover {
+  background: #f5f5f5;
+  color: var(--brand-color, #e31e24);
+  text-decoration: none;
+}
+
+.wholesale-hero-categories__item {
+  position: relative;
+}
+
+.wholesale-hero-categories__chevron {
+  font-size: 1rem;
+  line-height: 1;
+  color: #999;
+  margin-left: auto;
+}
+
+.wholesale-hero-categories__submenu {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  /* Fixed + JS top/left: escapes scroll parents (.wholesale-hero-categories__list overflow) */
+  .wholesale-hero-categories__item.has-children.is-open > .wholesale-hero-categories__submenu {
+    display: block;
+    position: fixed;
+    width: min(620px, 56vw);
+    max-height: min(420px, calc(100vh - 24px));
+    overflow: auto;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
+    padding: 1rem;
+    z-index: 10050;
+  }
+}
+
+.wholesale-hero-categories__submenu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.25rem;
+}
+
+.wholesale-hero-categories__submenu-grid.cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.wholesale-hero-categories__submenu-group {
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.wholesale-hero-categories__submenu-group:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.wholesale-hero-categories__submenu-title {
+  display: inline-block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.4rem;
+  text-decoration: none;
+}
+
+.wholesale-hero-categories__submenu-title:hover {
+  color: var(--brand-color, #e31e24);
+  text-decoration: none;
+}
+
+.wholesale-hero-categories__submenu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.wholesale-hero-categories__submenu-list li {
+  margin-bottom: 0.2rem;
+}
+
+.wholesale-hero-categories__submenu-list a {
+  color: #666;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  text-decoration: none;
+}
+
+.wholesale-hero-categories__submenu-list a:hover {
+  color: var(--brand-color, #e31e24);
+}
+
+.wholesale-hero-categories__thumb {
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #f3f3f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wholesale-hero-categories__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wholesale-hero-categories__name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.wholesale-hero-block__slider {
+  flex: 1;
+  min-width: 0;
+  background: #fff;
+  overflow: hidden;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 992px) {
+  .wholesale-hero-block__slider {
+    height: 420px !important;
+    min-height: 420px !important;
+    max-height: 420px !important;
+  }
+}
+
+.wholesale-hero-block__slider .hero-slider-embedded,
+.wholesale-hero-block__slider .hero-slider {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  height: 220px;
+  min-height: 220px;
+  max-height: 220px;
+  aspect-ratio: unset !important;
+  overflow: hidden;
+  position: relative;
+  background: #fff;
+}
+
+.wholesale-hero-block__slider .slick-list,
+.wholesale-hero-block__slider .slick-track,
+.wholesale-hero-block__slider .slick-slide,
+.wholesale-hero-block__slider .slick-slide > div,
+.wholesale-hero-block__slider .hero-slider-item,
+.wholesale-hero-block__slider .hero-slider-media,
+.wholesale-hero-block__slider .hero-slider-media picture {
+  height: 220px !important;
+}
+
+/* Ensure slick wrapper elements don't add opacity/filter (but allow transforms for sliding) */
+.wholesale-hero-block__slider .slick-list,
+.wholesale-hero-block__slider .slick-slide {
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* Allow slick-track to transform for sliding, but prevent zoom transforms on slides */
+.wholesale-hero-block__slider .slick-slide {
+  transform: none !important;
+}
+
+.wholesale-hero-block__slider .hero-slider-item {
+  height: 100% !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.wholesale-hero-block__slider .hero-slider-media {
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  display: block !important;
+  background: #fff;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 0 !important;
+}
+
+.wholesale-hero-block__slider .hero-slider-media picture {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  line-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  vertical-align: bottom !important;
+}
+
+/* Override global .hero-slider zoom/fade that causes blurry stacked slides */
+.wholesale-hero-block__slider .hero-slider-media img,
+.wholesale-hero-block__slider .slick-slide .hero-slider-media img,
+.wholesale-hero-block__slider .slick-active .hero-slider-media img,
+.wholesale-hero-block__slider .slick-current .hero-slider-media img,
+.wholesale-hero-block__slider .slick-slide:not(.slick-active) .hero-slider-media img,
+.wholesale-hero-block__slider .hero-slider .hero-slider-media img,
+.wholesale-hero-block__slider .slick-track .hero-slider-media img,
+.wholesale-hero-block__slider .hero-slider-item .hero-slider-media img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  transform: none !important;
+  transition: none !important;
+  opacity: 1 !important;
+  filter: none !important;
+  will-change: auto !important;
+}
+
+@media (min-width: 992px) {
+  .wholesale-hero-block__slider .hero-slider-embedded,
+  .wholesale-hero-block__slider .hero-slider,
+  .wholesale-hero-block__slider #wholesaleHeroSlider.slick-slider {
+    height: 420px !important;
+    min-height: 420px !important;
+    max-height: 420px !important;
+  }
+
+  .wholesale-hero-block__slider .slick-list,
+  .wholesale-hero-block__slider .slick-track,
+  .wholesale-hero-block__slider .slick-slide,
+  .wholesale-hero-block__slider .slick-slide > div,
+  .wholesale-hero-block__slider .hero-slider-item,
+  .wholesale-hero-block__slider .hero-slider-media,
+  .wholesale-hero-block__slider .hero-slider-media picture {
+    height: 420px !important;
+  }
+}
+
+.wholesale-hero-block__slider .slick-dots {
+  bottom: 8px;
+  z-index: 3;
+}
+
+/* Right panel: Wholesale Made Simple (TVCMALL) */
+.wholesale-hero-services {
+  background: #f7f7f7;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 992px) {
+  .wholesale-hero-services {
+    height: 100%;
+    max-height: 420px;
+    border: none;
+    border-left: 1px solid #e5e5e5;
+    border-radius: 0;
+  }
+
+  .wholesale-hero-services__list {
+    max-height: none;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .wholesale-hero-categories__list {
+    max-height: none;
+    height: calc(100% - 42px);
+  }
+}
+
+.wholesale-hero-services__head {
+  padding: 0.85rem 1rem;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.wholesale-hero-services__title {
+  margin: 0 0 0.25rem;
+  font-size: 15px;
+  font-weight: 700;
+  color: #222;
+  line-height: 1.3;
+}
+
+.wholesale-hero-services__subtitle {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.wholesale-hero-services__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.wholesale-hero-services__link {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  color: #333;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  transition: background 0.15s ease;
+}
+
+.wholesale-hero-services__link:hover {
+  background: #fafafa;
+  color: var(--brand-color, #e31e24);
+  text-decoration: none;
+}
+
+.wholesale-hero-services__icon {
+  flex: 0 0 1.5rem;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.wholesale-hero-services__text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.wholesale-hero-services__text strong {
+  font-size: 13px;
+  font-weight: 600;
+  color: inherit;
+}
+
+.wholesale-hero-services__text span {
+  font-size: 11px;
+  color: #777;
+  line-height: 1.4;
+}
+
+.wholesale-hero-services__link:hover .wholesale-hero-services__text span {
+  color: #555;
+}
+
+/* Wholesale / B2B theme — TVCMALL-inspired */
+
+body.home.wholesale-theme .header {
+  border-bottom: none;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+}
+
+body.home.wholesale-theme .main .section-head h1,
+body.home.wholesale-theme .main .section-head h2,
+body.home.wholesale-theme .main .section-heading h2 {
+  font-weight: 600;
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  letter-spacing: -0.02em;
+}
+
+.header-utility {
+  background: #000;
+  color: #fff;
+  font-size: 0.75rem;
+  display: none;
+}
+
+@media (min-width: 992px) {
+  body.home.wholesale-theme .header-utility {
+    display: block;
+  }
+
+  body.home.wholesale-theme .top-bar__left .wholesale-tagline {
+    display: none;
+  }
+
+  /* TVCMALL-style typography (desktop home only) */
+  body.home.wholesale-theme,
+  body.home.wholesale-theme .header,
+  body.home.wholesale-theme .main {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body.home.wholesale-theme .header-utility,
+  body.home.wholesale-theme .header-utility__link,
+  body.home.wholesale-theme .header-utility__contact {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  body.home.wholesale-theme .quick-nav .txt {
+    font-size: 12px;
+  }
+
+  body.home.wholesale-theme .main-bar .navigation-link,
+  body.home.wholesale-theme .wholesale-nav-pills__link {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  body.home.wholesale-theme .main .section-heading h2,
+  body.home.wholesale-theme .featured-categories__heading h2 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+
+  body.home.wholesale-theme .wholesale-stats__item {
+    font-size: 13px;
+  }
+
+  body.home.wholesale-theme .featured-category-tile__name {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+}
+
+.header-utility__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 34px;
+  gap: 1rem;
+}
+
+.header-utility__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.header-utility__link {
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.header-utility__link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.header-utility__contact {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.header-utility__contact a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.header-utility__contact a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.wholesale-tagline {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  body.home.wholesale-theme .wholesale-tagline {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--brand-color);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+    max-width: 140px;
+    margin: 0;
+  }
+}
+
+@media (min-width: 992px) {
+  body.home.wholesale-theme .main-bar {
+    background: #fff;
+    color: #222;
+    border-top: 1px solid #ececec;
+    border-bottom: 1px solid #ececec;
+  }
+
+  body.home.wholesale-theme .main-bar .navigation-link,
+  body.home.wholesale-theme .main-bar .hamburger-categories,
+  body.home.wholesale-theme .main-bar .hamburger-categories .text-nowrap {
+    color: #222;
+    font-weight: 500;
+  }
+
+  body.home.wholesale-theme .main-bar .navigation-link:hover,
+  body.home.wholesale-theme .main-bar .hamburger-categories:hover {
+    color: var(--brand-color);
+  }
+
+  body.home.wholesale-theme .main-bar .hamburger-categories {
+    border-color: #e5e5e5;
+    background: #fafafa;
+  }
+
+  body.home.wholesale-theme .main-bar .btn-rfq {
+    background: var(--brand-color);
+    color: #fff;
+    border-color: var(--brand-color);
+    font-weight: 600;
+    font-size: 14px;
+  }
+}
+
+.wholesale-nav-pills {
+  display: none;
+  margin: 0 0 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 992px) {
+  body.home.wholesale-theme .wholesale-nav-pills {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+
+.wholesale-nav-pills__link {
+  color: #333;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.wholesale-nav-pills__link:hover {
+  background: #f2f2f2;
+  color: var(--brand-color);
+}
+
+.wholesale-services {
+  background: linear-gradient(180deg, #f3f4f5 0%, #fff 100%);
+  padding: 1.5rem 0 !important;
+}
+
+.wholesale-services__intro {
+  text-align: center;
+  margin: 0 auto 1.5rem;
+  max-width: 720px;
+}
+
+.wholesale-services__title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.wholesale-services__subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(0, 0, 0, 0.77);
+  line-height: 1.5;
+}
+
+.wholesale-services__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .wholesale-services__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .wholesale-services__grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.wholesale-service-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1rem;
+  background: #fff;
+  border: solid 1px #dee2e6;
+  border-radius: 8px;
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.97);
+  height: 100%;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.wholesale-service-card:hover {
+  border-color: var(--brand-color);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.97);
+}
+
+.wholesale-service-card__icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.wholesale-service-card__name {
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: 0.35rem;
+}
+
+.wholesale-service-card__desc {
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.77);
+  line-height: 1.4;
+}
+
+.wholesale-stats {
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+  padding: 0.65rem 0;
+}
+
+.wholesale-stats__track {
+  display: flex;
+  width: max-content;
+  animation: wholesale-stats-scroll 40s linear infinite;
+}
+
+.wholesale-stats__group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.wholesale-stats__item {
+  padding: 0 2rem;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  position: relative;
+}
+
+.wholesale-stats__item::after {
+  content: "•";
+  position: absolute;
+  right: 0;
+  opacity: 0.4;
+}
+
+.wholesale-stats__item:last-child::after {
+  display: none;
+}
+
+@keyframes wholesale-stats-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Featured categories — horizontal strip (TVCMALL style) */
+.featured-categories {
+  background: #fff;
+  padding: 1.5rem 0 2rem !important;
+}
+
+.featured-categories__heading {
+  margin-bottom: 1rem;
+}
+
+.featured-categories__heading h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  text-align: left;
+}
+
+.featured-categories__scroll {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.featured-category-tile {
+  flex: 0 0 120px;
+  width: 120px;
+  text-decoration: none;
+  color: #222;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .featured-category-tile {
+    flex: 0 0 140px;
+    width: 140px;
+  }
+}
+
+.featured-category-tile:hover {
+  text-decoration: none;
+  color: var(--brand-color, #e31e24);
+}
+
+.featured-category-tile__media {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f3f3f3;
+  margin-bottom: 0.5rem;
+  border: 1px solid #eee;
+}
+
+.featured-category-tile__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.25s ease;
+}
+
+.featured-category-tile:hover .featured-category-tile__media img {
+  transform: scale(1.05);
+}
+
+.featured-category-tile__name {
+  display: block;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Wholesale navigation pills wrapper */
+.wholesale-nav-pills-wrapper {
+  display: none !important;
+}
+
+@media (min-width: 992px) {
+  body.home.wholesale-theme .wholesale-nav-pills-wrapper {
+    display: flex !important;
+  }
+}
+
+/* ==========================================================================
+   Mobile / tablet: default theme — wholesale home blocks hidden
+   ========================================================================== */
+@media (max-width: 991.98px) {
+  .wholesale-home-desktop-only,
+  .wholesale-hero-categories,
+  .wholesale-hero-services,
+  .wholesale-stats.wholesale-home-desktop-only {
+    display: none !important;
+  }
+
+  .wholesale-hero-block {
+    background: transparent;
+    padding: 0 !important;
+  }
+
+  .wholesale-hero-block .container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .wholesale-hero-block__row {
+    display: block;
+    min-height: 0;
+    max-height: none;
+    border: none;
+    background: transparent;
+  }
+
+  .wholesale-hero-block__slider {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .wholesale-hero-block__slider .hero-slider-embedded,
+  .wholesale-hero-block__slider .hero-slider {
+    aspect-ratio: 10 / 3.33;
+    min-height: 0;
+    max-height: none;
+    height: auto;
+  }
+
+  .wholesale-hero-block__slider .hero-slider-media img {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+}

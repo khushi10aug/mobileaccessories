@@ -93,6 +93,10 @@ class CustomRouter
                 $rs = $srch->getResultSet();
                 $row = FatApp::getDb()->fetch($rs);
 
+                if (!$row) {
+                    $row = self::resolveBuiltInCustomSlug($customUrl[0]);
+                }
+
                 if (!$row && FatApp::getConfig('CONF_ENABLE_301', FatUtility::VAR_INT, 1) && !FatUtility::isAjaxCall()) {
                     $srch = UrlRewrite::getSearchObject();
                     $srch->doNotCalculateRecords();
@@ -132,8 +136,8 @@ class CustomRouter
                      * Multi-segment: e.g. reviews/product/24999/154 when no url_rewrite row (each segment = slug or digits). */
                     $shortSeo = (bool) preg_match('/^[a-zA-Z0-9][a-zA-Z0-9\-]*$/', $slug);
                     $longProductSeo = strlen($slug) >= 48 && (bool) preg_match('#^[a-zA-Z0-9][a-zA-Z0-9\-/]*$#', $slug);
-                    $multiSegSeo = self::isCatalogSeoMultiSegmentRedirectCandidate($slug);
-                    $seoSlugCandidate = ($shortSeo && !self::isDirectFrontendRoutePath($slug)) || $longProductSeo || $multiSegSeo;
+                    $multiSegSeo = self::isCatalogSeoMultiSegmentRedirectCandidate($slug) && !self::isDirectFrontendRoutePath($slug);
+                    $seoSlugCandidate = ($shortSeo && !self::isDirectFrontendRoutePath($slug) && !self::isBuiltInSystemCustomSlug($slug)) || $longProductSeo || $multiSegSeo;
                     if ($seoSlugCandidate) {
                         header('HTTP/1.1 301 Moved Permanently');
                         $langForHome = $strippedLangIdFromPath !== null && $strippedLangIdFromPath > 0 ? $strippedLangIdFromPath : SYSTEM_LANG_ID;
@@ -260,6 +264,7 @@ class CustomRouter
                 'public', 'scripts', 'app-api', 'user-uploads', 'products', 'shops', 'brands', 'category', 'cms',
                 'content', 'blog', 'banner', 'payment', 'order', 'orders', 'account', 'supplier', 'gift', 'rfq',
                 'notifications', 'payment-status', 'invoice', 'download', 'embed', 'oauth', 'cron', 'cronjob',
+                'custom', 'guest-user', 'wallet-pay', 'reviews', 'navigation', 'common', 'error',
             ];
         }
         $parts = explode('/', strtolower($slug));
@@ -274,5 +279,56 @@ class CustomRouter
         }
 
         return count($parts) >= 2;
+    }
+
+    /**
+     * Built-in SEO slugs shipped with Yo!Kart when tbl_url_rewrite rows are missing.
+     */
+    private static function getBuiltInCustomSlugMap()
+    {
+        return [
+            'faqs' => 'custom/faq',
+            'faq' => 'custom/faq',
+            'contact-us' => 'custom/contact-us',
+            'seller' => 'supplier',
+        ];
+    }
+
+    private static function resolveBuiltInCustomSlug($customSlug)
+    {
+        $map = self::getBuiltInCustomSlugMap();
+        $key = strtolower(trim((string) $customSlug));
+        if ($key === '') {
+            return false;
+        }
+
+        if (isset($map[$key])) {
+            return [
+                'urlrewrite_custom' => $key,
+                'urlrewrite_original' => $map[$key],
+            ];
+        }
+
+        /* Direct system route fallback when tbl_url_rewrite rows are missing (e.g. guest-user/forgot-password-form). */
+        if (self::isDirectFrontendRoutePath($key)) {
+            return [
+                'urlrewrite_custom' => $key,
+                'urlrewrite_original' => $key,
+            ];
+        }
+
+        return false;
+    }
+
+    /**
+     * Single-segment system URLs (faqs, contact-us) must not 301 to homepage.
+     */
+    private static function isBuiltInSystemCustomSlug($slug)
+    {
+        if ($slug === '' || strpos($slug, '/') !== false) {
+            return false;
+        }
+
+        return isset(self::getBuiltInCustomSlugMap()[strtolower($slug)]);
     }
 }

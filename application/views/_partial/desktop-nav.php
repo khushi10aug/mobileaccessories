@@ -1,7 +1,28 @@
+<?php
+if (!isset($controllerName)) {
+    $controllerName = LibHelper::getControllerName();
+}
+?>
 <!-- Start Navigation Bar -->
 <div class="navigation-wrapper">
     <ul class="navigation">
-        <?php if ($isMegaMenuEnabled == Navigations::LAYOUT_MEGA_MENU) { ?>
+        <?php
+        /*if ('Home' == $controllerName) {
+            $quickLinks = [
+                ['label' => Labels::getLabel('LBL_New_Arrivals', $siteLangId), 'url' => UrlHelper::generateUrl('products', 'index', ['sort' => 'newest'])],
+                ['label' => Labels::getLabel('LBL_Best_Sellers', $siteLangId), 'url' => UrlHelper::generateUrl('products', 'index', ['sort' => 'popular'])],
+                ['label' => Labels::getLabel('LBL_Bulk_Deals', $siteLangId), 'url' => UrlHelper::generateUrl('products', 'index')]
+            ];
+            ?>
+        <li class="wholesale-nav-pills-wrapper">
+            <ul class="wholesale-nav-pills">
+                <?php foreach ($quickLinks as $link) { ?>
+                    <li><a class="wholesale-nav-pills__link" href="<?php echo $link['url']; ?>"><?php echo $link['label']; ?></a></li>
+                <?php } ?>
+            </ul>
+        </li>
+        <?php }*/
+        if ($isMegaMenuEnabled == Navigations::LAYOUT_MEGA_MENU) { ?>
             <li>
                 <button class="hamburger-categories dropdown-toggle-custom" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#categories-menu" aria-controls="categories-menu" onclick="openMobileMenu();">

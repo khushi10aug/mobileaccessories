@@ -74,7 +74,7 @@ class HomeController extends MyAppController
             $this->_template->render();
             die;
         } else {
-            $slides = $this->getSlides(1);
+            $slides = $this->getSlides();
             $this->set('slides', $slides);
         }
 
@@ -85,6 +85,7 @@ class HomeController extends MyAppController
         }
 
         $this->_template->addJs(['js/slick.min.js', 'js/slick-carousels.js']);
+        $this->_template->addCss('css/wholesale.css');
         $geoAddress = Address::getYkGeoData();
         $cacheKey = $this->siteLangId . '-' . CommonHelper::getCurrencyId() . '-' . serialize($geoAddress);
         $cacheKey .= FatApp::getConfig('LAST_FAV_MARK_TIME', FatUtility::VAR_INT, 0);
@@ -102,7 +103,7 @@ class HomeController extends MyAppController
                         $tpl->set('slides', $slides);
                     }
                     $tpl->set('fullWidth', $collection['collection_full_width']);
-                    $sponsoredProdsLayout = $tpl->render(false, false, '_partial/homePageSlides.php', true, true);
+                    $sponsoredProdsLayout = $tpl->render(false, false, '_partial/wholesale/home-hero-with-categories.php', true, true);
                     $collectionTemplates[$collection['collection_id']]['html'] = $sponsoredProdsLayout;
                     break;
                 case Collections::TYPE_SPONSORED_PRODUCT_LAYOUT:

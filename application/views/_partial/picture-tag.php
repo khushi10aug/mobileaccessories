@@ -15,6 +15,9 @@ $title = isset($title) ? htmlspecialchars_decode($title) : $alt;
     <?php
     $emptyWebpUrlCount = 0;
     $webpItmesCount =  count($webpImageUrl);
+    if (!function_exists('imagewebp') || $_SERVER['HTTP_HOST'] === 'beta.mobileaccessories.in') {
+        $webpImageUrl = [];
+    }
     foreach ($webpImageUrl as $key => $url) {
         if (empty($url)) {
             $emptyWebpUrlCount++;

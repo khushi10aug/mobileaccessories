@@ -829,7 +829,7 @@ class ProductCategory extends MyAppModel
         return $treeArr;
     }
 
-    public static function getProdCatParentChildWiseArr(int $langId = 0, int $parentId = 0, bool $includeChildCat = true, bool $forSelectBox = false, bool $sortByName = false, $prodCatSrchObj = false, bool $excludeCategoriesHavingNoProducts = false)
+    public static function getProdCatParentChildWiseArr(int $langId = 0, int $parentId = 0, bool $includeChildCat = true, bool $forSelectBox = false, bool $sortByName = false, $prodCatSrchObj = false, bool $excludeCategoriesHavingNoProducts = false, bool $requireInStockProducts = false)
     {
         $cacheKey = '';
         if (!is_object($prodCatSrchObj)) {
@@ -864,6 +864,9 @@ class ProductCategory extends MyAppModel
             $prodSrchObj->addSubscriptionValidCondition();
             $prodSrchObj->addMultipleFields(array('product_id'));
             $prodSrchObj->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+            if ($requireInStockProducts) {
+                $prodSrchObj->excludeOutOfStockProducts();
+            }
             $prodSrchObj->addGroupBy('product_id');
 
             $prodCatSrch->joinProductCategoryRelations();
@@ -894,7 +897,7 @@ class ProductCategory extends MyAppModel
                 $categoriesArr[$key]['isLastChildCategory'] = ($cat['prodcat_has_child']) ? 0 : 1;
                 $categoriesArr[$key]['icon'] = UrlHelper::generateFullUrl('Category', 'icon', array($cat['prodcat_id'], $langId, 'COLLECTION_PAGE')) . $uploadedTime;
                 $categoriesArr[$key]['image'] = UrlHelper::generateFullUrl('Category', 'banner', array($cat['prodcat_id'], $langId, 'MOBILE', applicationConstants::SCREEN_MOBILE)) . $uploadedTime;
-                $categoriesArr[$key]['children'] = self::getProdCatParentChildWiseArr($langId, $cat['prodcat_id'], $includeChildCat, $forSelectBox, $sortByName, $prodCatSrchObj, $excludeCategoriesHavingNoProducts);
+                $categoriesArr[$key]['children'] = self::getProdCatParentChildWiseArr($langId, $cat['prodcat_id'], $includeChildCat, $forSelectBox, $sortByName, $prodCatSrchObj, $excludeCategoriesHavingNoProducts, $requireInStockProducts);
             }
         }
 
@@ -911,6 +914,25 @@ class ProductCategory extends MyAppModel
             trigger_error(Labels::getLabel('ERR_LANGUAGE_NOT_SPECIFIED', $langId), E_USER_ERROR);
         }
         return static::getProdCatParentChildWiseArr($langId, 0, false, true);
+    }
+
+    /**
+     * Remove parent categories whose children were all filtered out (e.g. no in-stock products).
+     */
+    public static function pruneEmptyParentCategories(array $categories): array
+    {
+        $pruned = [];
+        foreach ($categories as $cat) {
+            if (!empty($cat['children'])) {
+                $cat['children'] = self::pruneEmptyParentCategories($cat['children']);
+            }
+            $hasChildCategories = !empty($cat['children']);
+            $isLeaf = empty($cat['prodcat_has_child']);
+            if ($isLeaf || $hasChildCategories) {
+                $pruned[] = $cat;
+            }
+        }
+        return $pruned;
     }
 
     public function canRecordMarkDelete($prodcat_id)

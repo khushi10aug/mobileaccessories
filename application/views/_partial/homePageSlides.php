@@ -1,44 +1,54 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-if (isset($slides) && count($slides)) { ?>
+
+$embeddedInWholesaleHero = !empty($embeddedInWholesaleHero);
+if (!isset($slides) || !count($slides)) {
+    return;
+}
+
+$openSection = !$embeddedInWholesaleHero;
+$useContainer = !$embeddedInWholesaleHero && 0 == ($fullWidth ?? 0);
+$sliderClass = 'js-hero-slider hero-slider ';
+$sliderClass .= $embeddedInWholesaleHero ? 'hero-slider-embedded' : ((0 < ($fullWidth ?? 0)) ? 'hero-slider-full' : 'hero-slider-fixed');
+
+if ($openSection) { ?>
     <section class="jsSliderSection" data-width="<?php echo $fullWidth; ?>" data-section="hero-slides">
-        <?php if (0 == $fullWidth) { ?>
-            <div class="container">
-            <?php } ?>
-            <div class="js-hero-slider hero-slider <?php echo (0 < $fullWidth) ? 'hero-slider-full' : 'hero-slider-fixed' ?>" dir="<?php echo CommonHelper::getLayoutDirection(); ?> ">
+<?php }
+if ($useContainer) { ?>
+        <div class="container">
+<?php } ?>
+            <div class="<?php echo $sliderClass; ?>"<?php echo $embeddedInWholesaleHero ? ' id="wholesaleHeroSlider"' : ''; ?> dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php foreach ($slides as $slide) {
                     $desktopUrl = $desktopWebpUrl = '';
                     $tabletUrl = $tabletWebpUrl = '';
                     $mobileUrl = $mobileWebpUrl = '';
                     $haveUrl = ($slide['slide_url'] != '') ? true : false;
-                    $defaultUrl = '';
                     $slideArr = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $slide['slide_id'], 0, $siteLangId);
                     if (!$slideArr) {
                         continue;
-                    } else {
-                        foreach ($slideArr as $slideScreen) {
-                            $uploadedTime = AttachedFile::setTimeParam($slideScreen['afile_updated_at']);
-                            switch ($slideScreen['afile_screen']) {
-                                case applicationConstants::SCREEN_MOBILE:
-                                    $mobileUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_MOBILE, $siteLangId, ImageDimension::VIEW_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                                    $mobileWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_MOBILE, $siteLangId, "WEBP" . ImageDimension::VIEW_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
-                                    break;
-                                case applicationConstants::SCREEN_IPAD:
-                                    $tabletUrl = UrlHelper::getCachedUrl(
-                                        UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_IPAD, $siteLangId, ImageDimension::VIEW_TABLET)) . $uploadedTime,
-                                        CONF_IMG_CACHE_TIME,
-                                        '.jpg'
-                                    );
-                                    $tabletWebpUrl = UrlHelper::getCachedUrl(
-                                        UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_IPAD, $siteLangId, "WEBP" . ImageDimension::VIEW_TABLET)) . $uploadedTime,
-                                        CONF_IMG_CACHE_TIME,
-                                        '.webp'
-                                    );
-                                    break;
-                                case applicationConstants::SCREEN_DESKTOP:
-                                    $desktopUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_DESKTOP, $siteLangId, ImageDimension::VIEW_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                                    $desktopWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_DESKTOP, $siteLangId, "WEBP" . ImageDimension::VIEW_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
-                                    break;
-                            }
+                    }
+                    foreach ($slideArr as $slideScreen) {
+                        $uploadedTime = AttachedFile::setTimeParam($slideScreen['afile_updated_at']);
+                        switch ($slideScreen['afile_screen']) {
+                            case applicationConstants::SCREEN_MOBILE:
+                                $mobileUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_MOBILE, $siteLangId, ImageDimension::VIEW_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                $mobileWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_MOBILE, $siteLangId, "WEBP" . ImageDimension::VIEW_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
+                                break;
+                            case applicationConstants::SCREEN_IPAD:
+                                $tabletUrl = UrlHelper::getCachedUrl(
+                                    UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_IPAD, $siteLangId, ImageDimension::VIEW_TABLET)) . $uploadedTime,
+                                    CONF_IMG_CACHE_TIME,
+                                    '.jpg'
+                                );
+                                $tabletWebpUrl = UrlHelper::getCachedUrl(
+                                    UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_IPAD, $siteLangId, "WEBP" . ImageDimension::VIEW_TABLET)) . $uploadedTime,
+                                    CONF_IMG_CACHE_TIME,
+                                    '.webp'
+                                );
+                                break;
+                            case applicationConstants::SCREEN_DESKTOP:
+                                $desktopUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_DESKTOP, $siteLangId, ImageDimension::VIEW_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                $desktopWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_DESKTOP, $siteLangId, "WEBP" . ImageDimension::VIEW_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
+                                break;
                         }
                     }
 
@@ -48,7 +58,6 @@ if (isset($slides) && count($slides)) { ?>
 
                     $imageDimension = ImageDimension::getData(ImageDimension::TYPE_SLIDE);
 
-
                     $out = '<div class="hero-slider-item" role="group">';
                     if ($haveUrl) {
                         if ($slide['promotion_id'] > 0) {
@@ -56,8 +65,6 @@ if (isset($slides) && count($slides)) { ?>
                         } else {
                             $slideUrl = CommonHelper::processUrlString($slide['slide_url']);
                         }
-                    }
-                    if ($haveUrl) {
                         $out .= '<a target="' . $slide['slide_target'] . '" href="' . $slideUrl . '">';
                     }
                     $out .= '<div class="hero-slider-media">';
@@ -68,6 +75,7 @@ if (isset($slides) && count($slides)) { ?>
                         'imageUrl' => $desktopUrl,
                         'ratio' => $imageDimension[ImageDimension::VIEW_DESKTOP]['aspectRatio'],
                         'alt' => $slide['slide_title'],
+                        'lazyLoading' => !$embeddedInWholesaleHero,
                     ];
                     $out .= $this->includeTemplate('_partial/picture-tag.php', $pictureAttr, true, true);
                     $out .= '</div>';
@@ -81,8 +89,9 @@ if (isset($slides) && count($slides)) { ?>
                     }
                 } ?>
             </div>
-            <?php if (0 == $fullWidth) { ?>
-            </div>
-        <?php } ?>
+<?php if ($useContainer) { ?>
+        </div>
+<?php }
+if ($openSection) { ?>
     </section>
 <?php } ?>

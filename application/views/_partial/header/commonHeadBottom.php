@@ -46,7 +46,7 @@
 
 </head>
 <?php
-$bodyClass = ($controllerName == 'Home') ? 'home' : 'inner';
+$bodyClass = ($controllerName == 'Home') ? 'home wholesale-theme' : 'inner';
 if ($controllerName == 'Blog') {
     $bodyClass = 'is--blog';
 }

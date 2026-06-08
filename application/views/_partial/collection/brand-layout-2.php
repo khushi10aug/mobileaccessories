@@ -1,7 +1,7 @@
 <?php if (isset($collection['brands']) && count($collection['brands']) > 0) { ?>
     <section class="section" data-section="section">
         <div class="container">
-            <header class="section-head section-head-center">
+            <header class="section-head section-head-center1">
                 <?php echo ($collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
             </header>
             <div class="section-body">

@@ -59,7 +59,7 @@ if (isset($is_product) && $is_product > 0) {
             '@type' => 'BreadcrumbList',
             'itemListElement' => $breadcrumbItems
         ];
-        ?>
+        ?> 
         <script type="application/ld+json">
         <?php
         echo json_encode(

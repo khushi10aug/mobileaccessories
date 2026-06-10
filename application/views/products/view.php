@@ -18,7 +18,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
                 </div>
             </div>
         </div>
-    </section>
+    </section> 
     <div class="relatedProductsSectionJs"></div>
     <section class="section" data-section="section">
         <div class="container">

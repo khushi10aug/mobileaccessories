@@ -94,33 +94,174 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
 </script>
 
 <!-- Product Schema Code -->
+
 <?php
-$image = AttachedFile::getAttachment(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']); ?>
-<script type="application/ld+json">
-{
-    "@context": "http://schema.org",
-    "@type": "Product",
-    <?php if (isset($reviews['prod_rating']) && 0 < $reviews['prod_rating']) { ?> "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "<?php echo round(FatUtility::convertToType($reviews['prod_rating'], FatUtility::VAR_FLOAT), 1); ?>",
-                "reviewCount": "<?php echo FatUtility::int($reviews['totReviews']); ?>"
-            },
-    <?php } ?> "description": "<?php echo strip_tags(CommonHelper::renderHtml($product['product_description'])); ?>",
-    "name": "<?php echo $product['selprod_title']; ?>",
-    <?php if (isset($product['brand_name']) && $product['brand_name'] != '') { ?> "brand": "<?php echo $product['brand_name']; ?>",
-    <?php } ?>
-    <?php if (isset($product['selprod_sku']) && $product['selprod_sku'] != '') { ?> "sku": "<?php echo $product['selprod_sku']; ?>",
-    <?php } ?> "image": "<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, 0, $image['afile_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>",
-    "offers": {
-        "@type": "Offer",
-        "availability": "http://schema.org/InStock",
-        "price": "<?php echo $product['theprice']; ?>",
-        "url": "<?php echo UrlHelper::generateFullUrl('Products', 'view', [$product['selprod_id']]); ?>",
-        "priceCurrency": "<?php echo CommonHelper::getCurrencyCode(); ?>"
+
+$image = AttachedFile::getAttachment(
+    AttachedFile::FILETYPE_PRODUCT_IMAGE,
+    $product['product_id']
+);
+
+$imageUrl = UrlHelper::getCachedUrl(
+    UrlHelper::generateFullFileUrl(
+        'Image',
+        'product',
+        [
+            $product['product_id'],
+            ImageDimension::VIEW_THUMB,
+            0,
+            $image['afile_id']
+        ]
+    ),
+    CONF_IMG_CACHE_TIME,
+    '.jpg'
+);
+$imageUrl = [];
+if ($productImagesArr) {
+    foreach ($productImagesArr as $afile_id => $image) {
+        $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
+        $imageUrl[] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+
     }
 }
+
+$productUrl = UrlHelper::generateFullUrl(
+    'Products',
+    'view',
+    [$product['selprod_id']]
+);
+
+$description = strip_tags(
+    CommonHelper::renderHtml($product['product_description'])
+);
+$description = preg_replace('/\s+/', ' ', $description);
+$description = trim($description);
+
+$schema = [
+    '@context' => 'https://schema.org/',
+    '@type' => 'Product',
+    'name' => $product['selprod_title'],
+    'description' => $description,
+    'image' => $imageUrl,
+    'url' => $productUrl,
+];
+
+/* SKU */
+if (!empty($product['selprod_sku'])) {
+    $schema['sku'] = $product['selprod_sku'];
+}
+
+/* MPN */
+if (!empty($product['product_model'])) {
+    $schema['mpn'] = $product['product_model'];
+}
+
+/* Brand */
+if (!empty($product['brand_name'])) {
+    $schema['brand'] = [
+        '@type' => 'Brand',
+        'name' => $product['brand_name']
+    ];
+}
+$schema['hasMerchantReturnPolicy'] = [
+    '@type' => 'MerchantReturnPolicy',
+    "returnPolicyCategory"=> "https://schema.org/MerchantReturnFiniteReturnWindow",
+    "merchantReturnDays"=> 7,
+    "merchantReturnLink"=> "https://www.mobileaccessories.in/return-policy",
+    "applicableCountry"=> "IN",
+    "returnFees"=> "https://schema.org/FreeReturn",
+    "returnMethod"=> "https://schema.org/ReturnByMail",
+    "refundType"=> "https://schema.org/FullRefund",
+    "itemCondition"=> "https://schema.org/NewCondition",
+    "returnPolicySeasonalOverride"=> false
+];
+$schema['shippingDetails'] = [
+    "@type"=> "OfferShippingDetails",
+    "shippingRate"=> "Customized Shipping As per Convenience"
+];
+/* Offers */
+$schema['offers'] = [
+    '@type' => 'Offer',
+    'url' => $productUrl,
+    'priceCurrency' => CommonHelper::getCurrencyCode(),
+    'price' => (string)$product['theprice'],
+    'priceValidUntil' => date('Y-m-d', strtotime('+1 year')),
+    'availability' => 'https://schema.org/InStock',
+    'itemCondition' => 'https://schema.org/NewCondition',
+    'seller' => [
+        '@type' => 'Organization',
+        'name' => FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId)
+    ],
+];
+
+/* Aggregate Rating */
+if (
+    isset($reviews['prod_rating']) &&
+    $reviews['prod_rating'] > 0 &&
+    !empty($reviews['totReviews'])
+) {
+    $schema['aggregateRating'] = [
+        '@type' => 'AggregateRating',
+        'ratingValue' => round((float)$reviews['prod_rating'], 1),
+        'reviewCount' => (int)$reviews['totReviews'],
+        'bestRating' => 5,
+        'worstRating' => 1
+    ];
+}
+
+/* Additional Properties */
+$schema['additionalProperty'] = [];
+
+if (!empty($product['brand_name'])) {
+    $schema['additionalProperty'][] = [
+        '@type' => 'PropertyValue',
+        'name' => 'Brand',
+        'value' => $product['brand_name']
+    ];
+}
+
+if (!empty($product['selprod_sku'])) {
+    $schema['additionalProperty'][] = [
+        '@type' => 'PropertyValue',
+        'name' => 'SKU',
+        'value' => $product['selprod_sku']
+    ];
+}
+
+/* Optional compatibility field */
+if (!empty($product['product_short_description'])) {
+    $sdescription = strip_tags(
+        CommonHelper::renderHtml($product['product_short_description'])
+    );
+    $sdescription = preg_replace('/\s+/', ' ', $sdescription);
+    $sdescription = trim($sdescription);
+    
+    $schema['additionalProperty'][] = [
+        '@type' => 'PropertyValue',
+        'name' => 'Short Description',
+        'value' => $sdescription
+    ];
+}
+
+?>
+
+<script type="application/ld+json">
+<?php
+echo json_encode(
+    $schema,
+    JSON_UNESCAPED_SLASHES |
+    JSON_UNESCAPED_UNICODE |
+    JSON_PRETTY_PRINT
+);
+?>
 </script>
 
+
+
+<!----------------------->
+
+<?php 
+$image = AttachedFile::getAttachment(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']); ?>
 <!-- End Product Schema Code -->
 
 <!--Here is the facebook OG for this product  -->

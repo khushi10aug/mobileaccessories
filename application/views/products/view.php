@@ -9,7 +9,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <div class="breadcrumb">
-                        <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php'); ?>
+                        <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php',['is_product'=>1,'product'=>$product]); ?>
                     </div>
                     <div class="detail-first-fold">
                         <?php include ('product-detail-gallery.php'); ?>
@@ -256,9 +256,6 @@ echo json_encode(
 ?>
 </script>
 
-
-
-<!----------------------->
 
 <?php 
 $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']); ?>

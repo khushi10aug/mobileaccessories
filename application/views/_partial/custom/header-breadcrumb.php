@@ -14,3 +14,63 @@
         }
     } ?>
 </ul>
+
+
+<!-- Product BreadcrumbList Schema -->
+<?php
+
+if (isset($is_product) && $is_product > 0) {
+
+    $breadcrumbItems = [];
+    $position = 1;
+
+    $nodes = $this->variables['nodes'] ?? [];
+    $totalNodes = count($nodes);
+
+    foreach ($nodes as $index => $node) {
+
+        $item = [
+            '@type' => 'ListItem',
+            'position' => $position++,
+            'name' => html_entity_decode(
+                strip_tags($node['title']),
+                ENT_QUOTES,
+                'UTF-8'
+            )
+        ];
+
+        if (!empty($node['href'])) {
+            $item['item'] = UrlHelper::generateFullUrl() . ltrim($node['href'], '/');
+        } elseif ($index === ($totalNodes - 1)) {
+            // Last breadcrumb (Product)
+            $item['item'] = UrlHelper::generateFullUrl(
+                'Products',
+                'view',
+                [$product['selprod_id']]
+            );
+        }
+
+        $breadcrumbItems[] = $item;
+    }
+
+    if (!empty($breadcrumbItems)) {
+        $breadcrumbSchema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => $breadcrumbItems
+        ];
+        ?>
+        <script type="application/ld+json">
+        <?php
+        echo json_encode(
+            $breadcrumbSchema,
+            JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+        );
+        ?>
+        </script>
+        <?php
+    }
+}
+?>
+
+<!----------------------->

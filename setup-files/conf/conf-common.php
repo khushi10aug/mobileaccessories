@@ -34,7 +34,9 @@ define('S3_KEY', '');
 define('S3_SECRET', '');
 define('S3_REGION', 'us-east-2');
 
-/*CDN sub domain url which points to site document root*/
+/*CDN sub domain url which points to site document root.
+  Example: https://cdn.example.com  (no trailing slash)
+  When set, UrlHelper::getCachedUrl / generateFileUrl / getStaticAssetUrl prepend this domain.*/
 define('CDN_DOMAIN_URL', '');
 
 define('ALLOW_EMAILS', (strpos(($_SERVER['SERVER_NAME']), '4livedemo.com') > 0) ? false : true);

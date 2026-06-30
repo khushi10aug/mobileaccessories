@@ -15,11 +15,10 @@ class StaticFileServer {
 			exit;
 		}
 		
-		header('Cache-Control: public');
-		header("Pragma: public");
-		
-		header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($path)).' GMT', true, 200);
-		header("Expires: " . date('r', strtotime("+30 Day")), true);
+        header('Cache-Control: public, max-age=31536000, stale-while-revalidate=604800');
+        header("Pragma: public");
+        header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($path)).' GMT', true, 200);
+        header("Expires: " . date('r', strtotime("+1 year")));
 		
 		readfile($path);
 		

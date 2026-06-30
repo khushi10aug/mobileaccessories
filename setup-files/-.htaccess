@@ -19,7 +19,18 @@ RewriteRule ^app-api/(.*)/dashboard/(.*)$ /dashboard/app-api/$1/$2 [L]
 	Header unset ETag
     Header set X-Frame-Options "sameorigin"
     Header set X-XSS-Protection "1; mode=block"
-    #Header set X-Content-Type-Options "nosniff"    
+    #Header set X-Content-Type-Options "nosniff"
+
+    # Long-lived cache for static assets (busted via ?t= / ?sid= query params)
+    <FilesMatch "\.(css|js|mjs)$">
+        Header set Cache-Control "public, max-age=31536000, stale-while-revalidate=604800"
+    </FilesMatch>
+    <FilesMatch "\.(ico|gif|jpe?g|png|webp|svg|avif|woff2?|ttf|otf|eot)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    <FilesMatch "\.(pdf|map)$">
+        Header set Cache-Control "public, max-age=2592000"
+    </FilesMatch>
 </IfModule>
 
 <IfModule mod_headers.c>
@@ -50,10 +61,18 @@ ExpiresByType image/jpeg "access 1 year"
 ExpiresByType image/gif "access 1 year"
 ExpiresByType image/png "access 1 year"
 ExpiresByType image/svg+xml "access 1 year"
-ExpiresByType text/css "access 1 month"
+ExpiresByType image/webp "access 1 year"
+ExpiresByType image/avif "access 1 year"
+ExpiresByType text/css "access 1 year"
+ExpiresByType application/javascript "access 1 year"
+ExpiresByType text/javascript "access 1 year"
 ExpiresByType application/pdf "access 1 month"
-ExpiresByType text/x-javascript "access 1 month"
+ExpiresByType text/x-javascript "access 1 year"
 ExpiresByType application/x-shockwave-flash "access 1 month"
+ExpiresByType font/woff2 "access 1 year"
+ExpiresByType font/woff "access 1 year"
+ExpiresByType application/font-woff2 "access 1 year"
+ExpiresByType application/font-woff "access 1 year"
 ExpiresByType image/x-icon "access 1 year"
 ExpiresDefault "access 2 days"
 </IfModule>

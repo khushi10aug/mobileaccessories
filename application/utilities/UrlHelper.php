@@ -115,6 +115,33 @@ class UrlHelper extends FatUtility
         return $url;
     }
 
+    /**
+     * Build a cache-busted URL for files under /public (images, fonts, sprites, etc.).
+     * Uses filemtime by default; pass $cacheBust to override (e.g. RELEASE_DATE).
+     */
+    public static function getStaticAssetUrl(string $path, $cacheBust = null): string
+    {
+        $path = ltrim(str_replace('\\', '/', $path), '/');
+        $url = CONF_WEBROOT_URL . $path;
+
+        if (null === $cacheBust) {
+            $fullPath = CONF_INSTALLATION_PATH . 'public/' . $path;
+            if (is_file($fullPath)) {
+                $cacheBust = filemtime($fullPath);
+            }
+        }
+
+        if (!empty($cacheBust)) {
+            $url .= (false === strpos($url, '?') ? '?' : '&') . 't=' . rawurlencode((string) $cacheBust);
+        }
+
+        if (CDN_DOMAIN_URL != '') {
+            return rtrim(CDN_DOMAIN_URL, '/') . '/' . ltrim($url, '/');
+        }
+
+        return $url;
+    }
+
     public static function getAsFileUrl(string $key, int $expiry = null, string $extension = '')
     {
         return FatCache::getAsFileUrl($key, $expiry, $extension);

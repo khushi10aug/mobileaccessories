@@ -80,12 +80,12 @@ class FatTemplate
                 if ($mergeFiles) {
                     $last_updated = max($last_updated, $time);
                 } else {
-                    $str .= '<link rel="stylesheet" type="text/css" href="' . FatUtility::generateUrl('JsCss', 'cssCommon', array(), $use_root_url, false) . '&f=' . rawurlencode($fl) . '&min=0&sid=' . $time . '" />' . "\n";
+                    $str .= '<link rel="stylesheet" type="text/css" href="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('JsCss', 'cssCommon', array(), $use_root_url, false) . '&f=' . rawurlencode($fl) . '&min=0&sid=' . $time, CONF_DEF_CACHE_TIME, '.css') . '" />' . "\n";
                 }
             }
 
             if ($mergeFiles) {
-                $str .= '<link rel="stylesheet" type="text/css" href="' . FatUtility::generateUrl('JsCss', 'cssCommon', array(), $use_root_url, false) . '&min=1&sid=' . $last_updated . '" />' . "\n";
+                $str .= '<link rel="stylesheet" type="text/css" href="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('JsCss', 'cssCommon', array(), $use_root_url, false) . '&min=1&sid=' . $last_updated, CONF_DEF_CACHE_TIME, '.css') . '" />' . "\n";
             }
         }
 
@@ -97,11 +97,11 @@ class FatTemplate
                 if ($mergeFiles) {
                     $last_updated = max($last_updated, $time);
                 } else {
-                    $str .= '<link rel="stylesheet" type="text/css" href="' . FatUtility::generateUrl('JsCss', 'css', array(), $use_root_url, false) . '&f=' . rawurlencode($val) . '&min=0&sid=' . $time . '" />' . "\n";
+                    $str .= '<link rel="stylesheet" type="text/css" href="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('JsCss', 'css', array(), $use_root_url, false) . '&f=' . rawurlencode($val) . '&min=0&sid=' . $time, CONF_DEF_CACHE_TIME, '.css') . '" />' . "\n";
                 }
             }
             if ($mergeFiles) {
-                $str .= '<link rel="stylesheet" type="text/css" href="' . FatUtility::generateUrl('JsCss', 'css', array(), $use_root_url, false) . '&f=' . rawurlencode(implode(',', $this->arr_page_css)) . '&min=1&sid=' . $last_updated . '" />' . "\n";
+                $str .= '<link rel="stylesheet" type="text/css" href="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('JsCss', 'css', array(), $use_root_url, false) . '&f=' . rawurlencode(implode(',', $this->arr_page_css)) . '&min=1&sid=' . $last_updated, CONF_DEF_CACHE_TIME, '.css') . '" />' . "\n";
             }
         }
 

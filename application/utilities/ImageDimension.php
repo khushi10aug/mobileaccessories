@@ -957,4 +957,30 @@ class ImageDimension extends FatUtility
 
         return $arr[$key];
     }
+
+    public static function buildPictureSrcset(array $urls, int $dimensionType, array $sizeTypes = []): string
+    {
+        $parts = [];
+        foreach ($urls as $key => $url) {
+            if (empty($url)) {
+                continue;
+            }
+            $key = strtoupper($key);
+            $sizeType = $sizeTypes[$key] ?? $key;
+            $dims = self::getData($dimensionType, $sizeType);
+            $width = (int) ($dims[self::WIDTH] ?? 0);
+            $parts[] = (0 < $width) ? rtrim($url, ',') . ' ' . $width . 'w' : rtrim($url, ',');
+        }
+
+        return implode(', ', $parts);
+    }
+
+    public static function getPictureSizes(string $sizes = ''): string
+    {
+        if ('' !== $sizes) {
+            return $sizes;
+        }
+
+        return '(max-width: 576px) 50vw, (max-width: 1199px) 33vw, 400px';
+    }
 }

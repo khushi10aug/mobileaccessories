@@ -31,7 +31,12 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                                             $pictureAttr = [
                                                 'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBP" . ImageDimension::VIEW_MOBILE, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp')],
                                                 'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_MOBILE, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg')],
-                                                'ratio' => '1:1',
+                                                'dimensionType' => ImageDimension::TYPE_PRODUCTS,
+                            'dimensionSize' => ImageDimension::VIEW_MOBILE,
+                            'sizeTypes' => [
+                                ImageDimension::VIEW_DESKTOP => ImageDimension::VIEW_MOBILE,
+                            ],
+                            'ratio' => '1:1',
                                                 'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_MOBILE, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                                                 'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $product['prodcat_name'],
                                                 'siteLangId' => $siteLangId,

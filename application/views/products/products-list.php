@@ -63,6 +63,13 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                                             ImageDimension::VIEW_TABLET => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                                             ImageDimension::VIEW_MOBILE => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_MOBILE, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg')
                                         ],
+                                        'dimensionType' => ImageDimension::TYPE_PRODUCTS,
+                                        'dimensionSize' => ImageDimension::VIEW_CLAYOUT1,
+                                        'sizeTypes' => [
+                                            ImageDimension::VIEW_MOBILE => ImageDimension::VIEW_MOBILE,
+                                            ImageDimension::VIEW_TABLET => ImageDimension::VIEW_SMALL,
+                                            ImageDimension::VIEW_DESKTOP => ImageDimension::VIEW_CLAYOUT1,
+                                        ],
                                         'ratio' => '1:1',
                                         'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_CLAYOUT1, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                                         'siteLangId' => $siteLangId,

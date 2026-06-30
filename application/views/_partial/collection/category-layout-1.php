@@ -83,10 +83,17 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                                                         $pictureAttr = [
                                                             'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBP" . ImageDimension::VIEW_CLAYOUT2, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp')],
                                                             'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_CLAYOUT2, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg')],
-                                                            'ratio' => '1:1',
+                                                            'dimensionType' => ImageDimension::TYPE_PRODUCTS,
+                            'dimensionSize' => ImageDimension::VIEW_CLAYOUT2,
+                            'sizeTypes' => [
+                                ImageDimension::VIEW_DESKTOP => ImageDimension::VIEW_CLAYOUT2,
+                            ],
+                            'ratio' => '1:1',
                                                             'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_CLAYOUT2, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                                                             'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $product['prodcat_name'],
                                                             'siteLangId' => $siteLangId,
+                                                            'lazyLoading' => (1 !== $i),
+                                                            'fetchPriority' => (1 === $i) ? 'high' : '',
                                                         ];
 
                                                         $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);

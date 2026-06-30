@@ -66,6 +66,16 @@ if (isset($slides) && count($slides)) { ?>
                         'webpImageUrl' => [ImageDimension::VIEW_MOBILE => $mobileWebpUrl, ImageDimension::VIEW_TABLET => $tabletWebpUrl, ImageDimension::VIEW_DESKTOP => $desktopWebpUrl],
                         'jpgImageUrl' => [ImageDimension::VIEW_MOBILE => $mobileUrl, ImageDimension::VIEW_TABLET => $tabletUrl, ImageDimension::VIEW_DESKTOP => $desktopUrl],
                         'imageUrl' => $desktopUrl,
+                        'dimensionType' => ImageDimension::TYPE_SLIDE,
+                        'dimensionSize' => ImageDimension::VIEW_DESKTOP,
+                        'sizeTypes' => [
+                            ImageDimension::VIEW_MOBILE => ImageDimension::VIEW_MOBILE,
+                            ImageDimension::VIEW_TABLET => ImageDimension::VIEW_TABLET,
+                            ImageDimension::VIEW_DESKTOP => ImageDimension::VIEW_DESKTOP,
+                        ],
+                        'sizes' => '100vw',
+                        'lazyLoading' => false,
+                        'fetchPriority' => 'high',
                         'ratio' => $imageDimension[ImageDimension::VIEW_DESKTOP]['aspectRatio'],
                         'alt' => $slide['slide_title'],
                     ];

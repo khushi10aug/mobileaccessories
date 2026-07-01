@@ -501,4 +501,17 @@
 }
 .supplier-pkg-plans .text-decoration-line-through{
 	margin-right: 4px;
+}.product-sharing .via-social-sharing-link {
+    padding: 0.6rem 0.75rem;
+    display: block;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    color: currentColor;
+    padding: 0.6rem 10.2px 0.75rem;
+    display: block;
+    background-color: transparent;
+    position: relative;
+    overflow: hidden;
 }

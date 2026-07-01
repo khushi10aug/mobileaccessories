@@ -18,7 +18,7 @@ $additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'directi
 <head>
     <!-- Yo!Kart -->
     <meta charset="utf-8">
-    <meta name="author" content="">
+    <!--meta name="author" content=""-->
     <!-- Mobile Specific Metas ===================== -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php if (CommonHelper::demoUrl()) {
@@ -63,7 +63,7 @@ $additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'directi
     } else {
         $metaData = $this->writeMetaTags(true);
         $title = isset($metaData['meta_title']) ? $metaData['meta_title'] . ' ' : ' ';
-        $title .= FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '');
+        $title .= ' | '. FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '');
         $description = (isset($metaData['meta_description'])) ? $metaData['meta_description'] : $title;
         $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_META_IMAGE, 0, 0, $siteLangId);
         $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);

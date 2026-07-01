@@ -1483,14 +1483,16 @@ class ProductsController extends MyAppController
             return array();
         }
         $afile_id = FatUtility::int($afile_id);
-        $title = $product['product_name'];
+        $title = trim($product['product_name']);
 
         if ($product['selprod_title']) {
-            $title = $product['selprod_title'];
+            $title = trim($product['selprod_title']);
         }
+        $title .= ' | ' . FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->siteLangId, FatUtility::VAR_STRING, '');
+       // $title = html_entity_decode($title, ENT_QUOTES, 'utf-8');
 
         $product_description = trim(CommonHelper::subStringByWords(strip_tags(CommonHelper::renderHtml($product["product_description"], true)), 500));
-        $product_description .= ' - ' . Labels::getLabel('MSG_SEE_MORE_AT', $this->siteLangId) . ": " . UrlHelper::getCurrUrl();
+        //$product_description .= ' - ' . Labels::getLabel('MSG_SEE_MORE_AT', $this->siteLangId) . ": " . UrlHelper::getCurrUrl();
 
         $productImageUrl = '';
         /* $productImageUrl = UrlHelper::generateFullUrl('Image','product', array($product['product_id'],'', $product['selprod_id'],0,$this->siteLangId )); */

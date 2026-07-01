@@ -57,7 +57,7 @@ class EmailHandler extends FatModel
 
         $emails = array(FatApp::getConfig('CONF_SITE_OWNER_EMAIL'));
 
-        $srch = AdminUsers::getSearchObject();
+        /*$srch = AdminUsers::getSearchObject();
         $srch->addCondition('admin_id', '!=', 'mysql_func_' . Admin::SUPER, 'AND', true);
         $srch->addCondition('admin_email_notification', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         $srch->addMultipleFields(array('admin_id', 'admin_email'));
@@ -77,7 +77,7 @@ class EmailHandler extends FatModel
                     }
                 }
             }
-        }
+        }*/
 
         $additonalAlerts = FatUtility::int($additonalAlerts);
         if (0 < $additonalAlerts) {

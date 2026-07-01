@@ -774,6 +774,8 @@ class Cronjob extends FatModel
         $sentCartReminderCount = FatApp::getConfig('CONF_SENT_CART_REMINDER_COUNT', FatUtility::VAR_INT, 2);
         $buyerReminderInterval = FatApp::getConfig('CONF_REMINDER_INTERVAL_PRODUCTS_IN_CART', FatUtility::VAR_INT, 15);
 
+        return true;
+
         $srch = new SearchBase('tbl_user_cart', 'uc');
         $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'u.user_id LIKE usercart_user_id', 'u');
         $srch->joinTable(Credential::DB_TBL, 'INNER JOIN', 'ucr.' . Credential::DB_TBL_PREFIX . 'user_id = u.user_id', 'ucr');

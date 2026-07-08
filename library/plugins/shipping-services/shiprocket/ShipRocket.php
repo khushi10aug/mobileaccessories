@@ -309,7 +309,12 @@ class ShipRocket extends ShippingServicesBase
         }
 
         $resp = $this->getResponse();
-        return $this->channel = current($resp['data']);
+        $channels = is_array($resp['data'] ?? null) ? $resp['data'] : [];
+        if (empty($channels)) {
+            return [];
+        }
+
+        return $this->channel = is_array($channels[0] ?? null) ? $channels[0] : (array) current($channels);
     }
 
     /**
@@ -381,7 +386,12 @@ class ShipRocket extends ShippingServicesBase
         }
 
         $resp = $this->getResponse();
-        return $this->pickups = current($resp['data']);
+        if (!empty($resp['data']['shipping_address']) && is_array($resp['data']['shipping_address'])) {
+            return $this->pickups = $resp['data']['shipping_address'];
+        }
+
+        $pickups = is_array($resp['data'] ?? null) ? $resp['data'] : [];
+        return $this->pickups = is_array($pickups) ? $pickups : [];
     }
 
     /**

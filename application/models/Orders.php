@@ -1510,6 +1510,9 @@ class Orders extends MyAppModel
                 $this->addChildProductOrderHistory($subval["op_id"], $orderInfo['order_language_id'], FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0), '', true);
                 if ($subval['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
                     $emailObj->newDigitalOrderBuyer($orderId, $subval["op_id"], $orderInfo['order_language_id']);
+                } else {
+                    $shippingObj = new Shipping($orderInfo['order_language_id']);
+                    $shippingObj->pushOrderProductToShipping((int) $subval['op_id']);
                 }
             }
 

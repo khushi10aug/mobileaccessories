@@ -138,151 +138,178 @@ class RazorpayPayController extends PaymentController
     public function callback()
     {
         $post = FatApp::getPostedData();
-    
+
         if (empty($post['razorpay_payment_id']) || empty($post['merchant_order_id'])) {
             FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
         }
-    
+
         $razorpay_payment_id = $post['razorpay_payment_id'];
-        $merchant_order_id   = $post['merchant_order_id'];
-    
+        $merchant_order_id   = FatUtility::int($post['merchant_order_id']);
+
         $orderPaymentObj = new OrderPayment($merchant_order_id, $this->siteLangId);
+        $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
+        $successUrl = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo()));
+
+        /* Already paid (refresh / double submit) — send user to success immediately */
+        if (!empty($orderInfo) && (int) $orderInfo['order_payment_status'] !== Orders::ORDER_PAYMENT_PENDING) {
+            FatApp::redirectUser($successUrl);
+        }
+
         $paymentGatewayCharge = $orderPaymentObj->getOrderPaymentGatewayAmount();
-    
         if ($paymentGatewayCharge <= 0) {
             FatUtility::exitWithErrorCode(404);
         }
-    
+
         $success = false;
-        $error   = '';
-        $response_data = ''; // Initialize response data variable
-    
+        $error = '';
+        $response_data = '';
+        $result = '';
+
         try {
-            /* ===============================
-             * STEP 1: FETCH PAYMENT DETAILS
-             * =============================== */
-            $url = 'https://api.razorpay.com/v1/payments/' . $razorpay_payment_id;
-    
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_USERPWD, $this->settings['merchant_key_id'] . ":" . $this->settings['merchant_key_secret']);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 30); // Reduced from 60 to 30 seconds
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10); // Connection timeout
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-    
-            $result = curl_exec($ch);
-            $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            $curl_error = curl_error($ch);
-            curl_close($ch);
-    
-            if ($result === false || !empty($curl_error)) {
-                throw new Exception('Unable to fetch Razorpay payment details: ' . $curl_error);
-            }
-            
-            if ($http_status !== 200) {
-                throw new Exception('Razorpay API returned status code: ' . $http_status);
-            }
-    
-            $payment = json_decode($result, true);
-            
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new Exception('Invalid JSON response from Razorpay');
-            }
-    
-            /* ===============================
-             * STEP 2: CHECK PAYMENT STATUS
-             * =============================== */
-            if ($payment['status'] === 'captured') {
-                // Payment already captured → SUCCESS
+            $payment = $this->razorpayApiRequest('GET', 'https://api.razorpay.com/v1/payments/' . $razorpay_payment_id);
+            $result = $payment['raw'];
+            $paymentData = $payment['body'];
+
+            if ($paymentData['status'] === 'captured') {
                 $success = true;
-                $response_data = $result; // Use payment details response
-    
-            } elseif ($payment['status'] === 'authorized') {
-                // Manual capture required
-                $amount_in_paisa = $paymentGatewayCharge * 100;
-    
-                $capture_url = 'https://api.razorpay.com/v1/payments/' . $razorpay_payment_id . '/capture';
-                $fields_string = "amount=$amount_in_paisa";
-    
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $capture_url);
-                curl_setopt($ch, CURLOPT_USERPWD, $this->settings['merchant_key_id'] . ":" . $this->settings['merchant_key_secret']);
-                curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_TIMEOUT, 30); // Reduced from 60 to 30 seconds
-                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10); // Connection timeout
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-    
-                $capture_result = curl_exec($ch);
-                $capture_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                $capture_curl_error = curl_error($ch);
-                curl_close($ch);
-                
-                if ($capture_result === false || !empty($capture_curl_error)) {
-                    throw new Exception('Razorpay capture request failed: ' . $capture_curl_error);
-                }
-    
-                $capture_response = json_decode($capture_result, true);
-                
-                if (json_last_error() !== JSON_ERROR_NONE) {
-                    throw new Exception('Invalid JSON response from Razorpay capture');
-                }
-    
-                if (
-                    $capture_status === 200 ||
-                    (
-                        isset($capture_response['error']['description']) &&
-                        $capture_response['error']['description'] === 'This payment has already been captured'
-                    )
-                ) {
+                $response_data = $result;
+            } elseif ($paymentData['status'] === 'authorized') {
+                /* Capture only when dashboard uses manual capture */
+                $amount_in_paisa = (int) round($paymentGatewayCharge * 100);
+                $capture = $this->razorpayApiRequest(
+                    'POST',
+                    'https://api.razorpay.com/v1/payments/' . $razorpay_payment_id . '/capture',
+                    'amount=' . $amount_in_paisa
+                );
+                $capture_response = $capture['body'];
+                $alreadyCaptured = (
+                    isset($capture_response['error']['description']) &&
+                    $capture_response['error']['description'] === 'This payment has already been captured'
+                );
+
+                if ($capture['http_status'] === 200 || $alreadyCaptured) {
                     $success = true;
-                    $response_data = $capture_result; // Use capture response
+                    $response_data = $capture['raw'];
                 } else {
-                    $error_msg = isset($capture_response['error']['description']) 
-                        ? $capture_response['error']['description'] 
-                        : 'Razorpay capture failed with status: ' . $capture_status;
-                    $error = $error_msg;
+                    $error = isset($capture_response['error']['description'])
+                        ? $capture_response['error']['description']
+                        : 'Razorpay capture failed with status: ' . $capture['http_status'];
                 }
-    
             } else {
-                $error = 'Payment not successful. Status: ' . $payment['status'];
+                $error = 'Payment not successful. Status: ' . ($paymentData['status'] ?? 'unknown');
             }
-    
         } catch (Exception $e) {
             $success = false;
             $error = $e->getMessage();
         }
-    
-        /* ===============================
-         * STEP 3: FINAL ACTION
-         * =============================== */
-        if ($success === true) {
-    
-            $orderPaymentObj->addOrderPayment(
-                $this->settings["plugin_code"],
-                $razorpay_payment_id,
-                $paymentGatewayCharge,
-                Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId),
-                $response_data ?: $result
-            );
-    
-            FatApp::redirectUser(
-                UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo()))
-            );
-    
-        } else {
-    
+
+        if ($success !== true) {
             $orderPaymentObj->addOrderPaymentComments(
                 $error . ' | Razorpay Payment ID: ' . $razorpay_payment_id
             );
-    
             SystemLog::transaction($error, self::KEY_NAME . "-" . $orderPaymentObj->getOrderNo());
-    
             FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
+        }
+
+        /*
+         * Redirect buyer to success page first, then mark order paid /
+         * send emails in background. addOrderPayment is slow (vendor mail,
+         * buyer mail, rewards, etc.) and was blocking the success page.
+         */
+        $this->redirectAndContinue($successUrl);
+
+        $orderPaymentObj->addOrderPayment(
+            $this->settings['plugin_code'],
+            $razorpay_payment_id,
+            $paymentGatewayCharge,
+            Labels::getLabel('MSG_RECEIVED_PAYMENT', $this->siteLangId),
+            $response_data ?: $result
+        );
+        exit;
+    }
+
+    /**
+     * Call Razorpay REST API with short timeouts.
+     *
+     * @param string $method
+     * @param string $url
+     * @param string $postFields
+     * @return array{raw:string,body:array,http_status:int}
+     * @throws Exception
+     */
+    private function razorpayApiRequest(string $method, string $url, string $postFields = ''): array
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_USERPWD, $this->settings['merchant_key_id'] . ':' . $this->settings['merchant_key_secret']);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 12);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Connection: close']);
+
+        if (strtoupper($method) === 'POST') {
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+        }
+
+        $raw = curl_exec($ch);
+        $http_status = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curl_error = curl_error($ch);
+        curl_close($ch);
+
+        if ($raw === false || !empty($curl_error)) {
+            throw new Exception('Razorpay request failed: ' . $curl_error);
+        }
+
+        $body = json_decode($raw, true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($body)) {
+            throw new Exception('Invalid JSON response from Razorpay');
+        }
+
+        /* Allow non-200 for capture "already captured" handling by caller */
+        if ($http_status !== 200 && strtoupper($method) === 'GET') {
+            $desc = $body['error']['description'] ?? ('HTTP ' . $http_status);
+            throw new Exception('Razorpay API error: ' . $desc);
+        }
+
+        return [
+            'raw' => $raw,
+            'body' => $body,
+            'http_status' => $http_status,
+        ];
+    }
+
+    /**
+     * Send Location redirect to browser, close connection, keep PHP running.
+     */
+    private function redirectAndContinue(string $url): void
+    {
+        ignore_user_abort(true);
+        @set_time_limit(120);
+
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_write_close();
+        }
+
+        while (ob_get_level() > 0) {
+            @ob_end_clean();
+        }
+
+        header('Location: ' . $url, true, 302);
+        header('Content-Length: 0');
+        header('Connection: close');
+
+        if (function_exists('fastcgi_finish_request')) {
+            fastcgi_finish_request();
+            return;
+        }
+
+        echo '';
+        flush();
+        if (function_exists('litespeed_finish_request')) {
+            litespeed_finish_request();
         }
     }
     

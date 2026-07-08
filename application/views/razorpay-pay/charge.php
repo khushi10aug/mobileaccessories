@@ -83,40 +83,39 @@
             system_order_id: "<?php echo $orderInfo["id"]; ?>"
         },
         handler: function(transaction) {
-            // Get form and payment ID field BEFORE modifying DOM
-            var paymentIdField = document.getElementById('razorpay_payment_id');
-            var form = document.getElementById('razorpay-form');
-            
-            if (!paymentIdField || !form) {
-                console.error('Razorpay form elements not found');
-                return;
-            }
-            
-            // Set payment ID value
-            paymentIdField.value = transaction.razorpay_payment_id;
-            
-            // Show loader and processing message (hide form, show loader)
-            var formContainer = document.querySelector('.payable-amount-body');
-            if (formContainer) {
-                // Hide the form but keep it in DOM
-                var formElement = formContainer.querySelector('form');
-                if (formElement) {
-                    formElement.style.display = 'none';
+            var paymentId = transaction.razorpay_payment_id;
+            var orderId = "<?php echo (int) $orderInfo['id']; ?>";
+            var successUrl = <?php echo json_encode($paymentSuccessUrl); ?>;
+            var callbackUrl = <?php echo json_encode($paymentCallbackUrl); ?>;
+
+            /* Fire-and-forget server processing so user is not stuck on "Waiting..." */
+            try {
+                var body = new FormData();
+                body.append('razorpay_payment_id', paymentId);
+                body.append('merchant_order_id', orderId);
+                body.append('async_process', '1');
+                if (navigator.sendBeacon) {
+                    navigator.sendBeacon(callbackUrl, body);
+                } else {
+                    fetch(callbackUrl, {
+                        method: 'POST',
+                        body: body,
+                        credentials: 'same-origin',
+                        keepalive: true
+                    }).catch(function() {});
                 }
-                
-                // Add loader overlay
-                var loaderHtml = '<div class="text-center razorpay-loader-overlay" style="padding: 40px; position: relative; z-index: 10;"><div class="spinner spinner--sm spinner--brand" style="margin: 0 auto 20px;"></div><p style="font-size: 16px; color: #333;">' + (typeof langLbl !== 'undefined' && langLbl.waitingForResponse ? langLbl.waitingForResponse : 'Processing your payment. Please wait...') + '</p><p style="font-size: 14px; color: #666; margin-top: 10px;">' + (typeof langLbl !== 'undefined' && langLbl.dontReloadPageWhilePayment ? langLbl.dontReloadPageWhilePayment : 'Do not reload or close this page.') + '</p></div>';
-                formContainer.insertAdjacentHTML('afterbegin', loaderHtml);
+            } catch (e) {
+                /* If beacon fails, fall back to classic form submit */
+                var paymentIdField = document.getElementById('razorpay_payment_id');
+                var form = document.getElementById('razorpay-form');
+                if (paymentIdField && form) {
+                    paymentIdField.value = paymentId;
+                    form.submit();
+                    return;
+                }
             }
-            
-            // Disable form submission button if exists
-            var submitBtn = document.querySelector('input[type="submit"], button[type="submit"]');
-            if (submitBtn) {
-                submitBtn.disabled = true;
-            }
-            
-            // Submit the form
-            form.submit();
+
+            window.location.href = successUrl;
         }
     };
     var razorpay_submit_btn, razorpay_instance;

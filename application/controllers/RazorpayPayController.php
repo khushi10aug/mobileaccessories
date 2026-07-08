@@ -50,6 +50,8 @@ class RazorpayPayController extends PaymentController
         $this->set('paymentAmount', $paymentAmount);
         $this->set('orderInfo', $orderInfo);
         $this->set('paymentSettings', $this->settings);
+        $this->set('paymentSuccessUrl', UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderInfo['order_number'])));
+        $this->set('paymentCallbackUrl', UrlHelper::generateFullUrl('RazorpayPay', 'callback'));
         $this->set('exculdeMainHeaderDiv', true);
         if (FatUtility::isAjaxCall()) {
             $json['html'] = $this->_template->render(false, false, 'razorpay-pay/charge-ajax.php', true, false);
@@ -138,8 +140,14 @@ class RazorpayPayController extends PaymentController
     public function callback()
     {
         $post = FatApp::getPostedData();
+        /* Checkout JS already navigated to success; process in background via keepalive POST. */
+        $async = !empty($post['async_process']);
 
         if (empty($post['razorpay_payment_id']) || empty($post['merchant_order_id'])) {
+            if ($async) {
+                http_response_code(400);
+                exit('Missing payment data');
+            }
             FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
         }
 
@@ -150,14 +158,58 @@ class RazorpayPayController extends PaymentController
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         $successUrl = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo()));
 
-        /* Already paid (refresh / double submit) — send user to success immediately */
+        /* Already paid (refresh / double submit / race with async). */
         if (!empty($orderInfo) && (int) $orderInfo['order_payment_status'] !== Orders::ORDER_PAYMENT_PENDING) {
+            if ($async) {
+                http_response_code(200);
+                exit('OK');
+            }
             FatApp::redirectUser($successUrl);
         }
 
+        /*
+         * Async: user is already on success page. ACK immediately, then verify
+         * Razorpay + mark order paid (emails etc.) after the connection closes.
+         */
+        if ($async) {
+            $this->acknowledgeAndContinue();
+            $this->processVerifiedPayment($orderPaymentObj, $merchant_order_id, $razorpay_payment_id);
+            exit;
+        }
+
+        /* Legacy form POST fallback: verify, then redirect before slow email work. */
+        $result = $this->processVerifiedPayment($orderPaymentObj, $merchant_order_id, $razorpay_payment_id, false);
+        if (empty($result['success'])) {
+            FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
+        }
+
+        $this->redirectAndContinue($successUrl);
+        $orderPaymentObj->addOrderPayment(
+            $this->settings['plugin_code'],
+            $razorpay_payment_id,
+            $result['amount'],
+            Labels::getLabel('MSG_RECEIVED_PAYMENT', $this->siteLangId),
+            $result['response_data']
+        );
+        exit;
+    }
+
+    /**
+     * Verify payment with Razorpay and optionally record it.
+     *
+     * @return array{success:bool,amount:float,response_data:string}
+     */
+    private function processVerifiedPayment(
+        OrderPayment $orderPaymentObj,
+        int $merchant_order_id,
+        string $razorpay_payment_id,
+        bool $recordNow = true
+    ): array {
         $paymentGatewayCharge = $orderPaymentObj->getOrderPaymentGatewayAmount();
+        $out = ['success' => false, 'amount' => $paymentGatewayCharge, 'response_data' => ''];
+
         if ($paymentGatewayCharge <= 0) {
-            FatUtility::exitWithErrorCode(404);
+            return $out;
         }
 
         $success = false;
@@ -170,11 +222,22 @@ class RazorpayPayController extends PaymentController
             $result = $payment['raw'];
             $paymentData = $payment['body'];
 
-            if ($paymentData['status'] === 'captured') {
+            $paymentOrderId = isset($paymentData['notes']['system_order_id'])
+                ? FatUtility::int($paymentData['notes']['system_order_id'])
+                : 0;
+            if ($paymentOrderId > 0 && $paymentOrderId !== $merchant_order_id) {
+                throw new Exception('Payment order mismatch');
+            }
+
+            $paidAmount = isset($paymentData['amount']) ? ((float) $paymentData['amount'] / 100) : 0;
+            if ($paidAmount > 0 && abs($paidAmount - $paymentGatewayCharge) > 0.05) {
+                throw new Exception('Payment amount mismatch');
+            }
+
+            if (($paymentData['status'] ?? '') === 'captured') {
                 $success = true;
                 $response_data = $result;
-            } elseif ($paymentData['status'] === 'authorized') {
-                /* Capture only when dashboard uses manual capture */
+            } elseif (($paymentData['status'] ?? '') === 'authorized') {
                 $amount_in_paisa = (int) round($paymentGatewayCharge * 100);
                 $capture = $this->razorpayApiRequest(
                     'POST',
@@ -208,32 +271,28 @@ class RazorpayPayController extends PaymentController
                 $error . ' | Razorpay Payment ID: ' . $razorpay_payment_id
             );
             SystemLog::transaction($error, self::KEY_NAME . "-" . $orderPaymentObj->getOrderNo());
-            FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
+            return $out;
         }
 
-        /*
-         * Redirect buyer to success page first, then mark order paid /
-         * send emails in background. addOrderPayment is slow (vendor mail,
-         * buyer mail, rewards, etc.) and was blocking the success page.
-         */
-        $this->redirectAndContinue($successUrl);
+        $out['success'] = true;
+        $out['response_data'] = $response_data ?: $result;
 
-        $orderPaymentObj->addOrderPayment(
-            $this->settings['plugin_code'],
-            $razorpay_payment_id,
-            $paymentGatewayCharge,
-            Labels::getLabel('MSG_RECEIVED_PAYMENT', $this->siteLangId),
-            $response_data ?: $result
-        );
-        exit;
+        if ($recordNow) {
+            $orderPaymentObj->addOrderPayment(
+                $this->settings['plugin_code'],
+                $razorpay_payment_id,
+                $paymentGatewayCharge,
+                Labels::getLabel('MSG_RECEIVED_PAYMENT', $this->siteLangId),
+                $out['response_data']
+            );
+        }
+
+        return $out;
     }
 
     /**
      * Call Razorpay REST API with short timeouts.
      *
-     * @param string $method
-     * @param string $url
-     * @param string $postFields
      * @return array{raw:string,body:array,http_status:int}
      * @throws Exception
      */
@@ -268,7 +327,6 @@ class RazorpayPayController extends PaymentController
             throw new Exception('Invalid JSON response from Razorpay');
         }
 
-        /* Allow non-200 for capture "already captured" handling by caller */
         if ($http_status !== 200 && strtoupper($method) === 'GET') {
             $desc = $body['error']['description'] ?? ('HTTP ' . $http_status);
             throw new Exception('Razorpay API error: ' . $desc);
@@ -279,6 +337,39 @@ class RazorpayPayController extends PaymentController
             'body' => $body,
             'http_status' => $http_status,
         ];
+    }
+
+    /**
+     * Close HTTP response so browser can navigate away; keep PHP running.
+     */
+    private function acknowledgeAndContinue(): void
+    {
+        ignore_user_abort(true);
+        @set_time_limit(120);
+
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_write_close();
+        }
+
+        while (ob_get_level() > 0) {
+            @ob_end_clean();
+        }
+
+        http_response_code(200);
+        header('Content-Type: text/plain; charset=UTF-8');
+        header('Content-Length: 2');
+        header('Connection: close');
+        echo 'OK';
+
+        if (function_exists('fastcgi_finish_request')) {
+            fastcgi_finish_request();
+            return;
+        }
+
+        flush();
+        if (function_exists('litespeed_finish_request')) {
+            litespeed_finish_request();
+        }
     }
 
     /**

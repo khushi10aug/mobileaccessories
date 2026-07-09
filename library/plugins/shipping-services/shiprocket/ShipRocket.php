@@ -333,8 +333,15 @@ class ShipRocket extends ShippingServicesBase
         }
 
         $pickups = $this->getAllPickupLocations();
-        if (false !== array_search($pickupLocationId, array_column($pickups, 'pickup_location'))) {
-            return $pickupLocationId;
+        if (!empty($pickups)) {
+            $pickupCodes = array_column($pickups, 'pickup_location');
+            $locationIndex = array_search($pickupLocationId, $pickupCodes);
+            if (false !== $locationIndex && !empty($pickups[$locationIndex]['pickup_location'])) {
+                return $pickups[$locationIndex]['pickup_location'];
+            }
+            if (!empty($pickups[0]['pickup_location'])) {
+                return $pickups[0]['pickup_location'];
+            }
         }
 
         if (false === $this->addPickupLocation($pickupLocationId)) {
@@ -403,11 +410,16 @@ class ShipRocket extends ShippingServicesBase
     {
         $address = $this->getShopAddress($this->orderDetail['opshipping_by_seller_user_id']);
 
+        $email = $this->orderDetail['op_shop_owner_email'] ?? '';
+        if (empty($email)) {
+            $email = FatApp::getConfig('CONF_SITE_OWNER_EMAIL', FatUtility::VAR_STRING, '');
+        }
+
         $requestParam = [
             'pickup_location' => FatUtility::convertToType($pickupLocationId, FatUtility::VAR_STRING),
             'name' => $address['shop_name'],
-            'email' => $this->orderDetail['op_shop_owner_email'],
-            'phone' => $address['phone'],
+            'email' => $email,
+            'phone' => FatUtility::convertToType($address['phone'], FatUtility::VAR_STRING),
             'address' => $address['line1'],
             'address_2' => $address['line2'],
             'city' => $address['city'],
@@ -416,7 +428,7 @@ class ShipRocket extends ShippingServicesBase
             'pin_code' => $address['postalCode'],
         ];
 
-
+        
         return $this->doRequest(self::REQUEST_ADD_PICKUP_LOCATION, $requestParam);
     }
 
@@ -458,7 +470,7 @@ class ShipRocket extends ShippingServicesBase
         }
 
         $pickupLocationId = $this->getPickupLocation($this->orderDetail['op_shop_id']);
-        if (0 > $pickupLocationId) {
+        if (0 > $pickupLocationId || '' === $pickupLocationId) {
             $this->error = Labels::getLabel('ERR_UNABLE_TO_GET_PICKUP_LOCATION', $this->langId);
             return false;
         }
@@ -495,7 +507,7 @@ class ShipRocket extends ShippingServicesBase
 
         $weightUnitArray = applicationConstants::getWeightUnitsArr($this->langId, true);
         $productWeightInOunce = Shipping::convertWeightInOunce($this->orderDetail['op_product_weight'], $weightUnitArray[$this->orderDetail['op_product_weight_unit']]);
-
+        
         $requestParam = [
             'order_id' => $this->orderDetail['op_invoice_number'],
             'order_date' => date('Y-m-d H:i', $orderTimestamp),

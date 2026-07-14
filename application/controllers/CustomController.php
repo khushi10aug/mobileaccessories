@@ -701,13 +701,8 @@ class CustomController extends MyAppController
 
     public function sitemap()
     {
-        $brandSrch = Brand::getListingObj($this->siteLangId, array('brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name'), true);
-        $brandSrch->doNotCalculateRecords();
-        $brandSrch->doNotLimitRecords();
-        $brandSrch->addOrder('brand_name', 'asc');
-        $brandRs = $brandSrch->getResultSet();
-        $brandsArr = FatApp::getDb()->fetchAll($brandRs);
-        $categoriesArr = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, 0, true, false, true);
+        $brandsArr = $this->getSitemapBrandsWithProducts();
+        $categoriesArr = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, 0, true, false, true, false, true);
         $contentPages = ContentPage::getPagesForSelectBox($this->siteLangId);
 
         $srch = new ShopSearch($this->siteLangId);

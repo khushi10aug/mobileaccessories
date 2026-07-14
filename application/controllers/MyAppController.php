@@ -585,6 +585,27 @@ class MyAppController extends FatController
         return;
     }
 
+    /**
+     * Brands that have at least one active seller product (same criteria as XML brand sitemap).
+     */
+    protected function getSitemapBrandsWithProducts(): array
+    {
+        $prodSrch = new ProductSearch($this->siteLangId);
+        $prodSrch->setDefinedCriteria(1);
+        $prodSrch->joinProductToCategory();
+        $prodSrch->joinSellerSubscription();
+        $prodSrch->addSubscriptionValidCondition();
+        $prodSrch->addMultipleFields(array('brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name'));
+        $prodSrch->addGroupBy('brand_id');
+        $prodSrch->addOrder('brand_name');
+        $prodSrch->doNotCalculateRecords();
+        $prodSrch->doNotLimitRecords();
+        $brands = FatApp::getDb()->fetchAll($prodSrch->getResultSet());
+        return array_values(array_filter($brands, static function ($row) {
+            return !empty($row['brand_id']);
+        }));
+    }
+
     public function fatActionCatchAll($action)
     {
         $this->_template->render(false, false, 'error-pages/404.php');

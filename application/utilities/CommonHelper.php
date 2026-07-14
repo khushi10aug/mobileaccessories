@@ -1523,25 +1523,45 @@ class CommonHelper extends FatUtility
 
     public static function seoUrl($string)
     {
-        //Lower case everything
-        $string = ltrim(strtolower($string), '/');
-        //Make alphanumeric (removes all other characters)
-        //$string = preg_replace("/[^a-z0-9,&_\s-\/]/", "", $string);
-        //covert / to -
-        $string = preg_replace("/[\s,&#%+]/", "-", $string);
-        //Clean up multiple dashes or whitespaces
-        $string = preg_replace("/[\s-]+/", " ", $string);
-        //Convert whitespaces and underscore to dash
-        $string = preg_replace("/[\s_]/", "-", $string);
-        $string = str_replace('"', "", $string);
-        $keyword = strtolower($string);
-        $keyword = ucfirst(FatUtility::dashed2Camel($keyword));
+        if ($string === null || $string === '') {
+            return '';
+        }
 
+        /* Decode &ndash; / &amp; etc. before slugify (titles/HTML paste often include entities). */
+        $string = html_entity_decode((string) $string, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $string = strtolower(trim($string));
+        $string = ltrim($string, '/');
+
+        /* Unicode / typographic dashes → hyphen */
+        $string = preg_replace('/[\x{2010}-\x{2015}\x{2212}\x{FE58}\x{FE63}\x{FF0D}\x{00AD}–—―−]/u', '-', $string);
+
+        /* Path separators and common title punctuation → hyphen (never keep "/" in public slugs). */
+        $string = str_replace(
+            ['/', '\\', '|', '_', '+', '&', '#', '%', ',', ';', ':', '.', "'", '"', '`', '(', ')', '[', ']', '{', '}', '!', '?', '*', '@', '$', '=', '<', '>', '°'],
+            '-',
+            $string
+        );
+
+        /* Keep only a-z, 0-9, hyphen */
+        $string = preg_replace('/[^a-z0-9]+/', '-', $string);
+        $string = preg_replace('/-+/', '-', $string);
+        $string = trim($string, '-');
+
+        if ($string === '') {
+            return '';
+        }
+
+        $keyword = ucfirst(FatUtility::dashed2Camel($string));
         if (file_exists(CONF_INSTALLATION_PATH . 'application/controllers/' . $keyword . 'Controller' . '.php')) {
             return $string . '-' . rand(1, 100);
         }
 
-        return trim($string, '-');
+        return $string;
+    }
+
+    public static function createSlug($string)
+    {
+        return static::seoUrl($string);
     }
 
     public static function recursiveDelete($str, $removeParent = false)
@@ -1620,11 +1640,6 @@ class CommonHelper extends FatUtility
     public static function affiliateReferralTrackingUrl($code)
     {
         return UrlHelper::generateFullUrl('Home', 'AffiliateReferral', array($code), CONF_WEBROOT_FRONTEND);
-    }
-
-    public static function createSlug($string)
-    {
-        return preg_replace('/[^A-Za-z0-9-\/]+/', '-', ltrim($string, '/'));
     }
 
     public static function getProdRatingInPercentage($rating, $total, $circleView)

@@ -77,17 +77,48 @@ class CustomRouter
             /* [ Check url rewritten by the system or system url with query parameter*/
             $row = false;
             if (!empty($customUrl[0])) {
+                $requestSlug = rawurldecode($customUrl[0]);
+                $customUrl[0] = $requestSlug;
+
                 $srch = UrlRewrite::getSearchObject();
                 $srch->doNotCalculateRecords();
                 $srch->addMultipleFields(array('urlrewrite_custom', 'urlrewrite_original'));
                 $srch->setPageSize(1);
-                $srch->addCondition(UrlRewrite::DB_TBL_PREFIX . 'custom', '=', $customUrl[0]);
+                $srch->addCondition(UrlRewrite::DB_TBL_PREFIX . 'custom', '=', $requestSlug);
                 //$srch->addCondition(UrlRewrite::DB_TBL_PREFIX . 'lang_id', '=', SYSTEM_LANG_ID);
                 $rs = $srch->getResultSet();
                 $row = FatApp::getDb()->fetch($rs);
 
                 if (!$row) {
-                    $row = self::resolveBuiltInCustomSlug($customUrl[0]);
+                    $row = self::resolveBuiltInCustomSlug($requestSlug);
+                }
+
+                /* Malformed indexed URLs (–, /, |, &ndash;): normalize and 301 to clean slug when it exists. */
+                if (
+                    !$row
+                    && FatApp::getConfig('CONF_ENABLE_301', FatUtility::VAR_INT, 1)
+                    && !FatUtility::isAjaxCall()
+                    && in_array($_SERVER['REQUEST_METHOD'] ?? 'GET', ['GET', 'HEAD'], true)
+                ) {
+                    $normalizedSlug = CommonHelper::seoUrl($requestSlug);
+                    if (
+                        $normalizedSlug !== ''
+                        && strcasecmp($normalizedSlug, $requestSlug) !== 0
+                    ) {
+                        $srch = UrlRewrite::getSearchObject();
+                        $srch->doNotCalculateRecords();
+                        $srch->addMultipleFields(array('urlrewrite_custom', 'urlrewrite_original'));
+                        $srch->setPageSize(1);
+                        $srch->addCondition(UrlRewrite::DB_TBL_PREFIX . 'custom', '=', $normalizedSlug);
+                        $normRow = FatApp::getDb()->fetch($srch->getResultSet());
+                        if (!empty($normRow) && $normRow['urlrewrite_custom'] != '') {
+                            $redirectQueryString = (isset($customUrl[1]) && $customUrl[1] != '') ? '?' . $customUrl[1] : '';
+                            header('HTTP/1.1 301 Moved Permanently');
+                            header('Location: ' . UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_URL) . $normRow['urlrewrite_custom'] . $redirectQueryString);
+                            header('Connection: close');
+                            exit;
+                        }
+                    }
                 }
 
                 if (!$row && FatApp::getConfig('CONF_ENABLE_301', FatUtility::VAR_INT, 1) && !FatUtility::isAjaxCall()) {
@@ -95,7 +126,7 @@ class CustomRouter
                     $srch->doNotCalculateRecords();
                     $srch->addMultipleFields(array('urlrewrite_custom', 'urlrewrite_original'));
                     $srch->setPageSize(1);
-                    $srch->addCondition(UrlRewrite::DB_TBL_PREFIX . 'original', '=', $customUrl[0]);
+                    $srch->addCondition(UrlRewrite::DB_TBL_PREFIX . 'original', '=', $requestSlug);
                     $rs = $srch->getResultSet();
                     $res = FatApp::getDb()->fetch($rs);
                     if (!empty($res) && $res['urlrewrite_custom'] != '') {

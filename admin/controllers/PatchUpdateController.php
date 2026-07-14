@@ -277,19 +277,11 @@ class PatchUpdateController extends ListingBaseController
 
     public function changeCustomUrl()
     {
-        $urlSrch = UrlRewrite::getSearchObject();
-        $urlSrch->doNotCalculateRecords();
-        $urlSrch->doNotLimitRecords();
-        $urlSrch->addMultipleFields(array('urlrewrite_id', 'urlrewrite_original', 'urlrewrite_custom'));
-        $rs = $urlSrch->getResultSet();
-        $urlRows = FatApp::getDb()->fetchAll($rs);
-        $db = FatApp::getDb();
-        foreach ($urlRows as $row) {
-            $url = str_replace("/", "-", $row['urlrewrite_custom']);
-            if ($db->updateFromArray(UrlRewrite::DB_TBL, array('urlrewrite_custom' => $url), array('smt' => 'urlrewrite_id = ?', 'vals' => array($row['urlrewrite_id'])))) {
-                echo $row['urlrewrite_id'] . "<br>";
-            }
-        }
+        $stats = UrlRewrite::cleanupMalformedCustomUrls();
+        echo 'Updated: ' . (int) $stats['updated'] . '<br>';
+        echo 'Unchanged: ' . (int) $stats['unchanged'] . '<br>';
+        echo 'Failed: ' . (int) $stats['failed'] . '<br>';
+        echo 'Done';
     }
 
     public function updateCharset()

@@ -23,6 +23,9 @@ class Sitemap extends FatModel
     {
         set_time_limit(0);
 
+        /* Sanitize broken SEO slugs (–, /, |, &ndash;, etc.) before writing XML locs. */
+        UrlRewrite::cleanupMalformedCustomUrls();
+
         $structure = $this->getStructure();
         foreach ($structure as $val) {
             $this->sitemapListInc = 1;

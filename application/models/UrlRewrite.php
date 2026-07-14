@@ -25,6 +25,81 @@ class UrlRewrite extends MyAppModel
         return false;
     }
 
+    /**
+     * True when custom slug still has characters that break public SEO URLs
+     * (unicode dashes, slash, pipe, entities leftovers, spaces, etc.).
+     */
+    public static function isMalformedCustomUrl($customUrl): bool
+    {
+        $customUrl = (string) $customUrl;
+        if ($customUrl === '') {
+            return false;
+        }
+        /* Anything outside a-z 0-9 hyphen, or repeated hyphens / HTML entity leftovers */
+        if (preg_match('/[^a-z0-9\-]/', $customUrl)) {
+            return true;
+        }
+        if (strpos($customUrl, '--') !== false) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Re-sanitize urlrewrite_custom rows (and matching selprod_url_keyword) so sitemap / links
+     * no longer emit – / | &ndash; etc. Returns counts: updated, unchanged, failed.
+     */
+    public static function cleanupMalformedCustomUrls(): array
+    {
+        $result = ['updated' => 0, 'unchanged' => 0, 'failed' => 0];
+        $srch = static::getSearchObject();
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addMultipleFields(['urlrewrite_id', 'urlrewrite_original', 'urlrewrite_custom']);
+        $rows = FatApp::getDb()->fetchAll($srch->getResultSet());
+        if (empty($rows)) {
+            return $result;
+        }
+
+        $db = FatApp::getDb();
+        foreach ($rows as $row) {
+            $current = (string) $row['urlrewrite_custom'];
+            if (!static::isMalformedCustomUrl($current) && $current === CommonHelper::seoUrl($current)) {
+                $result['unchanged']++;
+                continue;
+            }
+
+            $clean = static::getValidSeoUrl($current, $row['urlrewrite_original']);
+            if ($clean === '' || $clean === $current) {
+                $result['unchanged']++;
+                continue;
+            }
+
+            if (
+                !$db->updateFromArray(
+                    static::DB_TBL,
+                    ['urlrewrite_custom' => $clean],
+                    ['smt' => 'urlrewrite_id = ?', 'vals' => [$row['urlrewrite_id']]]
+                )
+            ) {
+                $result['failed']++;
+                continue;
+            }
+
+            if (preg_match('#^products/view/(\d+)$#', (string) $row['urlrewrite_original'], $m)) {
+                $db->updateFromArray(
+                    SellerProduct::DB_TBL,
+                    ['selprod_url_keyword' => $clean],
+                    ['smt' => 'selprod_id = ?', 'vals' => [(int) $m[1]]]
+                );
+            }
+
+            $result['updated']++;
+        }
+
+        return $result;
+    }
+
     public static function update($originalUrl, $customUrl)
     {
         $seoUrlKeyword = array(

@@ -1022,6 +1022,9 @@ INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES
 ('CONF_REDIRECT_MISSING_REWRITE_TO_HOME', '0', 1)
 ON DUPLICATE KEY UPDATE `conf_val` = '0';
 
+/* After deploy: regenerate sitemap from Admin → SEO → Generate Sitemap
+   (cleanupMalformedCustomUrls runs automatically and removes –, /, |, &ndash; from product SEO URLs). */
+
 /* Product catalog: lang fields for features (run once on existing DBs) */
 ALTER TABLE `tbl_products_lang`
   ADD `product_features` mediumtext NOT NULL AFTER `product_youtube_video`,

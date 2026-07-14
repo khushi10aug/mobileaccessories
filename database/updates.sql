@@ -1017,10 +1017,10 @@ ALTER TABLE `tbl_products` ADD `product_cbrand_id` INT(11) NOT NULL AFTER `produ
 /* Seller package plan flat discount (list price minus discount = amount charged) */
 ALTER TABLE `tbl_seller_packages_plan` ADD `spplan_discount` decimal(10,2) NOT NULL DEFAULT 0.00 AFTER `spplan_price`;
 
-/* 301 removed SEO URLs (e.g. deleted products) to homepage — enable on live after deploy */
+/* Missing SEO URLs must return 404 (not 301 homepage) so Google deindexes ghost product pages */
 INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES
-('CONF_REDIRECT_MISSING_REWRITE_TO_HOME', '1', 1)
-ON DUPLICATE KEY UPDATE `conf_val` = VALUES(`conf_val`);
+('CONF_REDIRECT_MISSING_REWRITE_TO_HOME', '0', 1)
+ON DUPLICATE KEY UPDATE `conf_val` = '0';
 
 /* Product catalog: lang fields for features (run once on existing DBs) */
 ALTER TABLE `tbl_products_lang`

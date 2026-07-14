@@ -66,17 +66,10 @@ class CustomRouter
             $customUrl = rtrim($customUrl, '/');
             $customUrl = explode('/?', $customUrl);
 
-            $strippedLangIdFromPath = null;
             /* [ Strip leading "xx/rest" when xx is a real language code — must not depend on CONF_LANG_SPECIFIC_URL
-             * (live can have the setting off while Google still has /ar/… /es/… URLs; else slug keeps "/" and never matches SEO redirect rules). */
+             * (live can have the setting off while Google still has /ar/… /es/… URLs; else slug keeps "/" and never matches SEO rewrite rules). */
             $langParts = explode('/', $customUrl[0], 2);
             if (isset($langParts[1]) && $langParts[0] !== '' && in_array(strtoupper($langParts[0]), LANG_CODES_ARR, true)) {
-                foreach (LANG_CODES_ARR as $lid => $code) {
-                    if (strtoupper((string) $code) === strtoupper($langParts[0])) {
-                        $strippedLangIdFromPath = (int) $lid;
-                        break;
-                    }
-                }
                 $customUrl[0] = $langParts[1];
             }
             /* ] */
@@ -125,7 +118,6 @@ class CustomRouter
                 if (
                     !empty($customUrl[0])
                     && in_array($method, ['GET', 'HEAD'], true)
-                    && FatApp::getConfig('CONF_REDIRECT_MISSING_REWRITE_TO_HOME', FatUtility::VAR_INT, 1)
                     && !FatUtility::isAjaxCall()
                 ) {
                     $slug = $customUrl[0];
@@ -133,17 +125,14 @@ class CustomRouter
                         return;
                     }
                     /* Short slug: shop/brand-style. Long slug: product SEO URLs that include "/" (e.g. a1990-/-a1707-...).
-                     * Multi-segment: e.g. reviews/product/24999/154 when no url_rewrite row (each segment = slug or digits). */
+                     * Multi-segment: e.g. reviews/product/24999/154 when no url_rewrite row (each segment = slug or digits).
+                     * Missing rewrite → hard 404 so Google drops ghost URLs (do not 301 to homepage). */
                     $shortSeo = (bool) preg_match('/^[a-zA-Z0-9][a-zA-Z0-9\-]*$/', $slug);
                     $longProductSeo = strlen($slug) >= 48 && (bool) preg_match('#^[a-zA-Z0-9][a-zA-Z0-9\-/]*$#', $slug);
                     $multiSegSeo = self::isCatalogSeoMultiSegmentRedirectCandidate($slug) && !self::isDirectFrontendRoutePath($slug);
                     $seoSlugCandidate = ($shortSeo && !self::isDirectFrontendRoutePath($slug) && !self::isBuiltInSystemCustomSlug($slug)) || $longProductSeo || $multiSegSeo;
                     if ($seoSlugCandidate) {
-                        header('HTTP/1.1 301 Moved Permanently');
-                        $langForHome = $strippedLangIdFromPath !== null && $strippedLangIdFromPath > 0 ? $strippedLangIdFromPath : SYSTEM_LANG_ID;
-                        header('Location: ' . UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_URL, null, false, false, true, $langForHome));
-                        header('Connection: close');
-                        exit;
+                        FatUtility::exitWithErrorCode(404);
                     }
                 }
                 /* Unknown slug without rewrite: let framework keep parsed route, or fall through to map direct MVC paths below. */

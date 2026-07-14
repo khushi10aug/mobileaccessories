@@ -577,36 +577,12 @@ class MyAppController extends FatController
     }
 
     /**
-     * When CONF_REDIRECT_MISSING_REWRITE_TO_HOME is on: 301 to homepage instead of 404
-     * for missing catalog entities (product/shop/brand/category SEO URLs). Browser GET/HEAD only.
+     * Formerly 301'd missing catalog SEO URLs to the homepage (soft signal for Google).
+     * Kept as a no-op so callers fall through to FatUtility::exitWithErrorCode(404).
      */
     protected function redirectMissingEntitySeoToHomeIfEnabled(): void
     {
-        if (
-            false === MOBILE_APP_API_CALL
-            && FatApp::getConfig('CONF_REDIRECT_MISSING_REWRITE_TO_HOME', FatUtility::VAR_INT, 1)
-            && !FatUtility::isAjaxCall()
-            && in_array($_SERVER['REQUEST_METHOD'] ?? 'GET', ['GET', 'HEAD'], true)
-        ) {
-            $langId = defined('SYSTEM_LANG_ID') ? SYSTEM_LANG_ID : CommonHelper::getLangId();
-            $reqPath = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
-            if ($reqPath !== null && $reqPath !== '' && defined('LANG_CODES_ARR')) {
-                $trimPath = trim($reqPath, '/');
-                $pathSegs = explode('/', $trimPath, 2);
-                if (isset($pathSegs[1]) && $pathSegs[0] !== '' && in_array(strtoupper($pathSegs[0]), LANG_CODES_ARR, true)) {
-                    foreach (LANG_CODES_ARR as $lid => $code) {
-                        if (strtoupper((string) $code) === strtoupper($pathSegs[0])) {
-                            $langId = (int) $lid;
-                            break;
-                        }
-                    }
-                }
-            }
-            header('HTTP/1.1 301 Moved Permanently');
-            header('Location: ' . UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_URL, null, false, false, true, $langId));
-            header('Connection: close');
-            exit;
-        }
+        return;
     }
 
     public function fatActionCatchAll($action)

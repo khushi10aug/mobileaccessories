@@ -838,6 +838,7 @@ class SellerProduct extends MyAppModel
             return false;
         }
 
+        $selprodId = FatUtility::int($selprodId);
         $sellerProdObj = new SellerProduct($selprodId);
         if (!$sellerProdObj->deleteRecord(true)) {
             $this->error = $sellerProdObj->getError();
@@ -849,6 +850,11 @@ class SellerProduct extends MyAppModel
             $this->error = FatApp::getDb()->getError();
             return false;
         }
+
+        /* Drop SEO rewrite rows so deleted listings return 404 instead of resolving to a dead id. */
+        UrlRewrite::remove(Product::PRODUCT_VIEW_ORGINAL_URL . $selprodId);
+        UrlRewrite::remove(Product::PRODUCT_REVIEWS_ORGINAL_URL . $selprodId);
+        UrlRewrite::remove(Product::PRODUCT_MORE_SELLERS_ORGINAL_URL . $selprodId);
 
         return true;
     }

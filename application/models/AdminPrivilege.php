@@ -136,6 +136,7 @@ class AdminPrivilege
     public const SECTION_REQUEST_FOR_QUOTE = 128;
     public const SECTION_RFQ_OFFERS = 129;
     public const SECTION_APP_RELEASE = 130;
+    public const SECTION_ADMIN_LOGIN_HISTORY = 131;
 
     public const PRIVILEGE_NONE = 0;
     public const PRIVILEGE_READ = 1;
@@ -268,6 +269,7 @@ class AdminPrivilege
                 static::SECTION_THEME_COLOR => Labels::getLabel('NAV_THEME_COLOR', $langId),
 
                 static::SECTION_ADMIN_USERS => Labels::getLabel('NAV_ADMIN_USERS', $langId),
+                static::SECTION_ADMIN_LOGIN_HISTORY => Labels::getLabel('NAV_ADMIN_LOGIN_HISTORY', $langId),
                 static::SECTION_ADMIN_PERMISSIONS => Labels::getLabel('NAV_ADMIN_ROLES', $langId),
 
                 //static::SECTION_TOOLS => Labels::getLabel('NAV_TOOLS', $langId),
@@ -1743,5 +1745,15 @@ class AdminPrivilege
     public function canEditAppReleaseVersions($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_APP_RELEASE, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewAdminLoginHistory($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_ADMIN_LOGIN_HISTORY, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditAdminLoginHistory($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_ADMIN_LOGIN_HISTORY, static::PRIVILEGE_WRITE, $returnResult);
     }
 }

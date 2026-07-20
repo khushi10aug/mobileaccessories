@@ -322,9 +322,10 @@ class AdminGuestController extends FatController
             return false;
         }
         if ($row = AdminUsers::getAttributesById($admin_id)) {
-            $row['admin_ip'] = $_SERVER['REMOTE_ADDR'];
+            $row['admin_ip'] = CommonHelper::getClientIp();
             $adminAuthObj = AdminAuthentication::getInstance();
             $adminAuthObj->setAdminSession($row);
+            AdminLoginHistory::logLogin($row, $row['admin_ip'], AdminLoginHistory::LOGIN_TYPE_REMEMBER_ME);
             return true;
         }
         return false;

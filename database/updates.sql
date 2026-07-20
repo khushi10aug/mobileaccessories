@@ -1029,3 +1029,53 @@ ON DUPLICATE KEY UPDATE `conf_val` = '0';
 ALTER TABLE `tbl_products_lang`
   ADD `product_features` mediumtext NOT NULL AFTER `product_youtube_video`,
   ADD `product_key_features` mediumtext NOT NULL AFTER `product_features`;
+
+/* Admin login history - track who logged in, when, IP, browser */
+DROP TABLE IF EXISTS `tbl_admin_login_history`;
+CREATE TABLE `tbl_admin_login_history` (
+  `alh_id` int(11) NOT NULL AUTO_INCREMENT,
+  `alh_admin_id` int(11) NOT NULL,
+  `alh_admin_username` varchar(100) NOT NULL DEFAULT '',
+  `alh_admin_name` varchar(100) NOT NULL DEFAULT '',
+  `alh_admin_email` varchar(150) NOT NULL DEFAULT '',
+  `alh_ip` varchar(45) NOT NULL DEFAULT '',
+  `alh_user_agent` varchar(500) NOT NULL DEFAULT '',
+  `alh_browser` varchar(100) NOT NULL DEFAULT '',
+  `alh_platform` varchar(100) NOT NULL DEFAULT '',
+  `alh_device` varchar(50) NOT NULL DEFAULT '',
+  `alh_login_type` tinyint(4) NOT NULL DEFAULT 1 COMMENT '1=password, 2=remember_me',
+  `alh_session_id` varchar(128) NOT NULL DEFAULT '',
+  `alh_referer` varchar(500) NOT NULL DEFAULT '',
+  `alh_logged_at` datetime NOT NULL,
+  `alh_logout_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`alh_id`),
+  KEY `alh_admin_id` (`alh_admin_id`),
+  KEY `alh_logged_at` (`alh_logged_at`),
+  KEY `alh_ip` (`alh_ip`),
+  KEY `alh_session_id` (`alh_session_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`, `plang_helping_text`) VALUES
+(NULL, 'MANAGE_ADMIN_LOGIN_HISTORY', '-1', 'Admin Login History', 'View admin login activity including IP address, browser, device and login time.', '', '', '', '')
+ON DUPLICATE KEY UPDATE plang_title = VALUES(plang_title);
+
+INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('NAV_ADMIN_LOGIN_HISTORY', 1, 'Admin Login History', 1),
+('LBL_LOGIN_TYPE', 1, 'Login Type', 1),
+('LBL_PASSWORD_LOGIN', 1, 'Password', 1),
+('LBL_REMEMBER_ME_LOGIN', 1, 'Remember Me', 1),
+('LBL_BROWSER', 1, 'Browser', 1),
+('LBL_PLATFORM', 1, 'Platform', 1),
+('LBL_DEVICE', 1, 'Device', 1),
+('LBL_IP_ADDRESS', 1, 'IP Address', 1),
+('LBL_LOGGED_AT', 1, 'Logged At', 1),
+('LBL_LOGOUT_AT', 1, 'Logout At', 1),
+('LBL_USER_AGENT', 1, 'User Agent', 1),
+('LBL_SESSION_ID', 1, 'Session ID', 1),
+('LBL_REFERER', 1, 'Referer', 1),
+('LBL_LOGIN_DETAILS', 1, 'Login Details', 1),
+('LBL_DESKTOP', 1, 'Desktop', 1),
+('LBL_MOBILE', 1, 'Mobile', 1),
+('LBL_TABLET', 1, 'Tablet', 1),
+('FRM_SEARCH_BY_ADMIN_OR_IP', 1, 'Search by admin name, username, email or IP', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

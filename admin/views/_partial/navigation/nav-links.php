@@ -526,6 +526,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
     <?php
     if (
         $objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true) ||
+        $objPrivilege->canViewAdminLoginHistory(AdminAuthentication::getLoggedAdminId(), true) ||
         $objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true) ||
         $objPrivilege->canViewMessages(AdminAuthentication::getLoggedAdminId(), true)
     ) {
@@ -555,6 +556,19 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     </svg>
                                 </span>
                                 <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_ADMIN_USERS', $siteLangId); ?></span>
+                            </a>
+                        </li>
+                    <?php } ?>
+                    <?php if ($objPrivilege->canViewAdminLoginHistory(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li class="nav_item navItemJs">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["AdminLoginHistory"]' href="<?php echo UrlHelper::generateUrl('AdminLoginHistory') ?>">
+                                <span class="nav_icon">
+                                    <svg class="svg" width="24" height="24">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#test">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_ADMIN_LOGIN_HISTORY', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>

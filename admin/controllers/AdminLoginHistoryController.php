@@ -87,6 +87,10 @@ class AdminLoginHistoryController extends ListingBaseController
             $cond->attachCondition('alh_admin_email', 'like', '%' . $keyword . '%', 'OR');
             $cond->attachCondition('alh_ip', 'like', '%' . $keyword . '%', 'OR');
             $cond->attachCondition('alh_browser', 'like', '%' . $keyword . '%', 'OR');
+            $cond->attachCondition('alh_location', 'like', '%' . $keyword . '%', 'OR');
+            $cond->attachCondition('alh_city', 'like', '%' . $keyword . '%', 'OR');
+            $cond->attachCondition('alh_country', 'like', '%' . $keyword . '%', 'OR');
+            $cond->attachCondition('alh_isp', 'like', '%' . $keyword . '%', 'OR');
         }
 
         $loginType = FatApp::getPostedData('login_type', FatUtility::VAR_INT, -1);
@@ -194,7 +198,7 @@ class AdminLoginHistoryController extends ListingBaseController
 
     protected function getFormColumns(): array
     {
-        $cacheKey = 'adminLoginHistoryTblHeadingCols' . $this->siteLangId;
+        $cacheKey = 'adminLoginHistoryTblHeadingColsV2' . $this->siteLangId;
         $cached = CacheHelper::get($cacheKey, CONF_DEF_CACHE_TIME, '.txt');
         if ($cached) {
             return json_decode($cached, true);
@@ -204,6 +208,7 @@ class AdminLoginHistoryController extends ListingBaseController
             'alh_admin_name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
             'alh_admin_username' => Labels::getLabel('LBL_USERNAME', $this->siteLangId),
             'alh_ip' => Labels::getLabel('LBL_IP_ADDRESS', $this->siteLangId),
+            'alh_location' => Labels::getLabel('LBL_LOCATIONS', $this->siteLangId),
             'alh_browser' => Labels::getLabel('LBL_BROWSER', $this->siteLangId),
             'alh_platform' => Labels::getLabel('LBL_PLATFORM', $this->siteLangId),
             'alh_device' => Labels::getLabel('LBL_DEVICE', $this->siteLangId),
@@ -221,6 +226,7 @@ class AdminLoginHistoryController extends ListingBaseController
             'alh_admin_name',
             'alh_admin_username',
             'alh_ip',
+            'alh_location',
             'alh_browser',
             'alh_platform',
             'alh_device',

@@ -1030,7 +1030,7 @@ ALTER TABLE `tbl_products_lang`
   ADD `product_features` mediumtext NOT NULL AFTER `product_youtube_video`,
   ADD `product_key_features` mediumtext NOT NULL AFTER `product_features`;
 
-/* Admin login history - track who logged in, when, IP, browser */
+/* Admin login history - track who logged in, when, IP, browser, location */
 DROP TABLE IF EXISTS `tbl_admin_login_history`;
 CREATE TABLE `tbl_admin_login_history` (
   `alh_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1046,18 +1046,29 @@ CREATE TABLE `tbl_admin_login_history` (
   `alh_login_type` tinyint(4) NOT NULL DEFAULT 1 COMMENT '1=password, 2=remember_me',
   `alh_session_id` varchar(128) NOT NULL DEFAULT '',
   `alh_referer` varchar(500) NOT NULL DEFAULT '',
+  `alh_country` varchar(100) NOT NULL DEFAULT '',
+  `alh_country_code` varchar(10) NOT NULL DEFAULT '',
+  `alh_region` varchar(100) NOT NULL DEFAULT '',
+  `alh_city` varchar(100) NOT NULL DEFAULT '',
+  `alh_zip` varchar(20) NOT NULL DEFAULT '',
+  `alh_latitude` varchar(30) NOT NULL DEFAULT '',
+  `alh_longitude` varchar(30) NOT NULL DEFAULT '',
+  `alh_timezone` varchar(60) NOT NULL DEFAULT '',
+  `alh_isp` varchar(150) NOT NULL DEFAULT '',
+  `alh_location` varchar(255) NOT NULL DEFAULT '',
   `alh_logged_at` datetime NOT NULL,
   `alh_logout_at` datetime DEFAULT NULL,
   PRIMARY KEY (`alh_id`),
   KEY `alh_admin_id` (`alh_admin_id`),
   KEY `alh_logged_at` (`alh_logged_at`),
   KEY `alh_ip` (`alh_ip`),
-  KEY `alh_session_id` (`alh_session_id`)
+  KEY `alh_session_id` (`alh_session_id`),
+  KEY `alh_country_code` (`alh_country_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`, `plang_helping_text`) VALUES
-(NULL, 'MANAGE_ADMIN_LOGIN_HISTORY', '-1', 'Admin Login History', 'View admin login activity including IP address, browser, device and login time.', '', '', '', '')
-ON DUPLICATE KEY UPDATE plang_title = VALUES(plang_title);
+(NULL, 'MANAGE_ADMIN_LOGIN_HISTORY', '-1', 'Admin Login History', 'View admin login activity including IP address, browser, device, location and login time.', '', '', '', '')
+ON DUPLICATE KEY UPDATE plang_title = VALUES(plang_title), plang_summary = VALUES(plang_summary);
 
 INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('NAV_ADMIN_LOGIN_HISTORY', 1, 'Admin Login History', 1),
@@ -1077,5 +1088,15 @@ INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`
 ('LBL_DESKTOP', 1, 'Desktop', 1),
 ('LBL_MOBILE', 1, 'Mobile', 1),
 ('LBL_TABLET', 1, 'Tablet', 1),
-('FRM_SEARCH_BY_ADMIN_OR_IP', 1, 'Search by admin name, username, email or IP', 1)
+('LBL_LOCATION', 1, 'Location', 1),
+('LBL_COUNTRY', 1, 'Country', 1),
+('LBL_REGION', 1, 'Region', 1),
+('LBL_CITY', 1, 'City', 1),
+('LBL_ZIP', 1, 'ZIP / Postal Code', 1),
+('LBL_LATITUDE', 1, 'Latitude', 1),
+('LBL_LONGITUDE', 1, 'Longitude', 1),
+('LBL_TIMEZONE', 1, 'Timezone', 1),
+('LBL_ISP', 1, 'ISP', 1),
+('LBL_LOCAL_NETWORK', 1, 'Local / Private Network', 1),
+('FRM_SEARCH_BY_ADMIN_OR_IP', 1, 'Search by admin name, username, email, IP or location', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

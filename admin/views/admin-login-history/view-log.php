@@ -35,6 +35,49 @@
                                     <span class="value"><?php echo htmlspecialchars($detail['alh_ip']); ?></span>
                                 </li>
                                 <li class="list-stats-item">
+                                    <span class="lable"><?php echo Labels::getLabel('LBL_LOCATIONS', $siteLangId); ?></span>
+                                    <span class="value"><?php echo htmlspecialchars($detail['alh_location'] ?: '-'); ?></span>
+                                </li>
+                                <li class="list-stats-item">
+                                    <span class="lable"><?php echo Labels::getLabel('LBL_CITY', $siteLangId); ?></span>
+                                    <span class="value"><?php echo htmlspecialchars($detail['alh_city'] ?: '-'); ?></span>
+                                </li>
+                                <li class="list-stats-item">
+                                    <span class="lable"><?php echo Labels::getLabel('LBL_REGION', $siteLangId); ?></span>
+                                    <span class="value"><?php echo htmlspecialchars($detail['alh_region'] ?: '-'); ?></span>
+                                </li>
+                                <li class="list-stats-item">
+                                    <span class="lable"><?php echo Labels::getLabel('LBL_COUNTRY', $siteLangId); ?></span>
+                                    <span class="value">
+                                        <?php
+                                        $countryDisplay = trim(($detail['alh_country'] ?? '') . (!empty($detail['alh_country_code']) ? ' (' . $detail['alh_country_code'] . ')' : ''));
+                                        echo htmlspecialchars($countryDisplay !== '' ? $countryDisplay : '-');
+                                        ?>
+                                    </span>
+                                </li>
+                                <li class="list-stats-item">
+                                    <span class="lable"><?php echo Labels::getLabel('LBL_ZIP', $siteLangId); ?></span>
+                                    <span class="value"><?php echo htmlspecialchars($detail['alh_zip'] ?: '-'); ?></span>
+                                </li>
+                                <li class="list-stats-item">
+                                    <span class="lable"><?php echo Labels::getLabel('LBL_TIMEZONE', $siteLangId); ?></span>
+                                    <span class="value"><?php echo htmlspecialchars($detail['alh_timezone'] ?: '-'); ?></span>
+                                </li>
+                                <li class="list-stats-item">
+                                    <span class="lable"><?php echo Labels::getLabel('LBL_ISP', $siteLangId); ?></span>
+                                    <span class="value"><?php echo htmlspecialchars($detail['alh_isp'] ?: '-'); ?></span>
+                                </li>
+                                <?php if (!empty($detail['alh_latitude']) || !empty($detail['alh_longitude'])) { ?>
+                                    <li class="list-stats-item">
+                                        <span class="lable"><?php echo Labels::getLabel('LBL_LATITUDE', $siteLangId); ?></span>
+                                        <span class="value"><?php echo htmlspecialchars($detail['alh_latitude'] ?: '-'); ?></span>
+                                    </li>
+                                    <li class="list-stats-item">
+                                        <span class="lable"><?php echo Labels::getLabel('LBL_LONGITUDE', $siteLangId); ?></span>
+                                        <span class="value"><?php echo htmlspecialchars($detail['alh_longitude'] ?: '-'); ?></span>
+                                    </li>
+                                <?php } ?>
+                                <li class="list-stats-item">
                                     <span class="lable"><?php echo Labels::getLabel('LBL_BROWSER', $siteLangId); ?></span>
                                     <span class="value"><?php echo htmlspecialchars($detail['alh_browser']); ?></span>
                                 </li>

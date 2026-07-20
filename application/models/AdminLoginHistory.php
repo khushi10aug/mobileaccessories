@@ -44,9 +44,11 @@ class AdminLoginHistory extends MyAppModel
         if ($ip === '') {
             $ip = CommonHelper::getClientIp();
         }
+        $ip = self::normalizeIp($ip);
 
         $userAgent = CommonHelper::userAgent();
         $parsed = self::parseUserAgent($userAgent);
+        $location = self::resolveLocationByIp($ip);
 
         $data = [
             'alh_admin_id' => FatUtility::int($adminRow['admin_id']),
@@ -61,6 +63,16 @@ class AdminLoginHistory extends MyAppModel
             'alh_login_type' => $loginType,
             'alh_session_id' => session_id() ?: '',
             'alh_referer' => substr($_SERVER['HTTP_REFERER'] ?? '', 0, 500),
+            'alh_country' => substr($location['country'], 0, 100),
+            'alh_country_code' => substr($location['country_code'], 0, 10),
+            'alh_region' => substr($location['region'], 0, 100),
+            'alh_city' => substr($location['city'], 0, 100),
+            'alh_zip' => substr($location['zip'], 0, 20),
+            'alh_latitude' => substr($location['latitude'], 0, 30),
+            'alh_longitude' => substr($location['longitude'], 0, 30),
+            'alh_timezone' => substr($location['timezone'], 0, 60),
+            'alh_isp' => substr($location['isp'], 0, 150),
+            'alh_location' => substr($location['location'], 0, 255),
             'alh_logged_at' => date('Y-m-d H:i:s'),
             'alh_logout_at' => null,
         ];
@@ -103,6 +115,109 @@ class AdminLoginHistory extends MyAppModel
             ['alh_logout_at' => date('Y-m-d H:i:s')],
             ['smt' => 'alh_id = ?', 'vals' => [$row['alh_id']]]
         );
+    }
+
+    /**
+     * Resolve approximate location from IP via free geo lookup.
+     */
+    public static function resolveLocationByIp(string $ip): array
+    {
+        $empty = [
+            'country' => '',
+            'country_code' => '',
+            'region' => '',
+            'city' => '',
+            'zip' => '',
+            'latitude' => '',
+            'longitude' => '',
+            'timezone' => '',
+            'isp' => '',
+            'location' => '',
+        ];
+
+        $ip = self::normalizeIp($ip);
+        if ($ip === '' || $ip === 'UNKNOWN' || self::isPrivateOrLocalIp($ip)) {
+            $empty['location'] = Labels::getLabel('LBL_LOCAL_NETWORK', CommonHelper::getLangId());
+            return $empty;
+        }
+
+        $url = 'http://ip-api.com/json/' . rawurlencode($ip) . '?fields=status,message,country,countryCode,regionName,city,zip,lat,lon,timezone,isp,query';
+        $response = self::httpGet($url);
+        if ($response === '') {
+            return $empty;
+        }
+
+        $data = json_decode($response, true);
+        if (!is_array($data) || ($data['status'] ?? '') !== 'success') {
+            return $empty;
+        }
+
+        $city = trim((string) ($data['city'] ?? ''));
+        $region = trim((string) ($data['regionName'] ?? ''));
+        $country = trim((string) ($data['country'] ?? ''));
+        $parts = array_filter([$city, $region, $country]);
+
+        return [
+            'country' => $country,
+            'country_code' => trim((string) ($data['countryCode'] ?? '')),
+            'region' => $region,
+            'city' => $city,
+            'zip' => trim((string) ($data['zip'] ?? '')),
+            'latitude' => isset($data['lat']) ? (string) $data['lat'] : '',
+            'longitude' => isset($data['lon']) ? (string) $data['lon'] : '',
+            'timezone' => trim((string) ($data['timezone'] ?? '')),
+            'isp' => trim((string) ($data['isp'] ?? '')),
+            'location' => implode(', ', $parts),
+        ];
+    }
+
+    public static function normalizeIp(string $ip): string
+    {
+        $ip = trim(explode(',', $ip)[0]);
+        return $ip;
+    }
+
+    public static function isPrivateOrLocalIp(string $ip): bool
+    {
+        if ($ip === '::1' || $ip === '127.0.0.1' || strcasecmp($ip, 'localhost') === 0) {
+            return true;
+        }
+        return filter_var(
+            $ip,
+            FILTER_VALIDATE_IP,
+            FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+        ) === false;
+    }
+
+    protected static function httpGet(string $url): string
+    {
+        if (function_exists('curl_init')) {
+            $ch = curl_init();
+            curl_setopt_array($ch, [
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_CONNECTTIMEOUT => 2,
+                CURLOPT_TIMEOUT => 3,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_USERAGENT => 'AdminLoginHistory/1.0',
+            ]);
+            $response = curl_exec($ch);
+            $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            if ($response !== false && $httpCode >= 200 && $httpCode < 300) {
+                return (string) $response;
+            }
+            return '';
+        }
+
+        $context = stream_context_create([
+            'http' => [
+                'timeout' => 3,
+                'header' => "User-Agent: AdminLoginHistory/1.0\r\n",
+            ],
+        ]);
+        $response = @file_get_contents($url, false, $context);
+        return $response === false ? '' : (string) $response;
     }
 
     /**

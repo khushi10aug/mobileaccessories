@@ -126,6 +126,7 @@ class AdminAuthentication extends FatModel
             'admin_email' => $row['admin_email'],
             'admin_ip' => $row['admin_ip'],
             'admin_updated_on' => time(),
+            'admin_last_activity' => time(),
             'admin_admperm_updated_on' => $row['admin_admperm_updated_on'],
         );
     }

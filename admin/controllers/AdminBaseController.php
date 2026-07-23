@@ -24,9 +24,9 @@ class AdminBaseController extends FatController
         }
 
         if (!AdminAuthentication::isAdminLogged()) {
-            // PHP/session expired: close open login history via surviving cookie.
+            // PHP session already gone: close cookie-linked + abandoned open history rows.
             try {
-                AdminLoginHistory::closeOpenSessionFromCookie();
+                AdminLoginHistory::handleAutoSessionExpiry();
             } catch (Exception $e) {
                 // Ignore history tracking errors.
             }
@@ -37,11 +37,29 @@ class AdminBaseController extends FatController
             FatApp::redirectUser(UrlHelper::generateUrl('AdminGuest', 'loginForm'));
         }
 
+        // Idle timeout while PHP session is still alive: write logout then force logout.
+        if (AdminLoginHistory::isSessionIdleExpired()) {
+            try {
+                AdminLoginHistory::logLogout(AdminAuthentication::getLoggedAdminId());
+            } catch (Exception $e) {
+                // Ignore history tracking errors.
+            }
+            AdminAuthentication::clearLoggedAdminLoginCookie();
+            session_destroy();
+            CommonHelper::initCommonVariables(true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_SESSION_SEEMS_TO_BE_EXPIRED', CommonHelper::getLangId()), false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('AdminGuest', 'loginForm'));
+        }
+
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
 
         $permissionUpdatedOn = Admin::getAttributesById($this->admin_id, 'admin_admperm_updated_on');
         if ($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_admperm_updated_on'] != $permissionUpdatedOn) {
-            AdminLoginHistory::logLogout($this->admin_id);
+            try {
+                AdminLoginHistory::logLogout($this->admin_id);
+            } catch (Exception $e) {
+                // Ignore history tracking errors.
+            }
             AdminAuthentication::clearLoggedAdminLoginCookie();
             session_destroy();
             LibHelper::exitWithError(Labels::getLabel('ERR_SESSION_SEEMS_TO_BE_EXPIRED', CommonHelper::getLangId()), false, true);

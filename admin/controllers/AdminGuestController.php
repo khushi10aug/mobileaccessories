@@ -19,9 +19,9 @@ class AdminGuestController extends FatController
             LibHelper::exitWithError($msg, true, $redirect);
         }
 
-        // Session expired / logged out elsewhere: mark logout on open history row.
+        // Session expired / logged out elsewhere: mark logout on open history rows.
         try {
-            AdminLoginHistory::closeOpenSessionFromCookie();
+            AdminLoginHistory::handleAutoSessionExpiry();
         } catch (Exception $e) {
             // Ignore history tracking errors on guest pages.
         }

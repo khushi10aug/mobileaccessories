@@ -61,7 +61,7 @@ $this->includeTemplate('_partial/product-reviews.php', [
                     <div class="box box--white rounded p-3 have-you">
                         <h5><?php echo Labels::getLabel('Lbl_Share_your_thoughts', $siteLangId); ?></h5>
                         <p><?php echo Labels::getLabel('Lbl_With_other_customers', $siteLangId); ?></p>
-                        <a class="btn btn-brand btn-sm" href="<?php echo UrlHelper::generateUrl('Reviews', 'write', array($product_id)); ?>"><?php echo Labels::getLabel('Lbl_Write_a_Review', $siteLangId); ?></a>
+                        <a class="btn btn-brand btn-sm" href="<?php echo UrlHelper::generateUrl('Reviews', 'write', array($product_id, FatUtility::int($product['selprod_id'] ?? 0))); ?>"><?php echo Labels::getLabel('Lbl_Write_a_Review', $siteLangId); ?></a>
                     </div>
                 </div>
             <?php } ?>

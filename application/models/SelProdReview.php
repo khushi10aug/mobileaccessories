@@ -125,6 +125,36 @@ class SelProdReview extends MyAppModel
         return (is_array($row) ? $row : []);
     }
 
+    public static function userHasReviewedProduct(int $userId, int $productId): bool
+    {
+        $userId = FatUtility::int($userId);
+        $productId = FatUtility::int($productId);
+        if (1 > $userId || 1 > $productId) {
+            return false;
+        }
+        $srch = new SelProdReviewSearch();
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
+        $srch->addCondition('spreview_postedby_user_id', '=', $userId);
+        $srch->addCondition('spreview_product_id', '=', $productId);
+        $srch->addCondition('spreview_status', '!=', static::STATUS_CANCELLED);
+        return !empty(FatApp::getDb()->fetch($srch->getResultSet()));
+    }
+
+    public static function canUserSubmitProductReview(int $userId, int $productId): bool
+    {
+        if (!FatApp::getConfig('CONF_ALLOW_REVIEWS', FatUtility::VAR_INT, 0)) {
+            return false;
+        }
+        $userId = FatUtility::int($userId);
+        $productId = FatUtility::int($productId);
+        if (1 > $userId || 1 > $productId) {
+            return false;
+        }
+        return !static::userHasReviewedProduct($userId, $productId);
+    }
+
 
     public static function getStatusClassArr()
     {

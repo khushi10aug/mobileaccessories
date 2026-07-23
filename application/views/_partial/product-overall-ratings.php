@@ -114,7 +114,7 @@ if ($totReviews) {
         <h5 class="title-sub"><?php echo Labels::getLabel('LBL_REVIEW_THIS_PRODUCT', $siteLangId); ?></h5>
         <p><?php echo Labels::getLabel('LBL_SHARE_YOUR_THOUGHTS_WITH_OTHER_CUSTOMERS', $siteLangId); ?></p>
         <button class="btn btn-brand btn-block" type="button"
-            onclick="rateAndReviewProduct(<?php echo $product_id; ?>)">
+            onclick="rateAndReviewProduct(<?php echo $product_id; ?>, <?php echo FatUtility::int($selprod_id ?? 0); ?>)">
             <?php echo Labels::getLabel('LBL_WRITE_A_REVIEW', $siteLangId); ?>
         </button>
     </div>

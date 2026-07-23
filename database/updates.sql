@@ -1102,10 +1102,17 @@ INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`
 ('LBL_TIME_SPENT', 1, 'Time Spent', 1),
 ('LBL_HRS', 1, 'hrs', 1),
 ('LBL_STILL_ACTIVE', 1, 'Still active', 1),
-('FRM_SEARCH_BY_ADMIN_OR_IP', 1, 'Search by admin name, username, email, IP or location', 1)
+('FRM_SEARCH_BY_ADMIN_OR_IP', 1, 'Search by admin name, username, email, IP or location', 1),
+('ERR_GUEST_USERS_CANNOT_POST_REVIEWS', 1, 'Guest users cannot post reviews. Please login with your account.', 1),
+('ERR_YOU_CANNOT_REVIEW_YOUR_OWN_PRODUCT', 1, 'You cannot review your own product.', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 /* If tbl_admin_login_history already exists without last activity column, run:
 ALTER TABLE `tbl_admin_login_history`
   ADD COLUMN `alh_last_activity` datetime DEFAULT NULL AFTER `alh_logged_at`;
 */
+
+/* Allow product reviews without purchase (order_id = 0 for non-order reviews) */
+ALTER TABLE `tbl_seller_product_reviews` DROP INDEX `spreview_order_id`;
+ALTER TABLE `tbl_seller_product_reviews`
+  ADD UNIQUE KEY `spreview_order_selprod_user` (`spreview_order_id`, `spreview_selprod_id`, `spreview_postedby_user_id`);

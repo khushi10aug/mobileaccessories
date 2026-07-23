@@ -41,12 +41,12 @@ class ReviewsController extends MyAppController
         $reviews = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());
         $this->set('reviews', $reviews);
 
-        $canSubmitFeedback = true;
-        if ($loggedUserId) {
-            $orderProduct = SelProdReview::getProductOrderId($product['product_id'], $loggedUserId);
-            $op_order_id = (!empty($orderProduct) && array_key_exists('op_order_id', $orderProduct)) ? $orderProduct['op_order_id'] : 0;
-            if (empty($orderProduct) || (isset($orderProduct['op_order_id']) && !Orders::canSubmitFeedback($loggedUserId, $op_order_id, $selprod_id))) {
-                $canSubmitFeedback = false;
+        $canSubmitFeedback = false;
+        if (FatApp::getConfig('CONF_ALLOW_REVIEWS', FatUtility::VAR_INT, 0)) {
+            if ($loggedUserId) {
+                $canSubmitFeedback = SelProdReview::canUserSubmitProductReview($loggedUserId, $product['product_id']);
+            } else {
+                $canSubmitFeedback = true;
             }
         }
         $this->set('canSubmitFeedback', $canSubmitFeedback);
@@ -467,23 +467,313 @@ class ReviewsController extends MyAppController
         FatUtility::dieJsonSuccess($success);
     }
 
-    public function write($product_id)
+    public function write($product_id, $selprod_id = 0)
     {
         $product_id = FatUtility::int($product_id);
+        $selprod_id = FatUtility::int($selprod_id);
         if (!$product_id) {
             FatUtility::exitWithErrorCode(404);
         }
-        $loggedUserId = 0;
-        if (UserAuthentication::isUserLogged()) {
-            $loggedUserId = UserAuthentication::getLoggedUserId();
-        }
-        $orderProduct = SelProdReview::getProductOrderId($product_id, $loggedUserId);
-        if (empty($orderProduct)) {
-            Message::addErrorMessage(Labels::getLabel('ERR_REVIEW_CAN_BE_POSTED_ON_BOUGHT_PRODUCT', $this->siteLangId));
+
+        UserAuthentication::checkLogin();
+        if (UserAuthentication::isGuestUserLogged()) {
+            Message::addErrorMessage(Labels::getLabel('ERR_GUEST_USERS_CANNOT_POST_REVIEWS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
-        $opId = $orderProduct['op_id'];
-        FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'orderFeedback', array($opId), CONF_WEBROOT_DASHBOARD, null, false, false, false));
+
+        if (!FatApp::getConfig('CONF_ALLOW_REVIEWS', FatUtility::VAR_INT, 0)) {
+            Message::addErrorMessage(Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId));
+            CommonHelper::redirectUserReferer();
+        }
+
+        $loggedUserId = UserAuthentication::getLoggedUserId();
+        if (!SelProdReview::canUserSubmitProductReview($loggedUserId, $product_id)) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Already_submitted_order_feedback', $this->siteLangId));
+            CommonHelper::redirectUserReferer();
+        }
+
+        $orderProduct = SelProdReview::getProductOrderId($product_id, $loggedUserId);
+        if (!empty($orderProduct) && !empty($orderProduct['op_id'])) {
+            $orderSelprodId = !empty($orderProduct['op_selprod_id']) ? FatUtility::int($orderProduct['op_selprod_id']) : $selprod_id;
+            if ($orderSelprodId && Orders::canSubmitFeedback($loggedUserId, $orderProduct['op_order_id'], $orderSelprodId)) {
+                FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'orderFeedback', array($orderProduct['op_id']), CONF_WEBROOT_DASHBOARD, null, false, false, false));
+            }
+        }
+
+        FatApp::redirectUser(UrlHelper::generateUrl('Reviews', 'productFeedback', array($product_id, $selprod_id)));
+    }
+
+    public function productFeedback($product_id = 0, $selprod_id = 0)
+    {
+        UserAuthentication::checkLogin();
+        if (UserAuthentication::isGuestUserLogged()) {
+            Message::addErrorMessage(Labels::getLabel('ERR_GUEST_USERS_CANNOT_POST_REVIEWS', $this->siteLangId));
+            CommonHelper::redirectUserReferer();
+        }
+
+        $product_id = FatUtility::int($product_id);
+        $selprod_id = FatUtility::int($selprod_id);
+        $userId = UserAuthentication::getLoggedUserId();
+
+        if (1 > $product_id || !FatApp::getConfig('CONF_ALLOW_REVIEWS', FatUtility::VAR_INT, 0)) {
+            Message::addErrorMessage(Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId));
+            CommonHelper::redirectUserReferer();
+        }
+
+        if (!SelProdReview::canUserSubmitProductReview($userId, $product_id)) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Already_submitted_order_feedback', $this->siteLangId));
+            CommonHelper::redirectUserReferer();
+        }
+
+        $product = $this->getProductForFeedback($product_id, $selprod_id);
+        if (empty($product)) {
+            Message::addErrorMessage(Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId));
+            CommonHelper::redirectUserReferer();
+        }
+
+        if ($userId == FatUtility::int($product['selprod_user_id'])) {
+            Message::addErrorMessage(Labels::getLabel('ERR_YOU_CANNOT_REVIEW_YOUR_OWN_PRODUCT', $this->siteLangId));
+            CommonHelper::redirectUserReferer();
+        }
+
+        $ratingAspects = SelProdRating::getRatingAspectsArr($this->siteLangId);
+        $productObj = new Product();
+        $productCategories = $productObj->getProductCategories($product_id);
+        $otherRatingTypes = [];
+        if (!empty($productCategories)) {
+            $prodCatId = FatUtility::int(key($productCategories));
+            if (0 < $prodCatId) {
+                $srch = ProductCategory::getRatingTypesObj($this->siteLangId, applicationConstants::ACTIVE);
+                $srch->addCondition('prt_prodcat_id', '=', $prodCatId);
+                $srch->addCondition('ratingtype_type', '=', RatingType::TYPE_OTHER);
+                $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name']);
+                $otherRatingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
+            }
+        }
+        if (0 < count($otherRatingTypes)) {
+            $ratingAspects = $ratingAspects + $otherRatingTypes;
+        }
+
+        $shopRatingTypesArr = SelProdRating::getShopRatingTypeArr($this->siteLangId);
+        if (!empty($shopRatingTypesArr)) {
+            $ratingAspects = $shopRatingTypesArr + $ratingAspects;
+        }
+
+        $frm = $this->getProductFeedbackForm($product_id, $product['selprod_id'], $this->siteLangId, $ratingAspects);
+        $this->set('frm', $frm);
+        $this->set('product', $product);
+        $this->set('ratingAspects', $ratingAspects);
+        $this->set('selProdRating', SelProdRating::getRatingAspectsArr($this->siteLangId) + $otherRatingTypes);
+        $this->set('otherRatingTypesArr', $otherRatingTypes);
+        $this->set('shopRatingTypesArr', $shopRatingTypesArr);
+        $this->_template->addJs(['js/jquery.barrating.min.js']);
+        $this->_template->render(true, true, 'reviews/product-feedback.php');
+    }
+
+    public function setupProductFeedback()
+    {
+        UserAuthentication::checkLogin();
+        if (UserAuthentication::isGuestUserLogged()) {
+            LibHelper::dieJsonError(Labels::getLabel('ERR_GUEST_USERS_CANNOT_POST_REVIEWS', $this->siteLangId));
+        }
+
+        $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+        $selprodId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
+        $userId = UserAuthentication::getLoggedUserId();
+
+        if (1 > $productId || !FatApp::getConfig('CONF_ALLOW_REVIEWS', FatUtility::VAR_INT, 0)) {
+            LibHelper::dieJsonError(Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId));
+        }
+
+        if (!SelProdReview::canUserSubmitProductReview($userId, $productId)) {
+            LibHelper::dieJsonError(Labels::getLabel('MSG_Already_submitted_order_feedback', $this->siteLangId));
+        }
+
+        $product = $this->getProductForFeedback($productId, $selprodId);
+        if (empty($product)) {
+            LibHelper::dieJsonError(Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId));
+        }
+
+        if ($userId == FatUtility::int($product['selprod_user_id'])) {
+            LibHelper::dieJsonError(Labels::getLabel('ERR_YOU_CANNOT_REVIEW_YOUR_OWN_PRODUCT', $this->siteLangId));
+        }
+
+        $enteredAbusiveWordsArr = array();
+        if (!Abusive::validateContent(FatApp::getPostedData('spreview_description', FatUtility::VAR_STRING, ''), $enteredAbusiveWordsArr)) {
+            if (!empty($enteredAbusiveWordsArr)) {
+                $errStr = Labels::getLabel('LBL_Word_{abusiveword}_is/are_not_allowed_to_post', $this->siteLangId);
+                $errStr = str_replace('{abusiveword}', '"' . implode(', ', $enteredAbusiveWordsArr) . '"', $errStr);
+                LibHelper::dieJsonError($errStr);
+            }
+        }
+        if (!Abusive::validateContent(FatApp::getPostedData('spreview_title', FatUtility::VAR_STRING, ''), $enteredAbusiveWordsArr)) {
+            if (!empty($enteredAbusiveWordsArr)) {
+                $errStr = Labels::getLabel('LBL_Word_{abusiveword}_is/are_not_allowed_to_post', $this->siteLangId);
+                $errStr = str_replace('{abusiveword}', '"' . implode(', ', $enteredAbusiveWordsArr) . '"', $errStr);
+                LibHelper::dieJsonError($errStr);
+            }
+        }
+
+        $ratingAspects = SelProdRating::getRatingAspectsArr($this->siteLangId);
+        $productObj = new Product();
+        $productCategories = $productObj->getProductCategories($productId);
+        if (!empty($productCategories)) {
+            $prodCatId = FatUtility::int(key($productCategories));
+            if (0 < $prodCatId) {
+                $srch = ProductCategory::getRatingTypesObj($this->siteLangId, applicationConstants::ACTIVE);
+                $srch->addCondition('prt_prodcat_id', '=', $prodCatId);
+                $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name']);
+                $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
+                if (0 < count($ratingTypes)) {
+                    $ratingAspects = $ratingAspects + $ratingTypes;
+                }
+            }
+        }
+        $shopRatingTypesArr = SelProdRating::getShopRatingTypeArr($this->siteLangId);
+        if (!empty($shopRatingTypesArr)) {
+            $ratingAspects = $shopRatingTypesArr + $ratingAspects;
+        }
+
+        $frm = $this->getProductFeedbackForm($productId, $product['selprod_id'], $this->siteLangId, $ratingAspects);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        if (false === $post) {
+            LibHelper::dieJsonError($frm->getValidationErrors());
+        }
+
+        $post['spreview_seller_user_id'] = $product['selprod_user_id'];
+        $post['spreview_order_id'] = 0;
+        $post['spreview_product_id'] = $productId;
+        $post['spreview_selprod_id'] = $product['selprod_id'];
+        $post['spreview_selprod_code'] = $product['selprod_code'];
+        $post['spreview_postedby_user_id'] = $userId;
+        $post['spreview_posted_on'] = date('Y-m-d H:i:s');
+        $post['spreview_lang_id'] = $this->siteLangId;
+        $post['spreview_status'] = FatApp::getConfig('CONF_DEFAULT_REVIEW_STATUS', FatUtility::VAR_INT, 0);
+
+        $selProdReview = new SelProdReview();
+        $selProdReview->assignValues($post);
+
+        $db = FatApp::getDb();
+        $db->startTransaction();
+
+        if (!$selProdReview->save()) {
+            $db->rollbackTransaction();
+            LibHelper::dieJsonError($selProdReview->getError());
+        }
+
+        $sellerId = FatUtility::int($product['selprod_user_id']);
+        SelProdRating::updateSellerRating($sellerId);
+        SelProdReview::updateSellerTotalReviews($sellerId);
+        SelProdReview::updateProductRating($productId);
+
+        $spreviewId = $selProdReview->getMainTableRecordId();
+        $ratingsPosted = FatApp::getPostedData('review_rating');
+        if (!empty($ratingsPosted) && is_array($ratingsPosted)) {
+            foreach ($ratingsPosted as $ratingAspect => $ratingValue) {
+                if (array_key_exists($ratingAspect, $ratingAspects)) {
+                    $selProdRating = new SelProdRating();
+                    $ratingRow = [
+                        'sprating_spreview_id' => $spreviewId,
+                        'sprating_ratingtype_id' => $ratingAspect,
+                        'sprating_rating' => $ratingValue,
+                    ];
+                    $selProdRating->assignValues($ratingRow);
+                    if (!$selProdRating->save()) {
+                        $db->rollbackTransaction();
+                        LibHelper::dieJsonError($selProdRating->getError());
+                    }
+                }
+            }
+        }
+
+        if (!empty($_FILES) && array_key_exists('spreview_image', $_FILES) && is_array($_FILES['spreview_image']['tmp_name'])) {
+            foreach ($_FILES['spreview_image']['tmp_name'] as $index => $tmpName) {
+                if (!is_uploaded_file($tmpName)) {
+                    continue;
+                }
+                $fileHandlerObj = new AttachedFile();
+                if (!$fileHandlerObj->saveAttachment(
+                    $tmpName,
+                    AttachedFile::FILETYPE_ORDER_FEEDBACK,
+                    $spreviewId,
+                    0,
+                    $_FILES['spreview_image']['name'][$index]
+                )) {
+                    $db->rollbackTransaction();
+                    FatUtility::dieJsonError($fileHandlerObj->getError());
+                }
+            }
+        }
+
+        $db->commitTransaction();
+
+        $emailNotificationObj = new EmailHandler();
+        if ($post['spreview_status'] == SelProdReview::STATUS_APPROVED) {
+            $emailNotificationObj->sendBuyerReviewStatusUpdatedNotification($spreviewId, $this->siteLangId);
+        }
+
+        $notificationData = [
+            'notification_record_type' => Notification::TYPE_PRODUCT_REVIEW,
+            'notification_record_id' => $spreviewId,
+            'notification_user_id' => $userId,
+            'notification_label_key' => Notification::PRODUCT_REVIEW_NOTIFICATION,
+            'notification_added_on' => date('Y-m-d H:i:s'),
+        ];
+        Notification::saveNotifications($notificationData);
+
+        $redirectUrl = !empty($post['referrer']) ? $post['referrer'] : UrlHelper::generateUrl('Products', 'view', [$product['selprod_id']]);
+        $this->set('msg', Labels::getLabel('MSG_Feedback_Submitted_Successfully', $this->siteLangId));
+        $this->set('redirectUrl', $redirectUrl);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    private function getProductForFeedback(int $productId, int $selprodId = 0): array
+    {
+        $prodSrch = new ProductSearch($this->siteLangId);
+        $prodSrch->setDefinedCriteria();
+        $prodSrch->joinProductToCategory();
+        $prodSrch->doNotCalculateRecords();
+        $prodSrch->setPageSize(1);
+        $prodSrch->addCondition('product_id', '=', $productId);
+        if (0 < $selprodId) {
+            $prodSrch->addCondition('selprod_id', '=', $selprodId);
+        }
+        $prodSrch->addMultipleFields([
+            'product_id',
+            'selprod_id',
+            'selprod_user_id',
+            'selprod_code',
+            'selprod_product_id',
+            'shop_id',
+            'COALESCE(shop_name, shop_identifier) as shop_name',
+            'COALESCE(selprod_title, product_name, product_identifier) as selprod_title',
+            'COALESCE(product_name, product_identifier) as product_name',
+            'product_type',
+            'seller_user.user_regdate as user_regdate',
+        ]);
+        $product = FatApp::getDb()->fetch($prodSrch->getResultSet());
+        return is_array($product) ? $product : [];
+    }
+
+    private function getProductFeedbackForm(int $productId, int $selprodId, int $langId, array $ratingAspects): Form
+    {
+        $frm = new Form('frmProductFeedback');
+        foreach ($ratingAspects as $aspectVal => $aspectLabel) {
+            $fld = $frm->addSelectBox($aspectLabel, 'review_rating[' . $aspectVal . ']', ['1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5'], '', ['class' => 'star-rating'], Labels::getLabel('L_Rate', $langId));
+            $fld->requirements()->setRequired(true);
+            $fld->setWrapperAttribute('class', 'rating-f');
+            $fld->developerTags['noCaptionTag'] = true;
+        }
+        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $langId), 'spreview_title');
+        $frm->addTextArea(Labels::getLabel('FRM_DESCRIPTION', $langId), 'spreview_description')->requirements()->setRequired();
+        $frm->addFileUpload('', 'spreview_image[]', ['accept' => 'image/*', 'data-frm' => 'frmProductFeedback']);
+        $arr = ['{website-name}' => FatApp::getConfig('CONF_WEBSITE_NAME_' . $langId)];
+        $frm->addCheckBox(strtr(Labels::getLabel('FRM_I_AGREE_THAT_MY_REVIEW,_including_my_name,_username,_may_be_shared_by_{website-name}_on_its_website_and_mobile_app_to_the_public._Further_details_of_which_are_set_out_in_the_Privacy_Policy_which_I_have_previously_consented', $langId), $arr), 'agree', 1);
+        $frm->addHiddenField('', 'product_id', $productId);
+        $frm->addHiddenField('', 'selprod_id', $selprodId);
+        $frm->addHiddenField('', 'referrer', CommonHelper::redirectUserReferer(true));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $langId));
+        return $frm;
     }
 
     public function reviewAbuse($reviewId)

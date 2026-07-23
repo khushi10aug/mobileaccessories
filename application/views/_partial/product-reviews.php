@@ -56,14 +56,16 @@ $productView = $productView ?? false;
                                     </div>
                                 </div>
                             <?php } else { ?>
+                                <?php if (!empty($canSubmitFeedback)) { ?>
                                 <div class="rating-block m-0">
                                     <div class="review-cta">
                                         <button class="btn btn-brand btn-wide" type="button"
-                                            onclick="rateAndReviewProduct(<?php echo $product_id; ?>)">
+                                            onclick="rateAndReviewProduct(<?php echo $product_id; ?>, <?php echo FatUtility::int($product['selprod_id'] ?? 0); ?>)">
                                             <?php echo Labels::getLabel('LBL_WRITE_A_REVIEW', $siteLangId); ?>
                                         </button>
                                     </div>
                                 </div>
+                                <?php } ?>
                             <?php } ?>
                         </div>
                     <?php } ?>
@@ -121,6 +123,7 @@ $productView = $productView ?? false;
                                             'siteLangId' => $siteLangId,
                                             'canSubmitFeedback' => $canSubmitFeedback,
                                             'product_id' => $product_id,
+                                            'selprod_id' => FatUtility::int($product['selprod_id'] ?? 0),
                                         ], false); ?>
                                     </div>
                                 </div>

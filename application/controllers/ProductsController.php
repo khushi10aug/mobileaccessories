@@ -1071,11 +1071,12 @@ class ProductsController extends MyAppController
             $this->set('banners', $banners);
         }
 
-        $canSubmitFeedback = true;
-        if ($loggedUserId) {
-            $orderProduct = SelProdReview::getProductOrderId($product['product_id'], $loggedUserId);
-            if (empty($orderProduct) || (isset($orderProduct['op_order_id']) && !Orders::canSubmitFeedback($loggedUserId, $orderProduct['op_order_id'], $selprod_id))) {
-                $canSubmitFeedback = false;
+        $canSubmitFeedback = false;
+        if (FatApp::getConfig('CONF_ALLOW_REVIEWS', FatUtility::VAR_INT, 0)) {
+            if ($loggedUserId) {
+                $canSubmitFeedback = SelProdReview::canUserSubmitProductReview($loggedUserId, $product['product_id']);
+            } else {
+                $canSubmitFeedback = true;
             }
         }
 

@@ -1,0 +1,214 @@
+.section--review-feedback .review-feedback-card {
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    box-shadow: none;
+    overflow: hidden;
+    background: #fff;
+    height: auto;
+}
+
+.section--review-feedback .section-head {
+    margin-bottom: 1rem;
+}
+
+.section--review-feedback .section-heading h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.order-feedback-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.order-feedback-section .feedback-block {
+    padding: 1.5rem;
+}
+
+.order-feedback-section .feedback-block .card-title {
+    margin: 0 0 1rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.order-feedback-section .product-profile {
+    align-items: center;
+}
+
+.order-feedback-section .product-profile__pic {
+    flex: 0 0 64px;
+    max-width: 64px;
+    width: 64px;
+}
+
+.order-feedback-section .product-profile__pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.order-feedback-section .product-profile__title a {
+    color: inherit;
+    font-weight: 500;
+}
+
+.order-feedback-section .item__category a {
+    color: #6c757d;
+    font-size: 0.8rem;
+}
+
+.order-feedback-section .rating-listing {
+    margin-bottom: 1rem;
+}
+
+.order-feedback-section .rating-listing .rating {
+    --size: 1.5rem;
+    --space: 0.4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0.75rem 0;
+    position: relative;
+}
+
+.order-feedback-section .rating-listing .rating__text {
+    display: block;
+    margin: 0 0 0.35rem;
+    padding: 0;
+    border: 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: capitalize;
+    line-height: 1.3;
+    width: 100%;
+}
+
+.order-feedback-section .rating-listing-column {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem 1.5rem;
+}
+
+@media (max-width: 575.98px) {
+    .order-feedback-section .rating-listing-column {
+        grid-template-columns: 1fr;
+    }
+}
+
+.order-feedback-section .rating.rating-f .row,
+.order-feedback-section .rating.rating-f [class*="col-"] {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+    float: none;
+}
+
+.order-feedback-section .rating.rating-f label,
+.order-feedback-section .rating.rating-f .caption,
+.order-feedback-section .rating.rating-f .field_caption {
+    display: none !important;
+}
+
+.order-feedback-section .rating.rating-f .br-widget {
+    height: 24px;
+    clear: both;
+}
+
+.order-feedback-section .rating.rating-f .br-current-rating {
+    display: none !important;
+}
+
+.order-feedback-section .form-group {
+    margin-bottom: 1rem;
+}
+
+.order-feedback-section .form-label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.order-feedback-section .form-group input[type="text"],
+.order-feedback-section .form-group textarea {
+    width: 100%;
+}
+
+.order-feedback-section .form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.order-feedback-section .shop-rating-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.order-feedback-section .shop-card {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    gap: 1rem;
+}
+
+.order-feedback-section .shop-card__img {
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 0.25rem;
+    background: #fff;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.order-feedback-section .shop-card__img img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.order-feedback-section .shop-card__detail h6 {
+    margin: 0 0 0.2rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.order-feedback-section .shop-opened {
+    display: block;
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.order-feedback-section .review-agree .checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    line-height: 1.45;
+    font-size: 0.85rem;
+    color: #474747;
+}
+
+.order-feedback-section .review-agree input[type="checkbox"] {
+    margin-top: 0.2rem;
+    flex: 0 0 auto;
+}
+
+.order-feedback-section .btn-brand {
+    margin-top: 0.5rem;
+    min-width: 120px;
+}
+
+.order-feedback-section .divider {
+    margin: 0;
+}
+
+.main[dir="rtl"] .order-feedback-section .rating.rating-f .br-widget a {
+    float: right;
+}

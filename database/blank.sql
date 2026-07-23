@@ -6662,7 +6662,7 @@ CREATE TABLE `tbl_seller_product_reviews` (
   `spreview_status` tinyint(4) NOT NULL,
   `spreview_lang_id` int(11) NOT NULL,
   PRIMARY KEY (`spreview_id`),
-  UNIQUE KEY `spreview_order_id` (`spreview_order_id`,`spreview_selprod_id`)
+  UNIQUE KEY `spreview_order_selprod_user` (`spreview_order_id`,`spreview_selprod_id`,`spreview_postedby_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

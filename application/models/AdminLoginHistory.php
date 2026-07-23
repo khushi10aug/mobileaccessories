@@ -14,6 +14,14 @@ class AdminLoginHistory extends MyAppModel
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
     }
 
+    /**
+     * Table has no *_updated_on column; parent save() would fatal on unknown column.
+     */
+    public function updateModifiedTime()
+    {
+        return true;
+    }
+
     public static function getSearchObject()
     {
         return new SearchBase(static::DB_TBL, 'alh');
@@ -154,16 +162,16 @@ class AdminLoginHistory extends MyAppModel
             'alh_logout_at' => null,
         ];
 
-        $obj = new self();
-        $obj->assignValues($data);
-        if (!$obj->save()) {
+        $db = FatApp::getDb();
+        // Use direct insert — MyAppModel::save() also tries updating *_updated_on (not in this table).
+        if (!$db->insertFromArray(self::DB_TBL, $data)) {
             return false;
         }
 
-        $alhId = FatUtility::int($obj->getMainTableRecordId());
+        $alhId = FatUtility::int($db->getInsertId());
         if ($alhId > 0) {
             self::setLoginHistoryCookie($alhId);
-            if (isset($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME])) {
+            if (!empty($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]) && is_array($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME])) {
                 $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['alh_id'] = $alhId;
             }
         }
@@ -229,8 +237,13 @@ class AdminLoginHistory extends MyAppModel
             return;
         }
 
+        $session = $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME] ?? null;
+        if (!is_array($session)) {
+            return;
+        }
+
         // Throttle DB writes to once per minute.
-        $lastTouch = FatUtility::int($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['alh_last_touch'] ?? 0);
+        $lastTouch = FatUtility::int($session['alh_last_touch'] ?? 0);
         if ($lastTouch > 0 && (time() - $lastTouch) < 60) {
             return;
         }
@@ -244,10 +257,8 @@ class AdminLoginHistory extends MyAppModel
             ]
         );
 
-        if (isset($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME])) {
-            $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['alh_last_touch'] = time();
-            $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['alh_id'] = $alhId;
-        }
+        $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['alh_last_touch'] = time();
+        $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['alh_id'] = $alhId;
     }
 
     public static function closeHistoryById(int $alhId, array $row = []): bool
@@ -347,7 +358,7 @@ class AdminLoginHistory extends MyAppModel
 
         $ip = self::normalizeIp($ip);
         if ($ip === '' || $ip === 'UNKNOWN' || self::isPrivateOrLocalIp($ip)) {
-            $empty['location'] = Labels::getLabel('LBL_LOCAL_NETWORK', CommonHelper::getLangId());
+            $empty['location'] = 'Local / Private Network';
             return $empty;
         }
 

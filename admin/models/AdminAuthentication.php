@@ -104,7 +104,11 @@ class AdminAuthentication extends FatModel
         $row['admin_ip'] = $ip;
         $this->setAdminSession($row);
 
-        AdminLoginHistory::logLogin($row, $ip, AdminLoginHistory::LOGIN_TYPE_PASSWORD);
+        try {
+            AdminLoginHistory::logLogin($row, $ip, AdminLoginHistory::LOGIN_TYPE_PASSWORD);
+        } catch (Exception $e) {
+            // Never block admin login if history logging fails.
+        }
 
         /* clear failed login attempt for the user [ */
         $objUserAuthentication->clearFailedAttempt($ip, $username);

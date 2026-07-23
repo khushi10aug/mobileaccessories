@@ -20,7 +20,11 @@ class AdminGuestController extends FatController
         }
 
         // Session expired / logged out elsewhere: mark logout on open history row.
-        AdminLoginHistory::closeOpenSessionFromCookie();
+        try {
+            AdminLoginHistory::closeOpenSessionFromCookie();
+        } catch (Exception $e) {
+            // Ignore history tracking errors on guest pages.
+        }
 
         $controllerName = get_class($this);
         $arr = explode('-', FatUtility::camel2dashed($controllerName));
@@ -328,7 +332,11 @@ class AdminGuestController extends FatController
             $row['admin_ip'] = CommonHelper::getClientIp();
             $adminAuthObj = AdminAuthentication::getInstance();
             $adminAuthObj->setAdminSession($row);
-            AdminLoginHistory::logLogin($row, $row['admin_ip'], AdminLoginHistory::LOGIN_TYPE_REMEMBER_ME);
+            try {
+                AdminLoginHistory::logLogin($row, $row['admin_ip'], AdminLoginHistory::LOGIN_TYPE_REMEMBER_ME);
+            } catch (Exception $e) {
+                // Never block remember-me login if history logging fails.
+            }
             return true;
         }
         return false;

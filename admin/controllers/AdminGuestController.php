@@ -19,6 +19,9 @@ class AdminGuestController extends FatController
             LibHelper::exitWithError($msg, true, $redirect);
         }
 
+        // Session expired / logged out elsewhere: mark logout on open history row.
+        AdminLoginHistory::closeOpenSessionFromCookie();
+
         $controllerName = get_class($this);
         $arr = explode('-', FatUtility::camel2dashed($controllerName));
         array_pop($arr);

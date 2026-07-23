@@ -1057,6 +1057,7 @@ CREATE TABLE `tbl_admin_login_history` (
   `alh_isp` varchar(150) NOT NULL DEFAULT '',
   `alh_location` varchar(255) NOT NULL DEFAULT '',
   `alh_logged_at` datetime NOT NULL,
+  `alh_last_activity` datetime DEFAULT NULL,
   `alh_logout_at` datetime DEFAULT NULL,
   PRIMARY KEY (`alh_id`),
   KEY `alh_admin_id` (`alh_admin_id`),
@@ -1098,5 +1099,13 @@ INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`
 ('LBL_TIMEZONE', 1, 'Timezone', 1),
 ('LBL_ISP', 1, 'ISP', 1),
 ('LBL_LOCAL_NETWORK', 1, 'Local / Private Network', 1),
+('LBL_TIME_SPENT', 1, 'Time Spent', 1),
+('LBL_HRS', 1, 'hrs', 1),
+('LBL_STILL_ACTIVE', 1, 'Still active', 1),
 ('FRM_SEARCH_BY_ADMIN_OR_IP', 1, 'Search by admin name, username, email, IP or location', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+/* If tbl_admin_login_history already exists without last activity column, run:
+ALTER TABLE `tbl_admin_login_history`
+  ADD COLUMN `alh_last_activity` datetime DEFAULT NULL AFTER `alh_logged_at`;
+*/

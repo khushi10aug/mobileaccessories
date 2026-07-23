@@ -101,6 +101,10 @@
                                     <span class="lable"><?php echo Labels::getLabel('LBL_LOGOUT_AT', $siteLangId); ?></span>
                                     <span class="value"><?php echo !empty($detail['alh_logout_at']) ? FatDate::format($detail['alh_logout_at'], true) : '-'; ?></span>
                                 </li>
+                                <li class="list-stats-item">
+                                    <span class="lable"><?php echo Labels::getLabel('LBL_TIME_SPENT', $siteLangId); ?></span>
+                                    <span class="value"><?php echo htmlspecialchars(AdminLoginHistory::formatSessionDuration($detail, $siteLangId)); ?></span>
+                                </li>
                                 <?php if (!empty($detail['alh_referer'])) { ?>
                                     <li class="list-stats-item list-stats-item-full">
                                         <span class="lable"><?php echo Labels::getLabel('LBL_REFERER', $siteLangId); ?></span>

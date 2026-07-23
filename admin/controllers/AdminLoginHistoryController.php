@@ -198,7 +198,7 @@ class AdminLoginHistoryController extends ListingBaseController
 
     protected function getFormColumns(): array
     {
-        $cacheKey = 'adminLoginHistoryTblHeadingColsV2' . $this->siteLangId;
+        $cacheKey = 'adminLoginHistoryTblHeadingColsV3' . $this->siteLangId;
         $cached = CacheHelper::get($cacheKey, CONF_DEF_CACHE_TIME, '.txt');
         if ($cached) {
             return json_decode($cached, true);
@@ -208,12 +208,12 @@ class AdminLoginHistoryController extends ListingBaseController
             'alh_admin_name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
             'alh_admin_username' => Labels::getLabel('LBL_USERNAME', $this->siteLangId),
             'alh_ip' => Labels::getLabel('LBL_IP_ADDRESS', $this->siteLangId),
-            'alh_location' => Labels::getLabel('LBL_LOCATIONS', $this->siteLangId),
+            'alh_location' => Labels::getLabel('LBL_LOCATION', $this->siteLangId),
             'alh_browser' => Labels::getLabel('LBL_BROWSER', $this->siteLangId),
-            'alh_platform' => Labels::getLabel('LBL_PLATFORM', $this->siteLangId),
-            'alh_device' => Labels::getLabel('LBL_DEVICE', $this->siteLangId),
             'alh_login_type' => Labels::getLabel('LBL_LOGIN_TYPE', $this->siteLangId),
             'alh_logged_at' => Labels::getLabel('LBL_LOGGED_AT', $this->siteLangId),
+            'alh_logout_at' => Labels::getLabel('LBL_LOGOUT_AT', $this->siteLangId),
+            'time_spent' => Labels::getLabel('LBL_TIME_SPENT', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create($cacheKey, json_encode($arr), CacheHelper::TYPE_LABELS);
@@ -228,16 +228,16 @@ class AdminLoginHistoryController extends ListingBaseController
             'alh_ip',
             'alh_location',
             'alh_browser',
-            'alh_platform',
-            'alh_device',
             'alh_login_type',
             'alh_logged_at',
+            'alh_logout_at',
+            'time_spent',
             'action',
         ];
     }
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, Common::excludeKeysForSort());
+        return array_diff($fields, array_merge(Common::excludeKeysForSort(), ['time_spent', 'action']));
     }
 }

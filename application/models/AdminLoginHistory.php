@@ -4,6 +4,7 @@ class AdminLoginHistory extends MyAppModel
 {
     public const DB_TBL = 'tbl_admin_login_history';
     public const DB_TBL_PREFIX = 'alh_';
+    public const LOGIN_HISTORY_COOKIE_NAME = 'yokartAdmin_login_history';
 
     public const LOGIN_TYPE_PASSWORD = 1;
     public const LOGIN_TYPE_REMEMBER_ME = 2;
@@ -28,6 +29,78 @@ class AdminLoginHistory extends MyAppModel
     }
 
     /**
+     * Calculate time spent between login and logout (or until now if still active).
+     *
+     * @return array{seconds:int,hours:float,label:string,is_active:bool}
+     */
+    public static function getSessionDuration(array $row, int $langId = 0): array
+    {
+        $langId = $langId > 0 ? $langId : CommonHelper::getLangId();
+        $start = !empty($row['alh_logged_at']) ? strtotime($row['alh_logged_at']) : 0;
+        if ($start < 1) {
+            return [
+                'seconds' => 0,
+                'hours' => 0,
+                'label' => '-',
+                'is_active' => false,
+            ];
+        }
+
+        $isActive = empty($row['alh_logout_at']);
+        if ($isActive) {
+            $end = !empty($row['alh_last_activity']) ? strtotime($row['alh_last_activity']) : time();
+        } else {
+            $end = strtotime($row['alh_logout_at']);
+        }
+
+        if ($end < $start) {
+            $end = $start;
+        }
+
+        $seconds = (int) ($end - $start);
+        $hours = round($seconds / 3600, 2);
+        $days = intdiv($seconds, 86400);
+        $rem = $seconds % 86400;
+        $hrs = intdiv($rem, 3600);
+        $mins = intdiv($rem % 3600, 60);
+        $secs = $rem % 60;
+
+        $parts = [];
+        if ($days > 0) {
+            $parts[] = $days . 'd';
+        }
+        if ($hrs > 0 || $days > 0) {
+            $parts[] = $hrs . 'h';
+        }
+        if ($mins > 0 || ($days === 0 && $hrs === 0)) {
+            $parts[] = $mins . 'm';
+        }
+        if ($days === 0 && $hrs === 0 && $mins === 0) {
+            $parts[] = $secs . 's';
+        }
+
+        $label = implode(' ', $parts);
+        if ($hours > 0) {
+            $label .= ' (' . $hours . ' ' . Labels::getLabel('LBL_HRS', $langId) . ')';
+        }
+        if ($isActive) {
+            $label .= ' - ' . Labels::getLabel('LBL_STILL_ACTIVE', $langId);
+        }
+
+        return [
+            'seconds' => $seconds,
+            'hours' => $hours,
+            'label' => $label,
+            'is_active' => $isActive,
+        ];
+    }
+
+    public static function formatSessionDuration(array $row, int $langId = 0): string
+    {
+        return self::getSessionDuration($row, $langId)['label'];
+    }
+
+    /**
      * Log a successful admin login.
      *
      * @param array $adminRow admin fields (admin_id, admin_username, admin_name, admin_email)
@@ -40,6 +113,9 @@ class AdminLoginHistory extends MyAppModel
         if (empty($adminRow['admin_id'])) {
             return false;
         }
+
+        // Close any previous open history (e.g. expired session before remember-me re-login).
+        self::closeOpenSessionFromCookie();
 
         if ($ip === '') {
             $ip = CommonHelper::getClientIp();
@@ -74,12 +150,24 @@ class AdminLoginHistory extends MyAppModel
             'alh_isp' => substr($location['isp'], 0, 150),
             'alh_location' => substr($location['location'], 0, 255),
             'alh_logged_at' => date('Y-m-d H:i:s'),
+            'alh_last_activity' => date('Y-m-d H:i:s'),
             'alh_logout_at' => null,
         ];
 
         $obj = new self();
         $obj->assignValues($data);
-        return $obj->save();
+        if (!$obj->save()) {
+            return false;
+        }
+
+        $alhId = FatUtility::int($obj->getMainTableRecordId());
+        if ($alhId > 0) {
+            self::setLoginHistoryCookie($alhId);
+            if (isset($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME])) {
+                $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['alh_id'] = $alhId;
+            }
+        }
+        return true;
     }
 
     /**
@@ -88,8 +176,14 @@ class AdminLoginHistory extends MyAppModel
     public static function logLogout(int $adminId = 0): bool
     {
         $adminId = FatUtility::int($adminId);
+        $alhId = self::getActiveHistoryIdFromSessionOrCookie();
+
+        if ($alhId > 0) {
+            return self::closeHistoryById($alhId);
+        }
+
         if ($adminId < 1) {
-            return false;
+            return self::closeOpenSessionFromCookie();
         }
 
         $db = FatApp::getDb();
@@ -107,14 +201,130 @@ class AdminLoginHistory extends MyAppModel
         $row = $db->fetch($srch->getResultSet());
 
         if (empty($row['alh_id'])) {
+            return self::closeOpenSessionFromCookie();
+        }
+
+        return self::closeHistoryById((int) $row['alh_id'], $row);
+    }
+
+    /**
+     * Close open login history when PHP/admin session has expired (cookie still present).
+     */
+    public static function closeOpenSessionFromCookie(): bool
+    {
+        $alhId = self::getLoginHistoryIdFromCookie();
+        if ($alhId < 1) {
+            return false;
+        }
+        return self::closeHistoryById($alhId);
+    }
+
+    /**
+     * Update last activity while admin is still logged in.
+     */
+    public static function touchLastActivity(): void
+    {
+        $alhId = self::getActiveHistoryIdFromSessionOrCookie();
+        if ($alhId < 1) {
+            return;
+        }
+
+        // Throttle DB writes to once per minute.
+        $lastTouch = FatUtility::int($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['alh_last_touch'] ?? 0);
+        if ($lastTouch > 0 && (time() - $lastTouch) < 60) {
+            return;
+        }
+
+        FatApp::getDb()->updateFromArray(
+            self::DB_TBL,
+            ['alh_last_activity' => date('Y-m-d H:i:s')],
+            [
+                'smt' => 'alh_id = ? AND alh_logout_at IS NULL',
+                'vals' => [$alhId],
+            ]
+        );
+
+        if (isset($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME])) {
+            $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['alh_last_touch'] = time();
+            $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['alh_id'] = $alhId;
+        }
+    }
+
+    public static function closeHistoryById(int $alhId, array $row = []): bool
+    {
+        $alhId = FatUtility::int($alhId);
+        if ($alhId < 1) {
             return false;
         }
 
-        return $db->updateFromArray(
+        $db = FatApp::getDb();
+        if (empty($row)) {
+            $srch = self::getSearchObject();
+            $srch->addCondition('alh_id', '=', $alhId);
+            $srch->addCondition('alh_logout_at', 'is', 'mysql_func_NULL', 'AND', true);
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
+            $row = $db->fetch($srch->getResultSet());
+        }
+
+        if (empty($row['alh_id'])) {
+            self::clearLoginHistoryCookie();
+            return false;
+        }
+
+        // Prefer last activity so expired sessions show when the user was last active.
+        $logoutAt = !empty($row['alh_last_activity']) ? $row['alh_last_activity'] : date('Y-m-d H:i:s');
+
+        $updated = $db->updateFromArray(
             self::DB_TBL,
-            ['alh_logout_at' => date('Y-m-d H:i:s')],
-            ['smt' => 'alh_id = ?', 'vals' => [$row['alh_id']]]
+            ['alh_logout_at' => $logoutAt],
+            ['smt' => 'alh_id = ? AND alh_logout_at IS NULL', 'vals' => [$alhId]]
         );
+
+        self::clearLoginHistoryCookie();
+        if (isset($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['alh_id'])) {
+            unset($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['alh_id'], $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['alh_last_touch']);
+        }
+
+        return (bool) $updated;
+    }
+
+    public static function getActiveHistoryIdFromSessionOrCookie(): int
+    {
+        $alhId = FatUtility::int($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['alh_id'] ?? 0);
+        if ($alhId > 0) {
+            return $alhId;
+        }
+        return self::getLoginHistoryIdFromCookie();
+    }
+
+    public static function getLoginHistoryIdFromCookie(): int
+    {
+        return FatUtility::int($_COOKIE[self::LOGIN_HISTORY_COOKIE_NAME] ?? 0);
+    }
+
+    public static function setLoginHistoryCookie(int $alhId): void
+    {
+        $alhId = FatUtility::int($alhId);
+        if ($alhId < 1) {
+            return;
+        }
+        setcookie(
+            self::LOGIN_HISTORY_COOKIE_NAME,
+            (string) $alhId,
+            time() + (86400 * 30),
+            CONF_WEBROOT_FRONT_URL
+        );
+        $_COOKIE[self::LOGIN_HISTORY_COOKIE_NAME] = (string) $alhId;
+    }
+
+    public static function clearLoginHistoryCookie(): void
+    {
+        if (!isset($_COOKIE[self::LOGIN_HISTORY_COOKIE_NAME])) {
+            return;
+        }
+        setcookie(self::LOGIN_HISTORY_COOKIE_NAME, '', time() - 3600, CONF_WEBROOT_FRONT_URL);
+        unset($_COOKIE[self::LOGIN_HISTORY_COOKIE_NAME]);
     }
 
     /**

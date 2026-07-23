@@ -226,6 +226,7 @@ class ProfileController extends ListingBaseController
     public function logout()
     {
         AdminLoginHistory::logLogout(AdminAuthentication::getLoggedAdminId());
+        AdminLoginHistory::clearLoginHistoryCookie();
         AdminAuthentication::clearLoggedAdminLoginCookie();
         session_destroy();
         Message::addMessage(Labels::getLabel('MSG_YOU_ARE_LOGGED_OUT_SUCCESSFULLY', $this->siteLangId));

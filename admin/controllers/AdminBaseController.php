@@ -24,6 +24,8 @@ class AdminBaseController extends FatController
         }
 
         if (!AdminAuthentication::isAdminLogged()) {
+            // PHP/session expired: close open login history via surviving cookie.
+            AdminLoginHistory::closeOpenSessionFromCookie();
             CommonHelper::initCommonVariables(true);
             if ($this->_controllerName != 'HomeController') {
                 LibHelper::exitWithError(Labels::getLabel('ERR_SESSION_SEEMS_TO_BE_EXPIRED', CommonHelper::getLangId()), false, true);
@@ -35,11 +37,14 @@ class AdminBaseController extends FatController
 
         $permissionUpdatedOn = Admin::getAttributesById($this->admin_id, 'admin_admperm_updated_on');
         if ($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_admperm_updated_on'] != $permissionUpdatedOn) {
+            AdminLoginHistory::logLogout($this->admin_id);
             AdminAuthentication::clearLoggedAdminLoginCookie();
             session_destroy();
             LibHelper::exitWithError(Labels::getLabel('ERR_SESSION_SEEMS_TO_BE_EXPIRED', CommonHelper::getLangId()), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('AdminGuest', 'loginForm'));
         }
+
+        AdminLoginHistory::touchLastActivity();
 
         $this->objPrivilege = AdminPrivilege::getInstance();
 

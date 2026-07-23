@@ -25,6 +25,9 @@ foreach ($arrListing as $sn => $row) {
                 $value = !empty($row[$key]) ? FatDate::format($row[$key], true) : '-';
                 $td->appendElement('plaintext', $tdAttr, $value, true);
                 break;
+            case 'time_spent':
+                $td->appendElement('plaintext', $tdAttr, AdminLoginHistory::formatSessionDuration($row, $siteLangId), true);
+                break;
             case 'action':
                 $data = [
                     'siteLangId' => $siteLangId,

@@ -514,4 +514,8 @@
     background-color: transparent;
     position: relative;
     overflow: hidden;
+}.slick-track .industry-carousal-name>span {
+    text-overflow: unset;
+    overflow: visible;
+    white-space: unset;
 }

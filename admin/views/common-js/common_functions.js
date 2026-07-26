@@ -294,7 +294,13 @@ select2 = function (
 
 $(document).on('select2:open', () => {
     setTimeout(function () {
-        document.querySelector('.select2-search__field').focus();
+        /* Prefer the open dropdown search; fall back to the open container (multi-select).
+           Never use a bare .select2-search__field — multi-selects keep one visible and would steal focus. */
+        var searchField = document.querySelector('.select2-container--open .select2-dropdown .select2-search__field')
+            || document.querySelector('.select2-container--open .select2-search__field');
+        if (searchField) {
+            searchField.focus();
+        }
     }, 10);
 });
 /**

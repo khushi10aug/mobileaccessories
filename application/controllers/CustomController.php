@@ -4,7 +4,7 @@ class CustomController extends MyAppController
 {
     public function contactUs()
     {
-        $contactFrm = $this->contactUsForm();
+        $contactFrm = $this->contactUsForm(true);
         $contactFrm->addSecurityToken();
         $termsAndConditionsLinkHref = 'javascript:void(0)';
         $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
@@ -35,7 +35,7 @@ class CustomController extends MyAppController
 
     public function contactSubmit()
     {
-        $frm = $this->contactUsForm();
+        $frm = $this->contactUsForm(false);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], !MOBILE_APP_API_CALL);
 
         if (false === $post) {
@@ -51,13 +51,16 @@ class CustomController extends MyAppController
             $frm->expireSecurityToken(FatApp::getPostedData());
         }
 
-
-        if (false === MOBILE_APP_API_CALL && !CommonHelper::verifyCaptcha()) {
-            $message = Labels::getLabel('ERR_THAT_CAPTCHA_WAS_INCORRECT', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError($message);
+        $spamCheck = $this->validateContactAntiSpam($post);
+        if (true !== $spamCheck) {
+            if ('silent' === $spamCheck) {
+                Message::addMessage(Labels::getLabel('MSG_YOUR_MESSAGE_SENT_SUCCESSFULLY', $this->siteLangId));
+                FatApp::redirectUser(UrlHelper::generateUrl('Custom', 'ContactUs'));
             }
-            Message::addErrorMessage($message);
+            if (true === MOBILE_APP_API_CALL) {
+                FatUtility::dieJsonError($spamCheck);
+            }
+            Message::addErrorMessage($spamCheck);
             FatApp::redirectUser(UrlHelper::generateUrl('Custom', 'ContactUs'));
         }
 
@@ -678,7 +681,7 @@ class CustomController extends MyAppController
         return $frm;
     }
 
-    private function contactUsForm()
+    private function contactUsForm($forDisplay = false)
     {
         $frm = new Form('frmContact');
         $frm->addRequiredField(Labels::getLabel('FRM_YOUR_NAME', $this->siteLangId), 'name', '');
@@ -691,12 +694,155 @@ class CustomController extends MyAppController
 
         $frm->addTextArea(Labels::getLabel('FRM_YOUR_MESSAGE', $this->siteLangId), 'message', '')->requirements()->setRequired();
 
-        CommonHelper::addCaptchaField($frm);
+        /* Honeypot — leave empty. Hidden in CSS; bots usually fill it. */
+        $honeypot = $frm->addTextBox(Labels::getLabel('FRM_WEBSITE', $this->siteLangId), 'company_website', '');
+        $honeypot->setFieldTagAttribute('autocomplete', 'off');
+        $honeypot->setFieldTagAttribute('tabindex', '-1');
+        $honeypot->setFieldTagAttribute('aria-hidden', 'true');
+
+        if (true === $forDisplay || empty($_SESSION['contact_math_answer'])) {
+            $numA = random_int(1, 9);
+            $numB = random_int(1, 9);
+            $_SESSION['contact_math_answer'] = $numA + $numB;
+            $_SESSION['contact_math_question'] = $numA . ' + ' . $numB;
+            $_SESSION['contact_form_loaded_at'] = time();
+        }
+
+        $frm->addHiddenField('', 'form_loaded_at', FatUtility::int($_SESSION['contact_form_loaded_at'] ?? time()));
+
+        $mathLabel = str_replace(
+            '{question}',
+            $_SESSION['contact_math_question'] ?? '',
+            Labels::getLabel('FRM_SECURITY_CHECK_WHAT_IS_{question}?', $this->siteLangId)
+        );
+        if ('FRM_SECURITY_CHECK_WHAT_IS_{question}?' === $mathLabel || false !== strpos($mathLabel, '{question}')) {
+            $mathLabel = 'Security check: What is ' . ($_SESSION['contact_math_question'] ?? '') . '?';
+        }
+        $mathFld = $frm->addRequiredField($mathLabel, 'security_answer', '', ['autocomplete' => 'off', 'inputmode' => 'numeric']);
+        $mathFld->requirements()->setInt();
+
         $fld = $frm->addCheckBox('', 'agree', 1);
         $fld->requirements()->setRequired();
         $fld->requirements()->setCustomErrorMessage(Labels::getLabel('ERR_TERMS_CONDITION_AND_PRIVACY_POLICY_IS_MANDATORY.', $this->siteLangId));
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $this->siteLangId));
         return $frm;
+    }
+
+    /**
+     * Contact form anti-spam: honeypot, timing, math captcha, rate limit, content checks.
+     * @return true|string true on pass, 'silent' for honeypot/spam (fake success), or error message
+     */
+    private function validateContactAntiSpam(array $post)
+    {
+        if (true === MOBILE_APP_API_CALL) {
+            return true;
+        }
+
+        if (!empty(trim((string) ($post['company_website'] ?? '')))) {
+            return 'silent';
+        }
+
+        $loadedAt = FatUtility::int($post['form_loaded_at'] ?? 0);
+        $elapsed = time() - $loadedAt;
+        if ($loadedAt < 1 || $elapsed < 3) {
+            return 'silent';
+        }
+        if ($elapsed > 7200) {
+            return Labels::getLabel('ERR_THAT_CAPTCHA_WAS_INCORRECT', $this->siteLangId);
+        }
+
+        $expected = FatUtility::int($_SESSION['contact_math_answer'] ?? -999);
+        $given = FatUtility::int($post['security_answer'] ?? -1);
+        if ($expected < 0 || $given !== $expected) {
+            unset($_SESSION['contact_math_answer'], $_SESSION['contact_math_question']);
+            return Labels::getLabel('ERR_THAT_CAPTCHA_WAS_INCORRECT', $this->siteLangId);
+        }
+        unset($_SESSION['contact_math_answer'], $_SESSION['contact_math_question'], $_SESSION['contact_form_loaded_at']);
+
+        if ($this->isContactRateLimited()) {
+            return Labels::getLabel('ERR_LOGIN_ATTEMPT_LIMIT_EXCEEDED._PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId);
+        }
+
+        if ($this->contactMessageLooksLikeSpam($post)) {
+            return 'silent';
+        }
+
+        $this->recordContactSubmission();
+        return true;
+    }
+
+    private function contactRateLimitFile()
+    {
+        $dir = CONF_UPLOADS_PATH . 'contact-rate' . DIRECTORY_SEPARATOR;
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0755, true);
+        }
+        $ip = CommonHelper::getClientIp();
+        return $dir . md5($ip) . '.json';
+    }
+
+    private function isContactRateLimited()
+    {
+        $file = $this->contactRateLimitFile();
+        if (!is_file($file)) {
+            return false;
+        }
+        $data = json_decode((string) @file_get_contents($file), true);
+        if (!is_array($data) || empty($data['times']) || !is_array($data['times'])) {
+            return false;
+        }
+        $windowStart = time() - 3600;
+        $recent = array_values(array_filter($data['times'], function ($t) use ($windowStart) {
+            return FatUtility::int($t) >= $windowStart;
+        }));
+        return count($recent) >= 5;
+    }
+
+    private function recordContactSubmission()
+    {
+        $file = $this->contactRateLimitFile();
+        $data = ['times' => []];
+        if (is_file($file)) {
+            $existing = json_decode((string) @file_get_contents($file), true);
+            if (is_array($existing) && !empty($existing['times']) && is_array($existing['times'])) {
+                $data['times'] = $existing['times'];
+            }
+        }
+        $windowStart = time() - 3600;
+        $data['times'] = array_values(array_filter($data['times'], function ($t) use ($windowStart) {
+            return FatUtility::int($t) >= $windowStart;
+        }));
+        $data['times'][] = time();
+        @file_put_contents($file, json_encode($data), LOCK_EX);
+    }
+
+    private function contactMessageLooksLikeSpam(array $post)
+    {
+        $name = (string) ($post['name'] ?? '');
+        $message = (string) ($post['message'] ?? '');
+        $combined = $name . ' ' . $message;
+
+        if (preg_match('~https?://|www\.~i', $name)) {
+            return true;
+        }
+
+        preg_match_all('~https?://|www\.~i', $message, $urlMatches);
+        if (!empty($urlMatches[0]) && count($urlMatches[0]) >= 3) {
+            return true;
+        }
+
+        $spamPatterns = [
+            'viagra', 'cialis', 'crypto', 'bitcoin', 'forex', 'casino', 'porn',
+            'seo service', 'backlink', 'guest post', 'make money fast', 'loan approval',
+        ];
+        $haystack = strtolower($combined);
+        foreach ($spamPatterns as $pattern) {
+            if (false !== strpos($haystack, $pattern)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function sitemap()

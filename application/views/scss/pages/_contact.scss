@@ -50,15 +50,42 @@
     }
 }
 
-.g-map {
-    position: relative;
-    height: 490px;
-    /* z-index: 1;*/
+.hp-field {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
 }
 
-.g-map iframe {
-    position: absolute;
-    height: 100%;
+.g-map {
+    position: relative;
     width: 100%;
-    z-index: 0;
+    height: 490px;
+    overflow: hidden;
+
+    .mapouter,
+    .gmap_canvas {
+        position: absolute !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        text-align: left !important;
+    }
+
+    a {
+        display: none !important;
+    }
+
+    iframe {
+        position: absolute !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        border: 0;
+        z-index: 0;
+    }
 }

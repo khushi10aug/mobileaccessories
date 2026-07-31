@@ -21,6 +21,18 @@ $fld->developerTags['col'] = 12;
 <script>
     ykevents.contactUs();
 </script>
+<style>
+    .hp-field {
+        position: absolute !important;
+        left: -10000px !important;
+        top: auto !important;
+        width: 1px !important;
+        height: 1px !important;
+        overflow: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+</style>
 <div id="body" class="body">
     <?php $this->includeTemplate('_partial/page-head-section.php', ['headLabel' => Labels::getLabel('LBL_GET_IN_TOUCH', $siteLangId), 'subHeadLabel' => Labels::getLabel('LBL_GET_IN_TOUCH_TXT', $siteLangId)]); ?>
     <section class="section" data-section="section">
@@ -31,11 +43,6 @@ $fld->developerTags['col'] = 12;
                     <div class="row">
                         <div class="col-md-7">
                             <?php echo $contactFrm->getFormTag(); ?>
-                            <?php
-                            if (null != $contactFrm->getField('g-recaptcha-response')) {
-                                echo $contactFrm->getFieldHTML('g-recaptcha-response');
-                            }
-                            ?>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -89,6 +96,25 @@ $fld->developerTags['col'] = 12;
                                         </label>
                                         <?php echo $contactFrm->getFieldHtml('message'); ?>
 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hp-field" aria-hidden="true">
+                                <label><?php echo $contactFrm->getField('company_website')->getCaption(); ?></label>
+                                <?php echo $contactFrm->getFieldHtml('company_website'); ?>
+                            </div>
+                            <?php echo $contactFrm->getFieldHtml('form_loaded_at'); ?>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label">
+                                            <?php
+                                            $fld = $contactFrm->getField('security_answer');
+                                            echo $fld->getCaption();
+                                            ?>
+                                            <span class="spn_must_field">*</span>
+                                        </label>
+                                        <?php echo $contactFrm->getFieldHtml('security_answer'); ?>
                                     </div>
                                 </div>
                             </div>
@@ -205,9 +231,3 @@ $fld->developerTags['col'] = 12;
         </section>
     <?php } ?>
 </div>
-<?php
-$siteKey = FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '');
-$secretKey = FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '');
-if (!empty($siteKey) && !empty($secretKey)) { ?>
-    <script src='https://www.google.com/recaptcha/api.js?onload=googleCaptcha&render=<?php echo trim($siteKey); ?>'></script>
-<?php } ?>

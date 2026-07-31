@@ -260,6 +260,7 @@ class CustomRouter
                 'content', 'blog', 'banner', 'payment', 'order', 'orders', 'account', 'supplier', 'gift', 'rfq',
                 'notifications', 'payment-status', 'invoice', 'download', 'embed', 'oauth', 'cron', 'cronjob',
                 'reviews', 'navigation', 'common', 'guest-user', 'custom', 'wallet-pay', 'error', 'instagram-login',
+                'collections',
             ];
         }
 
@@ -285,6 +286,7 @@ class CustomRouter
                 'content', 'blog', 'banner', 'payment', 'order', 'orders', 'account', 'supplier', 'gift', 'rfq',
                 'notifications', 'payment-status', 'invoice', 'download', 'embed', 'oauth', 'cron', 'cronjob',
                 'custom', 'guest-user', 'wallet-pay', 'reviews', 'navigation', 'common', 'error',
+                'collections',
             ];
         }
         $parts = explode('/', strtolower($slug));

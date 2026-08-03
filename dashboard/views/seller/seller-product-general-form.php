@@ -330,7 +330,7 @@ if (null !== $fld) {
                                             <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Stock_Keeping_Unit', $siteLangId) ?>"></i>
                                         </th>
                                     <?php } ?>
-                                    <?php if (!empty($availableOptions) && $selprod_id == 0) { ?>
+                                    <?php if (($selprod_id == 0 && !empty($availableOptions)) || !empty($optionValues) || $selprod_id > 0) { ?>
                                         <th style="min-width:100px;">
                                             <?php echo Labels::getLabel('LBL_ACTION', $siteLangId); ?>
                                         </th>
@@ -345,7 +345,7 @@ if (null !== $fld) {
                                             $j++;
                                             $i = 0;
                                         } ?>
-                                        <tr>
+                                        <tr id="<?php echo $optionKey; ?>">
                                             <td><?php echo str_replace("_", " | ", $optionValue); ?>
                                             </td>
                                             <td class="optionFld-js"><?php echo $frmSellerProduct->getFieldHtml('varients[' . $j . '][selprod_cost' . $optionKey . ']'); ?>
@@ -360,17 +360,30 @@ if (null !== $fld) {
                                                 </td>
                                             <?php } ?>
                                             <td>
-                                                <button disabled="disabled" onclick="copyRowData(this)" type="button" class="js-copy-btn btn btn-secondary btn-elevate btn-icon" title="<?php echo Labels::getLabel('LBL_Copy_to_clipboard', $siteLangId) ?>">
-                                                    <i class="fas fa-paste"></i>
-                                                </button>
+                                                <ul class="actions">
+                                                    <li>
+                                                        <a href="javascript:void(0)" onclick="optionImageForm(<?php echo $product_id; ?>, '<?php echo $optionKey; ?>')" title="<?php echo Labels::getLabel('LBL_IMAGES', $siteLangId); ?>">
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#images"></use>
+                                                            </svg>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <button disabled="disabled" onclick="copyRowData(this)" type="button" class="js-copy-btn btn btn-secondary btn-elevate btn-icon" title="<?php echo Labels::getLabel('LBL_Copy_to_clipboard', $siteLangId) ?>">
+                                                            <i class="fas fa-paste"></i>
+                                                        </button>
+                                                    </li>
+                                                </ul>
                                             </td>
                                         </tr>
                                     <?php
                                         $i++;
                                     } ?>
                                 <?php
-                                } else { ?>
-                                    <tr>
+                                } else {
+                                    $editOptionKey = $editOptionKey ?? '0';
+                                    ?>
+                                    <tr id="<?php echo $editOptionKey; ?>">
                                         <?php if (!empty($optionValues)) { ?>
                                             <td><?php echo implode(' | ', $optionValues); ?>
                                             </td>
@@ -386,6 +399,17 @@ if (null !== $fld) {
                                             <td><?php echo $frmSellerProduct->getFieldHtml('selprod_sku'); ?>
                                             </td>
                                         <?php } ?>
+                                        <td>
+                                            <ul class="actions">
+                                                <li>
+                                                    <a href="javascript:void(0)" onclick="optionImageForm(<?php echo $product_id; ?>, '<?php echo $editOptionKey; ?>')" title="<?php echo Labels::getLabel('LBL_IMAGES', $siteLangId); ?>">
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#images"></use>
+                                                        </svg>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
                                     </tr>
                                 <?php } ?>
                             </tbody>

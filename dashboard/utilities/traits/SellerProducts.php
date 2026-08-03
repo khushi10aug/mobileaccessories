@@ -202,7 +202,7 @@ trait SellerProducts
         }
 
         /* $this->_template->addJs(array('js/jquery.datetimepicker.js'), false); */
-        $this->_template->addJs(['js/select2.js']);
+        $this->_template->addJs(['js/select2.js', 'js/cropper.js', 'js/cropper-main.js']);
         $this->_template->addCss(['css/select2.min.css']);
         $this->set('product_type', $productRow['product_type']);
         $this->set('product_id', $product_id);
@@ -348,6 +348,17 @@ trait SellerProducts
             }
         }
 
+        $editOptionKey = '0';
+        if ($selprod_id > 0 && !empty($sellerProductRow['selprod_code'])) {
+            $codePrefix = $product_id . '_';
+            if (0 === strpos($sellerProductRow['selprod_code'], $codePrefix)) {
+                $editOptionKey = substr($sellerProductRow['selprod_code'], strlen($codePrefix));
+                if ('' === $editOptionKey) {
+                    $editOptionKey = '0';
+                }
+            }
+        }
+
         //$shipBySeller = SellerProduct::prodShipByseller($product_id);
         $shipBySeller = Product::isProductShippedBySeller($product_id, $productRow['product_seller_id'], UserAuthentication::getLoggedUserId());
 
@@ -358,6 +369,7 @@ trait SellerProducts
         $this->set('optionValues', $optionValues);
         $this->set('availableOptions', $availableOptions);
         $this->set('productOptions', $productOptions);
+        $this->set('editOptionKey', $editOptionKey);
         /* $this->_template->addJs(array('js/jquery.datetimepicker.js'), false); */
         $this->set('customActiveTab', 'GENERAL');
         $this->set('frmSellerProduct', $frmSellerProduct);
@@ -436,9 +448,219 @@ trait SellerProducts
         $this->setUpMultipleSellerProducts(1);
         $post = FatApp::getPostedData();
         $this->set('selprod_id', $this->selProdRecordId);
+        $this->set('product_id', FatUtility::int($post['product_id'] ?? 0));
         $this->set('optionData', $post);
         $json['html'] = $this->_template->render(false, false, 'seller/add-inv-option.php', true);
         FatUtility::dieJsonSuccess($json);
+    }
+
+    /**
+     * Modal form to attach images for a specific option combination on seller inventory form.
+     */
+    public function optionImageForm($productId, $optionKey = '0')
+    {
+        $productId = FatUtility::int($productId);
+        $optionKey = trim((string) $optionKey);
+        if ('' === $optionKey) {
+            $optionKey = '0';
+        }
+        $this->validateSellerProductImageAccess($productId, $optionKey);
+
+        $frm = new Form('optionImageFrm');
+        $frm->addHiddenField('', 'record_id', $productId);
+        $frm->addHiddenField('', 'option_id', $optionKey);
+        $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_PRODUCT_IMAGE);
+        $languagesAssocArr = Language::getAllNames();
+        if (count($languagesAssocArr) > 1) {
+            $frm->addSelectBox(
+                Labels::getLabel('FRM_LANGUAGE', $this->siteLangId),
+                'lang_id',
+                array(0 => Labels::getLabel('LBL_All_Languages', $this->siteLangId)) + $languagesAssocArr,
+                '',
+                array(),
+                ''
+            );
+        } else {
+            $frm->addHiddenField('', 'lang_id', array_key_first($languagesAssocArr));
+        }
+        $fld = $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD', $this->siteLangId), 'prod_image');
+        $imgDimension = ImageDimension::getProductImageData(ImageDimension::VIEW_ORIGINAL);
+        $frm->addHiddenField('', 'min_width', $imgDimension[ImageDimension::WIDTH]);
+        $frm->addHiddenField('', 'min_height', $imgDimension[ImageDimension::HEIGHT]);
+        $frm->addHtml('', 'images', '');
+
+        $optionLabel = Labels::getLabel('LBL_FOR_ALL_OPTIONS', $this->siteLangId);
+        if ('0' !== $optionKey) {
+            $optionCombinations = Product::getSeparateImageOptions($productId, $this->siteLangId);
+            if (isset($optionCombinations[$optionKey])) {
+                $optionLabel = $optionCombinations[$optionKey];
+            } elseif (ctype_digit($optionKey) && isset($optionCombinations[(int) $optionKey])) {
+                $optionLabel = $optionCombinations[(int) $optionKey];
+            } else {
+                $optionLabel = str_replace('_', ' | ', $optionKey);
+            }
+        }
+
+        $this->set('frm', $frm);
+        $this->set('product_id', $productId);
+        $this->set('option_id', $optionKey);
+        $this->set('optionLabel', $optionLabel);
+        $this->set('html', $this->_template->render(false, false, 'seller/option-image-form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    public function optionImages($productId, $optionKey = '0', $langId = 0)
+    {
+        $productId = FatUtility::int($productId);
+        $optionKey = trim((string) $optionKey);
+        if ('' === $optionKey) {
+            $optionKey = '0';
+        }
+        $this->validateSellerProductImageAccess($productId, $optionKey);
+
+        $languages = Language::getAllNames();
+        if (count($languages) <= 1) {
+            $langId = array_key_first($languages);
+        } else {
+            $langId = FatUtility::int($langId);
+        }
+
+        $optionSubId = Product::encodeImageOptionSubId($optionKey);
+        $images = AttachedFile::getMultipleAttachments(
+            AttachedFile::FILETYPE_PRODUCT_IMAGE,
+            $productId,
+            $optionSubId,
+            $langId,
+            (count($languages) <= 1) ? true : false,
+            0,
+            0,
+            true
+        );
+
+        $this->set('images', $images ?: []);
+        $this->set('product_id', $productId);
+        $this->set('option_id', $optionKey);
+        $this->set('html', $this->_template->render(false, false, 'seller/option-images.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    public function uploadOptionMedia()
+    {
+        $post = FatApp::getPostedData();
+        if (empty($post)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId), true);
+        }
+        if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'] ?? '')) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
+        }
+
+        $productId = FatUtility::int($post['record_id'] ?? 0);
+        $optionKey = isset($post['option_id']) ? trim((string) $post['option_id']) : '0';
+        if ('' === $optionKey) {
+            $optionKey = '0';
+        }
+        $this->validateSellerProductImageAccess($productId, $optionKey);
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $langId = FatUtility::int($post['lang_id'] ?? 0);
+        } else {
+            $langId = array_key_first($languages);
+        }
+
+        $optionSubId = Product::encodeImageOptionSubId($optionKey);
+        $fileHandlerObj = new AttachedFile();
+        if (!$fileHandlerObj->saveImage(
+            $_FILES['cropped_image']['tmp_name'],
+            AttachedFile::FILETYPE_PRODUCT_IMAGE,
+            $productId,
+            $optionSubId,
+            $_FILES['cropped_image']['name'],
+            -1,
+            false,
+            $langId
+        )) {
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
+        }
+
+        FatApp::getDb()->updateFromArray(
+            'tbl_products',
+            ['product_img_updated_on' => date('Y-m-d H:i:s')],
+            ['smt' => 'product_id = ?', 'vals' => [$productId]]
+        );
+
+        $this->set('lang_id', $langId);
+        $this->set('option_id', $optionKey);
+        $this->set('product_id', $productId);
+        $this->set('msg', Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function deleteOptionImage($productId, $imageId)
+    {
+        $productId = FatUtility::int($productId);
+        $imageId = FatUtility::int($imageId);
+        if (1 > $productId || 1 > $imageId) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+        }
+
+        $fileHandlerObj = new AttachedFile();
+        $data = $fileHandlerObj::getAttributesById($imageId, ['afile_lang_id', 'afile_record_subid', 'afile_record_id', 'afile_type']);
+        if (false == $data || (int) $data['afile_record_id'] !== $productId || (int) $data['afile_type'] !== AttachedFile::FILETYPE_PRODUCT_IMAGE) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+        }
+
+        $this->validateSellerProductImageAccess($productId);
+
+        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_PRODUCT_IMAGE, $productId, $imageId)) {
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
+        }
+
+        $this->set('optionId', $data['afile_record_subid']);
+        $this->set('langId', $data['afile_lang_id']);
+        $this->set('msg', Labels::getLabel('LBL_Image_removed_successfully.', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    private function validateSellerProductImageAccess($productId, $optionKey = null)
+    {
+        $productId = FatUtility::int($productId);
+        if (1 > $productId) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+        }
+
+        $productRow = Product::getAttributesById($productId, ['product_seller_id', 'product_added_by_admin_id', 'product_active', 'product_approved']);
+        if (!$productRow) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+        }
+
+        $ownsProduct = ((int) $productRow['product_seller_id'] === (int) $this->userParentId);
+        $isAdminCatalog = ((int) $productRow['product_added_by_admin_id'] > 0);
+        if (!$ownsProduct && !$isAdminCatalog) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+        }
+
+        if (!$ownsProduct && !UserPrivilege::canSellerAddProductInCatalog($productId, $this->userParentId)) {
+            /* Allow if seller already has inventory for this product */
+            $srch = SellerProduct::getSearchObject();
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
+            $srch->addCondition('selprod_product_id', '=', $productId);
+            $srch->addCondition('selprod_user_id', '=', $this->userParentId);
+            $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
+            if (!FatApp::getDb()->fetch($srch->getResultSet())) {
+                LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            }
+        }
+
+        if (null !== $optionKey && '0' !== (string) $optionKey) {
+            $optionValues = Product::getSeparateImageOptions($productId, $this->siteLangId);
+            $optionKeyExists = array_key_exists($optionKey, $optionValues)
+                || (ctype_digit((string) $optionKey) && array_key_exists((int) $optionKey, $optionValues));
+            if (!$optionKeyExists) {
+                LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            }
+        }
     }
 
     private function inventoryOptionsForm()

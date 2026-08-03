@@ -551,4 +551,125 @@ $(document).on('click', '.tabs_002', function () {
 		}, {}, true);
 	};
 
+	optionImageForm = function (productId, optionKey) {
+		optionKey = (optionKey === undefined || optionKey === null || optionKey === '') ? '0' : optionKey;
+		$.ykmodal(fcom.getLoader());
+		fcom.updateWithAjax(fcom.makeUrl('Seller', 'optionImageForm', [productId, optionKey]), '', function (t) {
+			fcom.closeProcessing();
+			fcom.removeLoader();
+			$.ykmodal(t.html, false, 'modal-dialog-vertical-md');
+			$.ykmsg.close();
+		});
+	};
+
+	loadOptionImages = function (productId, optionKey, langId) {
+		optionKey = (optionKey === undefined || optionKey === null || optionKey === '') ? '0' : optionKey;
+		langId = langId || 0;
+		fcom.updateWithAjax(fcom.makeUrl('Seller', 'optionImages', [productId, optionKey, langId]), '', function (t) {
+			fcom.closeProcessing();
+			fcom.removeLoader();
+			$('#optionProductImagesJs').html(t.html || '');
+			$.ykmsg.close();
+		});
+	};
+
+	loadOptionImageCropper = function (inputBtn) {
+		if (!(inputBtn.files && inputBtn.files[0])) {
+			return;
+		}
+		if (typeof validateFileUpload === 'function' && !validateFileUpload(inputBtn.files[0])) {
+			return;
+		}
+		loadCropperSkeleton(false);
+		$("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
+		fcom.updateWithAjax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
+			fcom.closeProcessing();
+			fcom.removeLoader();
+			$.ykmsg.close();
+			$("#modalBoxJs .modal-body").html(t.body);
+			$("#modalBoxJs .modal-footer").html(t.footer);
+			var file = inputBtn.files[0];
+			var frmName = $(inputBtn).closest('form').attr('name') || 'optionImageFrm';
+			var minWidth = document[frmName].min_width.value;
+			var minHeight = document[frmName].min_height.value;
+			var options = {
+				aspectRatio: minWidth / minHeight,
+				data: {
+					width: minWidth,
+					height: minHeight,
+				},
+				minCropBoxWidth: minWidth,
+				minCropBoxHeight: minHeight,
+				toggleDragModeOnDblclick: false,
+				imageSmoothingQuality: 'high',
+				imageSmoothingEnabled: true,
+			};
+			$(inputBtn).val('');
+			setTimeout(function () { cropImage(file, options, 'uploadOptionMedia', inputBtn); }, 100);
+		});
+	};
+
+	uploadOptionMedia = function (formData) {
+		var frmName = formData.get('frmName') || 'optionImageFrm';
+		var otherData = $('form[name="' + frmName + '"]').serializeArray();
+		$.each(otherData, function (key, input) {
+			formData.append(input.name, input.value);
+		});
+
+		$.ajax({
+			url: fcom.makeUrl('Seller', 'uploadOptionMedia'),
+			type: 'post',
+			dataType: 'json',
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			beforeSend: function () {
+				$("#modalBoxJs .modal-body").prepend(fcom.getLoader());
+			},
+			success: function (ans) {
+				fcom.removeLoader();
+				fcom.closeProcessing();
+				$.ykmsg.close();
+				$(document.body).css({ cursor: 'default' });
+				if (ans.status == 0) {
+					fcom.displayErrorMessage(ans.msg);
+					return;
+				}
+				fcom.displaySuccessMessage(ans.msg);
+				$("#modalBoxJs").modal('hide');
+				/* Cropper closes the media modal; reopen so uploaded images are visible */
+				optionImageForm(ans.product_id, ans.option_id);
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				fcom.removeLoader();
+				fcom.closeProcessing();
+				$(document.body).css({ cursor: 'default' });
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	};
+
+	deleteOptionImage = function (productId, imageId) {
+		var agree = confirm(langLbl.confirmDelete);
+		if (!agree) { return false; }
+		var optionKey = $('#option_image_option_id').val() || '0';
+		var langId = $('#option_image_lang_id').val() || 0;
+		fcom.updateWithAjax(fcom.makeUrl('Seller', 'deleteOptionImage', [productId, imageId]), '', function (t) {
+			fcom.closeProcessing();
+			fcom.removeLoader();
+			fcom.displaySuccessMessage(t.msg);
+			loadOptionImages(productId, optionKey, langId);
+		});
+	};
+
 })();
+
+$(document).on('change', '#option_image_lang_id', function () {
+	var langId = $(this).val() || 0;
+	var productId = $('#option_image_record_id').val();
+	var optionKey = $('#option_image_option_id').val() || '0';
+	if (productId) {
+		loadOptionImages(productId, optionKey, langId);
+	}
+});

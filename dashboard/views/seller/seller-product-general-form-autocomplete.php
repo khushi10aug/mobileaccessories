@@ -404,8 +404,10 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php if (0 < $selprod_id) { ?>
-                                    <tr>
+                                <?php if (0 < $selprod_id) {
+                                    $editOptionKey = $editOptionKey ?? '0';
+                                    ?>
+                                    <tr id="<?php echo $editOptionKey; ?>">
                                         <?php if (!empty($optionValues)) { ?>
                                             <td><?php echo implode(' | ', $optionValues); ?>
                                             </td>
@@ -417,6 +419,17 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
                                         <td><?php echo $frmSellerProduct->getFieldHtml('selprod_stock'); ?>
                                         </td>
                                         <td><?php echo $frmSellerProduct->getFieldHtml('selprod_sku'); ?>
+                                        </td>
+                                        <td>
+                                            <ul class="actions">
+                                                <li>
+                                                    <a href="javascript:void(0)" onclick="optionImageForm(<?php echo $product_id; ?>, '<?php echo $editOptionKey; ?>')" title="<?php echo Labels::getLabel('LBL_IMAGES', $siteLangId); ?>">
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#images"></use>
+                                                        </svg>
+                                                    </a>
+                                                </li>
+                                            </ul>
                                         </td>
                                     </tr>
                                 <?php } ?>

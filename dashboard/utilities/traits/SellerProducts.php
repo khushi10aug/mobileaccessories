@@ -680,9 +680,13 @@ trait SellerProducts
         $frm->addHiddenField('', 'inv_option_name');
         $frm->addHiddenField('', 'inv_option_id');
         $frm->addHiddenField('', 'inv_option_selprod_id');
-        $frm->addButton('', 'btn_attach_image', Labels::getLabel('LBL_IMAGES', $this->siteLangId));
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_ADD', $this->siteLangId));
-        $frm->addButton('', 'btn_clear', Labels::getLabel('BTN_CLEAR', $this->siteLangId));
+        $addImageLbl = Labels::getLabel('LBL_ADD_IMAGE', $this->siteLangId);
+        if ($addImageLbl === 'LBL_ADD_IMAGE' || '' === trim((string) $addImageLbl)) {
+            $addImageLbl = 'Add Image';
+        }
+        $frm->addButton($addImageLbl, 'btn_attach_image', $addImageLbl);
+        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('BTN_ADD', $this->siteLangId));
+        $frm->addButton('&nbsp;', 'btn_clear', Labels::getLabel('BTN_CLEAR', $this->siteLangId));
         return $frm;
     }
 

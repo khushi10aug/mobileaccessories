@@ -57,7 +57,7 @@ $cancelBtnFld = $frmSellerProduct->getField('btn_cancel');
 $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inventory');
 
 $inventoryForm->setCustomRendererClass('FormRendererBS');
-$inventoryForm->developerTags['colClassAfterWidthDefault'] = 'col-3';
+$inventoryForm->developerTags['colClassAfterWidthDefault'] = 'col-md-3';
 $inventoryForm->developerTags['colWidthClassesDefault'] = [null, null, null, null];
 $inventoryForm->developerTags['colWidthValuesDefault'] = [null, null, null, null];
 $inventoryForm->developerTags['fldWidthClassesDefault'] = ['field_', 'field_', 'field_', 'field_'];
@@ -67,26 +67,50 @@ $inventoryForm->developerTags['labelWidthValuesDefault'] = ['label', 'label', 'l
 $inventoryForm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
 
 $inventoryForm->setFormTagAttribute('onsubmit', 'addInvOption(); return(false);');
-$inventoryForm->setFormTagAttribute('class', 'form optionForm-js optionFld-js form--horizontal');
+$inventoryForm->setFormTagAttribute('class', 'form optionForm-js optionFld-js form--horizontal inventory-options-form-js');
 if (CommonHelper::getLayoutDirection() != Language::getLayoutDirection($siteDefaultLangId)) {
     $inventoryForm->addFormTagAttribute('class', "layout--" . Language::getLayoutDirection($siteDefaultLangId));
     $inventoryForm->setFormTagAttribute('dir', $formLayout);
 }
 
+$fld = $inventoryForm->getField('option_autocomplete');
+if (null != $fld) {
+    $fld->developerTags['col'] = 3;
+}
+
+foreach (['inv_option_cost', 'inv_option_sell_price', 'inv_option_stock', 'inv_option_sku'] as $invFldName) {
+    $fld = $inventoryForm->getField($invFldName);
+    if (null != $fld) {
+        $fld->developerTags['col'] = 3;
+    }
+}
 
 $fld = $inventoryForm->getField('btn_attach_image');
 $fld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block attachInvOptionImageBtn--js');
 $fld->setFieldTagAttribute('type', 'button');
 $fld->setFieldTagAttribute('onclick', 'attachInvOptionImage(); return false;');
-$fld->developerTags['noCaptionTag'] = true;
+$fld->developerTags['col'] = 3;
 
 $fld = $inventoryForm->getField('btn_submit');
 $fld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
+$fld->developerTags['col'] = 3;
 
 $fld = $inventoryForm->getField('btn_clear');
 $fld->setFieldTagAttribute('class', 'btn btn-outline-gray btn-block clearBtn--js');
 $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
+$fld->developerTags['col'] = 3;
 ?>
+<style>
+    .inventory-options-form-js .field-set {
+        margin-bottom: 1rem;
+    }
+    .inventory-options-form-js .caption-wraper {
+        min-height: 1.5rem;
+    }
+    .inventory-options-form-js .field-wraper .btn {
+        width: 100%;
+    }
+</style>
 <div class="row">
     <div class="col-md-12">
         <div class="form__subcontent">

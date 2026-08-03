@@ -1104,7 +1104,8 @@ INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`
 ('LBL_STILL_ACTIVE', 1, 'Still active', 1),
 ('FRM_SEARCH_BY_ADMIN_OR_IP', 1, 'Search by admin name, username, email, IP or location', 1),
 ('ERR_GUEST_USERS_CANNOT_POST_REVIEWS', 1, 'Guest users cannot post reviews. Please login with your account.', 1),
-('ERR_YOU_CANNOT_REVIEW_YOUR_OWN_PRODUCT', 1, 'You cannot review your own product.', 1)
+('ERR_YOU_CANNOT_REVIEW_YOUR_OWN_PRODUCT', 1, 'You cannot review your own product.', 1),
+('LBL_ADD_IMAGE', 1, 'Add Image', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 /* If tbl_admin_login_history already exists without last activity column, run:

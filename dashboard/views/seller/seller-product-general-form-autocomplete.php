@@ -74,6 +74,12 @@ if (CommonHelper::getLayoutDirection() != Language::getLayoutDirection($siteDefa
 }
 
 
+$fld = $inventoryForm->getField('btn_attach_image');
+$fld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block attachInvOptionImageBtn--js');
+$fld->setFieldTagAttribute('type', 'button');
+$fld->setFieldTagAttribute('onclick', 'attachInvOptionImage(); return false;');
+$fld->developerTags['noCaptionTag'] = true;
+
 $fld = $inventoryForm->getField('btn_submit');
 $fld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
 
@@ -475,6 +481,8 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
         CONF_PRODUCT_SKU_MANDATORY = <?php echo FatApp::getConfig("CONF_PRODUCT_SKU_MANDATORY", FatUtility::VAR_INT, 1); ?>;
     var LBL_MANDATORY_OPTION_FIELDS =
         '<?php echo Labels::getLabel('LBL_Atleast_one_option_needs_to_be_added_before_creating_inventory_for_this_product', $siteLangId); ?>';
+    var LBL_SELECT_OPTION_FIRST =
+        '<?php echo Labels::getLabel('FRM_SELECT_OPTION', $siteLangId); ?>';
     var PRODUCT_TYPE_DIGITAL = <?php echo Product::PRODUCT_TYPE_DIGITAL; ?>;
     var productType = <?php echo $product_type; ?>;
     $("document").ready(function() {
@@ -707,6 +715,19 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
             $(".optionForm-js .optionname--js").val(null).trigger('change');
             $('.optionForm-js .optionname--js, .optionForm-js .select2').show();
             $('.optionForm-js .optionname--js').parent().find('.optionName-js').remove();
+        }
+
+        attachInvOptionImage = function() {
+            var productId = $("input[name='selprod_product_id']").val() || product_id;
+            var invOptionId = $('input[name="inv_option_id"]').val();
+            if (!invOptionId) {
+                fcom.displayErrorMessage(LBL_SELECT_OPTION_FIRST);
+                return false;
+            }
+            if (typeof optionImageForm === 'function') {
+                optionImageForm(productId, invOptionId);
+            }
+            return false;
         }
 
         <?php if ($selprod_id == 0) { ?>

@@ -100,13 +100,12 @@ class Sitemap extends FatModel
             $rs = $prodSrch->getResultSet();
             while ($row = FatApp::getDb()->fetch($rs)) {
                 $productImagesArr = array();
-                $options = SellerProduct::getSellerProductOptions($row['selprod_id'], false);
-                if (count($options) > 0) {
-                    foreach ($options as $op) {
-                        $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $row['product_id'], $op['selprodoption_optionvalue_id'], $language['language_id'], true);
-                        if ($images) {
-                            $productImagesArr += $images;
-                        }
+                $imageSubIds = Product::getImageRecordSubIdsForSelprod($row['selprod_id'], $row['product_id']);
+                foreach ($imageSubIds as $imageSubId) {
+                    $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $row['product_id'], $imageSubId, $language['language_id'], true);
+                    if ($images) {
+                        $productImagesArr += $images;
+                        break;
                     }
                 }
                 $this->writeSitemapUrl(UrlHelper::generateFullUrl('products', 'view', array($row['selprod_id']), CONF_WEBROOT_FRONT_URL, null, false, false, true, $language['language_id']), $file, 'weekly', ['product' => $productImagesArr]);

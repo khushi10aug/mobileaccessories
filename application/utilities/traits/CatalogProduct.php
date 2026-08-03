@@ -430,7 +430,11 @@ trait CatalogProduct
             } else {
                 $srch = new SearchBase(AttachedFile::DB_TBL);
                 $optionValues = Product::getSeparateImageOptions($recordId, $this->siteLangId);
-                $srch->addCondition('afile_record_subid', 'IN', array_keys($optionValues));
+                $encodedSubIds = [];
+                foreach (array_keys($optionValues) as $optionKey) {
+                    $encodedSubIds[] = Product::encodeImageOptionSubId($optionKey);
+                }
+                $srch->addCondition('afile_record_subid', 'IN', $encodedSubIds);
             }
 
             $srch->doNotCalculateRecords();
@@ -441,8 +445,9 @@ trait CatalogProduct
             } else {
                 $srch->addCondition('afile_lang_id', '=', 0);
             }
-            if (0 < $productOptionId) {
-                $srch->addCondition('afile_record_subid', 'IN', [$productOptionId, 0]);
+            $productOptionSubId = Product::encodeImageOptionSubId($productOptionId);
+            if (0 < $productOptionSubId) {
+                $srch->addCondition('afile_record_subid', 'IN', [$productOptionSubId, 0]);
                 $images = FatApp::getDb()->fetchAll($srch->getResultSet());
                 $allReadyAddedCount = count($images);
             } else {

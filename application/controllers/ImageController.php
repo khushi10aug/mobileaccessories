@@ -92,33 +92,26 @@ class ImageController extends FatController
         $selprod_id = FatUtility::int($selprod_id);
         $lang_id = FatUtility::int($lang_id);
 
-        /* code to fetch color specific images for a single product, and varies according to option value id, E.g: Color: White, Black, Grey[ */
+        /* code to fetch option/combination specific images for a single product[ */
+        $row = false;
         if ($selprod_id) {
-            $srch = SellerProduct::getSearchObject();
-            $srch->doNotCalculateRecords();
-            $srch->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'INNER JOIN', 'selprod_id = selprodoption_selprod_id and selprodoption_selprod_id = ' . $selprod_id, 'tspo');
-            $srch->joinTable(OptionValue::DB_TBL, 'INNER JOIN', 'tspo.selprodoption_optionvalue_id = opval.optionvalue_id', 'opval');
-            $srch->joinTable(Option::DB_TBL, 'INNER JOIN', 'opval.optionvalue_option_id = op.option_id', 'op');
-            $srch->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', 'sp.selprod_product_id = af.afile_record_id AND af.afile_record_subid =  tspo.selprodoption_optionvalue_id', 'af');
-            $srch->addCondition('selprod_id', '=', $selprod_id);
-            $srch->addCondition('af.afile_type', '=', AttachedFile::FILETYPE_PRODUCT_IMAGE);
-            $srch->addOrder('af.afile_display_order');
-
-            /* if( $lang_id > 0 ){ */
-            $cnd = $srch->addCondition('af.afile_lang_id', '=', $lang_id);
-            $cnd->attachCondition('af.afile_lang_id', '=', 0);
-            $srch->addOrder('af.afile_lang_id');
-            /* } */
-
-            $srch->addDirectCondition('selprodoption_selprod_id IS NOT NULL', 'AND');
-            $srch->addDirectCondition('af.afile_id IS NOT NULL', 'AND');
-            $srch->setPageNumber(1);
-            $srch->setPageSize(1);
-            /* $srch->addMultipleFields(array('selprod_id', 'selprod_product_id', 'selprodoption_option_id', 'afile_id', 'afile_record_id', 'afile_record_subid')); */
-            $srch->addMultipleFields(array('afile_id', 'afile_record_id', 'afile_record_subid'));
-            $rs = $srch->getResultSet();
-            $row = FatApp::getDb()->fetch($rs);
-            /* CommonHelper::printArray($row); die(); */
+            $imageSubIds = Product::getImageRecordSubIdsForSelprod($selprod_id, $recordId);
+            if (!empty($imageSubIds)) {
+                $srch = new SearchBase(AttachedFile::DB_TBL, 'af');
+                $srch->doNotCalculateRecords();
+                $srch->addCondition('af.afile_record_id', '=', $recordId);
+                $srch->addCondition('af.afile_type', '=', AttachedFile::FILETYPE_PRODUCT_IMAGE);
+                $srch->addCondition('af.afile_record_subid', 'IN', $imageSubIds);
+                $cnd = $srch->addCondition('af.afile_lang_id', '=', $lang_id);
+                $cnd->attachCondition('af.afile_lang_id', '=', 0);
+                /* Prefer full combination match (encoded) over single option-value ids */
+                $srch->addOrder('FIELD(af.afile_record_subid, ' . implode(',', array_map('intval', $imageSubIds)) . ')');
+                $srch->addOrder('af.afile_lang_id', 'DESC');
+                $srch->addOrder('af.afile_display_order');
+                $srch->setPageSize(1);
+                $srch->addMultipleFields(array('afile_id', 'afile_record_id', 'afile_record_subid'));
+                $row = FatApp::getDb()->fetch($srch->getResultSet());
+            }
         }
         /* ] */
         

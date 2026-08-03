@@ -777,16 +777,79 @@ class Product extends MyAppModel
     public static function getSeparateImageOptions($product_id, $lang_id)
     {
         $imgTypesArr = array(0 => Labels::getLabel('LBL_FOR_ALL_OPTIONS', $lang_id));
-        $productOptions = Product::getProductOptions($product_id, $lang_id, true, 1);
+        $productOptions = Product::getProductOptions($product_id, $lang_id, true);
 
-        foreach ($productOptions as $val) {
-            if (!empty($val['optionValues'])) {
-                foreach ($val['optionValues'] as $k => $v) {
-                    $imgTypesArr[$k] = $v;
+        if (!empty($productOptions) && is_array($productOptions)) {
+            $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
+            if (!empty($optionCombinations)) {
+                foreach ($optionCombinations as $key => $label) {
+                    $imgTypesArr[$key] = (false === strpos((string) $key, '_'))
+                        ? $label
+                        : str_replace('_', ' | ', $label);
                 }
             }
         }
         return $imgTypesArr;
+    }
+
+    /**
+     * Encode Advanced Media option key for afile_record_subid.
+     * Single option-value ids stay as-is; multi-option combinations (e.g. 155_160) are hashed into bigint range.
+     */
+    public static function encodeImageOptionSubId($optionKey)
+    {
+        $optionKey = trim((string) $optionKey);
+        if ($optionKey === '' || $optionKey === '0') {
+            return 0;
+        }
+        if (false === strpos($optionKey, '_')) {
+            return FatUtility::int($optionKey);
+        }
+        $hash = (int) sprintf('%u', crc32('imgopt_' . $optionKey));
+        return 3000000000 + ($hash % 1000000000);
+    }
+
+    /**
+     * Resolve afile_record_subid candidates for a seller product (combination first, then each option value).
+     */
+    public static function getImageRecordSubIdsForSelprod($selprodId, $productId = 0, $selprodCode = '')
+    {
+        $subIds = [];
+        $selprodId = FatUtility::int($selprodId);
+        $productId = FatUtility::int($productId);
+        $selprodCode = (string) $selprodCode;
+
+        if ($selprodCode === '' || 1 > $productId) {
+            $selprod = SellerProduct::getAttributesById($selprodId, ['selprod_code', 'selprod_product_id']);
+            if (!empty($selprod)) {
+                $selprodCode = (string) $selprod['selprod_code'];
+                $productId = FatUtility::int($selprod['selprod_product_id']);
+            }
+        }
+
+        if ($selprodCode !== '' && 0 < $productId) {
+            $prefix = $productId . '_';
+            if (0 === strpos($selprodCode, $prefix)) {
+                $optionKey = substr($selprodCode, strlen($prefix));
+                if ($optionKey !== '' && $optionKey !== '0') {
+                    $subIds[] = self::encodeImageOptionSubId($optionKey);
+                }
+            }
+        }
+
+        if (0 < $selprodId) {
+            $options = SellerProduct::getSellerProductOptions($selprodId, false);
+            if (!empty($options)) {
+                foreach ($options as $op) {
+                    $ovId = FatUtility::int($op['selprodoption_optionvalue_id']);
+                    if (0 < $ovId && !in_array($ovId, $subIds, true)) {
+                        $subIds[] = $ovId;
+                    }
+                }
+            }
+        }
+
+        return $subIds;
     }
 
     public static function getProductSpecifications($product_id, $lang_id)

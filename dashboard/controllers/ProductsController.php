@@ -624,6 +624,7 @@ class ProductsController extends SellerBaseController
     {
         $recordId = FatUtility::int($recordId);
         $fileType = FatUtility::int($fileType);
+        $optionId = Product::encodeImageOptionSubId($optionId);
         if (1 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
@@ -684,7 +685,8 @@ class ProductsController extends SellerBaseController
         }
 
         $recordId = $recordId = FatUtility::int($post['record_id']);
-        $optionId = FatUtility::int($post['option_id']);
+        $optionKey = isset($post['option_id']) ? trim((string) $post['option_id']) : '0';
+        $optionId = Product::encodeImageOptionSubId($optionKey);
         $fileType = FatUtility::int($post['file_type']);
         if (!in_array($fileType, [AttachedFile::FILETYPE_PRODUCT_IMAGE, AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP])) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -704,12 +706,14 @@ class ProductsController extends SellerBaseController
         if ($fileType != AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP && 0 < $recordId) {
             $productRow = Product::getAttributesById($recordId, array('product_seller_id'));
             $optionValues = Product::getSeparateImageOptions($recordId, $this->siteLangId);
-            if ($productRow['product_seller_id'] != $this->userParentId || !array_key_exists($optionId, $optionValues)) {
+            $optionKeyExists = array_key_exists($optionKey, $optionValues)
+                || (ctype_digit($optionKey) && array_key_exists((int) $optionKey, $optionValues));
+            if ($productRow['product_seller_id'] != $this->userParentId || !$optionKeyExists) {
                 LibHelper::exitWithError($this->str_invalid_request);
             }
         }
 
-        $this->validateImageSubscriptionLimit($recordId, $optionId, $langId, $fileType, $this->userParentId);
+        $this->validateImageSubscriptionLimit($recordId, $optionKey, $langId, $fileType, $this->userParentId);
 
         if ($fileType == AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP) {
             $fileHandlerObj = new AttachedFileTemp();
@@ -726,13 +730,13 @@ class ProductsController extends SellerBaseController
         }
 
         if (count($languages) > 1) {
-            $this->set("isDefaultLayout", $langId == 0 && $optionId == 0);
+            $this->set("isDefaultLayout", $langId == 0 && $optionKey === '0');
         } else {
-            $this->set("isDefaultLayout", $langId == CommonHelper::getDefaultFormLangId() && $optionId == 0);
+            $this->set("isDefaultLayout", $langId == CommonHelper::getDefaultFormLangId() && $optionKey === '0');
         }
 
         $this->set("lang_id", $langId);
-        $this->set("option_id", $optionId);
+        $this->set("option_id", $optionKey);
         $this->set("record_id", $recordId);
         $this->set("file_type", $fileType);
         $this->set("msg", Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));

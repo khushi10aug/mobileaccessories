@@ -156,7 +156,10 @@ class ImageAttributesController extends ListingBaseController
         $recordId = FatUtility::int($recordId);
         $moduleType = FatUtility::int($moduleType);
         $langId = FatUtility::int($langId);
-        $optionId = FatUtility::int($optionId);
+        $optionKey = $optionId;
+        $optionId = ($moduleType == AttachedFile::FILETYPE_PRODUCT_IMAGE)
+            ? Product::encodeImageOptionSubId($optionId)
+            : FatUtility::int($optionId);
 
         if ($recordId < 1) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -208,7 +211,7 @@ class ImageAttributesController extends ListingBaseController
         }
 
         $images = AttachedFile::getMultipleAttachments($moduleType, $recordId, $optionId, $langId, (count($languages) <= 1) ? true : false, 0, 0, true);
-        $frm = $this->getForm($recordId, $moduleType, $langId, $images, $optionId);
+        $frm = $this->getForm($recordId, $moduleType, $langId, $images, $optionKey);
         $this->set('recordId', $recordId);
         $this->set('moduleType', $moduleType);
         $this->set('langId', $langId);
@@ -259,7 +262,10 @@ class ImageAttributesController extends ListingBaseController
         $recordId = FatUtility::int($post['record_id']);
         $moduleType = FatUtility::int($post['module_type']);
         $langId = FatUtility::int($post['lang_id']);
-        $optionId = FatApp::getPostedData('option_id', FatUtility::VAR_INT, 0);
+        $optionKey = isset($post['option_id']) ? trim((string) $post['option_id']) : '0';
+        $optionId = ($moduleType == AttachedFile::FILETYPE_PRODUCT_IMAGE)
+            ? Product::encodeImageOptionSubId($optionKey)
+            : FatUtility::int($optionKey);
         if (!$recordId || !$moduleType) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
@@ -270,7 +276,7 @@ class ImageAttributesController extends ListingBaseController
 
         $images = AttachedFile::getMultipleAttachments($moduleType, $recordId, $optionId, $langId, (count($languages) <= 1) ? true : false, 0, 0, true);
 
-        $frm = $this->getForm($recordId, $moduleType, $langId, $images, $optionId);
+        $frm = $this->getForm($recordId, $moduleType, $langId, $images, $optionKey);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);

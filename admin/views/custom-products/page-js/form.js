@@ -271,28 +271,69 @@
         });
     };
     loadImageOptions = function () {
+        let optionsArr = [];
         $('#addProductfrm .optionsJs').each(function () {
             let data = $(this).select2('data');
-            if (data.length) {
-                data = data[0];
-                if (data.option_is_separate_images == 1) {
-                    let optionValueData = $.parseJSON($(this).closest('.rowJs').find('input.optionValuesJs').val());
-                    let optionIdEl = $('#image_option_id');
-                    optionIdEl.html(`<option value="0">
-                    ${forAllOptionsLbl}
-                    </option>`);
-
-                    $.each(optionValueData, function (index, opval) {
-                        optionIdEl.append(`<option value="${opval.id}">
-                            ${opval.value}
-                            </option>`);
-
-                    });
-                    return false;
-                }
+            if (!data.length) {
+                return;
             }
+            let optionValueRaw = $(this).closest('.rowJs').find('input.optionValuesJs').val();
+            if (!optionValueRaw) {
+                return;
+            }
+            let optionValueData = [];
+            try {
+                optionValueData = $.parseJSON(optionValueRaw);
+            } catch (e) {
+                optionValueData = [];
+            }
+            if (!optionValueData || !optionValueData.length) {
+                return;
+            }
+            let optionValues = {};
+            $.each(optionValueData, function (index, opval) {
+                if (opval && opval.id) {
+                    optionValues[opval.id] = opval.value;
+                }
+            });
+            if (Object.keys(optionValues).length) {
+                optionsArr.push({ optionValues: optionValues });
+            }
+        });
 
-        })
+        let optionIdEl = $('#image_option_id');
+        if (!optionIdEl.length) {
+            return;
+        }
+        optionIdEl.html(`<option value="0">${forAllOptionsLbl}</option>`);
+        let combinations = getOptionCombinations(optionsArr);
+        $.each(combinations, function (key, label) {
+            optionIdEl.append(`<option value="${key}">${label}</option>`);
+        });
+    };
+
+    getOptionCombinations = function (optionsArr) {
+        let tempArr = {};
+        if (!optionsArr.length) {
+            return tempArr;
+        }
+        $.each(optionsArr, function (i, option) {
+            let optionValues = option.optionValues || {};
+            let nextArr = {};
+            if ($.isEmptyObject(tempArr)) {
+                $.each(optionValues, function (k, v) {
+                    nextArr[k] = v;
+                });
+            } else {
+                $.each(tempArr, function (tempKey, tempVal) {
+                    $.each(optionValues, function (k, v) {
+                        nextArr[tempKey + '_' + k] = tempVal + ' | ' + v;
+                    });
+                });
+            }
+            tempArr = nextArr;
+        });
+        return tempArr;
     };
 
     productImagesCallback = function (t) {

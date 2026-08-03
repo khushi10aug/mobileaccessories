@@ -964,6 +964,7 @@ class ProductsController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         $fileType = FatUtility::int($fileType);
+        $optionId = Product::encodeImageOptionSubId($optionId);
         if (1 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
@@ -1023,7 +1024,8 @@ class ProductsController extends ListingBaseController
         }
 
         $recordId = $recordId = FatUtility::int($post['record_id']);
-        $optionId = FatUtility::int($post['option_id']);
+        $optionKey = isset($post['option_id']) ? trim((string) $post['option_id']) : '0';
+        $optionId = Product::encodeImageOptionSubId($optionKey);
         $fileType = FatUtility::int($post['file_type']);
         if (!in_array($fileType, [AttachedFile::FILETYPE_PRODUCT_IMAGE, AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP])) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -1040,7 +1042,7 @@ class ProductsController extends ListingBaseController
             $langId = array_key_first($languages);
         }
         $sellerId = (int) Product::getAttributesById($recordId, 'product_seller_id');
-        $this->validateImageSubscriptionLimit($recordId, $optionId, $langId, $fileType, $sellerId);
+        $this->validateImageSubscriptionLimit($recordId, $optionKey, $langId, $fileType, $sellerId);
 
         if ($fileType == AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP) {
             $fileHandlerObj = new AttachedFileTemp();
@@ -1057,13 +1059,13 @@ class ProductsController extends ListingBaseController
         }
 
         if (count($languages) > 1) {
-            $this->set("isDefaultLayout", $langId == 0 && $optionId == 0);
+            $this->set("isDefaultLayout", $langId == 0 && $optionKey === '0');
         } else {
-            $this->set("isDefaultLayout", $langId == CommonHelper::getDefaultFormLangId() && $optionId == 0);
+            $this->set("isDefaultLayout", $langId == CommonHelper::getDefaultFormLangId() && $optionKey === '0');
         }
 
         $this->set("lang_id", $langId);
-        $this->set("option_id", $optionId);
+        $this->set("option_id", $optionKey);
         $this->set("product_id", $recordId);
         $this->set("file_type", $fileType);
         $this->set("msg", Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));

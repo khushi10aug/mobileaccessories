@@ -861,11 +861,19 @@ class ProductsController extends MyAppController
                     /* Product UPC code [ */
                     $product['product_upc'] = UpcCode::getUpcCode($product['product_id'], $op['selprodoption_optionvalue_id']);
                     /* ] */
-                    $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id'], $op['selprodoption_optionvalue_id'], $this->siteLangId, true, '', $allowed_images);
+                    $productSelectedOptionValues[$op['selprodoption_option_id']] = $op['selprodoption_optionvalue_id'];
+                }
+                $imageSubIds = Product::getImageRecordSubIdsForSelprod(
+                    $selprod_id,
+                    $product['product_id'],
+                    isset($product['selprod_code']) ? $product['selprod_code'] : ''
+                );
+                foreach ($imageSubIds as $imageSubId) {
+                    $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id'], $imageSubId, $this->siteLangId, true, '', $allowed_images);
                     if ($images) {
                         $productImagesArr += $images;
+                        break;
                     }
-                    $productSelectedOptionValues[$op['selprodoption_option_id']] = $op['selprodoption_optionvalue_id'];
                 }
             }
 

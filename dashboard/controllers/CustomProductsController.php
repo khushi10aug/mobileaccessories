@@ -385,6 +385,7 @@ class CustomProductsController extends SellerBaseController
     {
         $recordId = FatUtility::int($recordId);
         $fileType = FatUtility::int($fileType);
+        $optionId = Product::encodeImageOptionSubId($optionId);
 
         $languages = Language::getAllNames();
         if (count($languages) <= 1) {
@@ -440,7 +441,8 @@ class CustomProductsController extends SellerBaseController
         }
 
         $recordId = $recordId = FatUtility::int($post['record_id']);
-        $optionId = FatUtility::int($post['option_id']);
+        $optionKey = isset($post['option_id']) ? trim((string) $post['option_id']) : '0';
+        $optionId = Product::encodeImageOptionSubId($optionKey);
         $fileType = FatUtility::int($post['file_type']);
 
         if (!in_array($fileType, [AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP])) {
@@ -476,13 +478,13 @@ class CustomProductsController extends SellerBaseController
         }
 
         if (count($languages) > 1) {
-            $this->set("isDefaultLayout", $langId == 0 && $optionId == 0);
+            $this->set("isDefaultLayout", $langId == 0 && $optionKey === '0');
         } else {
-            $this->set("isDefaultLayout", $langId == CommonHelper::getDefaultFormLangId() && $optionId == 0);
+            $this->set("isDefaultLayout", $langId == CommonHelper::getDefaultFormLangId() && $optionKey === '0');
         }
 
         $this->set("lang_id", $langId);
-        $this->set("option_id", $optionId);
+        $this->set("option_id", $optionKey);
         $this->set("record_id", $recordId);
         $this->set("file_type", $fileType);
         $this->set("msg", Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
@@ -668,20 +670,19 @@ class CustomProductsController extends SellerBaseController
                 $reqData = json_decode($reqData['preq_content'], true);
             }
             $productOptions = isset($reqData['product_option']) ? $reqData['product_option'] : array();
+            $optionsArr = [];
             if (!empty($productOptions)) {
                 foreach ($productOptions as $optionId) {
-                    $optionData = Option::getAttributesById($optionId, array('option_is_separate_images'));
-
-                    if (!$optionData || !$optionData['option_is_separate_images']) {
-                        continue;
-                    }
-
                     $optionValues = Product::getOptionValues($optionId, $lang_id);
                     if (!empty($optionValues)) {
-                        foreach ($optionValues as $k => $v) {
-                            $imgTypesArr[$k] = $v;
-                        }
+                        $optionsArr[] = ['optionValues' => $optionValues];
                     }
+                }
+            }
+            if (!empty($optionsArr)) {
+                $optionCombinations = CommonHelper::combinationOfElementsOfArr($optionsArr, 'optionValues', '_');
+                if (!empty($optionCombinations)) {
+                    $imgTypesArr = $imgTypesArr + $optionCombinations;
                 }
             }
         }

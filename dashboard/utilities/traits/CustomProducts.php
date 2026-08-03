@@ -244,6 +244,7 @@ trait CustomProducts
             FatUtility::dieWithError(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
         }
         $product_id = FatUtility::int($product_id);
+        $option_id = Product::encodeImageOptionSubId($option_id);
 
         if (!$product_id) {
             FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
@@ -288,7 +289,8 @@ trait CustomProducts
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId));
         }
         $product_id = FatUtility::int($post['product_id']);
-        $option_id = FatUtility::int($post['option_id']);
+        $optionKey = isset($post['option_id']) ? trim((string) $post['option_id']) : '0';
+        $option_id = Product::encodeImageOptionSubId($optionKey);
         $lang_id = FatUtility::int($post['lang_id']);
 
 
@@ -296,12 +298,14 @@ trait CustomProducts
         if ($product_id) {
             $productRow = Product::getAttributesById($product_id, array('product_seller_id'));
             $optionValues = Product::getSeparateImageOptions($product_id, $this->siteLangId);
-            if ($productRow['product_seller_id'] != $this->userParentId || !array_key_exists($option_id, $optionValues)) {
+            $optionKeyExists = array_key_exists($optionKey, $optionValues)
+                || (ctype_digit($optionKey) && array_key_exists((int) $optionKey, $optionValues));
+            if ($productRow['product_seller_id'] != $this->userParentId || !$optionKeyExists) {
                 FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId));
             }
         }
 
-        $this->validateImageSubscriptionLimit($product_id, $option_id, $lang_id);
+        $this->validateImageSubscriptionLimit($product_id, $optionKey, $lang_id);
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
             FatUtility::dieJsonError(Labels::getLabel("ERR_PLEASE_SELECT_A_FILE", $this->siteLangId));
@@ -1058,19 +1062,7 @@ trait CustomProducts
 
     private function getSeparateImageOptions($product_id, $lang_id)
     {
-        $imgTypesArr = array(0 => Labels::getLabel('LBL_For_All_Options', $this->siteLangId));
-        $productOptions = Product::getProductOptions($product_id, $lang_id, true, 1);
-
-        foreach ($productOptions as $val) {
-            if (!empty($val['optionValues'])) {
-                foreach ($val['optionValues'] as $k => $v) {
-                    $option_name = (isset($val['option_name']) && $val['option_name']) ? $val['option_name'] : $val['option_identifier'];
-                    //$imgTypesArr[$k] = $v .' ( '. $option_name .' )';
-                    $imgTypesArr[$k] = $v;
-                }
-            }
-        }
-        return $imgTypesArr;
+        return Product::getSeparateImageOptions($product_id, $lang_id);
     }
 
     private function getCustomProductImagesForm()

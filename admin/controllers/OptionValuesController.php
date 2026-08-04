@@ -235,6 +235,7 @@ class OptionValuesController extends ListingBaseController
             }
         }
 
+        $post['optionvalue_name'] = trim($post['optionvalue_name']);
         $post['optionvalue_identifier'] = $post['optionvalue_name'];
         $optionValueObj = new OptionValue($recordId);
         $optionValueObj->assignValues($post);
@@ -275,7 +276,7 @@ class OptionValuesController extends ListingBaseController
 
         $srch = OptionValue::getSearchObject($langId, true);
         $srch->addCondition('ov.optionvalue_option_id', '=', $optionId);
-        $srch->addMultipleFields(array('optionvalue_id as id, COALESCE(optionvalue_name, optionvalue_identifier) as text'));
+        $srch->addMultipleFields(array('optionvalue_id as id, TRIM(COALESCE(optionvalue_name, optionvalue_identifier)) as text'));
 
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('optionvalue_identifier', 'LIKE', '%' . $post['keyword'] . '%');

@@ -383,7 +383,7 @@ trait Options
 
         $srch = OptionValue::getSearchObject($langId, true);
         $srch->addCondition('ov.optionvalue_option_id', '=', 'mysql_func_' . $optionId, 'AND', true);
-        $srch->addMultipleFields(array('optionvalue_id as id, COALESCE(optionvalue_name, optionvalue_identifier) as text'));
+        $srch->addMultipleFields(array('optionvalue_id as id, TRIM(COALESCE(optionvalue_name, optionvalue_identifier)) as text'));
 
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('optionvalue_identifier', 'LIKE', '%' . $post['keyword'] . '%');

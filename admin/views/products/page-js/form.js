@@ -491,6 +491,9 @@ $(document).ready(function () {
 
         var keyword = e.detail.value;
         var list = [];
+        var selectedIds = (e.detail.tagify.value || []).map(function (tag) {
+            return String(tag.id);
+        });
         fcom.ajax(fcom.makeUrl('OptionValues', 'autoComplete'), {
             keyword: keyword,
             optionId: optionId,
@@ -498,13 +501,16 @@ $(document).ready(function () {
         }, function (t) {
             var ans = JSON.parse(t);
             $(ans['results']).each(function (id, val) {
+                if (selectedIds.indexOf(String(val.id)) !== -1) {
+                    return;
+                }
                 list.push({
                     "id": val.id,
-                    "value": val.text,
+                    "value": $.trim(val.text),
                 });
             });
             e.detail.tagify.settings.whitelist = list;
-            e.detail.tagify.loading(false).dropdown.show.call(tagify, keyword);
+            e.detail.tagify.loading(false).dropdown.show.call(e.detail.tagify, keyword);
         });
     }
 

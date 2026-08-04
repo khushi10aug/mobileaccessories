@@ -5,7 +5,7 @@ $productOption = $productOption ?? [];
 $tagData = [];
 if (!empty($productOption)) {
     foreach ($productOption['optionValues'] as $key => $name) {
-        $tagData[] = ['id' => $key, 'value' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8')];
+        $tagData[] = ['id' => $key, 'value' => htmlspecialchars(trim($name), ENT_QUOTES, 'UTF-8')];
     }
 }
 ?>

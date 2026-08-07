@@ -1020,10 +1020,45 @@ class Product extends MyAppModel
     {
         $selprod_id = FatUtility::int($selprod_id);
         $product_id = FatUtility::int($product_id);
+        $optionvalue_id = FatUtility::int($optionvalue_id);
         $selectedOptions[$option_id] = $optionvalue_id;
-        sort($selectedOptions);
 
-        $selprod_code = $product_id . '_' . implode('_', $selectedOptions);
+        /* Collect selected option-value ids (order-independent matching below). */
+        $optionValueIds = array();
+        foreach ($selectedOptions as $selectedOptionValueId) {
+            $selectedOptionValueId = FatUtility::int($selectedOptionValueId);
+            if (0 < $selectedOptionValueId) {
+                $optionValueIds[] = $selectedOptionValueId;
+            }
+        }
+        $optionValueIds = array_values(array_unique($optionValueIds));
+
+        /*
+         * Inventory codes are built in more than one order:
+         * - numeric sort of optionvalue ids (manual / clone inventory)
+         * - product option order (bulk combinations via combinationOfElementsOfArr)
+         * Try both exact codes, then match by requiring every selected optionvalue in selprod_code.
+         */
+        $codesToTry = array();
+        $numericSorted = $optionValueIds;
+        sort($numericSorted, SORT_NUMERIC);
+        if (!empty($numericSorted)) {
+            $codesToTry[] = $product_id . '_' . implode('_', $numericSorted);
+        }
+
+        $byOptionId = $selectedOptions;
+        ksort($byOptionId, SORT_NUMERIC);
+        $orderedByOptionId = array();
+        foreach ($byOptionId as $selectedOptionValueId) {
+            $selectedOptionValueId = FatUtility::int($selectedOptionValueId);
+            if (0 < $selectedOptionValueId) {
+                $orderedByOptionId[] = $selectedOptionValueId;
+            }
+        }
+        if (!empty($orderedByOptionId)) {
+            $codesToTry[] = $product_id . '_' . implode('_', $orderedByOptionId);
+        }
+        $codesToTry = array_values(array_unique($codesToTry));
 
         $prodSrchObj = new ProductSearch();
         $prodSrchObj->setDefinedCriteria(0, 0, ['doNotJoinSellers' => true]);
@@ -1033,42 +1068,61 @@ class Product extends MyAppModel
         $prodSrchObj->addMultipleFields(array('product_id', 'selprod_id', 'theprice'));
         $prodSrchObj->addCondition('product_id', '=', 'mysql_func_' . $product_id, 'AND', true);
 
-        $prodSrch = clone $prodSrchObj;
+        $product = false;
+        if (!empty($codesToTry)) {
+            $prodSrch = clone $prodSrchObj;
+            if (1 === count($codesToTry)) {
+                $prodSrch->addCondition('selprod_code', '=', $codesToTry[0]);
+            } else {
+                $prodSrch->addCondition('selprod_code', 'IN', $codesToTry);
+            }
+            $prodSrch->doNotLimitRecords();
+            $prodSrch->addOrder('theprice', 'ASC');
+            $product = FatApp::getDb()->fetch($prodSrch->getResultSet());
+        }
 
-        $prodSrch->addCondition('selprod_code', '=', $selprod_code);
-        $prodSrch->doNotLimitRecords();
-        $prodSrch->addOrder('theprice', 'ASC');
-        $productRs = $prodSrch->getResultSet();
-        //echo $prodSrch->getQuery();
-        $product = FatApp::getDb()->fetch($productRs);
+        /* Exact code miss: match combination by all selected option values regardless of code order. */
+        if (!$product && !empty($optionValueIds)) {
+            $prodSrch = clone $prodSrchObj;
+            foreach ($optionValueIds as $optValId) {
+                $prodSrch->addDirectCondition(
+                    "(selprod_code LIKE '%\\_" . $optValId . "\\_%' OR selprod_code LIKE '%\\_" . $optValId . "')"
+                );
+            }
+            $prodSrch->doNotLimitRecords();
+            $prodSrch->addOrder('theprice', 'ASC');
+            $product = FatApp::getDb()->fetch($prodSrch->getResultSet());
+        }
+
         if ($product) {
             if ($returnId) {
                 return $product['selprod_id'];
             }
             return UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']));
-        } else {
-            $prodSrch2 = new ProductSearch(CommonHelper::getLangId());
-            $prodSrch2->doNotCalculateRecords();
-            $prodSrch2->setDefinedCriteria(0, 0, ['doNotJoinSellers' => true]);
-            $prodSrch2->addCondition('selprod_id', '!=', 'mysql_func_' . $selprod_id, 'AND', true);
-            $prodSrch2->addCondition('product_id', '=', 'mysql_func_' . $product_id, 'AND', true);
-            $prodSrch2->addCondition('selprod_code', 'LIKE', '%_' . $optionvalue_id . '%');
-            $prodSrch2->addMultipleFields(array('selprod_id', 'special_price_found', 'theprice'));
-            $prodSrch2->setPageSize(1);
-            $prodSrch2->addOrder('theprice', 'ASC');
-            $productRs = $prodSrch2->getResultSet();
-            $product = FatApp::getDb()->fetch($productRs);
-
-            if ($product) {
-                if ($returnId) {
-                    return $product['selprod_id'];
-                }
-                return UrlHelper::generateUrl('Products', 'view', array($product['selprod_id'])) . "::";
-            } else {
-                return false;
-            }
-            return false;
         }
+
+        /* Combination unavailable: closest inventory that has the clicked option value. */
+        $prodSrch2 = new ProductSearch(CommonHelper::getLangId());
+        $prodSrch2->doNotCalculateRecords();
+        $prodSrch2->setDefinedCriteria(0, 0, ['doNotJoinSellers' => true]);
+        $prodSrch2->addCondition('selprod_id', '!=', 'mysql_func_' . $selprod_id, 'AND', true);
+        $prodSrch2->addCondition('product_id', '=', 'mysql_func_' . $product_id, 'AND', true);
+        $prodSrch2->addDirectCondition(
+            "(selprod_code LIKE '%\\_" . $optionvalue_id . "\\_%' OR selprod_code LIKE '%\\_" . $optionvalue_id . "')"
+        );
+        $prodSrch2->addMultipleFields(array('selprod_id', 'special_price_found', 'theprice'));
+        $prodSrch2->setPageSize(1);
+        $prodSrch2->addOrder('theprice', 'ASC');
+        $product = FatApp::getDb()->fetch($prodSrch2->getResultSet());
+
+        if ($product) {
+            if ($returnId) {
+                return $product['selprod_id'];
+            }
+            return UrlHelper::generateUrl('Products', 'view', array($product['selprod_id'])) . "::";
+        }
+
+        return false;
     }
 
     public static function uniqueProductAction($selprodCode, $weightageKey)

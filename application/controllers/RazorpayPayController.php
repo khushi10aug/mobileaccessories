@@ -139,6 +139,12 @@ class RazorpayPayController extends PaymentController
 
     public function callback()
     {
+        /* Razorpay Dashboard webhook URL often points here — handle JSON events first. */
+        if ($this->isRazorpayWebhookRequest()) {
+            $this->handleWebhook();
+            return;
+        }
+
         $post = FatApp::getPostedData();
         /* Checkout JS already navigated to success; process in background via keepalive POST. */
         $async = !empty($post['async_process']);
@@ -192,6 +198,128 @@ class RazorpayPayController extends PaymentController
             $result['response_data']
         );
         exit;
+    }
+
+    /**
+     * Dedicated webhook endpoint: /razorpay-pay/webhook
+     * Prefer this URL in Razorpay Dashboard (callback also accepts webhooks).
+     */
+    public function webhook()
+    {
+        $this->handleWebhook();
+    }
+
+    /**
+     * Process Razorpay server-to-server webhook (payment.captured / payment.authorized).
+     */
+    private function handleWebhook(): void
+    {
+        $rawBody = (string) @file_get_contents('php://input');
+        $signature = (string) ($_SERVER['HTTP_X_RAZORPAY_SIGNATURE'] ?? '');
+
+        if ('' === trim($rawBody)) {
+            http_response_code(400);
+            exit('Empty payload');
+        }
+
+        if (!$this->verifyWebhookSignature($rawBody, $signature)) {
+            SystemLog::transaction('Invalid Razorpay webhook signature', self::KEY_NAME . '-webhook');
+            http_response_code(400);
+            exit('Invalid signature');
+        }
+
+        $payload = json_decode($rawBody, true);
+        if (!is_array($payload) || empty($payload['event'])) {
+            http_response_code(400);
+            exit('Invalid payload');
+        }
+
+        $event = (string) $payload['event'];
+        $handledEvents = ['payment.captured', 'payment.authorized'];
+        if (!in_array($event, $handledEvents, true)) {
+            http_response_code(200);
+            exit('Ignored');
+        }
+
+        $paymentEntity = $payload['payload']['payment']['entity'] ?? null;
+        if (!is_array($paymentEntity) || empty($paymentEntity['id'])) {
+            SystemLog::transaction('Webhook missing payment entity: ' . $rawBody, self::KEY_NAME . '-webhook');
+            http_response_code(200);
+            exit('Missing payment');
+        }
+
+        $razorpayPaymentId = (string) $paymentEntity['id'];
+        $merchantOrderId = isset($paymentEntity['notes']['system_order_id'])
+            ? FatUtility::int($paymentEntity['notes']['system_order_id'])
+            : 0;
+
+        if ($merchantOrderId < 1) {
+            SystemLog::transaction(
+                'Webhook missing system_order_id for payment ' . $razorpayPaymentId,
+                self::KEY_NAME . '-webhook'
+            );
+            http_response_code(200);
+            exit('Missing order');
+        }
+
+        $orderPaymentObj = new OrderPayment($merchantOrderId, $this->siteLangId);
+        $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
+        if (empty($orderInfo)) {
+            SystemLog::transaction(
+                'Webhook order not found: ' . $merchantOrderId,
+                self::KEY_NAME . '-webhook'
+            );
+            http_response_code(200);
+            exit('Order not found');
+        }
+
+        if ((int) $orderInfo['order_payment_status'] !== Orders::ORDER_PAYMENT_PENDING) {
+            http_response_code(200);
+            exit('OK');
+        }
+
+        $result = $this->processVerifiedPayment($orderPaymentObj, $merchantOrderId, $razorpayPaymentId);
+        if (!empty($result['success'])) {
+            http_response_code(200);
+            exit('OK');
+        }
+
+        /* Re-check: browser async callback may have marked paid between verify and insert. */
+        $orderPaymentObj = new OrderPayment($merchantOrderId, $this->siteLangId);
+        $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
+        if (!empty($orderInfo) && (int) $orderInfo['order_payment_status'] !== Orders::ORDER_PAYMENT_PENDING) {
+            http_response_code(200);
+            exit('OK');
+        }
+
+        /* Transient failure — non-2xx so Razorpay retries. */
+        http_response_code(500);
+        exit('Processing failed');
+    }
+
+    private function isRazorpayWebhookRequest(): bool
+    {
+        /* Razorpay always sends this header on Dashboard webhooks. */
+        return !empty($_SERVER['HTTP_X_RAZORPAY_SIGNATURE']);
+    }
+
+    /**
+     * Verify X-Razorpay-Signature when webhook_secret is configured.
+     * If secret is empty, skip HMAC and rely on subsequent Razorpay API verify.
+     */
+    private function verifyWebhookSignature(string $rawBody, string $signature): bool
+    {
+        $secret = trim((string) ($this->settings['webhook_secret'] ?? ''));
+        if ('' === $secret) {
+            return true;
+        }
+
+        if ('' === $signature) {
+            return false;
+        }
+
+        $expected = hash_hmac('sha256', $rawBody, $secret);
+        return hash_equals($expected, $signature);
     }
 
     /**
@@ -278,13 +406,24 @@ class RazorpayPayController extends PaymentController
         $out['response_data'] = $response_data ?: $result;
 
         if ($recordNow) {
-            $orderPaymentObj->addOrderPayment(
+            $added = $orderPaymentObj->addOrderPayment(
                 $this->settings['plugin_code'],
                 $razorpay_payment_id,
                 $paymentGatewayCharge,
                 Labels::getLabel('MSG_RECEIVED_PAYMENT', $this->siteLangId),
                 $out['response_data']
             );
+            if (false === $added) {
+                /* Browser callback and webhook can race on the same payment id. */
+                $recheck = (new OrderPayment($merchant_order_id, $this->siteLangId))->getOrderPrimaryinfo();
+                if (!empty($recheck) && (int) $recheck['order_payment_status'] !== Orders::ORDER_PAYMENT_PENDING) {
+                    return $out;
+                }
+                $out['success'] = false;
+                $err = (string) ($orderPaymentObj->error ?? 'addOrderPayment failed');
+                SystemLog::transaction($err, self::KEY_NAME . '-' . $orderPaymentObj->getOrderNo());
+                return $out;
+            }
         }
 
         return $out;

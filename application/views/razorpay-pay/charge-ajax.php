@@ -42,22 +42,29 @@ if (!FatUtility::isAjaxCall()) { ?>
             var callbackUrl = <?php echo json_encode($paymentCallbackUrl); ?>;
 
             /* Fire-and-forget — leave checkout "Waiting..." screen immediately */
+            /* Webhook is the reliable backup if this request is lost. */
+            var queued = false;
             try {
                 var body = new FormData();
                 body.append('razorpay_payment_id', paymentId);
                 body.append('merchant_order_id', orderId);
                 body.append('async_process', '1');
                 if (navigator.sendBeacon) {
-                    navigator.sendBeacon(callbackUrl, body);
-                } else {
+                    queued = !!navigator.sendBeacon(callbackUrl, body);
+                }
+                if (!queued) {
                     fetch(callbackUrl, {
                         method: 'POST',
                         body: body,
                         credentials: 'same-origin',
                         keepalive: true
                     }).catch(function() {});
+                    queued = true;
                 }
             } catch (e) {
+                queued = false;
+            }
+            if (!queued) {
                 var paymentIdField = document.getElementById('razorpay_payment_id');
                 var form = document.getElementById('razorpay-form');
                 if (paymentIdField && form) {

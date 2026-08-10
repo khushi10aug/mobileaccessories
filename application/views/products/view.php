@@ -163,7 +163,7 @@ if (!empty($product['brand_name'])) {
         'name' => $product['brand_name']
     ];
 }
-$schema['hasMerchantReturnPolicy'] = [
+/*$schema['hasMerchantReturnPolicy'] = [
     '@type' => 'MerchantReturnPolicy',
     "returnPolicyCategory"=> "https://schema.org/MerchantReturnFiniteReturnWindow",
     "merchantReturnDays"=> 7,
@@ -178,7 +178,7 @@ $schema['hasMerchantReturnPolicy'] = [
 $schema['shippingDetails'] = [
     "@type"=> "OfferShippingDetails",
     "shippingRate"=> "Customized Shipping As per Convenience"
-];
+];*/
 /* Offers */
 $schema['offers'] = [
     '@type' => 'Offer',

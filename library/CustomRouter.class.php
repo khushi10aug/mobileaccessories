@@ -38,7 +38,7 @@ class CustomRouter
         }
         define('SYSTEM_LANG_ID', $langId);
 
-        /* App API is already resolved in setAPIRoute; skip SEO rewrite so /app-api/v*/... is not remapped to 404. */
+        // App API is already resolved in setAPIRoute; skip SEO rewrite so app-api routes are not remapped to 404.
         if (defined('MOBILE_APP_API_CALL') && true === MOBILE_APP_API_CALL) {
             return;
         }

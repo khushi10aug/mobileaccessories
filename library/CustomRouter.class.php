@@ -38,6 +38,11 @@ class CustomRouter
         }
         define('SYSTEM_LANG_ID', $langId);
 
+        /* App API is already resolved in setAPIRoute; skip SEO rewrite so /app-api/v*/... is not remapped to 404. */
+        if (defined('MOBILE_APP_API_CALL') && true === MOBILE_APP_API_CALL) {
+            return;
+        }
+
         /* Handled CDN url for static contents and 404 for other requests. Specially when mapped on same root directory[*/
         if (CDN_DOMAIN_URL != '' && (strpos(CDN_DOMAIN_URL, $_SERVER['SERVER_NAME']) !== false)) {
             if (!UrlHelper::staticContentProvider($controller, $action)) {
